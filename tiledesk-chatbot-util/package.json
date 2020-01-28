@@ -1,0 +1,30 @@
+{
+  "name": "@tiledesk/tiledesk-chatbot-util",
+  "version": "0.5.0",
+  "description": "A Library to simplify the use of Tiledesk microlanguage in a chatbot proxy",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tiledesk/tiledesk-nodejs-libs.git"
+  },
+  "keywords": [
+    "tiledesk",
+    "chatbot",
+    "client",
+    "livechat",
+    "live",
+    "chat",
+    "support",
+    "helpdesk",
+    "chatbot-microlanguage"
+  ],
+  "author": "Andrea Sponziello",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Tiledesk/tiledesk-nodejs-libs/issues"
+  },
+  "homepage": "https://github.com/Tiledesk/tiledesk-nodejs-libs#readme"
+}

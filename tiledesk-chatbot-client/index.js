@@ -1,5 +1,5 @@
 /* 
-    ver 0.5.1
+    ver 0.5.2
     Andrea Sponziello - (c) Tiledesk.com
 */
 
@@ -146,4 +146,4 @@ class TiledeskClient {
 
 }
 
-module.exports = {TiledeskClient};
+module.exports = { TiledeskClient };
