@@ -1,5 +1,5 @@
 /* 
-    ver 0.5.2
+    ver 0.5.4
     Andrea Sponziello - (c) Tiledesk.com
 */
 
@@ -10,7 +10,7 @@ const API_ENDPOINT = "https://tiledesk-server-pre.herokuapp.com";
 /**
  * This is the class that handles the communication with Tiledesk's APIs
  */
-class TiledeskClient {    
+class TiledeskClient {
 
   /**
    * Constructor for TiledeskClient object

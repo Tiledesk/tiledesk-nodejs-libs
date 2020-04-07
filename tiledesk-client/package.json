@@ -1,7 +1,7 @@
 {
-  "name": "@tiledesk/tiledesk-chatbot-client",
-  "version": "0.5.2",
-  "description": "Client library to use Tiledesk Request APIs from a chatbot NodeJS proxy",
+  "name": "@tiledesk/tiledesk-client",
+  "version": "0.6.0",
+  "description": "Client library for Tiledesk APIs",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
