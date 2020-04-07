@@ -1,3 +1,3 @@
-# Tiledesk Llibraries to simplify APIs calls from HNodeJS clients
+# Tiledesk Llibraries to simplify APIs calls from NodeJS clients
 
 
