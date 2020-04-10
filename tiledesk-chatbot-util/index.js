@@ -1,18 +1,40 @@
 /* 
-    ver 0.8.3
+    ver 0.8.4
     Andrea Sponziello - (c) Tiledesk.com
 */
 
-class TiledeskUtil {    
+class TiledeskChatbotUtil {    
+
+  fullname_email_in(command) {
+    if (command.payload &&
+        command.payload.fields &&
+        command.payload.fields.email &&
+        command.payload.fields.fullname) {
+      return {
+        email: command.payload.fields.email.stringValue,
+        fullname: command.payload.fields.fullname.stringValue
+      }
+    }
+    return null
+  }
+
+  dep_in(command) {
+    if (command.payload &&
+        command.payload.fields &&
+        command.payload.fields.dep_id) {
+      return command.payload.fields.dep_id.stringValue
+    }
+    return null
+  }
 
   /* Splits a message in multiple commands using the microlanguage
   \split:TIME
   command \split:TIME must stand on a line of his own as in the following example
    ex.
 
-  <<Hi!
+  Hi!
   \split:1000
-  Please tell me your email>>
+  Please tell me your email
 
   Sends two messages delayed by 1 second
   */
@@ -72,7 +94,9 @@ class TiledeskUtil {
       // looks for images
       // images are defined as a line starting with:
       // \image:IMAGE_URL
-      // or with optional size:
+      // with optional size:
+      // \image:WIDTH-HEIGHT:IMAGE_URL
+      // ex.:
       // \image:100-100:http://image.com/image.gif
       var image_pattern = /^\\image:.*/mg;
       // console.log("Searching images with image_pattern: ", image_pattern)
@@ -110,7 +134,8 @@ class TiledeskUtil {
       }
     
       // looks for bullet buttons
-      var button_pattern = /^\*.*/mg; // button pattern is a line that starts with *TEXT_OF_BUTTON (every button on a line)
+      // button pattern is a line that starts with *TEXT_OF_BUTTON (every button on a line)
+      var button_pattern = /^\*.*/mg;
       var text_buttons = text.match(button_pattern);
       if (text_buttons) {
         // ricava il testo rimuovendo i bottoni
@@ -138,7 +163,8 @@ class TiledeskUtil {
       }
 
       // looks for a webhook url
-      var webhook_pattern = /^\\webhook:.*/mg; // webhooks are defined as a line starting with \webhook:URL
+      // webhooks are defined as a line starting with \webhook:URL
+      var webhook_pattern = /^\\webhook:.*/mg;
       var webhooks = text.match(webhook_pattern);
       if (webhooks && webhooks.length > 0) {
         const webhook_text = webhooks[0]
@@ -154,6 +180,6 @@ class TiledeskUtil {
 
 }
 
-var tiledeskUtil = new TiledeskUtil();
+// var tiledeskChatbotUtil = new TiledeskChatbotUtil();
 
-module.exports = tiledeskUtil;
+module.exports = { TiledeskChatbotUtil };

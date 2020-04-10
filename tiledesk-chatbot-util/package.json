@@ -1,7 +1,7 @@
 {
   "name": "@tiledesk/tiledesk-chatbot-util",
-  "version": "0.8.3",
-  "description": "A Library to ease the use of Tiledesk microlanguage in a chatbot proxy",
+  "version": "0.8.4",
+  "description": "A Library to help using some Tiledesk features (ex. microlanguage) in a chatbot proxy",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

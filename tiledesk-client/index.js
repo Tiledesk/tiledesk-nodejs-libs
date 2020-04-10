@@ -1,10 +1,10 @@
 /* 
-    ver 0.1
+    ver 0.6.1
     Andrea Sponziello - (c) Tiledesk.com
 */
 
 const request = require('request')
-const API_ENDPOINT = "https://tiledesk-server-pre.herokuapp.com";
+// const API_ENDPOINT = "https://tiledesk-server-pre.herokuapp.com";
 
 /**
  * This is the class that handles the communication with Tiledesk's APIs
@@ -19,8 +19,15 @@ class TiledeskClient {
    * const tdclient = new TiledeskClient({request: request, response: response});
    *
    * @param {Object} options JSON configuration.
+   * @param {Object} options.APIURL Optional. Tiledesk server api endpoint
    */
-  constructor() {
+  constructor(options) {
+    if (options && options.APIURL) {
+      this.API_ENDPOINT = options.APIURL
+    }
+    else {
+      this.API_ENDPOINT = "https://tiledesk-server-pre.herokuapp.com";
+    }
   }
 
   fixToken(token) {
@@ -34,7 +41,7 @@ class TiledeskClient {
 
   getProjectSettings(project_id, token, callback) {
     const _token = this.fixToken(token)
-    const URL = `${API_ENDPOINT}/projects/${project_id}`
+    const URL = `${this.API_ENDPOINT}/projects/${project_id}`
     console.log("getProjectSettings URL:", URL);
     console.log("getProjectSettings token:", _token);
     
@@ -61,7 +68,7 @@ class TiledeskClient {
 
   getAllProjectUsers(project_id, departmentid, token, callback) {
     const _token = this.fixToken(token)
-    const URL = `${API_ENDPOINT}/${project_id}/departments/${departmentid}/operators?disableWebHookCall=true`
+    const URL = `${this.API_ENDPOINT}/${project_id}/departments/${departmentid}/operators?disableWebHookCall=true`
     console.log("getAllProjectUsers URL:", URL);
     request({
       url: URL,
@@ -79,7 +86,7 @@ class TiledeskClient {
 
   updateRequestProperties(request_id, project_id, properties, token, callback) {
     const jwt_token = this.fixToken(token)
-    var URL = `${API_ENDPOINT}/${project_id}/requests/${request_id}`
+    var URL = `${this.API_ENDPOINT}/${project_id}/requests/${request_id}`
     data = properties
     console.log("updating request attributes URL:", URL)
     console.log("updating request attributes jwt_token:", jwt_token)
@@ -102,7 +109,7 @@ class TiledeskClient {
 
   updateRequestAttributes(request_id, project_id, attributes, token, callback) {
     const jwt_token = this.fixToken(token)
-    var URL = `${API_ENDPOINT}/${project_id}/requests/${request_id}/attributes`
+    var URL = `${this.API_ENDPOINT}/${project_id}/requests/${request_id}/attributes`
     var data = attributes
     console.log("updating request attributes URL:", URL)
     console.log("updating request attributes jwt_token:", jwt_token)
@@ -125,7 +132,7 @@ class TiledeskClient {
 
   getProjectUser(project_id, user_id, token, callback) {
     const jwt_token = 'JWT ' + token
-    const URL = `${API_ENDPOINT}/${project_id}/project_users/users/${user_id}`
+    const URL = `${this.API_ENDPOINT}/${project_id}/project_users/users/${user_id}`
     console.log("getProjectUser.URL: ", URL);
     console.log("with token: ", jwt_token)
     request({
@@ -151,7 +158,7 @@ class TiledeskClient {
 
   updateProjectUserAvailable(project_id, project_user_id, user_available, token, callback) {
     const jwt_token = 'JWT ' + token
-    const URL = `${API_ENDPOINT}/${project_id}/project_users/${project_user_id}`
+    const URL = `${this.API_ENDPOINT}/${project_id}/project_users/${project_user_id}`
     console.log("setProjectUserAvailable. URL:", URL);
     console.log("with token: ", jwt_token)
     request({
@@ -174,7 +181,7 @@ class TiledeskClient {
 
   updateProjectUserAttributes(project_id, project_user_id, attributes, token, callback) {
     const jwt_token = 'JWT ' + token
-    const URL = `${API_ENDPOINT}/${project_id}/project_users/${project_user_id}`
+    const URL = `${this.API_ENDPOINT}/${project_id}/project_users/${project_user_id}`
     console.log("setProjectUserAvailable. URL:", URL);
     console.log("with token: ", jwt_token)
     request({
@@ -198,7 +205,7 @@ class TiledeskClient {
   getRequests(project_id, token, limit, status, callback) {
     const jwt_token = 'JWT ' + token
     // direction = 1 => oldest must be served first
-    const URL = `${API_ENDPOINT}/${project_id}/requests?status=${status}&limit=${limit}&direction=1`
+    const URL = `${this.API_ENDPOINT}/${project_id}/requests?status=${status}&limit=${limit}&direction=1`
     // console.log("requests.URL: ", URL);
     // console.log("\nwith token: ", jwt_token)
     request({
@@ -223,7 +230,7 @@ class TiledeskClient {
 
   updateRequestParticipants(project_id, request_id, token, participants, callback) {
     const jwt_token = 'JWT ' + token
-    const URL = `${API_ENDPOINT}/${project_id}/requests/${request_id}/participants`
+    const URL = `${this.API_ENDPOINT}/${project_id}/requests/${request_id}/participants`
     console.log("update request participant... URL:", URL);
     console.log("with token: ", jwt_token)
     request({
@@ -246,7 +253,7 @@ class TiledeskClient {
   getWidgetSettings(project_id, callback) {
     request(
     {
-      url: `https://tiledesk-server-pre.herokuapp.com/${project_id}/widgets`,
+      url: `${this.API_ENDPOINT}/${project_id}/widgets`,
       method: 'GET',
       json: true
     },
@@ -255,7 +262,7 @@ class TiledeskClient {
       //   console.log("ERROR: ", err);
       // }
       if(response.statusCode === 200) {
-        console.log(resbody)
+        // console.log(resbody)
         callback(resbody)
       }
     });
@@ -264,7 +271,7 @@ class TiledeskClient {
   openNow(project_id, token, callback) {
     const jwt_token = 'JWT ' + token
     request({
-       url: `${API_ENDPOINT}/projects/${project_id}/isopen`,
+       url: `${this.API_ENDPOINT}/projects/${project_id}/isopen`,
        headers: {
          'Content-Type' : 'application/json',
          'Authorization': jwt_token
@@ -281,7 +288,7 @@ class TiledeskClient {
    
    anonymauth(project_id, callback) {
      request({
-       url: `${API_ENDPOINT}/auth/signinAnonymously`,
+       url: `${this.API_ENDPOINT}/auth/signinAnonymously`,
        headers: {
          'Content-Type' : 'application/json'
        },
