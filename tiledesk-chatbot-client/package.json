@@ -1,6 +1,6 @@
 {
   "name": "@tiledesk/tiledesk-chatbot-client",
-  "version": "0.5.2",
+  "version": "0.5.11",
   "description": "Client library to use Tiledesk Request APIs from a chatbot NodeJS proxy",
   "main": "index.js",
   "scripts": {

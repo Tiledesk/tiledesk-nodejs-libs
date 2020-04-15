@@ -1,16 +1,17 @@
 /* 
-    ver 0.5.4
+    ver 0.5.11
     Andrea Sponziello - (c) Tiledesk.com
 */
 
 const request = require('request');
 
-const API_ENDPOINT = "https://tiledesk-server-pre.herokuapp.com";
+// const API_ENDPOINT = "https://tiledesk-server-pre.herokuapp.com";
+// const API_ENDPOINT = "https://apichatuv.mailconversion.com";
 
 /**
  * This is the class that handles the communication with Tiledesk's APIs
  */
-class TiledeskClient {
+class TiledeskChatbotClient {
 
   /**
    * Constructor for TiledeskClient object
@@ -20,16 +21,23 @@ class TiledeskClient {
    * const tdclient = new TiledeskClient({request: request, response: response});
    *
    * @param {Object} options JSON configuration.
-   * @param {Object} options.request Express HTTP request object.
-   * @param {Object} options.response Express HTTP response object.
+   * @param {Object} options.request Optional. Express HTTP request object.
+   * @param {Object} options.APIURL Optional. Tiledesk server api endpoint. If not provided, cloud endpoint is used
+   * @param {Object} options.request_id Optional. If options.request is not provided this will be used
+   * @param {Object} options.token Optional. If options.request is not provided this will be used
+   * @param {Object} options.project_id Optional. If options.request is not provided this will be used
+   * @param {Object} options.lead_id Optional. If options.request is not provided this will be used
+   * @param {Object} options.text Optional. If options.request is not provided this will be used
+   * 
+   * 
    */
   constructor(options) {
-    if (!options.request) {
-      throw new Error('Request can NOT be empty.');
-    }
-    if (!options.response) {
-      throw new Error('Response can NOT be empty.');
-    }
+    // if (!options.request) {
+    //   throw new Error('Request can NOT be empty.');
+    // }
+    // if (!options.response) {
+    //   throw new Error('Response can NOT be empty.');
+    // }
 
     /**
      * The Express HTTP request that the endpoint receives from the Assistant.
@@ -45,22 +53,77 @@ class TiledeskClient {
      */
     this.response_ = options.response;
 
-    var body = this.request_.body;
-    this.text = body.payload.text;
-    this.message_subtype = body.payload.attributes.subtype
-    this.conversation = body.payload.request;
-    console.log("tdconversation: " + this.conversation)
-    this.request_id = this.conversation.request_id;
-    this.botId = this.conversation.department.bot._id;
-    this.botName = this.conversation.department.bot.name;
-    this.token = "JWT " + body.token;
-    this.project_id = body.payload.id_project;
+    if (options.APIURL) {
+      this.API_ENDPOINT = options.APIURL
+    }
+    else {
+      this.API_ENDPOINT = "https://tiledesk-server-pre.herokuapp.com";
+    }
+    // this.text = body.payload.text;
+    // if (body.payload.attributes) {
+    //   this.message_subtype = body.payload.attributes.subtype
+    // }
+    // console.log("tdconversation: " + this.conversation)
+    // this.botId = this.conversation.department.bot._id;
+    // this.botName = this.conversation.department.bot.name;
+    if (this.request_) {
+      var body = this.request_.body;
+      if (!body.payload) {
+        throw new Error('Request body.payload can not be empty.');
+      }
+      this.supportRequest = body.payload.request;
+      this.text = body.payload.text;
+      this.lead_id = this.supportRequest.lead._id
+      this.request_id = this.supportRequest.request_id;
+      this.token = this.fixToken(body.token);
+      this.project_id = body.payload.id_project;
+    }
+    else {
+      // request_id
+      if (options.request_id) {
+        this.request_id = options.request_id
+      }
+      else {
+        throw new Error('options.request_id can NOT be empty.');
+      }
+      // token
+      if (options.token) {
+        this.token = this.fixToken(options.token)
+      }
+      else {
+        throw new Error('options.token can NOT be empty.');
+      }
+      // project_id
+      if (options.project_id) {
+        this.project_id = options.project_id
+      }
+      else {
+        throw new Error('options.project_id can NOT be empty.');
+      }
+      // lead_id
+      if (options.lead_id) {
+        this.lead_id = options.lead_id
+      }
+      // text
+      if (options.text) {
+        this.text = options.text
+      }
+    }
+  }
+
+  fixToken(token) {
+    if (token.startsWith('JWT ')) {
+      return token
+    }
+    else {
+      return 'JWT ' + token
+    }
   }
 
   sendMessage(msg, callback) {
     // console.log("Sending message to Tiledesk: " + JSON.stringify(msg))
     request({
-      url: `${API_ENDPOINT}/${this.project_id}/requests/${this.request_id}/messages`,
+      url: `${this.API_ENDPOINT}/${this.project_id}/requests/${this.request_id}/messages`,
       headers: {
         'Content-Type' : 'application/json',
         'Authorization': this.token
@@ -74,11 +137,28 @@ class TiledeskClient {
     );
   }
 
+  static sendMessageRaw(api_endpoint, project_id, request_id, msg, token, callback) {
+    // console.log("Sending message to Tiledesk: " + JSON.stringify(msg))
+    request({
+      url: `${api_endpoint}/${project_id}/requests/${request_id}/messages`,
+      headers: {
+        'Content-Type' : 'application/json',
+        'Authorization': token
+      },
+      json: msg,
+      method: 'POST'
+      },
+      function(err, res, resbody) {
+        callback(err)
+      }
+    );
+  }
+
   updateRequest(properties, attributes, callback) {
-    var URL = `${API_ENDPOINT}/${this.project_id}/requests/${this.request_id}/attributes`
+    var URL = `${this.API_ENDPOINT}/${this.project_id}/requests/${this.request_id}/attributes`
     var data = attributes
     if (properties) {
-      URL = `${API_ENDPOINT}/${this.project_id}/requests/${this.request_id}/`
+      URL = `${this.API_ENDPOINT}/${this.project_id}/requests/${this.request_id}/`
       data = properties
     }
     
@@ -101,7 +181,7 @@ class TiledeskClient {
 
   updateDepartment(dep_id, callback) {
     request({
-      url: `${API_ENDPOINT}/${this.project_id}/requests/${this.request_id}/departments`,
+      url: `${this.API_ENDPOINT}/${this.project_id}/requests/${this.request_id}/departments`,
       headers: {
         'Content-Type' : 'application/json',
         'Authorization': this.token
@@ -125,9 +205,12 @@ class TiledeskClient {
     
   }
 
-  updateEmailFullname(email, fullname, callback) {
+  updateLeadEmailFullname(email, fullname, callback) {
+    if (!this.lead_id) {
+      throw new Error('options.lead_id can NOT be empty.');
+    }
     request({
-      url: `${API_ENDPOINT}/${this.project_id}/leads/${this.conversation.lead._id}`,
+      url: `${this.API_ENDPOINT}/${this.project_id}/leads/${this.lead_id}`, // this.conversation.lead._id
       headers: {
         'Content-Type' : 'application/json',
         'Authorization': this.token
@@ -146,4 +229,4 @@ class TiledeskClient {
 
 }
 
-module.exports = { TiledeskClient };
+module.exports = { TiledeskChatbotClient };
