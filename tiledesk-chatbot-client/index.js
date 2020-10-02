@@ -1,5 +1,5 @@
 /* 
-    ver 0.5.11
+    ver 0.5.13
     Andrea Sponziello - (c) Tiledesk.com
 */
 
@@ -57,7 +57,7 @@ class TiledeskChatbotClient {
       this.API_ENDPOINT = options.APIURL
     }
     else {
-      this.API_ENDPOINT = "https://tiledesk-server-pre.herokuapp.com";
+      this.API_ENDPOINT = "https://api.tiledesk.com/v2";
     }
     // this.text = body.payload.text;
     // if (body.payload.attributes) {

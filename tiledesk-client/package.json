@@ -1,6 +1,6 @@
 {
   "name": "@tiledesk/tiledesk-client",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "description": "Client library for Tiledesk APIs",
   "main": "index.js",
   "scripts": {

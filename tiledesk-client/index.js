@@ -1,10 +1,9 @@
 /* 
-    ver 0.6.1
+    ver 0.6.2
     Andrea Sponziello - (c) Tiledesk.com
 */
 
 const request = require('request')
-// const API_ENDPOINT = "https://tiledesk-server-pre.herokuapp.com";
 
 /**
  * This is the class that handles the communication with Tiledesk's APIs
@@ -26,7 +25,7 @@ class TiledeskClient {
       this.API_ENDPOINT = options.APIURL
     }
     else {
-      this.API_ENDPOINT = "https://tiledesk-server-pre.herokuapp.com";
+      this.API_ENDPOINT = "https://api.tiledesk.com/v2";
     }
   }
 
