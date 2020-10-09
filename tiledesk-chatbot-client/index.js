@@ -1,12 +1,9 @@
 /* 
-    ver 0.5.13
+    ver 0.5.14
     Andrea Sponziello - (c) Tiledesk.com
 */
 
 const request = require('request');
-
-// const API_ENDPOINT = "https://tiledesk-server-pre.herokuapp.com";
-// const API_ENDPOINT = "https://apichatuv.mailconversion.com";
 
 /**
  * This is the class that handles the communication with Tiledesk's APIs
@@ -71,12 +68,18 @@ class TiledeskChatbotClient {
       if (!body.payload) {
         throw new Error('Request body.payload can not be empty.');
       }
-      this.supportRequest = body.payload.request;
-      this.text = body.payload.text;
-      this.lead_id = this.supportRequest.lead._id
+      const payload = body.payload
+      this.supportRequest = payload.request;
+      this.text = payload.text;
+      if (this.supportRequest && this.supportRequest.lead) {
+        this.lead_id = this.supportRequest.lead._id
+      }
       this.request_id = this.supportRequest.request_id;
       this.token = this.fixToken(body.token);
-      this.project_id = body.payload.id_project;
+      this.project_id = payload.id_project;
+      if (payload && payload.attributes && payload.attributes.action) {
+        this.action = payload.attributes.action
+      }
     }
     else {
       // request_id
