@@ -1,5 +1,5 @@
 /* 
-    ver 0.6.4
+    ver 0.6.5
     Andrea Sponziello - (c) Tiledesk.com
 */
 
@@ -282,30 +282,30 @@ class TiledeskClient {
        if(response.statusCode === 200) {
          callback(JSON.parse(resbody).isopen)
        }
-     });
-   }
+    });
+  }
    
-   anonymauth(project_id, callback) {
-     request({
-       url: `${this.API_ENDPOINT}/auth/signinAnonymously`,
-       headers: {
-         'Content-Type' : 'application/json'
-       },
-       json: {
-         "id_project": project_id
-       },
-       method: 'POST'
-     },
-     function(err, response, resbody) {
-      //  console.log("resbody: ", resbody)
-       if(response.statusCode === 200) {
-         callback(resbody.token)
-       }
-     });
-   }
-
-   sendMessage(msg, project_id, request_id, token, callback) {
+  anonymauth(project_id, callback) {
     request({
+      url: `${this.API_ENDPOINT}/auth/signinAnonymously`,
+      headers: {
+        'Content-Type' : 'application/json'
+      },
+      json: {
+        "id_project": project_id
+      },
+      method: 'POST'
+    },
+    function(err, response, resbody) {
+      if(response.statusCode === 200) {
+        callback(resbody.token)
+      }
+    });
+  }
+
+  sendMessage(msg, project_id, request_id, token, callback) {
+    request(
+    {
       url: `${this.API_ENDPOINT}/${project_id}/requests/${request_id}/messages`,
       headers: {
         'Content-Type' : 'application/json',
@@ -313,30 +313,12 @@ class TiledeskClient {
       },
       json: msg,
       method: 'POST'
-      },
+    },
       function(err, res, resbody) {
         callback(err)
       }
     );
   }
-
-  static sendMessageRaw(api_endpoint, msg, project_id, request_id, token, callback) {
-    // console.log("Sending message to Tiledesk: " + JSON.stringify(msg))
-    request({
-      url: `${api_endpoint}/${project_id}/requests/${request_id}/messages`,
-      headers: {
-        'Content-Type' : 'application/json',
-        'Authorization': token
-      },
-      json: msg,
-      method: 'POST'
-      },
-      function(err, res, resbody) {
-        callback(err)
-      }
-    );
-  }
-
 }
 
 module.exports = { TiledeskClient };
