@@ -1,5 +1,5 @@
 /* 
-    ver 0.6.7
+    ver 0.6.18
     Andrea Sponziello - (c) Tiledesk.com
 */
 
@@ -23,6 +23,8 @@ class TiledeskClient {
    * @param {Object} options.token Mandatory. Tiledesk auth token
    * 
    */
+  static DEFAULT_API_ENDPOINT = "https://api.tiledesk.com/v2";
+
   constructor(options) {
     if (!options.projectId) {
       throw new Error('projectId can NOT be empty.');
@@ -35,7 +37,7 @@ class TiledeskClient {
       this.API_ENDPOINT = options.APIURL
     }
     else {
-      this.API_ENDPOINT = "https://api.tiledesk.com/v2";
+      this.API_ENDPOINT = TiledeskClient.DEFAULT_API_ENDPOINT;
     }
 
     this.projectId = options.projectId
@@ -326,8 +328,13 @@ class TiledeskClient {
        }
     });
   }
+
+  openNow(callback) {
+    TiledeskClient.openNow(this.API_ENDPOINT, this.projectId, this.token, callback);
+  }
    
-  static anonymauth(APIENDPOINT, project_id, callback) {
+  static anonymousAuthenticationRaw(APIENDPOINT, project_id, callback) {
+    console.log("using project_id", project_id)
     request({
       url: `${APIENDPOINT}/auth/signinAnonymously`,
       headers: {
@@ -339,15 +346,34 @@ class TiledeskClient {
       method: 'POST'
     },
     function(err, response, resbody) {
-      if(response.statusCode === 200) {
-        if (callback) {
-          callback(resbody.token)
-        }
+      if (callback) {
+        callback(err, response, resbody)
       }
     });
   }
 
-  static sendMessageRaw(APIENDPOINT, msg, project_id, request_id, token, callback) {
+  static anonymousAuthentication(project_id, callback) {
+    TiledeskClient.anonymousAuthenticationRaw(TiledeskClient.DEFAULT_API_ENDPOINT, project_id, callback);
+    // request({
+    //   url: `${DEFAULT_API_ENDPOINT}/auth/signinAnonymously`,
+    //   headers: {
+    //     'Content-Type' : 'application/json'
+    //   },
+    //   json: {
+    //     "id_project": project_id
+    //   },
+    //   method: 'POST'
+    // },
+    // function(err, response, resbody) {
+    //   if(response.statusCode === 200) {
+    //     if (callback) {
+    //       callback(resbody.token)
+    //     }
+    //   }
+    // });
+  }
+
+  static sendMessageRaw(APIENDPOINT, token, project_id, msgJSON, request_id, callback) {
     request(
     {
       url: `${APIENDPOINT}/${project_id}/requests/${request_id}/messages`,
@@ -355,7 +381,7 @@ class TiledeskClient {
         'Content-Type' : 'application/json',
         'Authorization': token
       },
-      json: msg,
+      json: msgJSON,
       method: 'POST'
     },
       function(err, res, resbody) {
@@ -366,24 +392,38 @@ class TiledeskClient {
     );
   }
 
-  sendMessage(msg, request_id, callback) {
-    request(
-    {
-      url: `${this.API_ENDPOINT}/${this.project_id}/requests/${request_id}/messages`,
-      headers: {
-        'Content-Type' : 'application/json',
-        'Authorization': this.token
-      },
-      json: msg,
-      method: 'POST'
-    },
-      function(err, res, resbody) {
-        if (callback) {
-          callback(err)
-        }
-      }
-    );
+  sendMessage(msgJSON, request_id, callback) {
+    console.log("mess:", msgJSON)
+    console.log("request_id:", request_id)
+    console.log("this.API_ENDPOINT:", this.API_ENDPOINT)
+    console.log("this.projectId:", this.projectId)
+    console.log("this.token:", this.token)
+    TiledeskClient.sendMessageRaw(this.API_ENDPOINT, this.token, this.projectId, msgJSON, request_id, callback);
   }
+
+  // sendMessage(msg, request_id, callback) {
+  //   console.log("mess:", msg)
+  //   console.log("request_id:", request_id)
+  //   console.log("this.API_ENDPOINT:", this.API_ENDPOINT)
+  //   console.log("this.projectId:", this.projectId)
+  //   console.log("this.token:", this.token)
+  //   request(
+  //   {
+  //     url: `${this.API_ENDPOINT}/${this.projectId}/requests/${request_id}/messages`,
+  //     headers: {
+  //       'Content-Type' : 'application/json',
+  //       'Authorization': this.token
+  //     },
+  //     json: msg,
+  //     method: 'POST'
+  //   },
+  //     function(err, res, resbody) {
+  //       if (callback) {
+  //         callback(err)
+  //       }
+  //     }
+  //   );
+  // }
 
 }
 

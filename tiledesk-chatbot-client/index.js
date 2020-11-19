@@ -1,5 +1,5 @@
 /* 
-    ver 0.5.14
+    ver 0.5.15
     Andrea Sponziello - (c) Tiledesk.com
 */
 
@@ -125,7 +125,8 @@ class TiledeskChatbotClient {
 
   sendMessage(msg, callback) {
     // console.log("Sending message to Tiledesk: " + JSON.stringify(msg))
-    request({
+    request(
+    {
       url: `${this.API_ENDPOINT}/${this.project_id}/requests/${this.request_id}/messages`,
       headers: {
         'Content-Type' : 'application/json',
@@ -133,9 +134,11 @@ class TiledeskChatbotClient {
       },
       json: msg,
       method: 'POST'
-      },
+    },
       function(err, res, resbody) {
-        callback(err)
+        if (callback) {
+          callback(err)
+        }
       }
     );
   }

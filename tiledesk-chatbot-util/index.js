@@ -1,5 +1,5 @@
 /* 
-    ver 0.8.4
+    ver 0.8.5
     Andrea Sponziello - (c) Tiledesk.com
 */
 
@@ -82,15 +82,13 @@ class TiledeskChatbotUtil {
       let ATTRIBUTES_KEY = 'attributes'
       let METADATA_KEY = "metadata"
       let TYPE_IMAGE = 'image'
+      let TYPE_FRAME = 'frame'
       let TYPE_TEXT = 'text'
-      
-
       var reply = {
           "message": {}
       }
       reply.message[TEXT_KEY] = text
       reply.message[TYPE_KEY] = TYPE_TEXT
-    
       // looks for images
       // images are defined as a line starting with:
       // \image:IMAGE_URL
@@ -99,7 +97,6 @@ class TiledeskChatbotUtil {
       // ex.:
       // \image:100-100:http://image.com/image.gif
       var image_pattern = /^\\image:.*/mg;
-      // console.log("Searching images with image_pattern: ", image_pattern)
       var images = text.match(image_pattern);
       // console.log("images: ", images)
       if (images && images.length > 0) {
@@ -128,6 +125,45 @@ class TiledeskChatbotUtil {
         reply.message[TYPE_KEY] = TYPE_IMAGE
         reply.message[METADATA_KEY] = {
           src: image_url,
+          width: width,
+          height: height
+        }
+      }
+
+      // looks for iframes
+      // iframes are defined as a line starting with:
+      // \frame:FRAME_URL
+      // with optional size:
+      // \frame:WIDTH-HEIGHT:FRAME_URL
+      // ex.:
+      // \frame:100-100:http://iframe.com/index.html
+      var frame_pattern = /^\\frame:.*/mg;
+      var frames = text.match(frame_pattern);
+      if (frames && frames.length > 0) {
+        const frame_text = frames[0]
+        var text = text.replace(frame_text,"").trim()
+        var frame_url = frame_text.replace("\\frame:", "")
+        var width = 200
+        var height = 200
+        // parse frame size (optional) ex: \frame:100-100:http://frame.com/index.html
+        let frame_size_pattern = /^([0-9]*-[0-9]*):(.*)/;
+        let frame_size_text = frame_url.match(frame_size_pattern)
+        if (frame_size_text && frame_size_text.length == 3) {
+          frame_url = frame_size_text[2]
+          let frame_size = frame_size_text[1]
+          console.log("size: " + frame_size)
+          console.log("frame url: " + frame_url)
+          let split_pattern = /-/
+          let size_splits = frame_size.split(split_pattern)
+          if (size_splits.length == 2) {
+            width = size_splits[0]
+            height = size_splits[1]
+          }
+        }
+        reply.message[TEXT_KEY] = text
+        reply.message[TYPE_KEY] = TYPE_FRAME
+        reply.message[METADATA_KEY] = {
+          src: frame_url,
           width: width,
           height: height
         }
