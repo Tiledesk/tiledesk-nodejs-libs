@@ -1,5 +1,5 @@
 /* 
-    ver 0.6.18
+    ver 0.6.19
     Andrea Sponziello - (c) Tiledesk.com
 */
 
@@ -41,16 +41,46 @@ class TiledeskClient {
     }
 
     this.projectId = options.projectId
-    this.token = this.fixToken(options.token)
+    this.token = TiledeskClient.fixToken(options.token)
   }
 
-  fixToken(token) {
+  static fixToken(token) {
     if (token.startsWith('JWT ')) {
       return token
     }
     else {
       return 'JWT ' + token
     }
+  }
+
+  // curl -v -X POST -H 'Content-Type:application/json' -u andrea.leo@f21.it:123456 -d '{"name":"testprj"}' https://api.tiledesk.com/v2/projects
+
+  static createProject(project_id, callback) {
+    TiledeskClient.createProjectRaw(TiledeskClient.DEFAULT_API_ENDPOINT, callback);
+    
+    const _token = TiledeskClient.fixToken(token)
+    const URL = `${APIENDPOINT}/projects/${project_id}`
+    // console.log("getProjectSettings URL:", URL);
+    // console.log("getProjectSettings token:", _token);
+    request({
+      url: URL,
+      headers: {
+        'Content-Type' : 'application/json',
+        'Authorization': _token
+      },
+      json: true,
+      method: 'GET'
+    },
+    function(err, response, resbody) {
+      // console.log("response: ", JSON.stringify(response))
+      if (response.statusCode == 200) {
+        callback(null, resbody)
+      }
+      else {
+        const error_msg = "getProjectSettings. Status code: " + response.statusCode
+        callback(error_msg, null)
+      }
+    });
   }
 
   getProjectSettings(callback) {
@@ -80,7 +110,7 @@ class TiledeskClient {
   }
 
   static getProjectSettingsRaw(APIENDPOINT, project_id, token, callback) {
-    const _token = this.fixToken(token)
+    const _token = TiledeskClient.fixToken(token)
     const URL = `${APIENDPOINT}/projects/${project_id}`
     // console.log("getProjectSettings URL:", URL);
     // console.log("getProjectSettings token:", _token);
@@ -106,7 +136,7 @@ class TiledeskClient {
   }
 
   static getAllProjectUsersRaw(APIENDPOINT, project_id, departmentid, token, callback) {
-    const _token = this.fixToken(token)
+    const _token = TiledeskClient.fixToken(token)
     const URL = `${this.APIENDPOINT}/${project_id}/departments/${departmentid}/operators?disableWebHookCall=true`
     console.log("getAllProjectUsers URL:", URL);
     request({
@@ -124,7 +154,7 @@ class TiledeskClient {
   }
 
   static updateRequestPropertiesRaw(API_ENDPOINT, request_id, project_id, properties, token, callback) {
-    const jwt_token = this.fixToken(token)
+    const jwt_token = TiledeskClient.fixToken(token)
     var URL = `${APIENDPOINT}/${project_id}/requests/${request_id}`
     data = properties
     console.log("updating request attributes URL:", URL)
@@ -147,7 +177,7 @@ class TiledeskClient {
   }
 
   static updateRequestAttributesRaw(APIENDPOINT, request_id, project_id, attributes, token, callback) {
-    const jwt_token = this.fixToken(token)
+    const jwt_token = TiledeskClient.fixToken(token)
     var URL = `${API_ENDPOINT}/${project_id}/requests/${request_id}/attributes`
     var data = attributes
     console.log("updating request attributes URL:", URL)
@@ -399,6 +429,28 @@ class TiledeskClient {
     console.log("this.projectId:", this.projectId)
     console.log("this.token:", this.token)
     TiledeskClient.sendMessageRaw(this.API_ENDPOINT, this.token, this.projectId, msgJSON, request_id, callback);
+  }
+
+  static fireEvent(APIENDPOINT, project_id, token, event, callback) {
+    const jwt_token = TiledeskClient.fixToken(token)
+    request({
+       url: `${APIENDPOINT}/${project_id}/events`,
+       headers: {
+         'Content-Type' : 'application/json',
+         'Authorization': jwt_token
+       },
+       json: event,
+       method: 'POST'
+     },
+     function(err, response, resbody) {
+        if (callback) {
+        callback(err, response, resbody)
+        }
+    });
+  }
+
+  fireEvent(event, callback) {
+    TiledeskClient.fireEvent(this.API_ENDPOINT, this.projectId, this.token, event, callback);
   }
 
   // sendMessage(msg, request_id, callback) {
