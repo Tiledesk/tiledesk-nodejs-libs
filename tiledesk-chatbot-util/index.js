@@ -1,11 +1,11 @@
 /* 
-    ver 0.8.5
+    ver 0.8.6
     Andrea Sponziello - (c) Tiledesk.com
 */
 
 class TiledeskChatbotUtil {    
 
-  fullname_email_in(command) {
+  static fullname_email_in(command) {
     if (command.payload &&
         command.payload.fields &&
         command.payload.fields.email &&
@@ -18,7 +18,7 @@ class TiledeskChatbotUtil {
     return null
   }
 
-  dep_in(command) {
+  static dep_in(command) {
     if (command.payload &&
         command.payload.fields &&
         command.payload.fields.dep_id) {
@@ -30,7 +30,7 @@ class TiledeskChatbotUtil {
   /* Splits a message in multiple commands using the microlanguage
   \split:TIME
   command \split:TIME must stand on a line of his own as in the following example
-   ex.
+  Ex.
 
   Hi!
   \split:1000
@@ -38,7 +38,7 @@ class TiledeskChatbotUtil {
 
   Sends two messages delayed by 1 second
   */
-  findSplits(text) {
+  static findSplits(text) {
       var commands = []
       const split_pattern = /^(\\split[:0-9]*)/mg //ex. \split:500
       var parts = text.split(split_pattern)
@@ -258,19 +258,6 @@ class TiledeskChatbotUtil {
       console.log("button text:", JSON.stringify(button));
       return button;
     }
-    
-    
-
-    // if (button_type === "text") {
-    //   console.log("button_string", button_string)
-    //   button[TiledeskChatbotUtil.TYPE_KEY] = TiledeskChatbotUtil.TYPE_TEXT;
-    //   button[TiledeskChatbotUtil.VALUE_KEY] = button_string;
-    // }
-    // else if (button_type === "url_blank") {
-    
-    // }
-    
-    
     return button
   }
 
