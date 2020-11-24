@@ -1,10 +1,10 @@
 var assert = require('assert');
-const { TiledeskClient } = require('../tiledesk-client');
+const { TiledeskClient } = require('..');
 
-const project_id = "5fb8137070e3c1001928efd7";
-const api_endpoint = TiledeskClient.DEFAULT_API_ENDPOINT;
 const username = "test@tiledesk.com";
 const password = "test";
+const project_id = "5fb8137070e3c1001928efd7";
+const api_endpoint = TiledeskClient.DEFAULT_API_ENDPOINT;
 
 describe('TiledeskClient', function() {
   describe('fireEvent()', function() {
@@ -85,3 +85,4 @@ describe('TiledeskClient', function() {
         });
     });
 });
+

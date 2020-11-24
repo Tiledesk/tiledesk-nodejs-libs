@@ -107,10 +107,8 @@ app.post('/opennow', (req, res) => {
 
 app.post('/fireevent', (req, res) => {
     console.log("/fireevent");
-    const project_id = req.body.project_id
-    const bot_id = req.body.bot_id
-    const bot_name = req.body.bot_name
-    const message =  req.body.message
+    const project_id = req.body.project_id;
+    const event = req.body.event;
     
     TiledeskClient.anonymousAuthentication(
       project_id,
@@ -122,16 +120,18 @@ app.post('/fireevent', (req, res) => {
               projectId: project_id,
               token: resbody.token
             });
-            const event = {
-                name: "faqbot.answer_not_found",
-                attributes: {
-                    bot: {
-                        _id: bot_id,
-                        name: bot_name
-                    },
-                    message: message
-                }
-            };
+            // const event = {
+            //     name: "faqbot.answer_not_found",
+            //     attributes: {
+            //         bot: {
+            //             _id: bot_id,
+            //             name: bot_name
+            //         },
+            //         message: {
+            //             text: "help"
+            //         }
+            //     }
+            // };
             tdclient.fireEvent(event, function(err, response, resbody) {
               res.json(resbody);
             });

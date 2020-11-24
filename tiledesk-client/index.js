@@ -1,5 +1,5 @@
 /* 
-    ver 0.6.19
+    ver 0.6.20
     Andrea Sponziello - (c) Tiledesk.com
 */
 
@@ -364,7 +364,7 @@ class TiledeskClient {
   }
    
   static anonymousAuthenticationRaw(APIENDPOINT, project_id, callback) {
-    console.log("using project_id", project_id)
+    // console.log("using project_id", project_id)
     request({
       url: `${APIENDPOINT}/auth/signinAnonymously`,
       headers: {

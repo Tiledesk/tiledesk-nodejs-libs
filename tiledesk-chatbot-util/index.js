@@ -76,19 +76,27 @@ class TiledeskChatbotUtil {
       return commands
   }
 
-  parseReply(text) {
-      let TEXT_KEY = 'text'
-      let TYPE_KEY = 'type'
-      let ATTRIBUTES_KEY = 'attributes'
-      let METADATA_KEY = "metadata"
-      let TYPE_IMAGE = 'image'
-      let TYPE_FRAME = 'frame'
-      let TYPE_TEXT = 'text'
+  static TEXT_KEY = 'text';
+  static TYPE_KEY = 'type';
+  static VALUE_KEY = 'value';
+  static ATTRIBUTES_KEY = 'attributes';
+  static METADATA_KEY = 'metadata';
+  static LINK_KEY = 'link';
+  static TARGET_KEY = 'target';
+  // values
+  static TYPE_IMAGE = 'image';
+  static TYPE_FRAME = 'frame';
+  static TYPE_TEXT = 'text';
+  static TYPE_URL = 'url';
+  static TARGET_BLANK = 'blank';
+  static TARGET_PARENT = 'parent';
+
+  static parseReply(text) {
       var reply = {
           "message": {}
       }
-      reply.message[TEXT_KEY] = text
-      reply.message[TYPE_KEY] = TYPE_TEXT
+      reply.message[TiledeskChatbotUtil.TEXT_KEY] = text
+      reply.message[TiledeskChatbotUtil.TYPE_KEY] = TiledeskChatbotUtil.TYPE_TEXT
       // looks for images
       // images are defined as a line starting with:
       // \image:IMAGE_URL
@@ -121,9 +129,9 @@ class TiledeskChatbotUtil {
             height = size_splits[1]
           }
         }
-        reply.message[TEXT_KEY] = text
-        reply.message[TYPE_KEY] = TYPE_IMAGE
-        reply.message[METADATA_KEY] = {
+        reply.message[TiledeskChatbotUtil.TEXT_KEY] = text
+        reply.message[TiledeskChatbotUtil.TYPE_KEY] = TYPE_IMAGE
+        reply.message[TiledeskChatbotUtil.METADATA_KEY] = {
           src: image_url,
           width: width,
           height: height
@@ -160,9 +168,9 @@ class TiledeskChatbotUtil {
             height = size_splits[1]
           }
         }
-        reply.message[TEXT_KEY] = text
-        reply.message[TYPE_KEY] = TYPE_FRAME
-        reply.message[METADATA_KEY] = {
+        reply.message[TiledeskChatbotUtil.TEXT_KEY] = text
+        reply.message[TiledeskChatbotUtil.TYPE_KEY] = TYPE_FRAME
+        reply.message[TiledeskChatbotUtil.METADATA_KEY] = {
           src: frame_url,
           width: width,
           height: height
@@ -171,31 +179,36 @@ class TiledeskChatbotUtil {
     
       // looks for bullet buttons
       // button pattern is a line that starts with *TEXT_OF_BUTTON (every button on a line)
-      var button_pattern = /^\*.*/mg;
-      var text_buttons = text.match(button_pattern);
+      const button_pattern = /^\*.*/mg;
+      const text_buttons = text.match(button_pattern);
       if (text_buttons) {
+        console.log("text buttons")
         // ricava il testo rimuovendo i bottoni
-        var text_with_removed_buttons = text.replace(button_pattern,"").trim()
-        reply.message[TEXT_KEY] = text_with_removed_buttons
+        const text_with_removed_buttons = text.replace(button_pattern,"").trim()
+        reply.message[TiledeskChatbotUtil.TEXT_KEY] = text_with_removed_buttons
         // estrae i bottoni
-        var buttons = []
+        let buttons = []
         text_buttons.forEach(element => {
-          var remove_extra_from_button = /^\*/mg; // removes initial "*"
-          var button_text = element.replace(remove_extra_from_button, "").trim()
-          var button = {}
-          button[TYPE_KEY] = "text"
-          button["value"] = button_text
+          const remove_extra_from_button = /^\*/mg; // removes initial "*"
+          let button_text = element.replace(remove_extra_from_button, "").trim();
+          let button = TiledeskChatbotUtil.parse_button_from_string(button_text);
+          // var button = {}
+          // button[TYPE_KEY] = "text"
+          // button["value"] = button_text
           buttons.push(button)
           console.log("Added button: " + button_text)
         });
-        if (reply.message[ATTRIBUTES_KEY] == null) {
-          reply.message[ATTRIBUTES_KEY] = {}
+        if (reply.message[TiledeskChatbotUtil.ATTRIBUTES_KEY] == null) {
+          reply.message[TiledeskChatbotUtil.ATTRIBUTES_KEY] = {}
         }
-        reply.message[ATTRIBUTES_KEY]["attachment"] = {
+        reply.message[TiledeskChatbotUtil.ATTRIBUTES_KEY]["attachment"] = {
           type:"template",
           buttons: buttons
         }
         text = text_with_removed_buttons
+      }
+      else {
+        console.log("no text buttons")
       }
 
       // looks for a webhook url
@@ -214,6 +227,66 @@ class TiledeskChatbotUtil {
       return reply
   }
 
+  static parse_button_from_string(button_string) {
+    const tdlink_pattern = /(tdLink:)(\S+)/m;
+    const tdlink_blank_pattern = /(tdLinkBlank:)(\S+)/m;
+    const tdlink_parent_pattern = /(tdLinkParent:)(\S+)/m;
+    const text_button_link = button_string.match(tdlink_pattern);
+    const text_button_link_blank = button_string.match(tdlink_blank_pattern);
+    const text_button_link_parent = button_string.match(tdlink_parent_pattern);
+    console.log('text_button_link', text_button_link)
+    console.log('text_button_link_blank', text_button_link_blank)
+    console.log('text_button_link_parent', text_button_link_parent)
+    if (text_button_link && text_button_link.length && text_button_link.length === 3) {
+      const button =  TiledeskChatbotUtil.button_link_by_match(button_string, text_button_link, TiledeskChatbotUtil.TARGET_BLANK);
+      return button;
+    }
+    if (text_button_link_blank && text_button_link_blank.length && text_button_link_blank.length === 3) {
+      const button =  TiledeskChatbotUtil.button_link_by_match(button_string, text_button_link_blank, TiledeskChatbotUtil.TARGET_BLANK);
+      return button;
+    }
+    if (text_button_link_parent && text_button_link_parent.length && text_button_link_parent.length === 3) {
+      const button =  TiledeskChatbotUtil.button_link_by_match(button_string, text_button_link_parent, TiledeskChatbotUtil.TARGET_PARENT);
+      return button;
+    }
+    else {
+      // No subpatterns = text button
+      let button = {};
+      console.log("button_text label", button_string)
+      button[TiledeskChatbotUtil.TYPE_KEY] = TiledeskChatbotUtil.TYPE_TEXT;
+      button[TiledeskChatbotUtil.VALUE_KEY] = button_string;
+      console.log("button text:", JSON.stringify(button));
+      return button;
+    }
+    
+    
+
+    // if (button_type === "text") {
+    //   console.log("button_string", button_string)
+    //   button[TiledeskChatbotUtil.TYPE_KEY] = TiledeskChatbotUtil.TYPE_TEXT;
+    //   button[TiledeskChatbotUtil.VALUE_KEY] = button_string;
+    // }
+    // else if (button_type === "url_blank") {
+    
+    // }
+    
+    
+    return button
+  }
+
+  static button_link_by_match(button_string, match, target) {
+    let button = {};
+    const command = match[0];
+    const link = match[2];
+    const button_label = button_string.replace(command,'').trim();
+    console.log("button_url_label", button_label)
+    button[TiledeskChatbotUtil.TYPE_KEY] = TiledeskChatbotUtil.TYPE_URL;
+    button[TiledeskChatbotUtil.VALUE_KEY] = button_label;
+    button[TiledeskChatbotUtil.LINK_KEY] = link;
+    button[TiledeskChatbotUtil.TARGET_KEY] = target;
+    console.log("button link blank:", JSON.stringify(button));
+    return button;
+  }
 }
 
 // var tiledeskChatbotUtil = new TiledeskChatbotUtil();
