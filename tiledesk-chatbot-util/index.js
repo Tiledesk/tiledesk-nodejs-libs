@@ -133,7 +133,7 @@ class TiledeskChatbotUtil {
           }
         }
         reply.message[TiledeskChatbotUtil.TEXT_KEY] = text
-        reply.message[TiledeskChatbotUtil.TYPE_KEY] = TYPE_IMAGE
+        reply.message[TiledeskChatbotUtil.TYPE_KEY] = TiledeskChatbotUtil.TYPE_IMAGE
         reply.message[TiledeskChatbotUtil.METADATA_KEY] = {
           src: image_url,
           width: width,
@@ -172,7 +172,7 @@ class TiledeskChatbotUtil {
           }
         }
         reply.message[TiledeskChatbotUtil.TEXT_KEY] = text
-        reply.message[TiledeskChatbotUtil.TYPE_KEY] = TYPE_FRAME
+        reply.message[TiledeskChatbotUtil.TYPE_KEY] = TiledeskChatbotUtil.TYPE_FRAME
         reply.message[TiledeskChatbotUtil.METADATA_KEY] = {
           src: frame_url,
           width: width,
