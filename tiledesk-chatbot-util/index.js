@@ -1,5 +1,5 @@
 /* 
-    ver 0.8.6
+    ver 0.8.9
     Andrea Sponziello - (c) Tiledesk.com
 */
 
@@ -44,16 +44,16 @@ class TiledeskChatbotUtil {
       var parts = text.split(split_pattern)
       for (var i=0; i < parts.length; i++) {
           let p = parts[i]
-          console.log("part: " + p)
+          // console.log("part: " + p)
           if (i % 2 != 0) {
           // split command
-          console.log("split command: " + p)
+          // console.log("split command: " + p)
           var split_parts = p.split(":")
           var wait_time = 1000
           if (split_parts.length == 2) {
               wait_time = split_parts[1]
           }
-          console.log("wait time: " + wait_time)
+          // console.log("wait time: " + wait_time)
           var command = {}
           command.type = "wait"
           command.time = parseInt(wait_time, 10)
@@ -83,11 +83,14 @@ class TiledeskChatbotUtil {
   static METADATA_KEY = 'metadata';
   static LINK_KEY = 'link';
   static TARGET_KEY = 'target';
+  static ACTION_KEY = 'action';
+  static SHOW_REPLY_KEY = 'show_reply';
   // values
   static TYPE_IMAGE = 'image';
   static TYPE_FRAME = 'frame';
   static TYPE_TEXT = 'text';
   static TYPE_URL = 'url';
+  static TYPE_ACTION = 'action';
   static TARGET_BLANK = 'blank';
   static TARGET_PARENT = 'parent';
 
@@ -120,8 +123,8 @@ class TiledeskChatbotUtil {
         if (image_size_text && image_size_text.length == 3) {
           image_url = image_size_text[2]
           let image_size = image_size_text[1]
-          console.log("size: " + image_size)
-          console.log("imageì url: " + image_url)
+          // console.log("size: " + image_size)
+          // console.log("imageì url: " + image_url)
           let split_pattern = /-/
           let size_splits = image_size.split(split_pattern)
           if (size_splits.length == 2) {
@@ -159,8 +162,8 @@ class TiledeskChatbotUtil {
         if (frame_size_text && frame_size_text.length == 3) {
           frame_url = frame_size_text[2]
           let frame_size = frame_size_text[1]
-          console.log("size: " + frame_size)
-          console.log("frame url: " + frame_url)
+          // console.log("size: " + frame_size)
+          // console.log("frame url: " + frame_url)
           let split_pattern = /-/
           let size_splits = frame_size.split(split_pattern)
           if (size_splits.length == 2) {
@@ -182,7 +185,6 @@ class TiledeskChatbotUtil {
       const button_pattern = /^\*.*/mg;
       const text_buttons = text.match(button_pattern);
       if (text_buttons) {
-        console.log("text buttons")
         // ricava il testo rimuovendo i bottoni
         const text_with_removed_buttons = text.replace(button_pattern,"").trim()
         reply.message[TiledeskChatbotUtil.TEXT_KEY] = text_with_removed_buttons
@@ -196,7 +198,6 @@ class TiledeskChatbotUtil {
           // button[TYPE_KEY] = "text"
           // button["value"] = button_text
           buttons.push(button)
-          console.log("Added button: " + button_text)
         });
         if (reply.message[TiledeskChatbotUtil.ATTRIBUTES_KEY] == null) {
           reply.message[TiledeskChatbotUtil.ATTRIBUTES_KEY] = {}
@@ -208,7 +209,7 @@ class TiledeskChatbotUtil {
         text = text_with_removed_buttons
       }
       else {
-        console.log("no text buttons")
+        // console.log("no text buttons")
       }
 
       // looks for a webhook url
@@ -217,10 +218,10 @@ class TiledeskChatbotUtil {
       var webhooks = text.match(webhook_pattern);
       if (webhooks && webhooks.length > 0) {
         const webhook_text = webhooks[0]
-        console.log("webhook_text: " + webhook_text)
+        // console.log("webhook_text: " + webhook_text)
         text = text.replace(webhook_text,"").trim()
         const webhook_url = webhook_text.replace("\\webhook:", "")
-        console.log("webhook_url " + webhook_url)
+        // console.log("webhook_url " + webhook_url)
         reply.webhook = webhook_url
       }
 
@@ -231,47 +232,71 @@ class TiledeskChatbotUtil {
     const tdlink_pattern = /(tdLink:)(\S+)/m;
     const tdlink_blank_pattern = /(tdLinkBlank:)(\S+)/m;
     const tdlink_parent_pattern = /(tdLinkParent:)(\S+)/m;
-    const text_button_link = button_string.match(tdlink_pattern);
-    const text_button_link_blank = button_string.match(tdlink_blank_pattern);
-    const text_button_link_parent = button_string.match(tdlink_parent_pattern);
-    console.log('text_button_link', text_button_link)
-    console.log('text_button_link_blank', text_button_link_blank)
-    console.log('text_button_link_parent', text_button_link_parent)
-    if (text_button_link && text_button_link.length && text_button_link.length === 3) {
-      const button =  TiledeskChatbotUtil.button_link_by_match(button_string, text_button_link, TiledeskChatbotUtil.TARGET_BLANK);
+    const tdaction_pattern = /(tdAction:)(\S+)/m;
+    const tdaction_show_reply_pattern = /(tdActionShowReply:)(\S+)/m;
+    const match_button_link = button_string.match(tdlink_pattern);
+    const match_button_link_blank = button_string.match(tdlink_blank_pattern);
+    const match_button_link_parent = button_string.match(tdlink_parent_pattern);
+    const match_button_action = button_string.match(tdaction_pattern);
+    const match_button_action_show_reply = button_string.match(tdaction_show_reply_pattern);
+    // console.log('text_button_link', text_button_link)
+    // console.log('text_button_link_blank', text_button_link_blank)
+    // console.log('text_button_link_parent', text_button_link_parent)
+    // console.log('text_button_action', text_button_action)
+    if (match_button_link && match_button_link.length && match_button_link.length === 3) {
+      const button =  TiledeskChatbotUtil.create_link_button_by_match(button_string, match_button_link, TiledeskChatbotUtil.TARGET_BLANK);
       return button;
     }
-    if (text_button_link_blank && text_button_link_blank.length && text_button_link_blank.length === 3) {
-      const button =  TiledeskChatbotUtil.button_link_by_match(button_string, text_button_link_blank, TiledeskChatbotUtil.TARGET_BLANK);
+    else if (match_button_link_blank && match_button_link_blank.length && match_button_link_blank.length === 3) {
+      const button =  TiledeskChatbotUtil.create_link_button_by_match(button_string, match_button_link_blank, TiledeskChatbotUtil.TARGET_BLANK);
       return button;
     }
-    if (text_button_link_parent && text_button_link_parent.length && text_button_link_parent.length === 3) {
-      const button =  TiledeskChatbotUtil.button_link_by_match(button_string, text_button_link_parent, TiledeskChatbotUtil.TARGET_PARENT);
+    else if (match_button_link_parent && match_button_link_parent.length && match_button_link_parent.length === 3) {
+      const button =  TiledeskChatbotUtil.create_link_button_by_match(button_string, match_button_link_parent, TiledeskChatbotUtil.TARGET_PARENT);
+      return button;
+    }
+    else if (match_button_action && match_button_action.length && match_button_action.length === 3) {
+      const show_reply = false;
+      const button =  TiledeskChatbotUtil.create_action_button_by_match(button_string, match_button_action, show_reply);
+      return button;
+    }
+    else if (match_button_action_show_reply && match_button_action_show_reply.length && match_button_action_show_reply.length === 3) {
+      const show_reply = true;
+      const button =  TiledeskChatbotUtil.create_action_button_by_match(button_string, match_button_action_show_reply, show_reply);
       return button;
     }
     else {
       // No subpatterns = text button
       let button = {};
-      console.log("button_text label", button_string)
       button[TiledeskChatbotUtil.TYPE_KEY] = TiledeskChatbotUtil.TYPE_TEXT;
       button[TiledeskChatbotUtil.VALUE_KEY] = button_string;
-      console.log("button text:", JSON.stringify(button));
       return button;
     }
     return button
   }
 
-  static button_link_by_match(button_string, match, target) {
+  static create_link_button_by_match(button_string, match, target) {
     let button = {};
     const command = match[0];
     const link = match[2];
     const button_label = button_string.replace(command,'').trim();
-    console.log("button_url_label", button_label)
+    // console.log("button_url_label", button_label)
     button[TiledeskChatbotUtil.TYPE_KEY] = TiledeskChatbotUtil.TYPE_URL;
     button[TiledeskChatbotUtil.VALUE_KEY] = button_label;
     button[TiledeskChatbotUtil.LINK_KEY] = link;
     button[TiledeskChatbotUtil.TARGET_KEY] = target;
-    console.log("button link blank:", JSON.stringify(button));
+    return button;
+  }
+
+  static create_action_button_by_match(button_string, match, show_reply) {
+    let button = {};
+    const command = match[0];
+    const action = match[2];
+    const button_label = button_string.replace(command,'').trim();
+    button[TiledeskChatbotUtil.TYPE_KEY] = TiledeskChatbotUtil.TYPE_ACTION;
+    button[TiledeskChatbotUtil.VALUE_KEY] = button_label;
+    button[TiledeskChatbotUtil.ACTION_KEY] = action;
+    button[TiledeskChatbotUtil.SHOW_REPLY_KEY] = show_reply;
     return button;
   }
 }

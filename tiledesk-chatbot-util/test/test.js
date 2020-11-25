@@ -15,6 +15,25 @@ describe('TiledeskChatbotUtil', function() {
             assert.strictEqual(reply.message.text, 'Intro text');
             assert(reply.message.attributes != null);
             assert(reply.message.attributes.attachment != null);
+            // MESSAGE:
+            // {
+            //     "message": {
+            //         "text": "Intro text",
+            //         "type": "text",
+            //         "attributes": {
+            //             "attachment": {
+            //                 "type": "template",
+            //                 "buttons": [{
+            //                     "type": "text",
+            //                     "value": "Button 1"
+            //                 }, {
+            //                     "type": "text",
+            //                     "value": "Button 2"
+            //                 }]
+            //             }
+            //         }
+            //     }
+            // }
         });
     });
 });
@@ -39,6 +58,24 @@ describe('TiledeskChatbotUtil', function() {
             assert.strictEqual(reply.message.attributes.attachment.buttons[0].value, 'Button with text');
             assert.strictEqual(reply.message.attributes.attachment.buttons[0].link, 'http://www.google.com');
             assert.strictEqual(reply.message.attributes.attachment.buttons[0].target, TiledeskChatbotUtil.TARGET_BLANK);
+            // MESSAGE:
+            // {
+            //     "message": {
+            //         "text": "Intro text",
+            //         "type": "text",
+            //         "attributes": {
+            //             "attachment": {
+            //                 "type": "template",
+            //                 "buttons": [{
+            //                     "type": "url",
+            //                     "value": "Button with text",
+            //                     "link": "http://www.google.com",
+            //                     "target": "blank"
+            //                 }]
+            //             }
+            //         }
+            //     }
+            // }
         });
     });
 });
@@ -63,6 +100,24 @@ describe('TiledeskChatbotUtil', function() {
             assert.strictEqual(reply.message.attributes.attachment.buttons[0].value, 'Button with text');
             assert.strictEqual(reply.message.attributes.attachment.buttons[0].link, 'http://www.google.com');
             assert.strictEqual(reply.message.attributes.attachment.buttons[0].target, TiledeskChatbotUtil.TARGET_BLANK);
+            // MESSAGE:
+            // {
+            //     "message": {
+            //         "text": "Intro text",
+            //         "type": "text",
+            //         "attributes": {
+            //             "attachment": {
+            //                 "type": "template",
+            //                 "buttons": [{
+            //                     "type": "url",
+            //                     "value": "Button with text",
+            //                     "link": "http://www.google.com",
+            //                     "target": "blank"
+            //                 }]
+            //             }
+            //         }
+            //     }
+            // }
         });
     });
 });
@@ -87,6 +142,107 @@ describe('TiledeskChatbotUtil', function() {
             assert.strictEqual(reply.message.attributes.attachment.buttons[0].value, 'Button with text');
             assert.strictEqual(reply.message.attributes.attachment.buttons[0].link, 'http://www.google.com');
             assert.strictEqual(reply.message.attributes.attachment.buttons[0].target, TiledeskChatbotUtil.TARGET_PARENT);
+            // MESSAGE:
+            // {
+            //     "message": {
+            //         "text": "Intro text",
+            //         "type": "text",
+            //         "attributes": {
+            //             "attachment": {
+            //                 "type": "template",
+            //                 "buttons": [{
+            //                     "type": "url",
+            //                     "value": "Button with text",
+            //                     "link": "http://www.google.com",
+            //                     "target": "parent"
+            //                 }]
+            //             }
+            //         }
+            //     }
+            // }
+            
+        });
+    });
+});
+
+describe('TiledeskChatbotUtil', function() {
+    describe('parseReply() of tdAction buttons', function() {
+        it('should return a Action button with show_reply = false', function() {
+            const text = 'Intro text\n* Action Button with text tdAction:ACTION-CALLBACK-NAME';
+            console.log("parsing text:", text);
+            const reply = TiledeskChatbotUtil.parseReply(text);
+            console.log("reply:", JSON.stringify(reply));
+            assert(reply.message != null);
+            assert(reply.message.text != null);
+            assert.strictEqual(reply.message.text, 'Intro text');
+            assert.strictEqual(reply.message.type, TiledeskChatbotUtil.TYPE_TEXT);
+            assert(reply.message.attributes != null);
+            assert(reply.message.attributes.attachment != null);
+            assert(reply.message.attributes.attachment.buttons != null);
+            assert(reply.message.attributes.attachment.buttons.length == 1);
+            assert.strictEqual(reply.message.attributes.attachment.buttons[0].type, TiledeskChatbotUtil.TYPE_ACTION);
+            assert.strictEqual(reply.message.attributes.attachment.buttons[0].value, 'Action Button with text');
+            assert.strictEqual(reply.message.attributes.attachment.buttons[0].action, 'ACTION-CALLBACK-NAME');
+            assert.strictEqual(reply.message.attributes.attachment.buttons[0].show_reply, false);
+            // MESSAGE:
+            // {
+            //     "message": {
+            //         "text": "Intro text",
+            //         "type": "text",
+            //         "attributes": {
+            //             "attachment": {
+            //                 "type": "template",
+            //                 "buttons": [{
+            //                     "type": "action",
+            //                     "value": "Action Button with text",
+            //                     "action": "ACTION-CALLBACK-NAME",
+            //                     "show_reply": false
+            //                 }]
+            //             }
+            //         }
+            //     }
+            // }
+        });
+    });
+});
+
+describe('TiledeskChatbotUtil', function() {
+    describe('parseReply() of tdAction buttons', function() {
+        it('should return a Action button with show_reply = true', function() {
+            const text = 'Intro text\n* Action Button with text tdActionShowReply:ACTION-CALLBACK-NAME';
+            console.log("parsing text:", text);
+            const reply = TiledeskChatbotUtil.parseReply(text);
+            console.log("reply:", JSON.stringify(reply));
+            assert(reply.message != null);
+            assert(reply.message.text != null);
+            assert.strictEqual(reply.message.text, 'Intro text');
+            assert.strictEqual(reply.message.type, TiledeskChatbotUtil.TYPE_TEXT);
+            assert(reply.message.attributes != null);
+            assert(reply.message.attributes.attachment != null);
+            assert(reply.message.attributes.attachment.buttons != null);
+            assert(reply.message.attributes.attachment.buttons.length == 1);
+            assert.strictEqual(reply.message.attributes.attachment.buttons[0].type, TiledeskChatbotUtil.TYPE_ACTION);
+            assert.strictEqual(reply.message.attributes.attachment.buttons[0].value, 'Action Button with text');
+            assert.strictEqual(reply.message.attributes.attachment.buttons[0].action, 'ACTION-CALLBACK-NAME');
+            assert.strictEqual(reply.message.attributes.attachment.buttons[0].show_reply, true);
+            // MESSAGE:
+            // {
+            //     "message": {
+            //         "text": "Intro text",
+            //         "type": "text",
+            //         "attributes": {
+            //             "attachment": {
+            //                 "type": "template",
+            //                 "buttons": [{
+            //                     "type": "action",
+            //                     "value": "Action Button with text",
+            //                     "action": "ACTION-CALLBACK-NAME",
+            //                     "show_reply": true
+            //                 }]
+            //             }
+            //         }
+            //     }
+            // }
         });
     });
 });
