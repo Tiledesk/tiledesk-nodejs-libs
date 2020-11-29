@@ -1,8 +1,6 @@
 var assert = require('assert');
 const { TiledeskChatbotUtil } = require('..');
 
-
-
 /************************
  * IMAGES
  ************************/

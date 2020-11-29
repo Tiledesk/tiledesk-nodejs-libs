@@ -1,6 +1,6 @@
 {
   "name": "@tiledesk/tiledesk-chatbot-util",
-  "version": "0.8.10",
+  "version": "0.8.11",
   "description": "A Library to help using some Tiledesk features (ex. microlanguage) in a chatbot proxy",
   "main": "index.js",
   "scripts": {

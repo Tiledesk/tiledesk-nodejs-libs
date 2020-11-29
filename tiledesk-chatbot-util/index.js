@@ -1,5 +1,5 @@
 /* 
-    ver 0.8.9
+    ver 0.8.11
     Andrea Sponziello - (c) Tiledesk.com
 */
 
@@ -276,38 +276,6 @@ class TiledeskChatbotUtil {
           reply.message[TiledeskChatbotUtil.METADATA_KEY].height = height;
         }
       }
-
-      // var frame_pattern = /^tdFrame:.*/mg;
-      // var frames = text.match(frame_pattern);
-      // if (frames && frames.length > 0) {
-      //   const frame_text = frames[0]
-      //   var text = text.replace(frame_text,"").trim()
-      //   var frame_url = frame_text.replace("tdFrame:", "")
-      //   var width = 200
-      //   var height = 200
-      //   // parse frame size (optional) ex: \frame:100-100:http://frame.com/index.html
-      //   let frame_size_pattern = /^([0-9]*-[0-9]*):(.*)/;
-      //   let frame_size_text = frame_url.match(frame_size_pattern)
-      //   if (frame_size_text && frame_size_text.length == 3) {
-      //     frame_url = frame_size_text[2]
-      //     let frame_size = frame_size_text[1]
-      //     // console.log("size: " + frame_size)
-      //     // console.log("frame url: " + frame_url)
-      //     let split_pattern = /-/
-      //     let size_splits = frame_size.split(split_pattern)
-      //     if (size_splits.length == 2) {
-      //       width = size_splits[0]
-      //       height = size_splits[1]
-      //     }
-      //   }
-      //   reply.message[TiledeskChatbotUtil.TEXT_KEY] = text
-      //   reply.message[TiledeskChatbotUtil.TYPE_KEY] = TiledeskChatbotUtil.TYPE_FRAME
-      //   reply.message[TiledeskChatbotUtil.METADATA_KEY] = {
-      //     src: frame_url,
-      //     width: width,
-      //     height: height
-      //   }
-      // }
     
       // looks for bullet buttons
       // button pattern is a line that starts with *TEXT_OF_BUTTON (every button on a line)
