@@ -85,17 +85,19 @@ class TiledeskChatbotUtil {
   static TARGET_KEY = 'target';
   static ACTION_KEY = 'action';
   static SHOW_REPLY_KEY = 'show_reply';
+  static SRC_KEY = 'src';
   // values
   static TYPE_IMAGE = 'image';
   static TYPE_FRAME = 'frame';
   static TYPE_TEXT = 'text';
-  static TYPE_URL = 'url';
-  static TYPE_ACTION = 'action';
-  static TARGET_BLANK = 'blank';
-  static TARGET_PARENT = 'parent';
+  static TYPE_BUTTON_TEXT = 'text';
+  static TYPE_BUTTON_URL = 'url';
+  static TYPE_BUTTON_ACTION = 'action';
+  static TARGET_BUTTON_LINK_BLANK = 'blank';
+  static TARGET_BUTTON_LINK_PARENT = 'parent';
 
   static parseReply(text) {
-      var reply = {
+      let reply = {
           "message": {}
       }
       reply.message[TiledeskChatbotUtil.TEXT_KEY] = text
@@ -107,12 +109,12 @@ class TiledeskChatbotUtil {
       // \image:WIDTH-HEIGHT:IMAGE_URL
       // ex.:
       // \image:100-100:http://image.com/image.gif
-      var image_pattern = /^\\image:.*/mg;
-      var images = text.match(image_pattern);
+      const image_pattern = /^\\image:.*/mg;
+      let images = text.match(image_pattern);
       // console.log("images: ", images)
       if (images && images.length > 0) {
         const image_text = images[0]
-        var text = text.replace(image_text,"").trim()
+        text = text.replace(image_text,"").trim()
         var image_url = image_text.replace("\\image:", "")
 
         var width = 200
@@ -141,44 +143,171 @@ class TiledeskChatbotUtil {
         }
       }
 
-      // looks for iframes
-      // iframes are defined as a line starting with:
-      // \frame:FRAME_URL
+      // looks for tdImages, new tag!
+      // images are defined as a line starting with:
+      // tdImage:IMAGE_URL
       // with optional size:
-      // \frame:WIDTH-HEIGHT:FRAME_URL
+      // tdImage:WIDTH-HEIGHT:IMAGE_URL
       // ex.:
-      // \frame:100-100:http://iframe.com/index.html
-      var frame_pattern = /^\\frame:.*/mg;
-      var frames = text.match(frame_pattern);
-      if (frames && frames.length > 0) {
-        const frame_text = frames[0]
-        var text = text.replace(frame_text,"").trim()
-        var frame_url = frame_text.replace("\\frame:", "")
-        var width = 200
-        var height = 200
-        // parse frame size (optional) ex: \frame:100-100:http://frame.com/index.html
-        let frame_size_pattern = /^([0-9]*-[0-9]*):(.*)/;
-        let frame_size_text = frame_url.match(frame_size_pattern)
-        if (frame_size_text && frame_size_text.length == 3) {
-          frame_url = frame_size_text[2]
-          let frame_size = frame_size_text[1]
-          // console.log("size: " + frame_size)
-          // console.log("frame url: " + frame_url)
-          let split_pattern = /-/
-          let size_splits = frame_size.split(split_pattern)
-          if (size_splits.length == 2) {
-            width = size_splits[0]
-            height = size_splits[1]
+      // tdImage:100-100:http://image.com/image.gif
+      const tdImage_pattern = /^(tdImage.*):(http(?:s)*.*)/m;
+      const tdimages_match = text.match(tdImage_pattern);
+      console.log("tdimages_match: ", tdimages_match)
+      // tdimages:  [
+      //   'tdImage...:IMAGE_URL', // [0]
+      //   'tdImage...', // [1]
+      //   'IMAGE_URL',  // [2]
+      //   index: 11,
+      //   input: 'Intro text\ntdImage...:IMAGE_URL',
+      //   groups: undefined
+      // ]
+      if (tdimages_match && tdimages_match.length === 3) {
+        const image_text = tdimages_match[0]; // 'tdImage...:IMAGE_URL'
+        const image_tag = tdimages_match[1]; // 'tdImage...'
+        const image_url = tdimages_match[2]; // 'IMAGE_URL'
+        text = text.replace(image_text,"").trim() // clean message from this tag suddenly after parsing
+        let width = null
+        let height = null
+        // parse image size (optional) ex: \tdImage,w100 h100:http://image.com/image.gif
+        // let image_size_pattern = /^.*,(w[0-9]+)(h[0-9]+)/;
+        let image_size_pattern = /^.*,\s*(w[0-9]+)*\s*(h[0-9]+)*/;
+        let image_size_match = image_tag.match(image_size_pattern)
+        console.log("image_size_match:", image_size_match);
+        // image_size_match: [
+        //   'tdImage, w200',
+        //   'w200',
+        //   undefined,
+        //   index: 0,
+        //   input: 'tdImage, w200',
+        //   groups: undefined
+        // ]
+        if (image_size_match && image_size_match.length >= 2) {
+          const first_capture = image_size_match[1];
+          if (first_capture && first_capture.startsWith("w")) { // on one capture can be 'w' or 'h'
+            width = parseInt(first_capture.substring(1));
+          }
+          else if (first_capture && first_capture.startsWith("h")) {
+            height = parseInt(first_capture.substring(1));
+          }
+          if (image_size_match.length > 2) { // on the second should be 'h' ...
+            const second_capture = image_size_match[2];
+            if (second_capture && second_capture.startsWith('h')) { // ...but it's better to check
+              height = parseInt(second_capture.substring(1));
+            }
+          }
+        }
+        reply.message[TiledeskChatbotUtil.TEXT_KEY] = text
+        reply.message[TiledeskChatbotUtil.TYPE_KEY] = TiledeskChatbotUtil.TYPE_IMAGE
+        reply.message[TiledeskChatbotUtil.METADATA_KEY] = {
+          src: image_url
+        }
+        if (width) {
+          reply.message[TiledeskChatbotUtil.METADATA_KEY].width = width;
+        }
+        if (height) {
+          reply.message[TiledeskChatbotUtil.METADATA_KEY].height = height;
+        }
+      }
+
+      // renders an iframe in the widget
+      // iframes are defined as a line starting with:
+      // tdFrame::FRAME_URL
+      // with optional size:
+      // tdFrame,wWIDTH hHEIGHT:FRAME_URL
+      // ex.:
+      // tdFrame:http://iframe.com/index.html
+      // with size:
+      // tdFrame,w100 h100:http://iframe.com/index.html
+      // WORK IN PROGRESS...
+      const tdFrame_pattern = /^(tdFrame.*):(http(?:s)*.*)/m;
+      const tdframes_match = text.match(tdFrame_pattern);
+      console.log("tdframes_match: ", tdframes_match)
+      // tdframes:  [
+      //   'tdFrame...:IMAGE_URL', // [0]
+      //   'tdFrame...', // [1]
+      //   'URL',  // [2]
+      //   index: 11,
+      //   input: 'Intro text\ntdFrame...:URL',
+      //   groups: undefined
+      // ]
+      if (tdframes_match && tdframes_match.length === 3) {
+        const frame_text = tdframes_match[0]; // 'tdFrame...:IMAGE_URL'
+        const frame_tag = tdframes_match[1]; // 'tdFrame...'
+        const frame_url = tdframes_match[2]; // 'URL'
+        text = text.replace(frame_text,"").trim() // clean message from this tag suddenly after parsing
+        let width = null
+        let height = null
+        // parse size (optional) ex: \tdFrame,w100 h100:http://image.com/image.gif
+        let size_pattern = /^.*,\s*(w[0-9]+)*\s*(h[0-9]+)*/;
+        let size_match = frame_tag.match(size_pattern)
+        console.log("image_size_match:", size_match);
+        // size_match: [
+        //   'tdFrame, w200',
+        //   'w200',
+        //   undefined,
+        //   index: 0,
+        //   input: 'tdFrame, w200',
+        //   groups: undefined
+        // ]
+        if (size_match && size_match.length >= 2) {
+          const first_capture = size_match[1];
+          if (first_capture && first_capture.startsWith("w")) { // on one capture can be 'w' or 'h'
+            width = parseInt(first_capture.substring(1));
+          }
+          else if (first_capture && first_capture.startsWith("h")) {
+            height = parseInt(first_capture.substring(1));
+          }
+          if (size_match.length > 2) { // on the second should be 'h' ...
+            const second_capture = size_match[2];
+            if (second_capture && second_capture.startsWith('h')) { // ...but it's better to check
+              height = parseInt(second_capture.substring(1));
+            }
           }
         }
         reply.message[TiledeskChatbotUtil.TEXT_KEY] = text
         reply.message[TiledeskChatbotUtil.TYPE_KEY] = TiledeskChatbotUtil.TYPE_FRAME
         reply.message[TiledeskChatbotUtil.METADATA_KEY] = {
-          src: frame_url,
-          width: width,
-          height: height
+          src: frame_url
+        }
+        if (width) {
+          reply.message[TiledeskChatbotUtil.METADATA_KEY].width = width;
+        }
+        if (height) {
+          reply.message[TiledeskChatbotUtil.METADATA_KEY].height = height;
         }
       }
+
+      // var frame_pattern = /^tdFrame:.*/mg;
+      // var frames = text.match(frame_pattern);
+      // if (frames && frames.length > 0) {
+      //   const frame_text = frames[0]
+      //   var text = text.replace(frame_text,"").trim()
+      //   var frame_url = frame_text.replace("tdFrame:", "")
+      //   var width = 200
+      //   var height = 200
+      //   // parse frame size (optional) ex: \frame:100-100:http://frame.com/index.html
+      //   let frame_size_pattern = /^([0-9]*-[0-9]*):(.*)/;
+      //   let frame_size_text = frame_url.match(frame_size_pattern)
+      //   if (frame_size_text && frame_size_text.length == 3) {
+      //     frame_url = frame_size_text[2]
+      //     let frame_size = frame_size_text[1]
+      //     // console.log("size: " + frame_size)
+      //     // console.log("frame url: " + frame_url)
+      //     let split_pattern = /-/
+      //     let size_splits = frame_size.split(split_pattern)
+      //     if (size_splits.length == 2) {
+      //       width = size_splits[0]
+      //       height = size_splits[1]
+      //     }
+      //   }
+      //   reply.message[TiledeskChatbotUtil.TEXT_KEY] = text
+      //   reply.message[TiledeskChatbotUtil.TYPE_KEY] = TiledeskChatbotUtil.TYPE_FRAME
+      //   reply.message[TiledeskChatbotUtil.METADATA_KEY] = {
+      //     src: frame_url,
+      //     width: width,
+      //     height: height
+      //   }
+      // }
     
       // looks for bullet buttons
       // button pattern is a line that starts with *TEXT_OF_BUTTON (every button on a line)
@@ -192,6 +321,38 @@ class TiledeskChatbotUtil {
         let buttons = []
         text_buttons.forEach(element => {
           const remove_extra_from_button = /^\*/mg; // removes initial "*"
+          let button_text = element.replace(remove_extra_from_button, "").trim();
+          let button = TiledeskChatbotUtil.parse_button_from_string(button_text);
+          // var button = {}
+          // button[TYPE_KEY] = "text"
+          // button["value"] = button_text
+          buttons.push(button)
+        });
+        if (reply.message[TiledeskChatbotUtil.ATTRIBUTES_KEY] == null) {
+          reply.message[TiledeskChatbotUtil.ATTRIBUTES_KEY] = {}
+        }
+        reply.message[TiledeskChatbotUtil.ATTRIBUTES_KEY]["attachment"] = {
+          type:"template",
+          buttons: buttons
+        }
+        text = text_with_removed_buttons
+      }
+      else {
+        // console.log("no text buttons")
+      }
+
+      // looks for buttons
+      // button pattern is a line that starts with tdButton: TEXT_OF_BUTTON (every button on a line)
+      const tdbutton_pattern = /^tdButton:.*/mg;
+      const tdbuttons_match = text.match(tdbutton_pattern);
+      console.log("tdbutton matches:", tdbuttons_match)
+      if (tdbuttons_match) {
+        const text_with_removed_buttons = text.replace(tdbutton_pattern,"").trim()
+        reply.message[TiledeskChatbotUtil.TEXT_KEY] = text_with_removed_buttons
+        // extracts buttons
+        let buttons = []
+        tdbuttons_match.forEach(element => {
+          const remove_extra_from_button = /^tdButton:/; // removes the initial 'tdButton:'
           let button_text = element.replace(remove_extra_from_button, "").trim();
           let button = TiledeskChatbotUtil.parse_button_from_string(button_text);
           // var button = {}
@@ -244,15 +405,15 @@ class TiledeskChatbotUtil {
     // console.log('text_button_link_parent', text_button_link_parent)
     // console.log('text_button_action', text_button_action)
     if (match_button_link && match_button_link.length && match_button_link.length === 3) {
-      const button =  TiledeskChatbotUtil.create_link_button_by_match(button_string, match_button_link, TiledeskChatbotUtil.TARGET_BLANK);
+      const button =  TiledeskChatbotUtil.create_link_button_by_match(button_string, match_button_link, TiledeskChatbotUtil.TARGET_BUTTON_LINK_BLANK);
       return button;
     }
     else if (match_button_link_blank && match_button_link_blank.length && match_button_link_blank.length === 3) {
-      const button =  TiledeskChatbotUtil.create_link_button_by_match(button_string, match_button_link_blank, TiledeskChatbotUtil.TARGET_BLANK);
+      const button =  TiledeskChatbotUtil.create_link_button_by_match(button_string, match_button_link_blank, TiledeskChatbotUtil.TARGET_BUTTON_LINK_BLANK);
       return button;
     }
     else if (match_button_link_parent && match_button_link_parent.length && match_button_link_parent.length === 3) {
-      const button =  TiledeskChatbotUtil.create_link_button_by_match(button_string, match_button_link_parent, TiledeskChatbotUtil.TARGET_PARENT);
+      const button =  TiledeskChatbotUtil.create_link_button_by_match(button_string, match_button_link_parent, TiledeskChatbotUtil.TARGET_BUTTON_LINK_PARENT);
       return button;
     }
     else if (match_button_action && match_button_action.length && match_button_action.length === 3) {
@@ -281,7 +442,7 @@ class TiledeskChatbotUtil {
     const link = match[2];
     const button_label = button_string.replace(command,'').trim();
     // console.log("button_url_label", button_label)
-    button[TiledeskChatbotUtil.TYPE_KEY] = TiledeskChatbotUtil.TYPE_URL;
+    button[TiledeskChatbotUtil.TYPE_KEY] = TiledeskChatbotUtil.TYPE_BUTTON_URL;
     button[TiledeskChatbotUtil.VALUE_KEY] = button_label;
     button[TiledeskChatbotUtil.LINK_KEY] = link;
     button[TiledeskChatbotUtil.TARGET_KEY] = target;
@@ -293,7 +454,7 @@ class TiledeskChatbotUtil {
     const command = match[0];
     const action = match[2];
     const button_label = button_string.replace(command,'').trim();
-    button[TiledeskChatbotUtil.TYPE_KEY] = TiledeskChatbotUtil.TYPE_ACTION;
+    button[TiledeskChatbotUtil.TYPE_KEY] = TiledeskChatbotUtil.TYPE_BUTTON_ACTION;
     button[TiledeskChatbotUtil.VALUE_KEY] = button_label;
     button[TiledeskChatbotUtil.ACTION_KEY] = action;
     button[TiledeskChatbotUtil.SHOW_REPLY_KEY] = show_reply;
