@@ -13,9 +13,9 @@ const { TiledeskChatbotUtil } = require('..');
         it('should return an image message', function() {
             // const cbutil = new TiledeskChatbotUtil();
             const text = "Intro text\n\\image:http://IMAGE_HOST/IMAGE_PATH";
-            console.log("parsing text:", text);
+            console.log("legacy images parsing text:", text);
             const reply = TiledeskChatbotUtil.parseReply(text);
-            console.log("reply:", JSON.stringify(reply));
+            console.log("legacy images reply:", JSON.stringify(reply));
             assert(reply.message != null);
             assert(reply.message.text != null);
             assert.strictEqual(reply.message.text, 'Intro text');

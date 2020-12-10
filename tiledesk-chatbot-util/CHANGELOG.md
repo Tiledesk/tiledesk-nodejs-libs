@@ -1,15 +1,28 @@
 # Library for Tiledesk External Chatbots, node.js
 
+### 0.8.15
+- added is_agent_handoff_command()
+
+### 0.8.14
+- youtube videos /embed/ url bug fix
+
+### 0.8.13
+- microlang automatically moves youtube videos to the /embed/ url to allow embedding in frames
+
+### 0.8.12
+- added: microlang tag tdVideo
+- refactored parse() method
+
 ### 0.8.11
-- added: microlang command tdButton
-- added: microlang command tdFrame
+- added: microlang tag tdButton
+- added: microlang tag tdFrame
 - added: microlang test splitted in more files
 
 ### 0.8.8
-- added: microlang command tdAction
-- added: microlang command tdActionShowReply
+- added: microlang tag tdAction
+- added: microlang tag tdActionShowReply
 
 ### 0.8.6
-- added: microlang command tdLink
-- added: microlang command tdLinkBlank
-- added: microlang command tdLinkParent
+- added: microlang tag tdLink
+- added: microlang tag tdLinkBlank
+- added: microlang tag tdLinkParent

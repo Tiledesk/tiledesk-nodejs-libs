@@ -97,47 +97,47 @@ describe('TiledeskChatbotUtil', function() {
     });
 });
 
-describe('TiledeskChatbotUtil', function() {
-    describe('parseReply() of tdLinkBlank buttons', function() {
-        it('should return a link.BLANK button', function() {
-            // const cbutil = new TiledeskChatbotUtil();
-            const text = 'Intro text\n*Button with text tdLinkBlank:http://www.google.com';
-            console.log("parsing text:", text);
-            const reply = TiledeskChatbotUtil.parseReply(text);
-            console.log("reply:", JSON.stringify(reply));
-            assert(reply.message != null);
-            assert(reply.message.text != null);
-            assert.strictEqual(reply.message.text, 'Intro text');
-            assert.strictEqual(reply.message.type, TiledeskChatbotUtil.TYPE_TEXT);
-            assert(reply.message.attributes != null);
-            assert(reply.message.attributes.attachment != null);
-            assert(reply.message.attributes.attachment.buttons != null);
-            assert(reply.message.attributes.attachment.buttons.length == 1);
-            assert.strictEqual(reply.message.attributes.attachment.buttons[0].type, TiledeskChatbotUtil.TYPE_BUTTON_URL);
-            assert.strictEqual(reply.message.attributes.attachment.buttons[0].value, 'Button with text');
-            assert.strictEqual(reply.message.attributes.attachment.buttons[0].link, 'http://www.google.com');
-            assert.strictEqual(reply.message.attributes.attachment.buttons[0].target, TiledeskChatbotUtil.TARGET_BUTTON_LINK_BLANK);
-            // MESSAGE:
-            // {
-            //     "message": {
-            //         "text": "Intro text",
-            //         "type": "text",
-            //         "attributes": {
-            //             "attachment": {
-            //                 "type": "template",
-            //                 "buttons": [{
-            //                     "type": "url",
-            //                     "value": "Button with text",
-            //                     "link": "http://www.google.com",
-            //                     "target": "blank"
-            //                 }]
-            //             }
-            //         }
-            //     }
-            // }
-        });
-    });
-});
+// describe('TiledeskChatbotUtil', function() {
+//     describe('parseReply() of tdLinkBlank buttons', function() {
+//         it('should return a link.BLANK button', function() {
+//             // const cbutil = new TiledeskChatbotUtil();
+//             const text = 'Intro text\n*Button with text tdLinkBlank:http://www.google.com';
+//             console.log("parsing text:", text);
+//             const reply = TiledeskChatbotUtil.parseReply(text);
+//             console.log("reply:", JSON.stringify(reply));
+//             assert(reply.message != null);
+//             assert(reply.message.text != null);
+//             assert.strictEqual(reply.message.text, 'Intro text');
+//             assert.strictEqual(reply.message.type, TiledeskChatbotUtil.TYPE_TEXT);
+//             assert(reply.message.attributes != null);
+//             assert(reply.message.attributes.attachment != null);
+//             assert(reply.message.attributes.attachment.buttons != null);
+//             assert(reply.message.attributes.attachment.buttons.length == 1);
+//             assert.strictEqual(reply.message.attributes.attachment.buttons[0].type, TiledeskChatbotUtil.TYPE_BUTTON_URL);
+//             assert.strictEqual(reply.message.attributes.attachment.buttons[0].value, 'Button with text');
+//             assert.strictEqual(reply.message.attributes.attachment.buttons[0].link, 'http://www.google.com');
+//             assert.strictEqual(reply.message.attributes.attachment.buttons[0].target, TiledeskChatbotUtil.TARGET_BUTTON_LINK_BLANK);
+//             // MESSAGE:
+//             // {
+//             //     "message": {
+//             //         "text": "Intro text",
+//             //         "type": "text",
+//             //         "attributes": {
+//             //             "attachment": {
+//             //                 "type": "template",
+//             //                 "buttons": [{
+//             //                     "type": "url",
+//             //                     "value": "Button with text",
+//             //                     "link": "http://www.google.com",
+//             //                     "target": "blank"
+//             //                 }]
+//             //             }
+//             //         }
+//             //     }
+//             // }
+//         });
+//     });
+// });
 
 describe('TiledeskChatbotUtil', function() {
     describe('parseReply() of tdLinkParent buttons', function() {
