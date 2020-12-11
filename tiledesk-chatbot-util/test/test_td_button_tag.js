@@ -54,7 +54,7 @@ describe('TiledeskChatbotUtil', function() {
 
 describe('TiledeskChatbotUtil', function() {
     describe('parseReply() of tdButton', function() {
-        it('should return an intro text with four buttons with mixed spaces between the * and the text', function() {
+        it('should return an intro text with four buttons with mixed spaces between the * and the button text', function() {
             // const cbutil = new TiledeskChatbotUtil();
             // const text = 'Intro text\ntdButton:Button 1\ntdButton:Button 2';
             const text = 'Intro text\n*   Button 1\n*      Button 2\n*         Button 3\n*      Button 4';
@@ -96,6 +96,29 @@ describe('TiledeskChatbotUtil', function() {
             //                 }]
             //             }
             //         }
+            //     }
+            // }
+        });
+    });
+});
+
+describe('TiledeskChatbotUtil', function() {
+    describe('parseReply() of tdButton', function() {
+        it('should not return because the are no spaces between * and the first button letter', function() {
+            const text = 'Intro text\n*Button 1\n*Button 2';
+            console.log("parsing text:", text);
+            const reply = TiledeskChatbotUtil.parseReply(text);
+            console.log("reply:", JSON.stringify(reply));
+            assert(reply.message != null);
+            assert(reply.message.text != null);
+            assert.strictEqual(reply.message.type, TiledeskChatbotUtil.TYPE_TEXT);
+            assert.strictEqual(reply.message.text, text);
+            assert(reply.message.attributes == null);
+            // MESSAGE:
+            // {
+            //     "message": {
+            //         "text": "Intro text",
+            //         "type": "text"
             //     }
             // }
         });
