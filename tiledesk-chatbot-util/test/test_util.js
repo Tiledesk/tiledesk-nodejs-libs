@@ -78,14 +78,14 @@ const { TiledeskChatbotUtil } = require('..');
   */
  describe('TiledeskChatbotUtil', function() {
     describe('This messae only contains the command', function() {
-        it('should return agent_handoff = null', function() {
+        it('should return agent_handoff != null', function() {
             const msg = {
                 'text': '\\agent'
             };
-            const info = TiledeskChatbotUtil.is_agent_handoff_command(msg);
-            console.log("info:", JSON.stringify(info));
-            assert.strictEqual(info.text, '');
-            assert.strictEqual(info.agent_handoff, TiledeskChatbotUtil.AGENT_COMMAND);
+            const command = TiledeskChatbotUtil.is_agent_handoff_command(msg);
+            console.log("info:", JSON.stringify(command));
+            assert.strictEqual(command.text, '');
+            assert.strictEqual(command.agent_handoff, TiledeskChatbotUtil.AGENT_COMMAND);
         });
     });
 });

@@ -137,7 +137,7 @@ static is_agent_handoff_command(msg) {
   static TARGET_BUTTON_LINK_BLANK = 'blank';
   static TARGET_BUTTON_LINK_PARENT = 'parent';
   // tags
-  static BUTTON_TAG = 'tdButton:';
+  static BUTTON_TAG = '\\*\\s+'; //'tdButton:';
   static FRAME_TAG = 'tdFrame';
   static VIDEO_TAG = 'tdVideo';
   static IMAGE_TAG = 'tdImage';
@@ -160,7 +160,7 @@ static is_agent_handoff_command(msg) {
       parsed = TiledeskChatbotUtil.parse_tdImage(parsed.text, parsed.reply);
       parsed = TiledeskChatbotUtil.parse_tdFrame(parsed.text, parsed.reply);
       parsed = TiledeskChatbotUtil.parse_tdVideo(parsed.text, parsed.reply);
-      parsed = TiledeskChatbotUtil.parse_bullet_buttons(parsed.text, parsed.reply);
+      // parsed = TiledeskChatbotUtil.parse_bullet_buttons(parsed.text, parsed.reply);
       parsed = TiledeskChatbotUtil.parse_tdButtons(parsed.text, parsed.reply);
       parsed = TiledeskChatbotUtil.parse_webhook(parsed.text, parsed.reply);
 
@@ -547,43 +547,43 @@ static is_agent_handoff_command(msg) {
     }
   }
 
-  // looks for bullet buttons
-  // button pattern is a line that starts with *TEXT_OF_BUTTON (every button on a line)
-  static parse_bullet_buttons(text, reply) {
-    const button_pattern = /^\*.*/mg;
-    const text_buttons = text.match(button_pattern);
-    if (text_buttons) {
-      // ricava il testo rimuovendo i bottoni
-      const text_with_removed_buttons = text.replace(button_pattern,"").trim()
-      reply.message[TiledeskChatbotUtil.TEXT_KEY] = text_with_removed_buttons
-      // estrae i bottoni
-      let buttons = []
-      text_buttons.forEach(element => {
-        const remove_extra_from_button = /^\*/mg; // removes initial "*"
-        let button_text = element.replace(remove_extra_from_button, "").trim();
-        let button = TiledeskChatbotUtil.parse_button_from_string(button_text);
-        // var button = {}
-        // button[TYPE_KEY] = "text"
-        // button["value"] = button_text
-        buttons.push(button)
-      });
-      if (reply.message[TiledeskChatbotUtil.ATTRIBUTES_KEY] == null) {
-        reply.message[TiledeskChatbotUtil.ATTRIBUTES_KEY] = {}
-      }
-      reply.message[TiledeskChatbotUtil.ATTRIBUTES_KEY]["attachment"] = {
-        type:"template",
-        buttons: buttons
-      }
-      text = text_with_removed_buttons
-    }
-    else {
-      // console.log("no text buttons")
-    }
-    return {
-      text: text,
-      reply: reply
-    }
-  }
+  // // looks for bullet buttons
+  // // button pattern is a line that starts with *TEXT_OF_BUTTON (every button on a line)
+  // static parse_bullet_buttons(text, reply) {
+  //   const button_pattern = /^\*\S+.*/mg;
+  //   const text_buttons = text.match(button_pattern);
+  //   if (text_buttons) {
+  //     // ricava il testo rimuovendo i bottoni
+  //     const text_with_removed_buttons = text.replace(button_pattern,"").trim()
+  //     reply.message[TiledeskChatbotUtil.TEXT_KEY] = text_with_removed_buttons
+  //     // estrae i bottoni
+  //     let buttons = []
+  //     text_buttons.forEach(element => {
+  //       const remove_extra_from_button = /^\*/mg; // removes initial "*"
+  //       let button_text = element.replace(remove_extra_from_button, "").trim();
+  //       let button = TiledeskChatbotUtil.parse_button_from_string(button_text);
+  //       // var button = {}
+  //       // button[TYPE_KEY] = "text"
+  //       // button["value"] = button_text
+  //       buttons.push(button)
+  //     });
+  //     if (reply.message[TiledeskChatbotUtil.ATTRIBUTES_KEY] == null) {
+  //       reply.message[TiledeskChatbotUtil.ATTRIBUTES_KEY] = {}
+  //     }
+  //     reply.message[TiledeskChatbotUtil.ATTRIBUTES_KEY]["attachment"] = {
+  //       type:"template",
+  //       buttons: buttons
+  //     }
+  //     text = text_with_removed_buttons
+  //   }
+  //   else {
+  //     // console.log("no text buttons")
+  //   }
+  //   return {
+  //     text: text,
+  //     reply: reply
+  //   }
+  // }
 
   // looks for tdButtons
   // button pattern is a line that starts with tdButton: TEXT_OF_BUTTON (every button on a line)
@@ -599,7 +599,7 @@ static is_agent_handoff_command(msg) {
       // extracts buttons
       let buttons = []
       tdbuttons_match.forEach(element => {
-        const remove_extra_from_button = /^tdButton:/; // removes the initial 'tdButton:'
+        const remove_extra_from_button = new RegExp('^' + tdbutton_tag, '');; // /^tdButton:/; // removes the initial 'tdButton:'
         let button_text = element.replace(remove_extra_from_button, "").trim();
         let button = TiledeskChatbotUtil.parse_button_from_string(button_text);
         // var button = {}

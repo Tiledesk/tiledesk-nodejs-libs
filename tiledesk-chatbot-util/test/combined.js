@@ -8,7 +8,7 @@ const { TiledeskChatbotUtil } = require('..');
     describe('parseReply() of tdImage and bullet buttons', function() {
         it('should return an image message combined with buttons', function() {
             // const cbutil = new TiledeskChatbotUtil();
-            const text = "Intro text\ntdImage,w200 h400:http://IMAGE_HOST/IMAGE_PATH\n*Button1\n*button2";
+            const text = "Intro text\ntdImage,w200 h400:http://IMAGE_HOST/IMAGE_PATH\n* Button1\n* button2";
             console.log("parsing text:", text);
             const reply = TiledeskChatbotUtil.parseReply(text);
             console.log("reply:", JSON.stringify(reply));

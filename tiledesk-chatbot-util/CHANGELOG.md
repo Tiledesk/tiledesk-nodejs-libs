@@ -1,6 +1,8 @@
 # Library for Tiledesk External Chatbots, node.js
 
-### 0.8.15
+This library is on npm: https://www.npmjs.com/package/@tiledesk/tiledesk-chatbot-util
+
+### 0.8.15 (online)
 - added is_agent_handoff_command()
 
 ### 0.8.14
