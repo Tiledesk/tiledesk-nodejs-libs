@@ -2,8 +2,15 @@
 
 This library is on npm: https://www.npmjs.com/package/@tiledesk/tiledesk-chatbot-util
 
-### 0.8.16
+### 0.8.17 (online)
+- bullet button TEMPORARY allows for no spaces between * and text. EX. *Button and * Button both supported
+- button link simply expresses as a link after the button text as *Button text https://link.to
+- button link blank simply expressed as a link single-spaced from text i.e. *Button text https://link.to
+- button link parent simply expressed as a link double-spaced from text i.e. *Button text  https://link.to
+
+### 0.8.16 (online)
 - deployed new bullet button (now mandatory at least one space between * and the first button text)
+- removed support for old bullet button
 
 ### 0.8.15 (online)
 - added is_agent_handoff_command()

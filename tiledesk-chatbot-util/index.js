@@ -1,5 +1,5 @@
 /* 
-    ver 0.8.15
+    ver 0.8.17
     Andrea Sponziello - (c) Tiledesk.com
 */
 
@@ -137,12 +137,12 @@ static is_agent_handoff_command(msg) {
   static TARGET_BUTTON_LINK_BLANK = 'blank';
   static TARGET_BUTTON_LINK_PARENT = 'parent';
   // tags
-  static BUTTON_TAG = '\\*\\s+'; //'tdButton:';
+  static BUTTON_TAG = '\\*\\s*'; //'\\*\\s+'; //'tdButton:';
   static FRAME_TAG = 'tdFrame';
   static VIDEO_TAG = 'tdVideo';
   static IMAGE_TAG = 'tdImage';
-  static LINK_TAG = 'tdLink:';
-  static LINK_PARENT_TAG = 'tdLinkParent:';
+  static LINK_TAG = '\\s{1}(http|https)://'; //'tdLink:';
+  static LINK_PARENT_TAG = '\\s{2}(http|https)://'; // 'tdLinkParent:';
   static ACTION_TAG = 'tdAction:';
   static ACTION_SHOW_REPLY_TAG = 'tdActionShowReply:';
   // other
@@ -171,17 +171,20 @@ static is_agent_handoff_command(msg) {
   }
 
   static parse_button_from_string(button_string) {
-    const tdlink_tag = TiledeskChatbotUtil.LINK_TAG; // 'tdLink:';
-    const tdlink_pattern = new RegExp('(' + tdlink_tag + ')(\\S+)', 'm');
-    // const tdlink_pattern = /(tdLink:)(\S+)/m;
+    const tdlink_pattern = /\s{1}((http|https):\/\/\S*)/m
+    const tdlink_parent_pattern = /\s{2}((http|https):\/\/\S*)/m
+    // const tdlink_tag = TiledeskChatbotUtil.LINK_TAG; // 'tdLink:';
+    // const tdlink_pattern = new RegExp('(' + tdlink_tag + ')(\\S+)', 'm');
+    // const tdlink_pattern = new RegExp('(' + tdlink_tag + ')(\\S+)', 'm');
+    // REMOVED const tdlink_pattern = /(tdLink:)(\S+)/m;
 
-    const tdlink_parent_tag = TiledeskChatbotUtil.LINK_PARENT_TAG; // 'tdLinkParent:';
-    const tdlink_parent_pattern = new RegExp('(' + tdlink_parent_tag + ')(\\S+)', 'm');
-    // const tdlink_parent_pattern = /(tdLinkParent:)(\S+)/m;
+    // const tdlink_parent_tag = TiledeskChatbotUtil.LINK_PARENT_TAG; // 'tdLinkParent:';
+    // const tdlink_parent_pattern = new RegExp('(' + tdlink_parent_tag + ')(\\S+)', 'm');
+    // REMOVED const tdlink_parent_pattern = /(tdLinkParent:)(\S+)/m;
 
     const tdaction_tag = TiledeskChatbotUtil.ACTION_TAG; // 'tdAction:';
     const tdaction_pattern = new RegExp('(' + tdaction_tag + ')(\\S+)', 'm');
-    // const tdaction_pattern = /(tdAction:)(\S+)/m;
+    // REMOVED const tdaction_pattern = /(tdAction:)(\S+)/m;
     
     const tdaction_show_reply_tag = TiledeskChatbotUtil.ACTION_SHOW_REPLY_TAG; // 'tdActionShowReply:';
     const tdaction_show_reply_pattern = new RegExp('(' + tdaction_show_reply_tag + ')(\\S+)', 'm');
@@ -194,23 +197,11 @@ static is_agent_handoff_command(msg) {
     const match_button_link_parent = button_string.match(tdlink_parent_pattern);
     const match_button_action = button_string.match(tdaction_pattern);
     const match_button_action_show_reply = button_string.match(tdaction_show_reply_pattern);
-    console.log('match_button_link', match_button_link)
+    console.log('match_button_link*********>>>', match_button_link)
     // console.log('text_button_link_blank', text_button_link_blank)
-    // console.log('text_button_link_parent', text_button_link_parent)
+    console.log('match_button_link_parent', match_button_link_parent)
     // console.log('text_button_action', text_button_action)
-    if (match_button_link && match_button_link.length && match_button_link.length === 3) {
-      const button =  TiledeskChatbotUtil.create_link_button_by_match(button_string, match_button_link, TiledeskChatbotUtil.TARGET_BUTTON_LINK_BLANK);
-      return button;
-    }
-    // else if (match_button_link_blank && match_button_link_blank.length && match_button_link_blank.length === 3) {
-    //   const button =  TiledeskChatbotUtil.create_link_button_by_match(button_string, match_button_link_blank, TiledeskChatbotUtil.TARGET_BUTTON_LINK_BLANK);
-    //   return button;
-    // }
-    else if (match_button_link_parent && match_button_link_parent.length && match_button_link_parent.length === 3) {
-      const button =  TiledeskChatbotUtil.create_link_button_by_match(button_string, match_button_link_parent, TiledeskChatbotUtil.TARGET_BUTTON_LINK_PARENT);
-      return button;
-    }
-    else if (match_button_action && match_button_action.length && match_button_action.length === 3) {
+    if (match_button_action && match_button_action.length && match_button_action.length === 3) {
       const show_reply = false;
       const button =  TiledeskChatbotUtil.create_action_button_by_match(button_string, match_button_action, show_reply);
       return button;
@@ -218,6 +209,14 @@ static is_agent_handoff_command(msg) {
     else if (match_button_action_show_reply && match_button_action_show_reply.length && match_button_action_show_reply.length === 3) {
       const show_reply = true;
       const button =  TiledeskChatbotUtil.create_action_button_by_match(button_string, match_button_action_show_reply, show_reply);
+      return button;
+    }
+    else if (match_button_link_parent && match_button_link_parent.length && match_button_link_parent.length === 3) {
+      const button =  TiledeskChatbotUtil.create_link_button_by_match(button_string, match_button_link_parent, TiledeskChatbotUtil.TARGET_BUTTON_LINK_PARENT);
+      return button;
+    }
+    else if (match_button_link && match_button_link.length && match_button_link.length === 3) {
+      const button =  TiledeskChatbotUtil.create_link_button_by_match(button_string, match_button_link, TiledeskChatbotUtil.TARGET_BUTTON_LINK_BLANK);
       return button;
     }
     else {
@@ -231,9 +230,18 @@ static is_agent_handoff_command(msg) {
   }
 
   static create_link_button_by_match(button_string, match, target) {
+    // match:
+    // [
+    //   ' http://www.google.com',
+    //   'http://www.google.com',
+    //   'http',
+    //   index: 11,
+    //   input: 'Link button http://www.google.com',
+    //   groups: undefined
+    // ]
     let button = {};
     const command = match[0];
-    const link = match[2];
+    const link = match[1];
     const button_label = button_string.replace(command,'').trim();
     // console.log("button_url_label", button_label)
     button[TiledeskChatbotUtil.TYPE_KEY] = TiledeskChatbotUtil.TYPE_BUTTON_URL;
