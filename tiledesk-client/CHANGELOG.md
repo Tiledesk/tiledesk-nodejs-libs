@@ -1,5 +1,15 @@
 # Client library for Tiledesk APIs, node.js 
 
+### 0.6.24 - online
+- getErr()
+
+### 0.6.22 - online
+- added some console.log to openNow()
+
+### 0.6.21 - online
+- added: moved request -> myrequesat for openNow()
+- fixed: call of fixToken for openNow()
+
 ### 0.6.20
 - added: test fireEvent()
 - added: test anonymousAuthentication()

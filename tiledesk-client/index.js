@@ -1,5 +1,5 @@
 /* 
-    ver 0.6.20
+    ver 0.6.25
     Andrea Sponziello - (c) Tiledesk.com
 */
 
@@ -24,6 +24,7 @@ class TiledeskClient {
    * 
    */
   static DEFAULT_API_ENDPOINT = "https://api.tiledesk.com/v2";
+  // static BETA_API_ENDPOINT = "https://tiledesk-server-pre.herokuapp.com";
 
   constructor(options) {
     if (!options.projectId) {
@@ -62,7 +63,7 @@ class TiledeskClient {
     const URL = `${APIENDPOINT}/projects/${project_id}`
     // console.log("getProjectSettings URL:", URL);
     // console.log("getProjectSettings token:", _token);
-    request({
+    TiledeskClient.myrequest({
       url: URL,
       headers: {
         'Content-Type' : 'application/json',
@@ -72,7 +73,6 @@ class TiledeskClient {
       method: 'GET'
     },
     function(err, response, resbody) {
-      // console.log("response: ", JSON.stringify(response))
       if (response.statusCode == 200) {
         callback(null, resbody)
       }
@@ -80,6 +80,14 @@ class TiledeskClient {
         const error_msg = "getProjectSettings. Status code: " + response.statusCode
         callback(error_msg, null)
       }
+
+      // if (response.statusCode == 200) {
+      //   callback(null, resbody)
+      // }
+      // else {
+      //   const error_msg = "getProjectSettings. Status code: " + response.statusCode
+      //   callback(error_msg, null)
+      // }
     });
   }
 
@@ -88,7 +96,7 @@ class TiledeskClient {
     console.log("getProjectSettings URL:", URL);
     // console.log("getProjectSettings token:", _token);
     
-    request({
+    TiledeskClient.myrequest({
       url: URL,
       headers: {
         'Content-Type' : 'application/json',
@@ -98,7 +106,6 @@ class TiledeskClient {
       method: 'GET'
     },
     function(err, response, resbody) {
-      // console.log("response: ", JSON.stringify(response))
       if (response.statusCode == 200) {
         callback(null, resbody)
       }
@@ -106,6 +113,14 @@ class TiledeskClient {
         const error_msg = "getProjectSettings. Status code: " + response.statusCode
         callback(error_msg, null)
       }
+
+      // if (response.statusCode == 200) {
+      //   callback(null, resbody)
+      // }
+      // else {
+      //   const error_msg = "getProjectSettings. Status code: " + response.statusCode
+      //   callback(error_msg, null)
+      // }
     });
   }
 
@@ -114,7 +129,7 @@ class TiledeskClient {
     const URL = `${APIENDPOINT}/projects/${project_id}`
     // console.log("getProjectSettings URL:", URL);
     // console.log("getProjectSettings token:", _token);
-    request({
+    TiledeskClient.myrequest({
       url: URL,
       headers: {
         'Content-Type' : 'application/json',
@@ -124,14 +139,22 @@ class TiledeskClient {
       method: 'GET'
     },
     function(err, response, resbody) {
-      // console.log("response: ", JSON.stringify(response))
-      if (response.statusCode == 200) {
-        callback(null, resbody)
+      if (response.statusCode === 200) {
+        if (callback) {
+         callback(null, JSON.parse(resbody))
+        }
       }
-      else {
-        const error_msg = "getProjectSettings. Status code: " + response.statusCode
-        callback(error_msg, null)
+      else if (callback) {
+        callback(TiledeskClient.getErr(err, response, resbody), null);
       }
+
+      // if (response.statusCode == 200) {
+      //   callback(null, resbody)
+      // }
+      // else {
+      //   const error_msg = "getProjectSettings. Status code: " + response.statusCode
+      //   callback(error_msg, null)
+      // }
     });
   }
 
@@ -139,7 +162,7 @@ class TiledeskClient {
     const _token = TiledeskClient.fixToken(token)
     const URL = `${this.APIENDPOINT}/${project_id}/departments/${departmentid}/operators?disableWebHookCall=true`
     console.log("getAllProjectUsers URL:", URL);
-    request({
+    TiledeskClient.myrequest({
       url: URL,
       headers: {
         'Content-Type' : 'application/json',
@@ -149,7 +172,16 @@ class TiledeskClient {
       method: 'GET'
     },
     function(err, response, resbody) {
-      callback(err, resbody)
+      if (response.statusCode === 200) {
+        if (callback) {
+         callback(null, JSON.parse(resbody))
+        }
+      }
+      else if (callback) {
+        callback(TiledeskClient.getErr(err, response, resbody), null);
+      }
+
+      // callback(err, resbody)
     });
   }
 
@@ -159,7 +191,7 @@ class TiledeskClient {
     data = properties
     console.log("updating request attributes URL:", URL)
     console.log("updating request attributes jwt_token:", jwt_token)
-    request({
+    TiledeskClient.myrequest({
       url: URL,
       headers: {
         'Content-Type' : 'application/json',
@@ -169,9 +201,18 @@ class TiledeskClient {
       method: 'PATCH'
       },
       function(err, res, resbody) {
-        if (callback) {
-          callback(err)
+        if (response.statusCode === 200) {
+          if (callback) {
+           callback(null, JSON.parse(resbody))
+          }
         }
+        else if (callback) {
+          callback(TiledeskClient.getErr(err, response, resbody), null);
+        }
+
+        // if (callback) {
+        //   callback(err)
+        // }
       }
     );
   }
@@ -182,7 +223,7 @@ class TiledeskClient {
     var data = attributes
     console.log("updating request attributes URL:", URL)
     console.log("updating request attributes jwt_token:", jwt_token)
-    request({
+    TiledeskClient.myrequest({
       url: URL,
       headers: {
         'Content-Type' : 'application/json',
@@ -192,9 +233,18 @@ class TiledeskClient {
       method: 'PATCH'
       },
       function(err, res, resbody) {
-        if (callback) {
-          callback(err)
+        if (response.statusCode === 200) {
+          if (callback) {
+           callback(null, JSON.parse(resbody))
+          }
         }
+        else if (callback) {
+          callback(TiledeskClient.getErr(err, response, resbody), null);
+        }
+
+        // if (callback) {
+        //   callback(err)
+        // }
       }
     );
   }
@@ -204,7 +254,7 @@ class TiledeskClient {
     const URL = `${APIENDPOINT}/${project_id}/project_users/users/${user_id}`
     console.log("getProjectUser.URL: ", URL);
     console.log("with token: ", jwt_token)
-    request({
+    TiledeskClient.myrequest({
       url: URL,
       headers: {
         'Content-Type' : 'application/json',
@@ -214,17 +264,25 @@ class TiledeskClient {
       method: 'GET'
     },
     function(err, response, resbody) {
-      // console.log("resbody: ", JSON.stringify(resbody))
-      if (resbody && resbody[0]) {
+      if (response.statusCode === 200) {
         if (callback) {
-          callback(err, resbody[0])
+         callback(null, JSON.parse(resbody))
         }
       }
-      else {
-        if (callback) {
-          callback(err, null)
-        }
+      else if (callback) {
+        callback(TiledeskClient.getErr(err, response, resbody), null);
       }
+      
+      // if (resbody && resbody[0]) {
+      //   if (callback) {
+      //     callback(err, resbody[0])
+      //   }
+      // }
+      // else {
+      //   if (callback) {
+      //     callback(err, null)
+      //   }
+      // }
     });
   }
 
@@ -233,7 +291,7 @@ class TiledeskClient {
     const URL = `${APIENDPOINT}/${project_id}/project_users/${project_user_id}`
     console.log("setProjectUserAvailable. URL:", URL);
     console.log("with token: ", jwt_token)
-    request({
+    TiledeskClient.myrequest({
       url: URL,
       headers: {
         'Content-Type' : 'application/json',
@@ -245,9 +303,18 @@ class TiledeskClient {
       method: 'PUT'
     },
     function(err, response, resbody) {
-      if (callback) {
-        callback(err, resbody)
+      if (response.statusCode === 200) {
+        if (callback) {
+         callback(null, JSON.parse(resbody))
+        }
       }
+      else if (callback) {
+        callback(TiledeskClient.getErr(err, response, resbody), null);
+      }
+
+      // if (callback) {
+      //   callback(err, resbody)
+      // }
     });
   }
 
@@ -256,7 +323,7 @@ class TiledeskClient {
     const URL = `${APIENDPOINT}/${project_id}/project_users/${project_user_id}`
     console.log("setProjectUserAvailable. URL:", URL);
     console.log("with token: ", jwt_token)
-    request({
+    TiledeskClient.myrequest({
       url: URL,
       headers: {
         'Content-Type' : 'application/json',
@@ -268,9 +335,18 @@ class TiledeskClient {
       method: 'PUT'
     },
     function(err, response, resbody) {
-      if (callback) {
-        callback(err, resbody)
+      if (response.statusCode === 200) {
+        if (callback) {
+         callback(null, JSON.parse(resbody))
+        }
       }
+      else if (callback) {
+        callback(TiledeskClient.getErr(err, response, resbody), null);
+      }
+
+      // if (callback) {
+      //   callback(err, resbody)
+      // }
     });
   }
 
@@ -278,7 +354,7 @@ class TiledeskClient {
     const jwt_token = 'JWT ' + token
     // direction = 1 => oldest must be served first
     const URL = `${APIENDPOINT}/${project_id}/requests?status=${status}&limit=${limit}&direction=1`
-    request({
+    TiledeskClient.myrequest({
       url: URL,
       headers: {
         'Content-Type' : 'application/json',
@@ -288,16 +364,26 @@ class TiledeskClient {
       method: 'GET'
     },
     function(err, response, resbody) {
-      // console.log("resbody: ", JSON.stringify(resbody))
-      if (resbody && resbody.requests) {
+      
+      if (response.statusCode === 200) {
         if (callback) {
-          callback(err, resbody.requests)
+         callback(null, JSON.parse(resbody))
         }
       }
-      else {
-        // throw
-        console.log("Error getting requests. Error:", err, " URL", URL, " token:", jwt_token, " Body:", resbody)
+      else if (callback) {
+        callback(TiledeskClient.getErr(err, response, resbody), null);
       }
+
+      // if (resbody && resbody.requests) {
+      //   if (callback) {
+      //     callback(err, resbody.requests)
+      //   }
+      // }
+      // else {
+      //   // throw
+      //   console.log("Error getting requests. Error:", err, " URL", URL, " token:", jwt_token, " Body:", resbody)
+      // }
+
     });
   }
 
@@ -306,7 +392,7 @@ class TiledeskClient {
     const URL = `${APIENDPOINT}/${project_id}/requests/${request_id}/participants`
     console.log("update request participant... URL:", URL);
     console.log("with token: ", jwt_token)
-    request({
+    TiledeskClient.myrequest({
       url: URL,
       headers: {
         'Content-Type' : 'application/json',
@@ -316,32 +402,42 @@ class TiledeskClient {
       method: 'PUT'
     },
     function(err, response, resbody) {
-      // console.log('resbody.requests:', resbody.requests);
-      if (callback) {
-        callback(err)
+      if (response.statusCode === 200) {
+        if (callback) {
+         callback(null, JSON.parse(resbody))
+        }
+      }
+      else if (callback) {
+        callback(TiledeskClient.getErr(err, response, resbody), null);
       }
     });
   }
 
   static getWidgetSettingsRaw(APIENDPOINT, project_id, callback) {
-    request(
+    TiledeskClient.myrequest(
     {
       url: `${APIENDPOINT}/${project_id}/widgets`,
       method: 'GET',
       json: true
     },
     function(err, response, resbody) {
-      if(response.statusCode === 200) {
+      if (response.statusCode === 200) {
         if (callback) {
-          callback(resbody)
+         callback(null, JSON.parse(resbody))
         }
+      }
+      else if (callback) {
+        callback(TiledeskClient.getErr(err, response, resbody), null);
       }
     });
   }
 
   static openNow(APIENDPOINT, project_id, token, callback) {
-    const jwt_token = 'JWT ' + token
-    request({
+    const jwt_token = TiledeskClient.fixToken(token)
+    // console.log("using token:", jwt_token)
+    // console.log("using project_id:", project_id)
+    // console.log("using APIENDPOINT:", APIENDPOINT)
+    TiledeskClient.myrequest({
        url: `${APIENDPOINT}/projects/${project_id}/isopen`,
        headers: {
          'Content-Type' : 'application/json',
@@ -350,22 +446,47 @@ class TiledeskClient {
        method: 'GET'
      },
      function(err, response, resbody) {
-      //  console.log("resbody: ", resbody)
-       if(response.statusCode === 200) {
+       if (response.statusCode === 200) {
          if (callback) {
-          callback(JSON.parse(resbody).isopen)
+          callback(null, JSON.parse(resbody))
          }
        }
+       else if (callback) {
+         callback(TiledeskClient.getErr(err, response, resbody), null);
+       }
     });
+  }
+
+  static getErr(err, response, resbody) {
+    let res_err = {}
+    res_err.tiledesk_err = resbody;
+    res_err.http_err = err;
+    return res_err;
   }
 
   openNow(callback) {
     TiledeskClient.openNow(this.API_ENDPOINT, this.projectId, this.token, callback);
   }
-   
+  
+  static myrequest(options, callback) {
+    request(
+      {
+        url: options.url,
+        headers: options.headers,
+        json: options.json,
+        method: options.method
+      },
+        function(err, res, resbody) {
+          if (callback) {
+            callback(err,res, resbody);
+          }
+        }
+      );
+  }
+
   static anonymousAuthenticationRaw(APIENDPOINT, project_id, callback) {
     // console.log("using project_id", project_id)
-    request({
+    TiledeskClient.myrequest({
       url: `${APIENDPOINT}/auth/signinAnonymously`,
       headers: {
         'Content-Type' : 'application/json'
@@ -376,9 +497,18 @@ class TiledeskClient {
       method: 'POST'
     },
     function(err, response, resbody) {
-      if (callback) {
-        callback(err, response, resbody)
+      if (response.statusCode === 200) {
+        if (callback) {
+         callback(null, JSON.parse(resbody))
+        }
       }
+      else if (callback) {
+        callback(TiledeskClient.getErr(err, response, resbody), null);
+      }
+
+      // if (callback) {
+      //   callback(err, response, resbody)
+      // }
     });
   }
 
@@ -404,7 +534,7 @@ class TiledeskClient {
   }
 
   static sendMessageRaw(APIENDPOINT, token, project_id, msgJSON, request_id, callback) {
-    request(
+    TiledeskClient.myrequest(
     {
       url: `${APIENDPOINT}/${project_id}/requests/${request_id}/messages`,
       headers: {
@@ -415,19 +545,28 @@ class TiledeskClient {
       method: 'POST'
     },
       function(err, res, resbody) {
-        if (callback) {
-          callback(err)
+        if (response.statusCode === 200) {
+          if (callback) {
+           callback(null, JSON.parse(resbody))
+          }
         }
+        else if (callback) {
+          callback(TiledeskClient.getErr(err, response, resbody), null);
+        }
+
+        // if (callback) {
+        //   callback(err)
+        // }
       }
     );
   }
 
   sendMessage(msgJSON, request_id, callback) {
-    console.log("mess:", msgJSON)
-    console.log("request_id:", request_id)
-    console.log("this.API_ENDPOINT:", this.API_ENDPOINT)
-    console.log("this.projectId:", this.projectId)
-    console.log("this.token:", this.token)
+    // console.log("mess:", msgJSON)
+    // console.log("request_id:", request_id)
+    // console.log("this.API_ENDPOINT:", this.API_ENDPOINT)
+    // console.log("this.projectId:", this.projectId)
+    // console.log("this.token:", this.token)
     TiledeskClient.sendMessageRaw(this.API_ENDPOINT, this.token, this.projectId, msgJSON, request_id, callback);
   }
 
@@ -443,8 +582,16 @@ class TiledeskClient {
        method: 'POST'
      },
      function(err, response, resbody) {
-        if (callback) {
-        callback(err, response, resbody)
+        // if (callback) {
+        //   callback(err, response, resbody)
+        // }
+        if (response.statusCode === 200) {
+          if (callback) {
+           callback(null, JSON.parse(resbody))
+          }
+        }
+        else if (callback) {
+          callback(TiledeskClient.getErr(err, response, resbody), null);
         }
     });
   }
@@ -452,30 +599,6 @@ class TiledeskClient {
   fireEvent(event, callback) {
     TiledeskClient.fireEvent(this.API_ENDPOINT, this.projectId, this.token, event, callback);
   }
-
-  // sendMessage(msg, request_id, callback) {
-  //   console.log("mess:", msg)
-  //   console.log("request_id:", request_id)
-  //   console.log("this.API_ENDPOINT:", this.API_ENDPOINT)
-  //   console.log("this.projectId:", this.projectId)
-  //   console.log("this.token:", this.token)
-  //   request(
-  //   {
-  //     url: `${this.API_ENDPOINT}/${this.projectId}/requests/${request_id}/messages`,
-  //     headers: {
-  //       'Content-Type' : 'application/json',
-  //       'Authorization': this.token
-  //     },
-  //     json: msg,
-  //     method: 'POST'
-  //   },
-  //     function(err, res, resbody) {
-  //       if (callback) {
-  //         callback(err)
-  //       }
-  //     }
-  //   );
-  // }
 
 }
 
