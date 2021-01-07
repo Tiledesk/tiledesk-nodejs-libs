@@ -1,6 +1,6 @@
 {
   "name": "@tiledesk/tiledesk-client",
-  "version": "0.6.26",
+  "version": "0.6.27",
   "description": "Client library for Tiledesk node.js APIs",
   "main": "index.js",
   "scripts": {
@@ -29,6 +29,7 @@
   },
   "homepage": "https://github.com/Tiledesk/tiledesk-nodejs-libs#readme",
   "dependencies": {
-    "mocha": "^8.2.1"
+    "mocha": "^8.2.1",
+    "request": "^2.88.2"
   }
 }

@@ -1,9 +1,11 @@
 /* 
-    ver 0.5.15
+    ver 0.5.16
     Andrea Sponziello - (c) Tiledesk.com
 */
 
 const request = require('request');
+// const { TiledeskClient } = require('../tiledesk-client');
+const { TiledeskClient } = require('@tiledesk/tiledesk-client');
 
 /**
  * This is the class that handles the communication with Tiledesk's APIs
@@ -14,8 +16,8 @@ class TiledeskChatbotClient {
    * Constructor for TiledeskClient object
    *
    * @example
-   * const { TiledeskClient } = require('tiledesk-client');
-   * const tdclient = new TiledeskClient({request: request, response: response});
+   * const { TiledeskChatbotClient } = require('tiledesk-chatbot-client');
+   * const tdclient = new TiledeskChatbotClient({request: request, response: response});
    *
    * @param {Object} options JSON configuration.
    * @param {Object} options.request Optional. Express HTTP request object.
@@ -112,6 +114,13 @@ class TiledeskChatbotClient {
         this.text = options.text
       }
     }
+    // finally initialize an instance of TiledeskClient:
+    this.tiledeskClient = new TiledeskClient(
+      {
+        projectId: this.project_id,
+        token: this.token,
+        APIURL: this.API_ENDPOINT
+      });
   }
 
   fixToken(token) {
@@ -124,90 +133,111 @@ class TiledeskChatbotClient {
   }
 
   sendMessage(msg, callback) {
-    // console.log("Sending message to Tiledesk: " + JSON.stringify(msg))
-    request(
-    {
-      url: `${this.API_ENDPOINT}/${this.project_id}/requests/${this.request_id}/messages`,
-      headers: {
-        'Content-Type' : 'application/json',
-        'Authorization': this.token
-      },
-      json: msg,
-      method: 'POST'
-    },
-      function(err, res, resbody) {
-        if (callback) {
-          callback(err)
-        }
-      }
-    );
+    this.tiledeskClient.sendMessage(
+      msg,
+      this.request_id,
+      callback);
+    // TiledeskChatbotClient.myrequest(
+    //   {
+    //     url: `${this.API_ENDPOINT}/${this.project_id}/requests/${this.request_id}/messages`,
+    //     headers: {
+    //       'Content-Type' : 'application/json',
+    //       'Authorization': this.token
+    //     },
+    //     json: msg,
+    //     method: 'POST'
+    //   },
+    //     function(err, res, resbody) {
+    //       if (callback) {
+    //         callback(err)
+    //       }
+    //     }
+    //   );
   }
 
-  static sendMessageRaw(api_endpoint, project_id, request_id, msg, token, callback) {
-    // console.log("Sending message to Tiledesk: " + JSON.stringify(msg))
-    request({
-      url: `${api_endpoint}/${project_id}/requests/${request_id}/messages`,
-      headers: {
-        'Content-Type' : 'application/json',
-        'Authorization': token
-      },
-      json: msg,
-      method: 'POST'
-      },
-      function(err, res, resbody) {
-        callback(err)
-      }
-    );
-  }
+  // static myrequest(options, callback) {
+  //   request(
+  //     {
+  //       url: options.url,
+  //       headers: options.headers,
+  //       json: options.json,
+  //       method: options.method
+  //     },
+  //       function(err, res, resbody) {
+  //         if (callback) {
+  //           callback(err,res, resbody);
+  //         }
+  //       }
+  //     );
+  // }
+
+  // static sendMessageRaw(api_endpoint, project_id, request_id, msg, token, callback) {
+  //   // console.log("Sending message to Tiledesk: " + JSON.stringify(msg))
+  //   request({
+  //     url: `${api_endpoint}/${project_id}/requests/${request_id}/messages`,
+  //     headers: {
+  //       'Content-Type' : 'application/json',
+  //       'Authorization': token
+  //     },
+  //     json: msg,
+  //     method: 'POST'
+  //     },
+  //     function(err, res, resbody) {
+  //       callback(err)
+  //     }
+  //   );
+  // }
 
   updateRequest(properties, attributes, callback) {
-    var URL = `${this.API_ENDPOINT}/${this.project_id}/requests/${this.request_id}/attributes`
-    var data = attributes
-    if (properties) {
-      URL = `${this.API_ENDPOINT}/${this.project_id}/requests/${this.request_id}/`
-      data = properties
-    }
+    this.tiledeskClient.updateRequest(this.request_id, properties, attributes, callback);
+    // var URL = `${this.API_ENDPOINT}/${this.project_id}/requests/${this.request_id}/attributes`
+    // var data = attributes
+    // if (properties) {
+    //   URL = `${this.API_ENDPOINT}/${this.project_id}/requests/${this.request_id}/`
+    //   data = properties
+    // }
     
-    request({
-      url: URL,
-      headers: {
-        'Content-Type' : 'application/json',
-        'Authorization': this.token
-      },
-      json: data,
-      method: 'PATCH'
-      },
-      function(err, res, resbody) {
-        if (callback) {
-          callback(err)
-        }
-      }
-    );
+    // request({
+    //   url: URL,
+    //   headers: {
+    //     'Content-Type' : 'application/json',
+    //     'Authorization': this.token
+    //   },
+    //   json: data,
+    //   method: 'PATCH'
+    //   },
+    //   function(err, res, resbody) {
+    //     if (callback) {
+    //       callback(err)
+    //     }
+    //   }
+    // );
   }
 
   updateDepartment(dep_id, callback) {
-    request({
-      url: `${this.API_ENDPOINT}/${this.project_id}/requests/${this.request_id}/departments`,
-      headers: {
-        'Content-Type' : 'application/json',
-        'Authorization': this.token
-      },
-      json: {
-        departmentid: dep_id
-      },
-      method: 'PUT'
-      },
-      function(err, res, resbody) {
-        if (err) {
-          console.log("BOT UPDATE DEP ERROR: ", err);
-        }
-        console.log("BOT UPDATE DEP, TILEDESK RESPONSE: " + JSON.stringify(resbody))
-        if(res.statusCode === 200) {
-          console.log("BOT UPDATE DEP, TILEDESK RESPONSE: OK")
-          callback(err)
-        }
-      }
-    );
+    this.tiledeskClient.updateRequest(this.request_id, dep_id, callback);
+    // request({
+    //   url: `${this.API_ENDPOINT}/${this.project_id}/requests/${this.request_id}/departments`,
+    //   headers: {
+    //     'Content-Type' : 'application/json',
+    //     'Authorization': this.token
+    //   },
+    //   json: {
+    //     departmentid: dep_id
+    //   },
+    //   method: 'PUT'
+    //   },
+    //   function(err, res, resbody) {
+    //     if (err) {
+    //       console.log("BOT UPDATE DEP ERROR: ", err);
+    //     }
+    //     console.log("BOT UPDATE DEP, TILEDESK RESPONSE: " + JSON.stringify(resbody))
+    //     if(res.statusCode === 200) {
+    //       console.log("BOT UPDATE DEP, TILEDESK RESPONSE: OK")
+    //       callback(err)
+    //     }
+    //   }
+    // );
     
   }
 
@@ -215,22 +245,23 @@ class TiledeskChatbotClient {
     if (!this.lead_id) {
       throw new Error('options.lead_id can NOT be empty.');
     }
-    request({
-      url: `${this.API_ENDPOINT}/${this.project_id}/leads/${this.lead_id}`, // this.conversation.lead._id
-      headers: {
-        'Content-Type' : 'application/json',
-        'Authorization': this.token
-      },
-      json: {
-        email: email,
-        fullname: fullname
-      },
-      method: 'PUT'
-      },
-      function(err, res, resbody) {
-        callback(err, res, resbody)
-      }
-    );
+    this.tiledeskClient.updateLeadEmailFullname(this.lead_id, email, fullname, callback);
+    // request({
+    //   url: `${this.API_ENDPOINT}/${this.project_id}/leads/${this.lead_id}`, // this.conversation.lead._id
+    //   headers: {
+    //     'Content-Type' : 'application/json',
+    //     'Authorization': this.token
+    //   },
+    //   json: {
+    //     email: email,
+    //     fullname: fullname
+    //   },
+    //   method: 'PUT'
+    //   },
+    //   function(err, res, resbody) {
+    //     callback(err, res, resbody)
+    //   }
+    // );
   }
 
 }

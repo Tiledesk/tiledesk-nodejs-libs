@@ -1,5 +1,11 @@
 # Client library for Tiledesk APIs, node.js 
 
+### 0.6.27 - online
+- added updateLeadEmailFullname()
+- added updateDepartment()
+- added updateRequest()
+- added dependency declaration in package.json: "request": "^2.88.2"
+
 ### 0.6.26 - online
 - SendMessageRaw fix: response not defined
 
