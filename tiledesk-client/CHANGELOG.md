@@ -1,5 +1,12 @@
 # Client library for Tiledesk APIs, node.js 
 
+### 0.6.26 - online
+- SendMessageRaw fix: response not defined
+
+### 0.6.25 - online
+- introduced myrequest() to decouple "request" lib
+- now each method shares the same return callback/error handling
+
 ### 0.6.24 - online
 - getErr()
 

@@ -1,5 +1,5 @@
 /* 
-    ver 0.6.25
+    ver 0.6.26
     Andrea Sponziello - (c) Tiledesk.com
 */
 
@@ -544,7 +544,7 @@ class TiledeskClient {
       json: msgJSON,
       method: 'POST'
     },
-      function(err, res, resbody) {
+      function(err, response, resbody) {
         if (response.statusCode === 200) {
           if (callback) {
            callback(null, JSON.parse(resbody))
