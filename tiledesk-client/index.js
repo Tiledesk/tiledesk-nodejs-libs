@@ -1,5 +1,5 @@
 /* 
-    ver 0.6.27
+    ver 0.6.35
     Andrea Sponziello - (c) Tiledesk.com
 */
 
@@ -74,11 +74,13 @@ class TiledeskClient {
     },
     function(err, response, resbody) {
       if (response.statusCode == 200) {
-        callback(null, resbody)
+        if (callback) {
+          callback(null, resbody)
+        }
       }
-      else {
-        const error_msg = "getProjectSettings. Status code: " + response.statusCode
-        callback(error_msg, null)
+      else if (callback) {
+          const error_msg = "getProjectSettings. Status code: " + response.statusCode
+          callback(error_msg, null)
       }
 
       // if (response.statusCode == 200) {
@@ -107,9 +109,11 @@ class TiledeskClient {
     },
     function(err, response, resbody) {
       if (response.statusCode == 200) {
-        callback(null, resbody)
+        if (callback) {
+          callback(null, resbody)
+        }
       }
-      else {
+      else if (callback) {
         const error_msg = "getProjectSettings. Status code: " + response.statusCode
         callback(error_msg, null)
       }
@@ -141,7 +145,7 @@ class TiledeskClient {
     function(err, response, resbody) {
       if (response.statusCode === 200) {
         if (callback) {
-         callback(null, JSON.parse(resbody))
+         callback(null, resbody)
         }
       }
       else if (callback) {
@@ -174,7 +178,7 @@ class TiledeskClient {
     function(err, response, resbody) {
       if (response.statusCode === 200) {
         if (callback) {
-         callback(null, JSON.parse(resbody))
+         callback(null, resbody)
         }
       }
       else if (callback) {
@@ -203,7 +207,7 @@ class TiledeskClient {
       function(err, response, resbody) {
         if (response.statusCode === 200) {
           if (callback) {
-           callback(null, JSON.parse(resbody))
+           callback(null, resbody)
           }
         }
         else if (callback) {
@@ -235,7 +239,7 @@ class TiledeskClient {
       function(err, response, resbody) {
         if (response.statusCode === 200) {
           if (callback) {
-           callback(null, JSON.parse(resbody))
+           callback(null, resbody)
           }
         }
         else if (callback) {
@@ -266,7 +270,7 @@ class TiledeskClient {
     function(err, response, resbody) {
       if (response.statusCode === 200) {
         if (callback) {
-         callback(null, JSON.parse(resbody))
+         callback(null, resbody)
         }
       }
       else if (callback) {
@@ -305,7 +309,7 @@ class TiledeskClient {
     function(err, response, resbody) {
       if (response.statusCode === 200) {
         if (callback) {
-         callback(null, JSON.parse(resbody))
+         callback(null, resbody)
         }
       }
       else if (callback) {
@@ -337,7 +341,7 @@ class TiledeskClient {
     function(err, response, resbody) {
       if (response.statusCode === 200) {
         if (callback) {
-         callback(null, JSON.parse(resbody))
+         callback(null, resbody)
         }
       }
       else if (callback) {
@@ -366,7 +370,7 @@ class TiledeskClient {
     function(err, response, resbody) {
       if (response.statusCode === 200) {
         if (callback) {
-         callback(null, JSON.parse(resbody))
+         callback(null, resbody)
         }
       }
       else if (callback) {
@@ -403,7 +407,7 @@ class TiledeskClient {
     function(err, response, resbody) {
       if (response.statusCode === 200) {
         if (callback) {
-         callback(null, JSON.parse(resbody))
+         callback(null, resbody)
         }
       }
       else if (callback) {
@@ -422,7 +426,7 @@ class TiledeskClient {
     function(err, response, resbody) {
       if (response.statusCode === 200) {
         if (callback) {
-         callback(null, JSON.parse(resbody))
+          callback(null, resbody)
         }
       }
       else if (callback) {
@@ -446,9 +450,9 @@ class TiledeskClient {
      },
      function(err, response, resbody) {
        if (response.statusCode === 200) {
-         if (callback) {
-          callback(null, JSON.parse(resbody))
-         }
+          if (callback) {
+            callback(null, resbody)
+          }
        }
        else if (callback) {
          callback(TiledeskClient.getErr(err, response, resbody), null);
@@ -468,6 +472,10 @@ class TiledeskClient {
   }
   
   static myrequest(options, callback) {
+    // console.log("options.url:", options.url);
+    // console.log("options.headers:", options.headers);
+    // console.log("options.json:", options.json);
+    // console.log("options.method:", options.method);
     request(
       {
         url: options.url,
@@ -477,7 +485,7 @@ class TiledeskClient {
       },
         function(err, res, resbody) {
           if (callback) {
-            callback(err,res, resbody);
+            callback(err, res, resbody);
           }
         }
       );
@@ -498,7 +506,7 @@ class TiledeskClient {
     function(err, response, resbody) {
       if (response.statusCode === 200) {
         if (callback) {
-         callback(null, JSON.parse(resbody))
+          callback(null, resbody)
         }
       }
       else if (callback) {
@@ -516,9 +524,10 @@ class TiledeskClient {
   }
 
   static sendMessageRaw(APIENDPOINT, token, project_id, msgJSON, request_id, callback) {
+    const url = `${APIENDPOINT}/${project_id}/requests/${request_id}/messages`;
     TiledeskClient.myrequest(
     {
-      url: `${APIENDPOINT}/${project_id}/requests/${request_id}/messages`,
+      url: url,
       headers: {
         'Content-Type' : 'application/json',
         'Authorization': token
@@ -529,7 +538,7 @@ class TiledeskClient {
       function(err, response, resbody) {
         if (response.statusCode === 200) {
           if (callback) {
-           callback(null, JSON.parse(resbody))
+            callback(null, resbody)
           }
         }
         else if (callback) {
@@ -557,7 +566,7 @@ class TiledeskClient {
      function(err, response, resbody) {
         if (response.statusCode === 200) {
           if (callback) {
-           callback(null, JSON.parse(resbody))
+            callback(null, resbody)
           }
         }
         else if (callback) {
@@ -592,7 +601,7 @@ class TiledeskClient {
       function(err, response, resbody) {
         if (response.statusCode === 200) {
           if (callback) {
-          callback(null, JSON.parse(resbody))
+            callback(null, resbody)
           }
         }
         else if (callback) {
@@ -622,7 +631,7 @@ class TiledeskClient {
       function(err, response, resbody) {
         if (response.statusCode === 200) {
           if (callback) {
-          callback(null, JSON.parse(resbody))
+            callback(null, resbody)
           }
         }
         else if (callback) {
@@ -647,7 +656,7 @@ class TiledeskClient {
       function(err, response, resbody) {
         if (response.statusCode === 200) {
           if (callback) {
-          callback(null, JSON.parse(resbody))
+            callback(null, resbody)
           }
         }
         else if (callback) {
