@@ -1,4 +1,7 @@
-# Client library for Tiledesk APIs, node.js 
+# Client library for Tiledesk APIs for nodejs 
+
+### 0.6.36 - online
+- some methods refactoring
 
 ### 0.6.27 - online
 - added updateLeadEmailFullname()

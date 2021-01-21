@@ -1,5 +1,5 @@
 /* 
-    ver 0.6.35
+    ver 0.6.36
     Andrea Sponziello - (c) Tiledesk.com
 */
 
@@ -128,9 +128,9 @@ class TiledeskClient {
     });
   }
 
-  static getProjectSettingsRaw(APIENDPOINT, project_id, token, callback) {
+  static getProjectSettingsRaw(API_ENDPOINT, project_id, token, callback) {
     const _token = TiledeskClient.fixToken(token)
-    const URL = `${APIENDPOINT}/projects/${project_id}`
+    const URL = `${API_ENDPOINT}/projects/${project_id}`
     // console.log("getProjectSettings URL:", URL);
     // console.log("getProjectSettings token:", _token);
     TiledeskClient.myrequest({
@@ -162,9 +162,9 @@ class TiledeskClient {
     });
   }
 
-  static getAllProjectUsersRaw(APIENDPOINT, project_id, departmentid, token, callback) {
+  static getAllProjectUsersRaw(API_ENDPOINT, project_id, departmentid, token, callback) {
     const _token = TiledeskClient.fixToken(token)
-    const URL = `${this.APIENDPOINT}/${project_id}/departments/${departmentid}/operators?disableWebHookCall=true`
+    const URL = `${API_ENDPOINT}/${project_id}/departments/${departmentid}/operators?disableWebHookCall=true`
     console.log("getAllProjectUsers URL:", URL);
     TiledeskClient.myrequest({
       url: URL,
@@ -191,7 +191,7 @@ class TiledeskClient {
 
   static updateRequestPropertiesRaw(API_ENDPOINT, request_id, project_id, properties, token, callback) {
     const jwt_token = TiledeskClient.fixToken(token)
-    var URL = `${APIENDPOINT}/${project_id}/requests/${request_id}`
+    var URL = `${API_ENDPOINT}/${project_id}/requests/${request_id}`
     data = properties
     console.log("updating request attributes URL:", URL)
     console.log("updating request attributes jwt_token:", jwt_token)
@@ -221,7 +221,7 @@ class TiledeskClient {
     );
   }
 
-  static updateRequestAttributesRaw(APIENDPOINT, request_id, project_id, attributes, token, callback) {
+  static updateRequestAttributesRaw(API_ENDPOINT, request_id, project_id, attributes, token, callback) {
     const jwt_token = TiledeskClient.fixToken(token)
     var URL = `${API_ENDPOINT}/${project_id}/requests/${request_id}/attributes`
     var data = attributes
@@ -390,9 +390,9 @@ class TiledeskClient {
     });
   }
 
-  static updateRequestParticipantsRaw(APIENDPOINT, project_id, request_id, token, participants, callback) {
+  static updateRequestParticipantsRaw(API_ENDPOINT, project_id, request_id, token, participants, callback) {
     const jwt_token = 'JWT ' + token
-    const URL = `${APIENDPOINT}/${project_id}/requests/${request_id}/participants`
+    const URL = `${API_ENDPOINT}/${project_id}/requests/${request_id}/participants`
     console.log("update request participant... URL:", URL);
     console.log("with token: ", jwt_token)
     TiledeskClient.myrequest({
@@ -491,10 +491,10 @@ class TiledeskClient {
       );
   }
 
-  static anonymousAuthenticationRaw(APIENDPOINT, project_id, callback) {
+  static anonymousAuthenticationRaw(API_ENDPOINT, project_id, callback) {
     // console.log("using project_id", project_id)
     TiledeskClient.myrequest({
-      url: `${APIENDPOINT}/auth/signinAnonymously`,
+      url: `${API_ENDPOINT}/auth/signinAnonymously`,
       headers: {
         'Content-Type' : 'application/json'
       },
@@ -523,8 +523,8 @@ class TiledeskClient {
     TiledeskClient.anonymousAuthenticationRaw(TiledeskClient.DEFAULT_API_ENDPOINT, project_id, callback);
   }
 
-  static sendMessageRaw(APIENDPOINT, token, project_id, msgJSON, request_id, callback) {
-    const url = `${APIENDPOINT}/${project_id}/requests/${request_id}/messages`;
+  static sendMessageRaw(API_ENDPOINT, token, project_id, msgJSON, request_id, callback) {
+    const url = `${API_ENDPOINT}/${project_id}/requests/${request_id}/messages`;
     TiledeskClient.myrequest(
     {
       url: url,
