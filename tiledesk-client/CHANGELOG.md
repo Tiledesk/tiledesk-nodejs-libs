@@ -1,5 +1,11 @@
 # Client library for Tiledesk APIs for nodejs 
 
+### 0.7.1 - onnline
+- Removed raw methods, now creating an instance of TiledeskClient is mandatory, see test 'init()'
+- APIKEY is mandatory
+- added option to log request and response HTTP calls, see test for the howto
+- added automated testing
+
 ### 0.6.36 - online
 - some methods refactoring
 
