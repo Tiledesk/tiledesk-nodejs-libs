@@ -13,7 +13,7 @@ describe('TiledeskChatbotUtil', function() {
             const text = 'Intro text\n* Button 1\n* Button 2';
             console.log("parsing text:", text);
             const reply = TiledeskChatbotUtil.parseReply(text);
-            console.log("reply:", JSON.stringify(reply));
+            console.log("reply buttons:", JSON.stringify(reply));
             assert(reply.message != null);
             assert(reply.message.text != null);
             assert.strictEqual(reply.message.type, TiledeskChatbotUtil.TYPE_TEXT);
@@ -102,42 +102,14 @@ describe('TiledeskChatbotUtil', function() {
     });
 });
 
-// ************************************************************
-// ****************** TEMPORARY DISABLED **********************
-// ****** IN THE FINAL RELEASE ENABLE THIS TEST AND DISABLE ***
-// ****** THE NEXT ONE ****************************************
-// ************************************************************
-// describe('TiledeskChatbotUtil', function() {
-//     describe('parseReply() of tdButton', function() {
-//         it('should not return because the are no spaces between * and the first button letter', function() {
-//             const text = 'Intro text\n*Button 1\n*Button 2';
-//             console.log("parsing text:", text);
-//             const reply = TiledeskChatbotUtil.parseReply(text);
-//             console.log("reply:", JSON.stringify(reply));
-//             assert(reply.message != null);
-//             assert(reply.message.text != null);
-//             assert.strictEqual(reply.message.type, TiledeskChatbotUtil.TYPE_TEXT);
-//             assert.strictEqual(reply.message.text, text);
-//             assert(reply.message.attributes == null);
-//             // MESSAGE:
-//             // {
-//             //     "message": {
-//             //         "text": "Intro text",
-//             //         "type": "text"
-//             //     }
-//             // }
-//         });
-//     });
-// });
+
 
 // *********************************************************
 // ****************** TEMPORARY ENABLED *******************
 // *********************************************************
 describe('TiledeskChatbotUtil', function() {
     describe('parseReply() of tdButton', function() {
-        it('should return an intro text with a couple of buttons. TEMPORARY TEST WITH * NO-SPACES button text AS i.e. *BUTTONTEST. disabled in next version', function() {
-            // const cbutil = new TiledeskChatbotUtil();
-            // const text = 'Intro text\ntdButton:Button 1\ntdButton:Button 2';
+        it('should NOT return an intro text with a couple of buttons because of:* NO-SPACES button text AS i.e. *BUTTONTEST.', function() {
             const text = 'Intro text\n*Button 1\n*Button 2';
             console.log("parsing text:", text);
             const reply = TiledeskChatbotUtil.parseReply(text);
@@ -145,17 +117,17 @@ describe('TiledeskChatbotUtil', function() {
             assert(reply.message != null);
             assert(reply.message.text != null);
             assert.strictEqual(reply.message.type, TiledeskChatbotUtil.TYPE_TEXT);
-            assert.strictEqual(reply.message.text, 'Intro text');
-            assert(reply.message.attributes != null);
-            assert(reply.message.attributes.attachment != null);
-            assert(reply.message.attributes.attachment.type != null);
-            assert.strictEqual(reply.message.attributes.attachment.type, 'template');
-            assert(reply.message.attributes.attachment.buttons != null);
-            assert(reply.message.attributes.attachment.buttons.length == 2);
-            assert.strictEqual(reply.message.attributes.attachment.buttons[0].type, TiledeskChatbotUtil.TYPE_BUTTON_TEXT);
-            assert.strictEqual(reply.message.attributes.attachment.buttons[0].value, 'Button 1');
-            assert.strictEqual(reply.message.attributes.attachment.buttons[1].type, TiledeskChatbotUtil.TYPE_BUTTON_TEXT);
-            assert.strictEqual(reply.message.attributes.attachment.buttons[1].value, 'Button 2');
+            assert.strictEqual(reply.message.text, 'Intro text\n*Button 1\n*Button 2');
+            assert(reply.message.attributes == null);
+            // assert(reply.message.attributes.attachment == null);
+            // assert(reply.message.attributes.attachment.type != null);
+            // assert.strictEqual(reply.message.attributes.attachment.type, 'template');
+            // assert(reply.message.attributes.attachment.buttons != null);
+            // assert(reply.message.attributes.attachment.buttons.length == 2);
+            // assert.strictEqual(reply.message.attributes.attachment.buttons[0].type, TiledeskChatbotUtil.TYPE_BUTTON_TEXT);
+            // assert.strictEqual(reply.message.attributes.attachment.buttons[0].value, 'Button 1');
+            // assert.strictEqual(reply.message.attributes.attachment.buttons[1].type, TiledeskChatbotUtil.TYPE_BUTTON_TEXT);
+            // assert.strictEqual(reply.message.attributes.attachment.buttons[1].value, 'Button 2');
             
             // MESSAGE:
             // {

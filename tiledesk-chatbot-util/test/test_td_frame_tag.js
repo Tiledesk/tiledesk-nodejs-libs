@@ -37,6 +37,37 @@ const { TiledeskChatbotUtil } = require('..');
 });
 
 /**
+  * localhost and port specified
+  */
+ describe('TiledeskChatbotUtil', function() {
+    describe('parseReply() of tdFrame with with localhost and port specified', function() {
+        it('should return an frame message', function() {
+            // const cbutil = new TiledeskChatbotUtil();
+            const text = "answer frame\ntdFrame:http://localhost:3014/";
+            console.log("parsing text tdFrame with localhost:", text);
+            const reply = TiledeskChatbotUtil.parseReply(text);
+            console.log("reply:", JSON.stringify(reply));
+            assert(reply.message != null);
+            assert(reply.message.text != null);
+            assert.strictEqual(reply.message.text, 'answer frame');
+            assert.strictEqual(reply.message.type, TiledeskChatbotUtil.TYPE_FRAME);
+            assert(reply.message.metadata != null);
+            assert.strictEqual(reply.message.metadata.src, 'http://localhost:3014/');
+            // MESSAGE:
+            // {
+            //     "message": {
+            //         "text": "Intro text",
+            //         "type": "frame",
+            //         "metadata": {
+            //             "src": "IMAGE_URL"
+            //         }
+            //     }
+            // }
+        });
+    });
+});
+
+/**
   * https
   */
  describe('TiledeskChatbotUtil', function() {

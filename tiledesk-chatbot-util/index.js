@@ -1,5 +1,5 @@
 /* 
-    ver 0.8.17
+    ver 0.8.18
     Andrea Sponziello - (c) Tiledesk.com
 */
 
@@ -126,6 +126,7 @@ static is_agent_handoff_command(msg) {
   static SHOW_REPLY_KEY = 'show_reply';
   static SRC_KEY = 'src';
   static FRAME_TYPE_KEY = 'type';
+  static WEBHOOK_KEY = 'webhook';
   // values
   static TYPE_IMAGE = 'image';
   static TYPE_FRAME = 'frame';
@@ -137,7 +138,7 @@ static is_agent_handoff_command(msg) {
   static TARGET_BUTTON_LINK_BLANK = 'blank';
   static TARGET_BUTTON_LINK_PARENT = 'parent';
   // tags
-  static BUTTON_TAG = '\\*\\s*'; //'\\*\\s+'; //'tdButton:';
+  static BUTTON_TAG = '\\*\\s+'; // backup: '\\*\\s*'; senza spazi 
   static FRAME_TAG = 'tdFrame';
   static VIDEO_TAG = 'tdVideo';
   static IMAGE_TAG = 'tdImage';
@@ -162,7 +163,8 @@ static is_agent_handoff_command(msg) {
       parsed = TiledeskChatbotUtil.parse_tdVideo(parsed.text, parsed.reply);
       // parsed = TiledeskChatbotUtil.parse_bullet_buttons(parsed.text, parsed.reply);
       parsed = TiledeskChatbotUtil.parse_tdButtons(parsed.text, parsed.reply);
-      parsed = TiledeskChatbotUtil.parse_webhook(parsed.text, parsed.reply);
+      parsed = TiledeskChatbotUtil.parse_webhook_with_url(parsed.text, parsed.reply);
+      parsed = TiledeskChatbotUtil.parse_webhook_on_off(parsed.text, parsed.reply);
 
       text = parsed.text;
       reply = parsed.reply;
@@ -173,34 +175,19 @@ static is_agent_handoff_command(msg) {
   static parse_button_from_string(button_string) {
     const tdlink_pattern = /\s{1}((http|https):\/\/\S*)/m
     const tdlink_parent_pattern = /\s{2}((http|https):\/\/\S*)/m
-    // const tdlink_tag = TiledeskChatbotUtil.LINK_TAG; // 'tdLink:';
-    // const tdlink_pattern = new RegExp('(' + tdlink_tag + ')(\\S+)', 'm');
-    // const tdlink_pattern = new RegExp('(' + tdlink_tag + ')(\\S+)', 'm');
-    // REMOVED const tdlink_pattern = /(tdLink:)(\S+)/m;
-
-    // const tdlink_parent_tag = TiledeskChatbotUtil.LINK_PARENT_TAG; // 'tdLinkParent:';
-    // const tdlink_parent_pattern = new RegExp('(' + tdlink_parent_tag + ')(\\S+)', 'm');
-    // REMOVED const tdlink_parent_pattern = /(tdLinkParent:)(\S+)/m;
 
     const tdaction_tag = TiledeskChatbotUtil.ACTION_TAG; // 'tdAction:';
     const tdaction_pattern = new RegExp('(' + tdaction_tag + ')(\\S+)', 'm');
-    // REMOVED const tdaction_pattern = /(tdAction:)(\S+)/m;
     
     const tdaction_show_reply_tag = TiledeskChatbotUtil.ACTION_SHOW_REPLY_TAG; // 'tdActionShowReply:';
     const tdaction_show_reply_pattern = new RegExp('(' + tdaction_show_reply_tag + ')(\\S+)', 'm');
-    // const tdaction_show_reply_pattern = /(tdActionShowReply:)(\S+)/m;
-
-    // REMOVED - const tdlink_blank_pattern = /(tdLinkBlank:)(\S+)/m; // REMOVED
-    // REMOVED - const match_button_link_blank = button_string.match(tdlink_blank_pattern); // REMOVED
 
     const match_button_link = button_string.match(tdlink_pattern);
     const match_button_link_parent = button_string.match(tdlink_parent_pattern);
     const match_button_action = button_string.match(tdaction_pattern);
     const match_button_action_show_reply = button_string.match(tdaction_show_reply_pattern);
     console.log('match_button_link*********>>>', match_button_link)
-    // console.log('text_button_link_blank', text_button_link_blank)
     console.log('match_button_link_parent', match_button_link_parent)
-    // console.log('text_button_action', text_button_action)
     if (match_button_action && match_button_action.length && match_button_action.length === 3) {
       const show_reply = false;
       const button =  TiledeskChatbotUtil.create_action_button_by_match(button_string, match_button_action, show_reply);
@@ -598,7 +585,6 @@ static is_agent_handoff_command(msg) {
   static parse_tdButtons(text, reply) {
     const tdbutton_tag = TiledeskChatbotUtil.BUTTON_TAG;// 'tdButton:';
     const tdbutton_pattern = new RegExp('^' + tdbutton_tag + '.*', 'mg');
-    // const tdbutton_pattern = /^tdButton:.*/mg;
     const tdbuttons_match = text.match(tdbutton_pattern);
     console.log("tdbutton matches:", tdbuttons_match)
     if (tdbuttons_match) {
@@ -607,7 +593,7 @@ static is_agent_handoff_command(msg) {
       // extracts buttons
       let buttons = []
       tdbuttons_match.forEach(element => {
-        const remove_extra_from_button = new RegExp('^' + tdbutton_tag, '');; // /^tdButton:/; // removes the initial 'tdButton:'
+        const remove_extra_from_button = new RegExp('^' + tdbutton_tag, ''); // /^tdButton:/; // removes the initial 'tdButton:'
         let button_text = element.replace(remove_extra_from_button, "").trim();
         let button = TiledeskChatbotUtil.parse_button_from_string(button_text);
         // var button = {}
@@ -635,13 +621,15 @@ static is_agent_handoff_command(msg) {
 
   // looks for a webhook url
   // webhooks are defined as a line starting with \webhook:URL
-  static parse_webhook(text, reply) {
+  static parse_webhook_with_url(text, reply) {
     var webhook_pattern = /^\\webhook:.*/mg;
     var webhooks = text.match(webhook_pattern);
     if (webhooks && webhooks.length > 0) {
       const webhook_text = webhooks[0]
       text = text.replace(webhook_text,"").trim()
       const webhook_url = webhook_text.replace("\\webhook:", "")
+      // reply.message[TiledeskChatbotUtil.WEBHOOK_KEY] = webhook_url;
+      reply.message[TiledeskChatbotUtil.TEXT_KEY] = text;
       reply.webhook = webhook_url
     }
     return {
@@ -649,6 +637,26 @@ static is_agent_handoff_command(msg) {
       reply: reply
     }
   }
+
+  // looks for a webhook url
+  // webhooks are defined as a line starting with \webhook:URL
+  static parse_webhook_on_off(text, reply) {
+    var webhook_pattern = /^\\webhook/mg;
+    var webhooks = text.match(webhook_pattern);
+    console.log("webhooks pattern:", webhooks);
+    // webhooks pattern: [ '\\webhook' ]
+    if (webhooks && webhooks.length > 0) {
+      const webhook_text = webhooks[0]
+      text = text.replace(webhook_text,"").trim()
+      reply.message[TiledeskChatbotUtil.TEXT_KEY] = text;
+      reply.webhook = true;
+    }
+    return {
+      text: text,
+      reply: reply
+    }
+  }
+
 }
 
 

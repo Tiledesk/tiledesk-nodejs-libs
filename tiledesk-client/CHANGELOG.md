@@ -1,6 +1,22 @@
-# Client library for Tiledesk APIs for nodejs 
+# Client library for Tiledesk nodejs APIs client
 
-### 0.7.1 - onnline
+### 0.7.5 - online
+- error log refactored adding request and response headers of the http-request
+
+### 0.7.4 - online
+- for each call always do: const jwt_token = TiledeskClient.fixToken(token)
+- added err.options in error obj replies
+- improved log
+- added getProjectUser() to test
+
+### 0.7.3 - online
+- removed the unused, undocumented "getAllProjectUsers()"
+
+
+### 0.7.2 - online
+- bug fix
+
+### 0.7.1 - online
 - Removed raw methods, now creating an instance of TiledeskClient is mandatory, see test 'init()'
 - APIKEY is mandatory
 - added option to log request and response HTTP calls, see test for the howto

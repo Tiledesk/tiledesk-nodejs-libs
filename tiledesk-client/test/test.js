@@ -30,44 +30,106 @@ describe('TiledeskClient', function() {
           }
       });
     });
-  });
+});
 
-// describe('TiledeskClient', function() {
-//   describe('fireEvent()', function() {
-//     it('should return the event echo json if fired correctly', function() {
-//         TiledeskClient.anonymousAuthentication(
-//             project_id,
-//             function(err, response, resbody) {
-//                 if (!err && resbody.user) {
-//                     const tdclient = new TiledeskClient(
-//                     {
-//                         projectId: project_id,
-//                         token: resbody.token
-//                     });
-//                     const event = {
-//                         name: "faqbot.answer_not_found",
-//                         attributes: {
-//                             bot: {
-//                                 _id: "testbot_id",
-//                                 name: "testbot_name"
-//                             },
-//                             message: {
-//                                 text: "help"
-//                             }
-//                         }
-//                     };
-//                     tdclient.fireEvent(event, function(err, response, resbody) {
-//                         assert.strictEqual(resbody.name, "faqbot.answer_not_found");
-//                     });
-//                 }
-//                 else {
-//                     assert.ok(false);
-//                 }
-//             }
-//         );
-//     });
-//   });
-// });
+describe('TiledeskClient', function() {
+    describe('anonymousAuthentication()', function() {
+        it('should return the auth token', function() {
+            const tdclient = new TiledeskClient({
+                APIKEY: APIKEY,
+                API_ENDPOINT: API_ENDPOINT,
+                log: LOG_STATUS
+            })
+            if (tdclient) {
+              assert(tdclient != null);
+              tdclient.anonymousAuthentication(
+                PROJECT_ID,
+                function(err, result) {
+                    // console.log("*********************")
+                    // console.log(err, resbody)
+                    if (!err && result) {
+                        assert(result.token != null);
+                    }
+                    else {
+                        assert.ok(false);
+                    }
+                }
+              );
+            }
+            else {
+                assert.ok(false);
+            }
+        });
+    });
+});
+
+describe('TiledeskClient', function() {
+    describe('authEmailPassword()', function() {
+        it('should return the auth token', function() {
+            const tdclient = new TiledeskClient({
+                APIKEY: APIKEY,
+                API_ENDPOINT: API_ENDPOINT,
+                log: LOG_STATUS
+            })
+            if (tdclient) {
+              assert(tdclient != null);
+              tdclient.authEmailPassword(EMAIL, PASSWORD, function(err, result) {
+                // console.log("authEmailPassword().result:", result);
+                if (!err && result) {
+                    assert(result.success == true);
+                    assert(result.token != null);
+                    assert(result.user)
+                    assert(result.user._id !== null);
+                    assert(result.user.email !== null);
+                }
+                else {
+                    assert.ok(false);
+                }
+              })
+            }
+            else {
+                assert.ok(false);
+            }
+        });
+    });
+});
+
+describe('TiledeskClient', function() {
+  describe('fireEvent()', function() {
+    it('should return the event echo json if fired correctly', function() {
+        const tdclient = new TiledeskClient({
+            APIKEY: APIKEY,
+            API_ENDPOINT: API_ENDPOINT,
+            log: LOG_STATUS
+        })
+        tdclient.anonymousAuthentication(
+            PROJECT_ID,
+            function(err, result) {
+                if (!err && result.token) {
+                    const event = {
+                        name: "faqbot.answer_not_found",
+                        attributes: {
+                            bot: {
+                                _id: "testbot_id",
+                                name: "testbot_name"
+                            },
+                            message: {
+                                text: "help"
+                            }
+                        }
+                    };
+                    tdclient.fireEvent(PROJECT_ID, event, result.token, function(err, result) {
+                        assert.strictEqual(result.name, "faqbot.answer_not_found");
+                    });
+                }
+                else {
+                    assert.ok(false);
+                }
+            }
+        );
+    });
+  });
+});
 
 describe('TiledeskClient', function() {
     describe('getProjectSettings()', function() {
@@ -103,28 +165,36 @@ describe('TiledeskClient', function() {
 });
 
 describe('TiledeskClient', function() {
-    describe('anonymousAuthentication()', function() {
-        it('should return the auth token', function() {
-            const tdclient = new TiledeskClient({
+    describe('getProjectUser()', function() {
+        it('gets the project-user by user_id', function() {
+            const tdclient = new TiledeskClient(
+            {
                 APIKEY: APIKEY,
                 API_ENDPOINT: API_ENDPOINT,
                 log: LOG_STATUS
             })
             if (tdclient) {
-              assert(tdclient != null);
-              tdclient.anonymousAuthentication(
-                PROJECT_ID,
-                function(err, resbody) {
-                    // console.log("*********************")
-                    // console.log(err, resbody)
-                    if (!err && resbody) {
-                        assert(resbody.token != null);
+              tdclient.authEmailPassword(EMAIL, PASSWORD, function(err, result) {
+                const user_id = result.user._id;
+                // console.log("user_id**********", user_id)
+                tdclient.getProjectUser(
+                    PROJECT_ID,
+                    user_id,
+                    result.token,
+                    function(err, resbody) {
+                        // console.log("getProjectUser", result);
+                        if (!err && result) {
+                            assert(result.user !== null);
+                            assert(result.user._id !== null);
+                            assert(result.user.email !== null);
+                        }
+                        else {
+                            assert.ok(false);
+                        }
                     }
-                    else {
-                        assert.ok(false);
-                    }
-                }
-              );
+                );
+              })
+              
             }
             else {
                 assert.ok(false);
@@ -132,6 +202,41 @@ describe('TiledeskClient', function() {
         });
     });
 });
+
+// describe('TiledeskClient', function() {
+//     describe('getAllProjectUsers()', function() {
+//         it('gets all the project users', function() {
+//             const tdclient = new TiledeskClient(
+//             {
+//                 APIKEY: APIKEY,
+//                 API_ENDPOINT: API_ENDPOINT,
+//                 log: LOG_STATUS
+//             })
+//             if (tdclient) {
+//               tdclient.authEmailPassword(EMAIL, PASSWORD, function(err, result) {
+//                 tdclient.getAllProjectUsers(
+//                     PROJECT_ID,
+//                     result.token,
+//                     function(err, resbody) {
+//                         if (!err && resbody) {
+//                             assert(resbody.name === PROJECT_NAME);
+//                         }
+//                         else {
+//                             assert.ok(false);
+//                         }
+//                     }
+//                 );
+//               })
+              
+//             }
+//             else {
+//                 assert.ok(false);
+//             }
+//         });
+//     });
+// });
+
+
 
 describe('TiledeskClient', function() {
     describe('openNow()', function() {
@@ -194,7 +299,7 @@ describe('TiledeskClient', function() {
                         assert(resbody.token != null);
                         const text_value = 'test message';
                         const request_id = 'support-group-' + uuidv4();
-                        console.log("Sending message to REQUEST-ID:", request_id);
+                        // console.log("Sending message to REQUEST-ID:", request_id);
                         tdclient.sendMessage(PROJECT_ID, request_id, {text: text_value}, resbody.token, function(err, result) {
                             // console.log("RESULT:", result)
                             assert(err === null);

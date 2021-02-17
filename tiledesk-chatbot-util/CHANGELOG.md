@@ -2,6 +2,11 @@
 
 This library is on npm: https://www.npmjs.com/package/@tiledesk/tiledesk-chatbot-util
 
+### 0.8.18 (online)
+- Added test case for tdFrame: parseReply() of "tdFrame with localhost and port specified"
+- webhook tag updated, get webhook from parsed_reply.webhook, possible values: webhook=true or webhook=HTTP://URL
+- Button tag now requires a space after * (this avoids conflict with markdown synthax for bold and italic)
+
 ### 0.8.17 (online)
 - bullet button TEMPORARY allows for no spaces between * and text. EX. *Button and * Button both supported
 - button link simply expresses as a link after the button text as *Button text https://link.to
