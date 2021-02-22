@@ -1,5 +1,5 @@
 /* 
-    ver 0.7.5
+    ver 0.7.6
     Andrea Sponziello - (c) Tiledesk.com
 */
 
@@ -643,7 +643,7 @@ class TiledeskClient {
         url.searchParams.append(key, options.additional_params[key]);
       }
     }
-    console.log("URL", url.href);
+    // console.log("URL", url.href);
     const HTTPREQUEST = {
       url: url.href,
       headers: {
