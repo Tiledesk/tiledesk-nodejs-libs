@@ -437,6 +437,33 @@ class TiledeskClient {
     );
   }
 
+  updateProjectUserCurrentlyLoggedIn(project_id, values, token, callback) {
+    const jwt_token = TiledeskClient.fixToken(token)
+    const URL = `${this.API_ENDPOINT}/${project_id}/project_users/`
+    const HTTPREQUEST = {
+      url: URL,
+      headers: {
+        'Content-Type' : 'application/json',
+        'Authorization': jwt_token
+      },
+      json: values,
+      method: 'PUT'
+    };
+    TiledeskClient.myrequest(
+      HTTPREQUEST,
+      function(err, response, resbody) {
+        if (response.statusCode === 200) {
+          if (callback) {
+          callback(null, resbody)
+          }
+        }
+        else if (callback) {
+          callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
+        }
+      }, this.log
+    );
+  }
+
   // static updateProjectUserAvailableRaw(APIENDPOINT, project_id, project_user_id, user_available, token, callback) {
   //   const jwt_token = 'JWT ' + token
   //   const URL = `${APIENDPOINT}/${project_id}/project_users/${project_user_id}`
@@ -603,12 +630,22 @@ class TiledeskClient {
   //   });
   // }
 
-  getRequests(project_id, limit, status, token, callback) {
+  getRequests(project_id, limit, status, token, callback, options) {
     const jwt_token = TiledeskClient.fixToken(token)
     // direction = 1 => oldest must be served first
-    const URL = `${this.API_ENDPOINT}/${project_id}/requests?status=${status}&limit=${limit}&direction=1`
+    // const URL = `${this.API_ENDPOINT}/${project_id}/requests?status=${status}&limit=${limit}&direction=1`
+    let url = new URL(`${this.API_ENDPOINT}/${project_id}/requests`)
+    url.searchParams.append("status", status);
+    url.searchParams.append("limit", limit);
+    url.searchParams.append("direction", 1);
+    if (options && options.additional_params) {
+      for (let key in options.additional_params) {
+        url.searchParams.append(key, options.additional_params[key]);
+      }
+    }
+    console.log("URL", url.href);
     const HTTPREQUEST = {
-      url: URL,
+      url: url.href,
       headers: {
         'Content-Type' : 'application/json',
         'Authorization': jwt_token
