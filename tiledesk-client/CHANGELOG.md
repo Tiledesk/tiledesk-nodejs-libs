@@ -1,5 +1,9 @@
 # Client library for Tiledesk nodejs APIs client
 
+### 0.7.6
+- added updateProjectUserCurrentlyLoggedIn
+- added "options" as last parameter of getRequests to allow adding additional params as no_populate, snap_department etc.
+
 ### 0.7.5 - online
 - error log refactored adding request and response headers of the http-request
 
