@@ -1,5 +1,4 @@
 /* 
-    ver 0.5.17
     Andrea Sponziello - (c) Tiledesk.com
 */
 
@@ -81,6 +80,10 @@ class TiledeskChatbotClient {
       this.project_id = payload.id_project;
       if (payload && payload.attributes && payload.attributes.action) {
         this.action = payload.attributes.action
+      }
+      if (body.hook) {
+        this.chatbot_name = body.hook.name;
+        this.chatbot_id = body.hook._id;
       }
     }
     else {

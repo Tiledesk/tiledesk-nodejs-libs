@@ -108,8 +108,8 @@ describe('TiledeskChatbotUtil', function() {
 // ****************** TEMPORARY ENABLED *******************
 // *********************************************************
 describe('TiledeskChatbotUtil', function() {
-    describe('parseReply() of tdButton', function() {
-        it('should NOT return an intro text with a couple of buttons because of:* NO-SPACES button text AS i.e. *BUTTONTEST.', function() {
+    describe('parseReply() of no more working old Button', function() {
+        it('should NOT return a buttons because of:* NO-SPACES button text AS i.e. *BUTTONTEST.', function() {
             const text = 'Intro text\n*Button 1\n*Button 2';
             console.log("parsing text:", text);
             const reply = TiledeskChatbotUtil.parseReply(text);
@@ -287,6 +287,8 @@ describe('TiledeskChatbotUtil', function() {
         it('should return a link.PARENT button', function() {
             // const cbutil = new TiledeskChatbotUtil();
             const text = 'Intro text\n* Button with text  http://www.google.com';
+            // const text = 'Intro text\n* Button with text > http://www.google.com';
+            
             console.log("parsing text:", text);
             const reply = TiledeskChatbotUtil.parseReply(text);
             console.log("reply:", JSON.stringify(reply));
