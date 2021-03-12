@@ -1,10 +1,10 @@
 {
   "name": "@tiledesk/tiledesk-chatbot-client",
-  "version": "0.5.19",
+  "version": "0.5.25",
   "description": "Client library to use Tiledesk Request APIs from a chatbot NodeJS proxy",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/Tiledesk/tiledesk-nodejs-libs#readme",
   "dependencies": {
-    "@tiledesk/tiledesk-client": "^0.7.6",
+    "@tiledesk/tiledesk-client": "^0.7.7",
     "request": "^2.88.2"
   }
 }

@@ -20,6 +20,7 @@ class TiledeskChatbotClient {
    *
    * @param {Object} options JSON configuration.
    * @param {Object} options.request Optional. Express HTTP request object.
+   * @param {Object} options.APIKEY Mandatory. Tiledesk APIKEY.
    * @param {Object} options.APIURL Optional. Tiledesk server api endpoint. If not provided, cloud endpoint is used
    * @param {Object} options.request_id Optional. If options.request is not provided this will be used
    * @param {Object} options.token Optional. If options.request is not provided this will be used
@@ -52,11 +53,17 @@ class TiledeskChatbotClient {
     this.response_ = options.response;
 
     if (options.APIURL) {
-      this.API_ENDPOINT = options.APIURL
+      this.APIURL = options.APIURL
     }
     else {
-      this.API_ENDPOINT = "https://api.tiledesk.com/v2";
+      this.APIURL = "https://api.tiledesk.com/v2";
     }
+
+    this.log = false;
+    if (options && options.log) {
+      this.log = options.log;
+    }
+
     // this.text = body.payload.text;
     // if (body.payload.attributes) {
     //   this.message_subtype = body.payload.attributes.subtype
@@ -122,7 +129,9 @@ class TiledeskChatbotClient {
       {
         projectId: this.project_id,
         token: this.token,
-        APIURL: this.API_ENDPOINT
+        APIURL: this.APIURL,
+        APIKEY: options.APIKEY,
+        log: this.log
       });
   }
 
@@ -137,8 +146,10 @@ class TiledeskChatbotClient {
 
   sendMessage(msg, callback) {
     this.tiledeskClient.sendMessage(
-      msg,
+      this.project_id,
       this.request_id,
+      msg,
+      this.token,
       callback);
     // TiledeskChatbotClient.myrequest(
     //   {
@@ -192,7 +203,12 @@ class TiledeskChatbotClient {
   // }
 
   updateRequest(properties, attributes, callback) {
-    this.tiledeskClient.updateRequest(this.request_id, properties, attributes, callback);
+    this.tiledeskClient.updateRequest(
+      this.project_id,
+      this.request_id,
+      properties,
+      attributes,
+      callback);
     // var URL = `${this.API_ENDPOINT}/${this.project_id}/requests/${this.request_id}/attributes`
     // var data = attributes
     // if (properties) {
@@ -218,7 +234,11 @@ class TiledeskChatbotClient {
   }
 
   updateDepartment(dep_id, callback) {
-    this.tiledeskClient.updateRequest(this.request_id, dep_id, callback);
+    this.tiledeskClient.updateDepartment(
+      this.project_id,
+      this.request_id,
+      dep_id,
+      callback);
     // request({
     //   url: `${this.API_ENDPOINT}/${this.project_id}/requests/${this.request_id}/departments`,
     //   headers: {
@@ -248,7 +268,12 @@ class TiledeskChatbotClient {
     if (!this.lead_id) {
       throw new Error('options.lead_id can NOT be empty.');
     }
-    this.tiledeskClient.updateLeadEmailFullname(this.lead_id, email, fullname, callback);
+    this.tiledeskClient.updateLeadEmailFullname(
+      this.project_id,
+      this.lead_id,
+      email,
+      fullname,
+      callback);
     // request({
     //   url: `${this.API_ENDPOINT}/${this.project_id}/leads/${this.lead_id}`, // this.conversation.lead._id
     //   headers: {

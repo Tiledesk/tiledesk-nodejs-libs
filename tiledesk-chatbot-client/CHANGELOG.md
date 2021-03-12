@@ -1,5 +1,23 @@
 # Node.js library to call Tiledesk APIs from an external chatbot 
 
+### 0.5.25 - online
+- bug fix
+
+### 0.5.24 - online
+- bug fix
+
+### 0.5.23 - online
+- introduced "log" property
+
+### 0.5.22 - online
+- bug fix
+
+### 0.5.21 - online
+- updated dependency "@tiledesk/tiledesk-client": "^0.7.7"
+
+### 0.5.20 - online
+- bug fix
+
 ### 0.5.19 - online
 - added properties: this.chatbot_name, this.chatbot_id
 

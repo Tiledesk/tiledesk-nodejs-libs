@@ -24,11 +24,14 @@ describe('TiledeskClient', function() {
       it('should return a new TiledeskClient', function() {
           const tdclient = new TiledeskClient({
               APIKEY: APIKEY,
-              API_ENDPOINT: API_ENDPOINT,
+              APIURL: "https://tiledesk-server-pre.herokuapp.com/v3",
               log: LOG_STATUS
           })
           if (tdclient) {
             assert(tdclient != null);
+            assert(tdclient.APIURL === "https://tiledesk-server-pre.herokuapp.com/v3");
+            assert(tdclient.APIKEY === APIKEY);
+            assert(tdclient.log === LOG_STATUS);
           }
           else {
               assert.ok(false);
@@ -42,7 +45,7 @@ describe('TiledeskClient', function() {
         it('should return the auth token', function(done) {
             const tdclient = new TiledeskClient({
                 APIKEY: APIKEY,
-                API_ENDPOINT: API_ENDPOINT,
+                APIURL: API_ENDPOINT,
                 log: LOG_STATUS
             })
             if (tdclient) {
@@ -73,7 +76,7 @@ describe('TiledeskClient', function() {
         it('should return the auth token', function(done) {
             const tdclient = new TiledeskClient({
                 APIKEY: APIKEY,
-                API_ENDPOINT: API_ENDPOINT,
+                APIURL: API_ENDPOINT,
                 log: LOG_STATUS
             })
             if (tdclient) {
@@ -107,7 +110,7 @@ describe('TiledeskClient', function() {
     it('should return the event echo json if fired correctly', function(done) {
         const tdclient = new TiledeskClient({
             APIKEY: APIKEY,
-            API_ENDPOINT: API_ENDPOINT,
+            APIURL: API_ENDPOINT,
             log: LOG_STATUS
         })
         // tdclient.anonymousAuthentication(
@@ -145,7 +148,7 @@ describe('TiledeskClient', function() {
             const tdclient = new TiledeskClient(
             {
                 APIKEY: APIKEY,
-                API_ENDPOINT: API_ENDPOINT,
+                APIURL: API_ENDPOINT,
                 log: LOG_STATUS
             })
             if (tdclient) {
@@ -179,7 +182,7 @@ describe('TiledeskClient', function() {
             const tdclient = new TiledeskClient(
             {
                 APIKEY: APIKEY,
-                API_ENDPOINT: API_ENDPOINT,
+                APIURL: API_ENDPOINT,
                 log: LOG_STATUS
             })
             if (tdclient) {
@@ -216,7 +219,7 @@ describe('TiledeskClient', function() {
             const tdclient = new TiledeskClient(
             {
                 APIKEY: APIKEY,
-                API_ENDPOINT: API_ENDPOINT,
+                APIURL: API_ENDPOINT,
                 log: LOG_STATUS
             })
             if (tdclient) {
@@ -252,7 +255,7 @@ describe('TiledeskClient', function() {
             const tdclient = new TiledeskClient(
             {
                 APIKEY: APIKEY,
-                API_ENDPOINT: API_ENDPOINT,
+                APIURL: API_ENDPOINT,
                 log: LOG_STATUS
             })
             if (tdclient) {
@@ -290,7 +293,7 @@ describe('TiledeskClient', function() {
             const tdclient = new TiledeskClient(
             {
                 APIKEY: APIKEY,
-                API_ENDPOINT: API_ENDPOINT,
+                APIURL: API_ENDPOINT,
                 log: LOG_STATUS
             })
             if (tdclient) {
@@ -356,7 +359,7 @@ describe('TiledeskClient', function() {
         it('should return false because of project not having open hours setup', function(done) {
             const tdclient = new TiledeskClient({
                 APIKEY: APIKEY,
-                API_ENDPOINT: API_ENDPOINT,
+                APIURL: API_ENDPOINT,
                 log: LOG_STATUS
             });
             if (tdclient) {
@@ -379,7 +382,7 @@ describe('TiledeskClient', function() {
         it('Widget settings JSON', function(done) {
             const tdclient = new TiledeskClient({
                 APIKEY: APIKEY,
-                API_ENDPOINT: API_ENDPOINT,
+                APIURL: API_ENDPOINT,
                 log: LOG_STATUS
             });
             if (tdclient) {
@@ -441,7 +444,7 @@ describe('TiledeskClient', function() {
         it('sends a message to a request conversation', function(done) {
             const tdclient = new TiledeskClient({
                 APIKEY: APIKEY,
-                API_ENDPOINT: API_ENDPOINT,
+                APIURL: API_ENDPOINT,
                 log: LOG_STATUS
             });
             if (tdclient) {
@@ -481,7 +484,7 @@ describe('TiledeskClient', function() {
             const tdclient = new TiledeskClient(
             {
                 APIKEY: APIKEY,
-                API_ENDPOINT: API_ENDPOINT,
+                APIURL: API_ENDPOINT,
                 log: LOG_STATUS
             })
             tdclient.getRequests(PROJECT_ID, 1, TiledeskClient.UNASSIGNED_STATUS, USER_TOKEN, (err, result) => {

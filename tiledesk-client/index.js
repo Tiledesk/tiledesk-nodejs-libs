@@ -40,11 +40,11 @@ class TiledeskClient {
     //   throw new Error('token can NOT be empty.');
     // }
 
-    if (options && options.API_ENDPOINT) {
-      this.API_ENDPOINT = options.API_ENDPOINT
+    if (options && options.APIURL) {
+      this.APIURL = options.APIURL
     }
     else {
-      this.API_ENDPOINT = TiledeskClient.DEFAULT_API_ENDPOINT;
+      this.APIURL = TiledeskClient.DEFAULT_API_ENDPOINT;
     }
 
     this.log = false;
@@ -72,7 +72,7 @@ class TiledeskClient {
     // TiledeskClient.createProjectRaw(TiledeskClient.DEFAULT_API_ENDPOINT, callback);
     
     const jwt_token = TiledeskClient.fixToken(token)
-    const URL = `${this.API_ENDPOINT}/projects/${project_id}`
+    const URL = `${this.APIURL}/projects/${project_id}`
     const HTTPREQUEST = {
       url: URL,
       headers: {
@@ -105,7 +105,7 @@ class TiledeskClient {
 
   getProjectSettings(projectId, token, callback) {
     const jwt_token = TiledeskClient.fixToken(token)
-    const URL = `${this.API_ENDPOINT}/projects/${projectId}`
+    const URL = `${this.APIURL}/projects/${projectId}`
     const HTTPREQUEST = {
       url: URL,
       headers: {
@@ -268,7 +268,7 @@ class TiledeskClient {
 
   updateRequestProperties(project_id, request_id, properties, token, callback) {
     const jwt_token = TiledeskClient.fixToken(token)
-    var URL = `${this.API_ENDPOINT}/${project_id}/requests/${request_id}`
+    var URL = `${this.APIURL}/${project_id}/requests/${request_id}`
     data = properties;
     const HTTPREQUEST = {
       url: URL,
@@ -332,7 +332,7 @@ class TiledeskClient {
 
   updateRequestAttributes(project_id, request_id, attributes, token, callback) {
     const jwt_token = TiledeskClient.fixToken(token)
-    var URL = `${this.API_ENDPOINT}/${project_id}/requests/${request_id}/attributes`
+    var URL = `${this.APIURL}/${project_id}/requests/${request_id}/attributes`
     var data = attributes;
     const HTTPREQUEST = {
       url: URL,
@@ -401,7 +401,7 @@ class TiledeskClient {
 
   getProjectUser(project_id, user_id, token, callback) {
     const jwt_token = TiledeskClient.fixToken(token)
-    const URL = `${this.API_ENDPOINT}/${project_id}/project_users/users/${user_id}`
+    const URL = `${this.APIURL}/${project_id}/project_users/users/${user_id}`
     const HTTPREQUEST = {
       url: URL,
       headers: {
@@ -439,7 +439,7 @@ class TiledeskClient {
 
   updateProjectUserCurrentlyLoggedIn(project_id, values, token, callback) {
     const jwt_token = TiledeskClient.fixToken(token)
-    const URL = `${this.API_ENDPOINT}/${project_id}/project_users/`
+    const URL = `${this.APIURL}/${project_id}/project_users/`
     const HTTPREQUEST = {
       url: URL,
       headers: {
@@ -498,7 +498,7 @@ class TiledeskClient {
 
   updateProjectUserAvailable(project_id, project_user_id, user_available, token, callback) {
     const jwt_token = TiledeskClient.fixToken(token)
-    const URL = `${this.API_ENDPOINT}/${project_id}/project_users/${project_user_id}`
+    const URL = `${this.APIURL}/${project_id}/project_users/${project_user_id}`
     const HTTPREQUEST = {
       url: URL,
       headers: {
@@ -563,7 +563,7 @@ class TiledeskClient {
 
   updateProjectUserAttributes(project_id, project_user_id, attributes, token, callback) {
     const jwt_token = TiledeskClient.fixToken(token)
-    const URL = `${this.API_ENDPOINT}/${project_id}/project_users/${project_user_id}`
+    const URL = `${this.APIURL}/${project_id}/project_users/${project_user_id}`
     const HTTPREQUEST = {
       url: URL,
       headers: {
@@ -634,7 +634,7 @@ class TiledeskClient {
     const jwt_token = TiledeskClient.fixToken(token)
     // direction = 1 => oldest must be served first
     // const URL = `${this.API_ENDPOINT}/${project_id}/requests?status=${status}&limit=${limit}&direction=1`
-    let url = new URL(`${this.API_ENDPOINT}/${project_id}/requests`)
+    let url = new URL(`${this.APIURL}/${project_id}/requests`)
     url.searchParams.append("status", status);
     url.searchParams.append("limit", limit);
     url.searchParams.append("direction", 1);
@@ -707,7 +707,7 @@ class TiledeskClient {
 
   updateRequestParticipants(project_id, request_id, participants, token, callback) {
     const jwt_token = TiledeskClient.fixToken(token)
-    const URL = `${this.API_ENDPOINT}/${project_id}/requests/${request_id}/participants`
+    const URL = `${this.APIURL}/${project_id}/requests/${request_id}/participants`
     const HTTPREQUEST = {
       url: URL,
       headers: {
@@ -753,7 +753,7 @@ class TiledeskClient {
 
   getWidgetSettings(project_id, callback) {
     const HTTPREQUEST = {
-      url: `${this.API_ENDPOINT}/${project_id}/widgets`,
+      url: `${this.APIURL}/${project_id}/widgets`,
       method: 'GET',
       json: true
     };
@@ -774,7 +774,7 @@ class TiledeskClient {
 
   openNow(project_id, callback) {
     // const jwt_token = TiledeskClient.fixToken(token)
-    const url = `${this.API_ENDPOINT}/projects/${project_id}/isopen`
+    const url = `${this.APIURL}/projects/${project_id}/isopen`
     const HTTPREQUEST = {
       url: url,
       headers: {
@@ -813,7 +813,7 @@ class TiledeskClient {
   
   anonymousAuthentication(project_id, callback) {
     const HTTPREQUEST = {
-      url: `${this.API_ENDPOINT}/auth/signinAnonymously`,
+      url: `${this.APIURL}/auth/signinAnonymously`,
       headers: {
         'Content-Type' : 'application/json'
       },
@@ -843,7 +843,7 @@ class TiledeskClient {
 
   authEmailPassword(email, password, callback) {
     const HTTPREQUEST = {
-      url: `${this.API_ENDPOINT}/auth/signin`,
+      url: `${this.APIURL}/auth/signin`,
       headers: {
         'Content-Type' : 'application/json'
       },
@@ -873,7 +873,7 @@ class TiledeskClient {
   }
 
   sendMessage(project_id, request_id, msgJSON, token, callback) {
-    const url = `${this.API_ENDPOINT}/${project_id}/requests/${request_id}/messages`;
+    const url = `${this.APIURL}/${project_id}/requests/${request_id}/messages`;
     const HTTPREQUEST = {
       url: url,
       headers: {
@@ -901,7 +901,7 @@ class TiledeskClient {
   fireEvent(project_id, event, token, callback) {
     const jwt_token = TiledeskClient.fixToken(token)
     const HTTPREQUEST = {
-      url: `${this.API_ENDPOINT}/${project_id}/events`,
+      url: `${this.APIURL}/${project_id}/events`,
       headers: {
         'Content-Type' : 'application/json',
         'Authorization': jwt_token
@@ -931,7 +931,7 @@ class TiledeskClient {
     //   throw new Error('options.lead_id can NOT be empty.');
     // }
     const HTTPREQUEST = {
-      url: `${this.API_ENDPOINT}/${projectId}/leads/${lead_id}`, // this.conversation.lead._id
+      url: `${this.APIURL}/${projectId}/leads/${lead_id}`, // this.conversation.lead._id
       headers: {
         'Content-Type' : 'application/json',
         'Authorization': this.token
@@ -958,10 +958,10 @@ class TiledeskClient {
   }
 
   updateRequest(projectId, request_id, properties, attributes, callback) {
-    let URL = `${this.API_ENDPOINT}/${projectId}/requests/${request_id}/attributes`
+    let URL = `${this.APIURL}/${projectId}/requests/${request_id}/attributes`
     let data = attributes
     if (properties) {
-      URL = `${this.API_ENDPOINT}/${projectId}/requests/${request_id}/`
+      URL = `${this.APIURL}/${projectId}/requests/${request_id}/`
       data = properties
     }
     
@@ -991,7 +991,7 @@ class TiledeskClient {
 
   updateDepartment(projectId, request_id, dep_id, callback) {
     const HTTPREQUEST = {
-      url: `${this.API_ENDPOINT}/${projectId}/requests/${request_id}/departments`,
+      url: `${this.APIURL}/${projectId}/requests/${request_id}/departments`,
       headers: {
         'Content-Type' : 'application/json',
         'Authorization': this.token
