@@ -1,5 +1,8 @@
 # Client library for Tiledesk nodejs APIs client
 
+### 0.7.8 - online
+- bug fix- Added missing jwt_token() to sendMessage and more.
+
 ### 0.7.7 - online
 - bug fix: APIURL
 

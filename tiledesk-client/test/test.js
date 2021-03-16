@@ -488,7 +488,7 @@ describe('TiledeskClient', function() {
                 log: LOG_STATUS
             })
             tdclient.getRequests(PROJECT_ID, 1, TiledeskClient.UNASSIGNED_STATUS, USER_TOKEN, (err, result) => {
-                console.log("result:", JSON.stringify(result));
+                // console.log("result:", JSON.stringify(result));
                 assert(result);
                 const requests = result.requests;
                 assert(requests);

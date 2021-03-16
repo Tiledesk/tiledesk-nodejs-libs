@@ -1,5 +1,4 @@
 /* 
-    ver 0.7.6
     Andrea Sponziello - (c) Tiledesk.com
 */
 
@@ -69,8 +68,6 @@ class TiledeskClient {
   // curl -v -X POST -H 'Content-Type:application/json' -u andrea.leo@f21.it:123456 -d '{"name":"testprj"}' https://api.tiledesk.com/v2/projects
 
   createProject(project_id, token, callback) {
-    // TiledeskClient.createProjectRaw(TiledeskClient.DEFAULT_API_ENDPOINT, callback);
-    
     const jwt_token = TiledeskClient.fixToken(token)
     const URL = `${this.APIURL}/projects/${project_id}`
     const HTTPREQUEST = {
@@ -146,126 +143,6 @@ class TiledeskClient {
     }, this.log);
   }
 
-  // static getProjectSettingsRaw(API_ENDPOINT, project_id, token, callback) {
-  //   const _token = TiledeskClient.fixToken(token)
-  //   const URL = `${API_ENDPOINT}/projects/${project_id}`
-  //   // console.log("getProjectSettings URL:", URL);
-  //   // console.log("getProjectSettings token:", _token);
-  //   TiledeskClient.myrequest({
-  //     url: URL,
-  //     headers: {
-  //       'Content-Type' : 'application/json',
-  //       'Authorization': _token
-  //     },
-  //     json: true,
-  //     method: 'GET'
-  //   },
-  //   function(err, response, resbody) {
-  //     if (response.statusCode === 200) {
-  //       if (callback) {
-  //        callback(null, resbody)
-  //       }
-  //     }
-  //     else if (callback) {
-  //       callback(TiledeskClient.getErr(err, response, resbody), null);
-  //     }
-
-  //     // if (response.statusCode == 200) {
-  //     //   callback(null, resbody)
-  //     // }
-  //     // else {
-  //     //   const error_msg = "getProjectSettings. Status code: " + response.statusCode
-  //     //   callback(error_msg, null)
-  //     // }
-  //   });
-  // }
-
-  // static getAllProjectUsersRaw(API_ENDPOINT, project_id, departmentid, token, callback) {
-  //   const _token = TiledeskClient.fixToken(token)
-  //   const URL = `${API_ENDPOINT}/${project_id}/departments/${departmentid}/operators?disableWebHookCall=true`
-  //   console.log("getAllProjectUsers URL:", URL);
-  //   TiledeskClient.myrequest({
-  //     url: URL,
-  //     headers: {
-  //       'Content-Type' : 'application/json',
-  //       'Authorization': _token
-  //     },
-  //     json: true,
-  //     method: 'GET'
-  //   },
-  //   function(err, response, resbody) {
-  //     if (response.statusCode === 200) {
-  //       if (callback) {
-  //        callback(null, resbody)
-  //       }
-  //     }
-  //     else if (callback) {
-  //       callback(TiledeskClient.getErr(err, response, resbody), null);
-  //     }
-
-  //     // callback(err, resbody)
-  //   });
-  // }
-
-  // REMOVED. UNUSED, UNDOCUMENTED.
-  // getAllProjectUsers(project_id, departmentid, token, callback) {
-  //   const _token = TiledeskClient.fixToken(token)
-  //   const URL = `${this.API_ENDPOINT}/${project_id}/departments/${departmentid}/operators?disableWebHookCall=true`
-  //   TiledeskClient.myrequest({
-  //     url: URL,
-  //     headers: {
-  //       'Content-Type' : 'application/json',
-  //       'Authorization': _token
-  //     },
-  //     json: true,
-  //     method: 'GET'
-  //   },
-  //   function(err, response, resbody) {
-  //     if (response.statusCode === 200) {
-  //       if (callback) {
-  //        callback(null, resbody)
-  //       }
-  //     }
-  //     else if (callback) {
-  //       callback(TiledeskClient.getErr(err, response, resbody), null);
-  //     }
-
-  //     // callback(err, resbody)
-  //   }, this.log);
-  // }
-
-  // static updateRequestPropertiesRaw(API_ENDPOINT, request_id, project_id, properties, token, callback) {
-  //   const jwt_token = TiledeskClient.fixToken(token)
-  //   var URL = `${API_ENDPOINT}/${project_id}/requests/${request_id}`
-  //   data = properties
-  //   console.log("updating request attributes URL:", URL)
-  //   console.log("updating request attributes jwt_token:", jwt_token)
-  //   TiledeskClient.myrequest({
-  //     url: URL,
-  //     headers: {
-  //       'Content-Type' : 'application/json',
-  //       'Authorization': jwt_token
-  //     },
-  //     json: data,
-  //     method: 'PATCH'
-  //     },
-  //     function(err, response, resbody) {
-  //       if (response.statusCode === 200) {
-  //         if (callback) {
-  //          callback(null, resbody)
-  //         }
-  //       }
-  //       else if (callback) {
-  //         callback(TiledeskClient.getErr(err, response, resbody), null);
-  //       }
-
-  //       // if (callback) {
-  //       //   callback(err)
-  //       // }
-  //     }
-  //   );
-  // }
-
   updateRequestProperties(project_id, request_id, properties, token, callback) {
     const jwt_token = TiledeskClient.fixToken(token)
     var URL = `${this.APIURL}/${project_id}/requests/${request_id}`
@@ -298,38 +175,6 @@ class TiledeskClient {
     );
   }
 
-  // static updateRequestAttributesRaw(API_ENDPOINT, request_id, project_id, attributes, token, callback) {
-  //   const jwt_token = TiledeskClient.fixToken(token)
-  //   var URL = `${API_ENDPOINT}/${project_id}/requests/${request_id}/attributes`
-  //   var data = attributes
-  //   console.log("updating request attributes URL:", URL)
-  //   console.log("updating request attributes jwt_token:", jwt_token)
-  //   TiledeskClient.myrequest({
-  //     url: URL,
-  //     headers: {
-  //       'Content-Type' : 'application/json',
-  //       'Authorization': jwt_token
-  //     },
-  //     json: data,
-  //     method: 'PATCH'
-  //     },
-  //     function(err, response, resbody) {
-  //       if (response.statusCode === 200) {
-  //         if (callback) {
-  //          callback(null, resbody)
-  //         }
-  //       }
-  //       else if (callback) {
-  //         callback(TiledeskClient.getErr(err, response, resbody), null);
-  //       }
-
-  //       // if (callback) {
-  //       //   callback(err)
-  //       // }
-  //     }
-  //   );
-  // }
-
   updateRequestAttributes(project_id, request_id, attributes, token, callback) {
     const jwt_token = TiledeskClient.fixToken(token)
     var URL = `${this.APIURL}/${project_id}/requests/${request_id}/attributes`
@@ -361,43 +206,6 @@ class TiledeskClient {
       }, this.log
     );
   }
-
-  // static getProjectUserRaw(APIENDPOINT, project_id, user_id, token, callback) {
-  //   const jwt_token = 'JWT ' + token
-  //   const URL = `${APIENDPOINT}/${project_id}/project_users/users/${user_id}`
-  //   console.log("getProjectUser.URL: ", URL);
-  //   console.log("with token: ", jwt_token)
-  //   TiledeskClient.myrequest({
-  //     url: URL,
-  //     headers: {
-  //       'Content-Type' : 'application/json',
-  //       'Authorization': jwt_token
-  //     },
-  //     json: true,
-  //     method: 'GET'
-  //   },
-  //   function(err, response, resbody) {
-  //     if (response.statusCode === 200) {
-  //       if (callback) {
-  //        callback(null, resbody)
-  //       }
-  //     }
-  //     else if (callback) {
-  //       callback(TiledeskClient.getErr(err, response, resbody), null);
-  //     }
-      
-  //     // if (resbody && resbody[0]) {
-  //     //   if (callback) {
-  //     //     callback(err, resbody[0])
-  //     //   }
-  //     // }
-  //     // else {
-  //     //   if (callback) {
-  //     //     callback(err, null)
-  //     //   }
-  //     // }
-  //   });
-  // }
 
   getProjectUser(project_id, user_id, token, callback) {
     const jwt_token = TiledeskClient.fixToken(token)
@@ -464,38 +272,6 @@ class TiledeskClient {
     );
   }
 
-  // static updateProjectUserAvailableRaw(APIENDPOINT, project_id, project_user_id, user_available, token, callback) {
-  //   const jwt_token = 'JWT ' + token
-  //   const URL = `${APIENDPOINT}/${project_id}/project_users/${project_user_id}`
-  //   console.log("setProjectUserAvailable. URL:", URL);
-  //   console.log("with token: ", jwt_token)
-  //   TiledeskClient.myrequest({
-  //     url: URL,
-  //     headers: {
-  //       'Content-Type' : 'application/json',
-  //       'Authorization': jwt_token
-  //     },
-  //     json: {
-  //       user_available: user_available
-  //     },
-  //     method: 'PUT'
-  //   },
-  //   function(err, response, resbody) {
-  //     if (response.statusCode === 200) {
-  //       if (callback) {
-  //        callback(null, resbody)
-  //       }
-  //     }
-  //     else if (callback) {
-  //       callback(TiledeskClient.getErr(err, response, resbody), null);
-  //     }
-
-  //     // if (callback) {
-  //     //   callback(err, resbody)
-  //     // }
-  //   });
-  // }
-
   updateProjectUserAvailable(project_id, project_user_id, user_available, token, callback) {
     const jwt_token = TiledeskClient.fixToken(token)
     const URL = `${this.APIURL}/${project_id}/project_users/${project_user_id}`
@@ -529,38 +305,6 @@ class TiledeskClient {
     );
   }
 
-  // static updateProjectUserAttributesRaw(APIENDPOINT, project_id, project_user_id, attributes, token, callback) {
-  //   const jwt_token = 'JWT ' + token
-  //   const URL = `${APIENDPOINT}/${project_id}/project_users/${project_user_id}`
-  //   console.log("setProjectUserAvailable. URL:", URL);
-  //   console.log("with token: ", jwt_token)
-  //   TiledeskClient.myrequest({
-  //     url: URL,
-  //     headers: {
-  //       'Content-Type' : 'application/json',
-  //       'Authorization': jwt_token
-  //     },
-  //     json: {
-  //       attributes: attributes
-  //     },
-  //     method: 'PUT'
-  //   },
-  //   function(err, response, resbody) {
-  //     if (response.statusCode === 200) {
-  //       if (callback) {
-  //        callback(null, resbody)
-  //       }
-  //     }
-  //     else if (callback) {
-  //       callback(TiledeskClient.getErr(err, response, resbody), null);
-  //     }
-
-  //     // if (callback) {
-  //     //   callback(err, resbody)
-  //     // }
-  //   });
-  // }
-
   updateProjectUserAttributes(project_id, project_user_id, attributes, token, callback) {
     const jwt_token = TiledeskClient.fixToken(token)
     const URL = `${this.APIURL}/${project_id}/project_users/${project_user_id}`
@@ -586,49 +330,9 @@ class TiledeskClient {
         else if (callback) {
           callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
         }
-
-        // if (callback) {
-        //   callback(err, resbody)
-        // }
       }, this.log
     );
   }
-
-  // static getRequestsRaw(APIENDPOINT, project_id, token, limit, status, callback) {
-  //   const jwt_token = 'JWT ' + token
-  //   // direction = 1 => oldest must be served first
-  //   const URL = `${APIENDPOINT}/${project_id}/requests?status=${status}&limit=${limit}&direction=1`
-  //   TiledeskClient.myrequest({
-  //     url: URL,
-  //     headers: {
-  //       'Content-Type' : 'application/json',
-  //       'Authorization': jwt_token
-  //     },
-  //     json: true,
-  //     method: 'GET'
-  //   },
-  //   function(err, response, resbody) {
-  //     if (response.statusCode === 200) {
-  //       if (callback) {
-  //        callback(null, resbody)
-  //       }
-  //     }
-  //     else if (callback) {
-  //       callback(TiledeskClient.getErr(err, response, resbody), null);
-  //     }
-
-  //     // if (resbody && resbody.requests) {
-  //     //   if (callback) {
-  //     //     callback(err, resbody.requests)
-  //     //   }
-  //     // }
-  //     // else {
-  //     //   // throw
-  //     //   console.log("Error getting requests. Error:", err, " URL", URL, " token:", jwt_token, " Body:", resbody)
-  //     // }
-
-  //   });
-  // }
 
   getRequests(project_id, limit, status, token, callback, options) {
     const jwt_token = TiledeskClient.fixToken(token)
@@ -679,32 +383,6 @@ class TiledeskClient {
     );
   }
 
-  // static updateRequestParticipantsRaw(API_ENDPOINT, project_id, request_id, token, participants, callback) {
-  //   const jwt_token = 'JWT ' + token
-  //   const URL = `${API_ENDPOINT}/${project_id}/requests/${request_id}/participants`
-  //   console.log("update request participant... URL:", URL);
-  //   console.log("with token: ", jwt_token)
-  //   TiledeskClient.myrequest({
-  //     url: URL,
-  //     headers: {
-  //       'Content-Type' : 'application/json',
-  //       'Authorization': jwt_token
-  //     },
-  //     json: participants,
-  //     method: 'PUT'
-  //   },
-  //   function(err, response, resbody) {
-  //     if (response.statusCode === 200) {
-  //       if (callback) {
-  //        callback(null, resbody)
-  //       }
-  //     }
-  //     else if (callback) {
-  //       callback(TiledeskClient.getErr(err, response, resbody), null);
-  //     }
-  //   });
-  // }
-
   updateRequestParticipants(project_id, request_id, participants, token, callback) {
     const jwt_token = TiledeskClient.fixToken(token)
     const URL = `${this.APIURL}/${project_id}/requests/${request_id}/participants`
@@ -731,25 +409,6 @@ class TiledeskClient {
       }, this.log
     );
   }
-
-  // static getWidgetSettingsRaw(APIENDPOINT, project_id, callback) {
-  //   TiledeskClient.myrequest(
-  //   {
-  //     url: `${APIENDPOINT}/${project_id}/widgets`,
-  //     method: 'GET',
-  //     json: true
-  //   },
-  //   function(err, response, resbody) {
-  //     if (response.statusCode === 200) {
-  //       if (callback) {
-  //         callback(null, resbody)
-  //       }
-  //     }
-  //     else if (callback) {
-  //       callback(TiledeskClient.getErr(err, response, resbody), null);
-  //     }
-  //   });
-  // }
 
   getWidgetSettings(project_id, callback) {
     const HTTPREQUEST = {
@@ -806,10 +465,6 @@ class TiledeskClient {
     res_err.http_request = request;
     return res_err;
   }
-
-  // openNow(callback) {
-  //   TiledeskClient.openNow(this.API_ENDPOINT, this.projectId, this.token, callback);
-  // }
   
   anonymousAuthentication(project_id, callback) {
     const HTTPREQUEST = {
@@ -873,12 +528,13 @@ class TiledeskClient {
   }
 
   sendMessage(project_id, request_id, msgJSON, token, callback) {
+    const jwt_token = TiledeskClient.fixToken(token)
     const url = `${this.APIURL}/${project_id}/requests/${request_id}/messages`;
     const HTTPREQUEST = {
       url: url,
       headers: {
         'Content-Type' : 'application/json',
-        'Authorization': token
+        'Authorization': jwt_token
       },
       json: msgJSON,
       method: 'POST'
@@ -926,15 +582,16 @@ class TiledeskClient {
   
   // migrated from TiledeskChatbotUtil
   
-  updateLeadEmailFullname(projectId, lead_id, email, fullname, callback) {
+  updateLeadEmailFullname(projectId, lead_id, email, fullname, token, callback) {
     // if (!this.lead_id) {
     //   throw new Error('options.lead_id can NOT be empty.');
     // }
+    const jwt_token = TiledeskClient.fixToken(token)
     const HTTPREQUEST = {
       url: `${this.APIURL}/${projectId}/leads/${lead_id}`, // this.conversation.lead._id
       headers: {
         'Content-Type' : 'application/json',
-        'Authorization': this.token
+        'Authorization': jwt_token
       },
       json: {
         email: email,
@@ -957,7 +614,8 @@ class TiledeskClient {
     );
   }
 
-  updateRequest(projectId, request_id, properties, attributes, callback) {
+  updateRequest(projectId, request_id, properties, attributes, token, callback) {
+    const jwt_token = TiledeskClient.fixToken(token)
     let URL = `${this.APIURL}/${projectId}/requests/${request_id}/attributes`
     let data = attributes
     if (properties) {
@@ -969,7 +627,7 @@ class TiledeskClient {
       url: URL,
       headers: {
         'Content-Type' : 'application/json',
-        'Authorization': this.token
+        'Authorization': jwt_token
       },
       json: data,
       method: 'PATCH'
@@ -989,12 +647,13 @@ class TiledeskClient {
     );
   }
 
-  updateDepartment(projectId, request_id, dep_id, callback) {
+  updateDepartment(projectId, request_id, dep_id, token, callback) {
+    const jwt_token = TiledeskClient.fixToken(token)
     const HTTPREQUEST = {
       url: `${this.APIURL}/${projectId}/requests/${request_id}/departments`,
       headers: {
         'Content-Type' : 'application/json',
-        'Authorization': this.token
+        'Authorization': jwt_token
       },
       json: {
         departmentid: dep_id
@@ -1041,105 +700,6 @@ class TiledeskClient {
       }
     );
   }
-
-  // static anonymousAuthenticationRaw(API_ENDPOINT, project_id, callback) {
-  //   // console.log("using project_id", project_id)
-  //   TiledeskClient.myrequest({
-  //     url: `${API_ENDPOINT}/auth/signinAnonymously`,
-  //     headers: {
-  //       'Content-Type' : 'application/json'
-  //     },
-  //     json: {
-  //       "id_project": project_id
-  //     },
-  //     method: 'POST'
-  //   },
-  //   function(err, response, resbody) {
-  //     if (response.statusCode === 200) {
-  //       if (callback) {
-  //         callback(null, resbody)
-  //       }
-  //     }
-  //     else if (callback) {
-  //       callback(TiledeskClient.getErr(err, response, resbody), null);
-  //     }
-
-  //     // if (callback) {
-  //     //   callback(err, response, resbody)
-  //     // }
-  //   });
-  // }
-
-  
-
-  // static anonymousAuthentication(project_id, callback) {
-  //   TiledeskClient.anonymousAuthenticationRaw(TiledeskClient.DEFAULT_API_ENDPOINT, project_id, callback);
-  // }
-
-  // static sendMessageRaw(API_ENDPOINT, token, project_id, msgJSON, request_id, callback) {
-  //   const url = `${API_ENDPOINT}/${project_id}/requests/${request_id}/messages`;
-  //   TiledeskClient.myrequest(
-  //   {
-  //     url: url,
-  //     headers: {
-  //       'Content-Type' : 'application/json',
-  //       'Authorization': token
-  //     },
-  //     json: msgJSON,
-  //     method: 'POST'
-  //   },
-  //     function(err, response, resbody) {
-  //       if (response.statusCode === 200) {
-  //         if (callback) {
-  //           callback(null, resbody)
-  //         }
-  //       }
-  //       else if (callback) {
-  //         callback(TiledeskClient.getErr(err, response, resbody), null);
-  //       }
-  //     }
-  //   );
-  // }
-
-  
-
-  // sendMessage(msgJSON, request_id, callback) {
-  //   TiledeskClient.sendMessageRaw(this.API_ENDPOINT, this.token, this.projectId, msgJSON, request_id, callback);
-  // }
-
-  // static fireEvent(APIENDPOINT, project_id, token, event, callback) {
-  //   const jwt_token = TiledeskClient.fixToken(token)
-  //   TiledeskClient.myrequest({
-  //      url: `${APIENDPOINT}/${project_id}/events`,
-  //      headers: {
-  //        'Content-Type' : 'application/json',
-  //        'Authorization': jwt_token
-  //      },
-  //      json: event,
-  //      method: 'POST'
-  //    },
-  //    function(err, response, resbody) {
-  //       if (response.statusCode === 200) {
-  //         if (callback) {
-  //           callback(null, resbody)
-  //         }
-  //       }
-  //       else if (callback) {
-  //         callback(TiledeskClient.getErr(err, response, resbody), null);
-  //       }
-  //     }
-  //   );
-  // }
-
-  
-
-  // fireEvent(event, callback) {
-  //   TiledeskClient.fireEvent(this.API_ENDPOINT, this.projectId, this.token, event, callback);
-  // }
-
-  
-
-  
 
 }
 
