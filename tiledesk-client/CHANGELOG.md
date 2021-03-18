@@ -1,5 +1,9 @@
 # Client library for Tiledesk nodejs APIs client
 
+### 0.7.9 - online
+- removed project_id as explicit parameter in some function calls. project_id is now an optional constructor parameter. Added "options" parameter some function calls.
+- added customAuthentication()
+
 ### 0.7.8 - online
 - bug fix- Added missing jwt_token() to sendMessage and more.
 
