@@ -45,13 +45,6 @@ class TiledeskChatbotClient {
      */
     this.request_ = options.request;
 
-    /**
-     * The Express HTTP response the endpoint will return to Assistant.
-     * @private
-     * @type {Object}
-     */
-    this.response_ = options.response;
-
     if (options.APIURL) {
       this.APIURL = options.APIURL
     }
@@ -68,11 +61,10 @@ class TiledeskChatbotClient {
     // if (body.payload.attributes) {
     //   this.message_subtype = body.payload.attributes.subtype
     // }
-    // console.log("tdconversation: " + this.conversation)
     // this.botId = this.conversation.department.bot._id;
     // this.botName = this.conversation.department.bot.name;
     if (this.request_) {
-      var body = this.request_.body;
+      const body = this.request_.body;
       if (!body.payload) {
         throw new Error('Request body.payload can not be empty.');
       }
@@ -83,7 +75,7 @@ class TiledeskChatbotClient {
         this.lead_id = this.supportRequest.lead._id
       }
       this.request_id = this.supportRequest.request_id;
-      this.token = this.fixToken(body.token);
+      this.token = body.token;
       this.project_id = payload.id_project;
       if (payload && payload.attributes && payload.attributes.action) {
         this.action = payload.attributes.action
@@ -103,7 +95,7 @@ class TiledeskChatbotClient {
       }
       // token
       if (options.token) {
-        this.token = this.fixToken(options.token)
+        this.token = options.token;
       }
       else {
         throw new Error('options.token can NOT be empty.');
@@ -124,10 +116,10 @@ class TiledeskChatbotClient {
         this.text = options.text
       }
     }
-    // finally initialize an instance of TiledeskClient:
+    // now initialize an instance of TiledeskClient:
     this.tiledeskClient = new TiledeskClient(
       {
-        projectId: this.project_id,
+        project_id: this.project_id,
         token: this.token,
         APIURL: this.APIURL,
         APIKEY: options.APIKEY,
@@ -146,122 +138,24 @@ class TiledeskChatbotClient {
 
   sendMessage(msg, callback) {
     this.tiledeskClient.sendMessage(
-      this.project_id,
       this.request_id,
       msg,
-      this.token,
       callback);
-    // TiledeskChatbotClient.myrequest(
-    //   {
-    //     url: `${this.API_ENDPOINT}/${this.project_id}/requests/${this.request_id}/messages`,
-    //     headers: {
-    //       'Content-Type' : 'application/json',
-    //       'Authorization': this.token
-    //     },
-    //     json: msg,
-    //     method: 'POST'
-    //   },
-    //     function(err, res, resbody) {
-    //       if (callback) {
-    //         callback(err)
-    //       }
-    //     }
-    //   );
   }
-
-  // static myrequest(options, callback) {
-  //   request(
-  //     {
-  //       url: options.url,
-  //       headers: options.headers,
-  //       json: options.json,
-  //       method: options.method
-  //     },
-  //       function(err, res, resbody) {
-  //         if (callback) {
-  //           callback(err,res, resbody);
-  //         }
-  //       }
-  //     );
-  // }
-
-  // static sendMessageRaw(api_endpoint, project_id, request_id, msg, token, callback) {
-  //   // console.log("Sending message to Tiledesk: " + JSON.stringify(msg))
-  //   request({
-  //     url: `${api_endpoint}/${project_id}/requests/${request_id}/messages`,
-  //     headers: {
-  //       'Content-Type' : 'application/json',
-  //       'Authorization': token
-  //     },
-  //     json: msg,
-  //     method: 'POST'
-  //     },
-  //     function(err, res, resbody) {
-  //       callback(err)
-  //     }
-  //   );
-  // }
 
   updateRequest(properties, attributes, callback) {
     this.tiledeskClient.updateRequest(
-      this.project_id,
       this.request_id,
       properties,
       attributes,
       callback);
-    // var URL = `${this.API_ENDPOINT}/${this.project_id}/requests/${this.request_id}/attributes`
-    // var data = attributes
-    // if (properties) {
-    //   URL = `${this.API_ENDPOINT}/${this.project_id}/requests/${this.request_id}/`
-    //   data = properties
-    // }
-    
-    // request({
-    //   url: URL,
-    //   headers: {
-    //     'Content-Type' : 'application/json',
-    //     'Authorization': this.token
-    //   },
-    //   json: data,
-    //   method: 'PATCH'
-    //   },
-    //   function(err, res, resbody) {
-    //     if (callback) {
-    //       callback(err)
-    //     }
-    //   }
-    // );
   }
 
   updateDepartment(dep_id, callback) {
     this.tiledeskClient.updateDepartment(
-      this.project_id,
       this.request_id,
       dep_id,
       callback);
-    // request({
-    //   url: `${this.API_ENDPOINT}/${this.project_id}/requests/${this.request_id}/departments`,
-    //   headers: {
-    //     'Content-Type' : 'application/json',
-    //     'Authorization': this.token
-    //   },
-    //   json: {
-    //     departmentid: dep_id
-    //   },
-    //   method: 'PUT'
-    //   },
-    //   function(err, res, resbody) {
-    //     if (err) {
-    //       console.log("BOT UPDATE DEP ERROR: ", err);
-    //     }
-    //     console.log("BOT UPDATE DEP, TILEDESK RESPONSE: " + JSON.stringify(resbody))
-    //     if(res.statusCode === 200) {
-    //       console.log("BOT UPDATE DEP, TILEDESK RESPONSE: OK")
-    //       callback(err)
-    //     }
-    //   }
-    // );
-    
   }
 
   updateLeadEmailFullname(email, fullname, callback) {
@@ -269,27 +163,10 @@ class TiledeskChatbotClient {
       throw new Error('options.lead_id can NOT be empty.');
     }
     this.tiledeskClient.updateLeadEmailFullname(
-      this.project_id,
       this.lead_id,
       email,
       fullname,
       callback);
-    // request({
-    //   url: `${this.API_ENDPOINT}/${this.project_id}/leads/${this.lead_id}`, // this.conversation.lead._id
-    //   headers: {
-    //     'Content-Type' : 'application/json',
-    //     'Authorization': this.token
-    //   },
-    //   json: {
-    //     email: email,
-    //     fullname: fullname
-    //   },
-    //   method: 'PUT'
-    //   },
-    //   function(err, res, resbody) {
-    //     callback(err, res, resbody)
-    //   }
-    // );
   }
 
 }

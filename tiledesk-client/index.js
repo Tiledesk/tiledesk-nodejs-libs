@@ -20,6 +20,7 @@ class TiledeskClient {
    * @param {Object} options.APIKEY Mandatory. Tiledesk APIKEY
    * @param {Object} options.APIURL Optional. Tiledesk server api endpoint
    * @param {Object} options.project_id Optional. Tiledesk server api endpoint
+   * @param {Object} options.token Optional. Tiledesk authentication token
    * @param {Object} options.log Optional. If true requests are logged
    * 
    * 
@@ -48,17 +49,17 @@ class TiledeskClient {
     }
 
     if (options && options.project_id) {
-      this.project_id = options.project_id
+      this.project_id = options.project_id;
+    }
+
+    if (options && options.token) {
+      this.token = options.token;
     }
 
     this.log = false;
     if (options && options.log) {
       this.log = options.log;
     }
-
-    // this.projectId = options.projectId
-    // this.token = TiledeskClient.fixToken(options.token);
-    
   }
 
   static fixToken(token) {
@@ -105,9 +106,29 @@ class TiledeskClient {
     }, this. log);
   }
 
-  getProjectSettings(projectId, token, callback) {
+  getProjectSettings(callback, options) {
+    let token;
+    if (options && options.token) {
+      token = options.token;
+    }
+    else if (this.token) {
+      token = this.token;
+    }
+    else {
+      throw new Error('token can NOT be null.');
+    }
+    let project_id;
+    if (options && options.project_id) {
+      project_id = options.project_id;
+    }
+    else if (this.project_id) {
+      project_id = this.project_id;
+    }
+    else {
+      throw new Error('project_id can NOT be null.');
+    }
     const jwt_token = TiledeskClient.fixToken(token)
-    const URL = `${this.APIURL}/projects/${projectId}`
+    const URL = `${this.APIURL}/projects/${project_id}`
     const HTTPREQUEST = {
       url: URL,
       headers: {
@@ -148,16 +169,23 @@ class TiledeskClient {
     }, this.log);
   }
 
-  updateRequestProperties(request_id, properties, token, callback, options) {
-    if (!token) {
+  updateRequestProperties(request_id, properties, callback, options) {
+    let token;
+    if (options && options.token) {
+      token = options.token;
+    }
+    else if (this.token) {
+      token = this.token;
+    }
+    else {
       throw new Error('token can NOT be null.');
     }
     let project_id;
     if (options && options.project_id) {
-      project_id = options.project_id
+      project_id = options.project_id;
     }
     else if (this.project_id) {
-      project_id = this.project_id
+      project_id = this.project_id;
     }
     else {
       throw new Error('project_id can NOT be null.');
@@ -193,16 +221,23 @@ class TiledeskClient {
     );
   }
 
-  updateRequestAttributes(request_id, attributes, token, callback, options) {
-    if (!token) {
+  updateRequestAttributes(request_id, attributes, callback, options) {
+    let token;
+    if (options && options.token) {
+      token = options.token;
+    }
+    else if (this.token) {
+      token = this.token;
+    }
+    else {
       throw new Error('token can NOT be null.');
     }
     let project_id;
     if (options && options.project_id) {
-      project_id = options.project_id
+      project_id = options.project_id;
     }
     else if (this.project_id) {
-      project_id = this.project_id
+      project_id = this.project_id;
     }
     else {
       throw new Error('project_id can NOT be null.');
@@ -238,16 +273,23 @@ class TiledeskClient {
     );
   }
 
-  getProjectUser(user_id, token, callback, options) {
-    if (!token) {
+  getProjectUser(user_id, callback, options) {
+    let token;
+    if (options && options.token) {
+      token = options.token;
+    }
+    else if (this.token) {
+      token = this.token;
+    }
+    else {
       throw new Error('token can NOT be null.');
     }
     let project_id;
     if (options && options.project_id) {
-      project_id = options.project_id
+      project_id = options.project_id;
     }
     else if (this.project_id) {
-      project_id = this.project_id
+      project_id = this.project_id;
     }
     else {
       throw new Error('project_id can NOT be null.');
@@ -289,16 +331,23 @@ class TiledeskClient {
     );
   }
 
-  updateProjectUserCurrentlyLoggedIn(values, token, callback, options) {
-    if (!token) {
+  updateProjectUserCurrentlyLoggedIn(values, callback, options) {
+    let token;
+    if (options && options.token) {
+      token = options.token;
+    }
+    else if (this.token) {
+      token = this.token;
+    }
+    else {
       throw new Error('token can NOT be null.');
     }
     let project_id;
     if (options && options.project_id) {
-      project_id = options.project_id
+      project_id = options.project_id;
     }
     else if (this.project_id) {
-      project_id = this.project_id
+      project_id = this.project_id;
     }
     else {
       throw new Error('project_id can NOT be null.');
@@ -329,16 +378,23 @@ class TiledeskClient {
     );
   }
 
-  updateProjectUserAvailable(project_user_id, user_available, token, callback, options) {
-    if (!token) {
+  updateProjectUserAvailable(project_user_id, user_available, callback, options) {
+    let token;
+    if (options && options.token) {
+      token = options.token;
+    }
+    else if (this.token) {
+      token = this.token;
+    }
+    else {
       throw new Error('token can NOT be null.');
     }
     let project_id;
     if (options && options.project_id) {
-      project_id = options.project_id
+      project_id = options.project_id;
     }
     else if (this.project_id) {
-      project_id = this.project_id
+      project_id = this.project_id;
     }
     else {
       throw new Error('project_id can NOT be null.');
@@ -375,16 +431,23 @@ class TiledeskClient {
     );
   }
 
-  updateProjectUserAttributes(project_user_id, attributes, token, callback, options) {
-    if (!token) {
+  updateProjectUserAttributes(project_user_id, attributes, callback, options) {
+    let token;
+    if (options && options.token) {
+      token = options.token;
+    }
+    else if (this.token) {
+      token = this.token;
+    }
+    else {
       throw new Error('token can NOT be null.');
     }
     let project_id;
     if (options && options.project_id) {
-      project_id = options.project_id
+      project_id = options.project_id;
     }
     else if (this.project_id) {
-      project_id = this.project_id
+      project_id = this.project_id;
     }
     else {
       throw new Error('project_id can NOT be null.');
@@ -417,16 +480,23 @@ class TiledeskClient {
     );
   }
 
-  getRequests(limit, status, token, callback, options) {
-    if (!token) {
+  getRequests(limit, status, callback, options) {
+    let token;
+    if (options && options.token) {
+      token = options.token;
+    }
+    else if (this.token) {
+      token = this.token;
+    }
+    else {
       throw new Error('token can NOT be null.');
     }
     let project_id;
     if (options && options.project_id) {
-      project_id = options.project_id
+      project_id = options.project_id;
     }
     else if (this.project_id) {
-      project_id = this.project_id
+      project_id = this.project_id;
     }
     else {
       throw new Error('project_id can NOT be null.');
@@ -479,16 +549,23 @@ class TiledeskClient {
     );
   }
 
-  updateRequestParticipants(request_id, participants, token, callback, options) {
-    if (!token) {
+  updateRequestParticipants(request_id, participants, callback, options) {
+    let token;
+    if (options && options.token) {
+      token = options.token;
+    }
+    else if (this.token) {
+      token = this.token;
+    }
+    else {
       throw new Error('token can NOT be null.');
     }
     let project_id;
     if (options && options.project_id) {
-      project_id = options.project_id
+      project_id = options.project_id;
     }
     else if (this.project_id) {
-      project_id = this.project_id
+      project_id = this.project_id;
     }
     else {
       throw new Error('project_id can NOT be null.');
@@ -519,7 +596,28 @@ class TiledeskClient {
     );
   }
 
-  getWidgetSettings(project_id, callback) {
+  getWidgetSettings(callback, options) {
+    let token;
+    if (options && options.token) {
+      token = options.token;
+    }
+    else if (this.token) {
+      token = this.token;
+    }
+    else {
+      throw new Error('token can NOT be null.');
+    }
+    let project_id;
+    if (options && options.project_id) {
+      project_id = options.project_id;
+    }
+    else if (this.project_id) {
+      project_id = this.project_id;
+    }
+    else {
+      throw new Error('project_id can NOT be null.');
+    }
+    const jwt_token = TiledeskClient.fixToken(token)
     const HTTPREQUEST = {
       url: `${this.APIURL}/${project_id}/widgets`,
       method: 'GET',
@@ -540,8 +638,28 @@ class TiledeskClient {
     );
   }
 
-  openNow(project_id, callback) {
-    // const jwt_token = TiledeskClient.fixToken(token)
+  openNow(callback, options) {
+    let token;
+    if (options && options.token) {
+      token = options.token;
+    }
+    else if (this.token) {
+      token = this.token;
+    }
+    else {
+      throw new Error('token can NOT be null.');
+    }
+    let project_id;
+    if (options && options.project_id) {
+      project_id = options.project_id;
+    }
+    else if (this.project_id) {
+      project_id = this.project_id;
+    }
+    else {
+      throw new Error('project_id can NOT be null.');
+    }
+    const jwt_token = TiledeskClient.fixToken(token)
     const url = `${this.APIURL}/projects/${project_id}/isopen`
     const HTTPREQUEST = {
       url: url,
@@ -665,16 +783,23 @@ class TiledeskClient {
     );
   }
 
-  sendMessage(request_id, msgJSON, token, callback, options) {
-    if (!token) {
+  sendMessage(request_id, msgJSON, callback, options) {
+    let token;
+    if (options && options.token) {
+      token = options.token;
+    }
+    else if (this.token) {
+      token = this.token;
+    }
+    else {
       throw new Error('token can NOT be null.');
     }
     let project_id;
     if (options && options.project_id) {
-      project_id = options.project_id
+      project_id = options.project_id;
     }
     else if (this.project_id) {
-      project_id = this.project_id
+      project_id = this.project_id;
     }
     else {
       throw new Error('project_id can NOT be null.');
@@ -705,16 +830,23 @@ class TiledeskClient {
     );
   }
 
-  fireEvent(event, token, callback, options) {
-    if (!token) {
+  fireEvent(event, callback, options) {
+    let token;
+    if (options && options.token) {
+      token = options.token;
+    }
+    else if (this.token) {
+      token = this.token;
+    }
+    else {
       throw new Error('token can NOT be null.');
     }
     let project_id;
     if (options && options.project_id) {
-      project_id = options.project_id
+      project_id = options.project_id;
     }
     else if (this.project_id) {
-      project_id = this.project_id
+      project_id = this.project_id;
     }
     else {
       throw new Error('project_id can NOT be null.');
@@ -746,26 +878,33 @@ class TiledeskClient {
   
   // migrated from TiledeskChatbotUtil
   
-  updateLeadEmailFullname(lead_id, email, fullname, token, callback, options) {
-    if (!this.lead_id) {
-      throw new Error('options.lead_id can NOT be empty.');
+  updateLeadEmailFullname(lead_id, email, fullname, callback, options) {
+    let token;
+    if (options && options.token) {
+      token = options.token;
     }
-    if (!token) {
+    else if (this.token) {
+      token = this.token;
+    }
+    else {
       throw new Error('token can NOT be null.');
     }
     let project_id;
     if (options && options.project_id) {
-      project_id = options.project_id
+      project_id = options.project_id;
     }
     else if (this.project_id) {
-      project_id = this.project_id
+      project_id = this.project_id;
     }
     else {
       throw new Error('project_id can NOT be null.');
     }
-    const jwt_token = TiledeskClient.fixToken(token)
+    const jwt_token = TiledeskClient.fixToken(token);
+    if (!this.lead_id) {
+      throw new Error('options.lead_id can NOT be empty.');
+    }
     const HTTPREQUEST = {
-      url: `${this.APIURL}/${projectId}/leads/${lead_id}`, // this.conversation.lead._id
+      url: `${this.APIURL}/${project_id}/leads/${lead_id}`, // this.conversation.lead._id
       headers: {
         'Content-Type' : 'application/json',
         'Authorization': jwt_token
@@ -791,25 +930,32 @@ class TiledeskClient {
     );
   }
 
-  updateRequest(request_id, properties, attributes, token, callback, options) {
-    if (!token) {
+  updateRequest(request_id, properties, attributes, callback, options) {
+    let token;
+    if (options && options.token) {
+      token = options.token;
+    }
+    else if (this.token) {
+      token = this.token;
+    }
+    else {
       throw new Error('token can NOT be null.');
     }
     let project_id;
     if (options && options.project_id) {
-      project_id = options.project_id
+      project_id = options.project_id;
     }
     else if (this.project_id) {
-      project_id = this.project_id
+      project_id = this.project_id;
     }
     else {
       throw new Error('project_id can NOT be null.');
     }
-    const jwt_token = TiledeskClient.fixToken(token)
-    let URL = `${this.APIURL}/${projectId}/requests/${request_id}/attributes`
+    const jwt_token = TiledeskClient.fixToken(token);
+    let URL = `${this.APIURL}/${project_id}/requests/${request_id}/attributes`
     let data = attributes
     if (properties) {
-      URL = `${this.APIURL}/${projectId}/requests/${request_id}/`
+      URL = `${this.APIURL}/${project_id}/requests/${request_id}/`
       data = properties
     }
     
@@ -837,23 +983,30 @@ class TiledeskClient {
     );
   }
 
-  updateDepartment(request_id, dep_id, token, callback, options) {
-    if (!token) {
+  updateDepartment(request_id, dep_id, callback, options) {
+    let token;
+    if (options && options.token) {
+      token = options.token;
+    }
+    else if (this.token) {
+      token = this.token;
+    }
+    else {
       throw new Error('token can NOT be null.');
     }
     let project_id;
     if (options && options.project_id) {
-      project_id = options.project_id
+      project_id = options.project_id;
     }
     else if (this.project_id) {
-      project_id = this.project_id
+      project_id = this.project_id;
     }
     else {
       throw new Error('project_id can NOT be null.');
     }
-    const jwt_token = TiledeskClient.fixToken(token)
+    const jwt_token = TiledeskClient.fixToken(token);
     const HTTPREQUEST = {
-      url: `${this.APIURL}/${projectId}/requests/${request_id}/departments`,
+      url: `${this.APIURL}/${project_id}/requests/${request_id}/departments`,
       headers: {
         'Content-Type' : 'application/json',
         'Authorization': jwt_token
