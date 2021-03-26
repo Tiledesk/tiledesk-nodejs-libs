@@ -42,19 +42,19 @@ static is_agent_handoff_command(msg) {
     }
   }
   const text = msg.text;
-  console.log("msg.text:", msg.text);
-  console.log("TiledeskChatbotUtil.AGENT_COMMAND:", TiledeskChatbotUtil.AGENT_COMMAND.replace(/\\\\/g, '\\'));
+  // console.log("msg.text:", msg.text);
+  // console.log("TiledeskChatbotUtil.AGENT_COMMAND:", TiledeskChatbotUtil.AGENT_COMMAND.replace(/\\\\/g, '\\'));
   const agent_pattern = new RegExp('^(' + TiledeskChatbotUtil.AGENT_COMMAND.replace(/\\/g, '\\\\') + ')$', 'm');
-  console.log("agent_pattern:", agent_pattern);
+  // console.log("agent_pattern:", agent_pattern);
   const match_agent = text.match(agent_pattern);
-  console.log("match_agent: ", match_agent);
+  // console.log("match_agent: ", match_agent);
   const agent_handoff = null;
   if (match_agent && match_agent.length >=2) {
-    console.log("match!");
+    // console.log("match!");
     let parts = text.split('\\agent');
-    console.log(parts)
+    // console.log(parts)
     const new_msg_text = parts[0].trim()
-    console.log(new_msg_text)
+    // console.log(new_msg_text)
     return {
       'agent_handoff': TiledeskChatbotUtil.AGENT_COMMAND,
       'text': new_msg_text
@@ -186,8 +186,8 @@ static is_agent_handoff_command(msg) {
     const match_button_link_parent = button_string.match(tdlink_parent_pattern);
     const match_button_action = button_string.match(tdaction_pattern);
     const match_button_action_show_reply = button_string.match(tdaction_show_reply_pattern);
-    console.log('match_button_link*********>>>', match_button_link)
-    console.log('match_button_link_parent', match_button_link_parent)
+    // console.log('match_button_link*********>>>', match_button_link)
+    // console.log('match_button_link_parent', match_button_link_parent)
     if (match_button_action && match_button_action.length && match_button_action.length === 3) {
       const show_reply = false;
       const button =  TiledeskChatbotUtil.create_action_button_by_match(button_string, match_button_action, show_reply);
@@ -309,7 +309,7 @@ static is_agent_handoff_command(msg) {
     const tdImage_pattern = new RegExp('^(' + image_tag + '.*):(http(?:s)*.*)', 'm');
     // const tdImage_pattern = /^(tdImage.*):(http(?:s)*.*)/m;
     const tdimages_match = text.match(tdImage_pattern);
-    console.log("tdimages_match: ", tdimages_match)
+    // console.log("tdimages_match: ", tdimages_match)
     // tdimages:  [
     //   'tdImage...:IMAGE_URL', // [0]
     //   'tdImage...', // [1]
@@ -329,7 +329,7 @@ static is_agent_handoff_command(msg) {
       // let image_size_pattern = /^.*,(w[0-9]+)(h[0-9]+)/;
       let image_size_pattern = /^.*,\s*(w[0-9]+)*\s*(h[0-9]+)*/;
       let image_size_match = image_tag.match(image_size_pattern)
-      console.log("image_size_match:", image_size_match);
+      // console.log("image_size_match:", image_size_match);
       // image_size_match: [
       //   'tdImage, w200',
       //   'w200',
@@ -386,7 +386,7 @@ static is_agent_handoff_command(msg) {
     // const tdFrame_pattern = /^(tdFrame.*):(http(?:s)*.*)/m;
     const tdFrame_pattern = new RegExp('^(' + frame_tag + '.*):(http(?:s)*.*)', 'm');
     const tdframes_match = text.match(tdFrame_pattern);
-    console.log("tdframes_match: ", tdframes_match)
+    // console.log("tdframes_match: ", tdframes_match)
     // tdframes:  [
     //   'tdFrame...:IMAGE_URL', // [0]
     //   'tdFrame...', // [1]
@@ -405,7 +405,7 @@ static is_agent_handoff_command(msg) {
       // parse size (optional) ex: \tdFrame,w100 h100:http://image.com/index.html
       let size_pattern = /^.*,\s*(w[0-9]+)*\s*(h[0-9]+)*/;
       let size_match = frame_tag.match(size_pattern)
-      console.log("frame_size_match:", size_match);
+      // console.log("frame_size_match:", size_match);
       // size_match: [
       //   'tdFrame, w200',
       //   'w200',
@@ -464,7 +464,7 @@ static is_agent_handoff_command(msg) {
     // const tdVideo_pattern = /^(tdVideo.*):(http(?:s)*.*)/m;
     const tdVideo_pattern = new RegExp('^(' + tdvideo_tag + '.*):(http(?:s)*.*)', 'm');
     const tdvideos_match = text.match(tdVideo_pattern);
-    console.log("tdvideos_match: ", tdvideos_match)
+    // console.log("tdvideos_match: ", tdvideos_match)
     // tdvideos:  [
     //   'tdVideo...:VIDEO_URL', // [0]
     //   'tdVideo...', // [1]
@@ -484,7 +484,7 @@ static is_agent_handoff_command(msg) {
       // parse size (optional) ex: \tdVideo,w100 h100:http://image.com/video.mp4
       let size_pattern = /^.*,\s*(w[0-9]+)*\s*(h[0-9]+)*/;
       let size_match = video_tag.match(size_pattern)
-      console.log("video_size_match:", size_match);
+      // console.log("video_size_match:", size_match);
       // size_match: [
       //   'tdVideo, w200',
       //   'w200',
@@ -530,7 +530,7 @@ static is_agent_handoff_command(msg) {
   static check_is_youtube_video_url(video_url) {
     if (video_url.startsWith('https://www.youtube.com/watch?v=')) {
       const queryObject = url.parse(video_url,true).query;
-      console.log("video_url v", queryObject['v']);
+      // console.log("video_url v", queryObject['v']);
       const video_id = queryObject['v'];
       if (video_id) {
         const youtube_embed_video_url = 'https://www.youtube.com/embed/' + video_id;
@@ -586,7 +586,7 @@ static is_agent_handoff_command(msg) {
     const tdbutton_tag = TiledeskChatbotUtil.BUTTON_TAG;// 'tdButton:';
     const tdbutton_pattern = new RegExp('^' + tdbutton_tag + '.*', 'mg');
     const tdbuttons_match = text.match(tdbutton_pattern);
-    console.log("tdbutton matches:", tdbuttons_match)
+    // console.log("tdbutton matches:", tdbuttons_match)
     if (tdbuttons_match) {
       const text_with_removed_buttons = text.replace(tdbutton_pattern,"").trim()
       reply.message[TiledeskChatbotUtil.TEXT_KEY] = text_with_removed_buttons
@@ -643,7 +643,7 @@ static is_agent_handoff_command(msg) {
   static parse_webhook_on_off(text, reply) {
     var webhook_pattern = /^\\webhook/mg;
     var webhooks = text.match(webhook_pattern);
-    console.log("webhooks pattern:", webhooks);
+    // console.log("webhooks pattern:", webhooks);
     // webhooks pattern: [ '\\webhook' ]
     if (webhooks && webhooks.length > 0) {
       const webhook_text = webhooks[0]

@@ -2,6 +2,9 @@
 
 This library is on npm: https://www.npmjs.com/package/@tiledesk/tiledesk-chatbot-util
 
+### 0.8.19 (online)
+- console.log removed
+
 ### 0.8.18 (online)
 - Added test case for tdFrame: parseReply() of "tdFrame with localhost and port specified"
 - webhook tag updated, get webhook from parsed_reply.webhook, possible values: webhook=true or webhook=HTTP://URL
