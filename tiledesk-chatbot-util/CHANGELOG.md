@@ -2,6 +2,10 @@
 
 This library is on npm: https://www.npmjs.com/package/@tiledesk/tiledesk-chatbot-util
 
+### 0.8.20 - online
+- added new synthax for 'parent' link buttons: '<'
+- added new synthax for 'self' link buttons: '>'
+
 ### 0.8.19 (online)
 - console.log removed
 

@@ -1,5 +1,5 @@
 /* 
-    ver 0.8.18
+    ver 0.8.21
     Andrea Sponziello - (c) Tiledesk.com
 */
 
@@ -137,14 +137,15 @@ static is_agent_handoff_command(msg) {
   static TYPE_BUTTON_ACTION = 'action';
   static TARGET_BUTTON_LINK_BLANK = 'blank';
   static TARGET_BUTTON_LINK_PARENT = 'parent';
+  static TARGET_BUTTON_LINK_SELF = 'self';
   // tags
-  static BUTTON_TAG = '\\*\\s+'; // backup: '\\*\\s*'; senza spazi 
+  static BUTTON_TAG = '\\*\\s+'; // backup: '\\*\\s*'; NO spaces 
   static FRAME_TAG = 'tdFrame';
   static VIDEO_TAG = 'tdVideo';
   static IMAGE_TAG = 'tdImage';
-  static LINK_TAG = '\\s{1}(http|https)://'; //'tdLink:';
-  static LINK_PARENT_TAG = '\\s{2}(http|https)://'; // 'tdLinkParent:';
   static ACTION_TAG = 'tdAction:';
+  static INTENT_TAG = 'tdIntent:';
+  
   static ACTION_SHOW_REPLY_TAG = 'tdActionShowReply:';
   // other
   static AGENT_COMMAND = '\\agent';
@@ -174,7 +175,9 @@ static is_agent_handoff_command(msg) {
 
   static parse_button_from_string(button_string) {
     const tdlink_pattern = /\s{1}((http|https):\/\/\S*)/m
-    const tdlink_parent_pattern = /\s{2}((http|https):\/\/\S*)/m
+    //const tdlink_parent_pattern = /\s{2}((http|https):\/\/\S*)/m
+    const tdlink_parent_pattern = /\s{1}<\s{1}((http|https):\/\/\S*)/m // '<' means parent
+    const tdlink_self_pattern = /\s{1}>\s{1}((http|https):\/\/\S*)/m // '>' means self (the widget itself)
 
     const tdaction_tag = TiledeskChatbotUtil.ACTION_TAG; // 'tdAction:';
     const tdaction_pattern = new RegExp('(' + tdaction_tag + ')(\\S+)', 'm');
@@ -182,9 +185,15 @@ static is_agent_handoff_command(msg) {
     const tdaction_show_reply_tag = TiledeskChatbotUtil.ACTION_SHOW_REPLY_TAG; // 'tdActionShowReply:';
     const tdaction_show_reply_pattern = new RegExp('(' + tdaction_show_reply_tag + ')(\\S+)', 'm');
 
+    const tdintent_tag = TiledeskChatbotUtil.INTENT_TAG; // 'tdIntent:';
+    const tdintent_pattern = new RegExp('(' + tdintent_tag + ')(\\S+)', 'm');
+
     const match_button_link = button_string.match(tdlink_pattern);
     const match_button_link_parent = button_string.match(tdlink_parent_pattern);
+    const match_button_link_self = button_string.match(tdlink_self_pattern);
     const match_button_action = button_string.match(tdaction_pattern);
+    const match_button_intent = button_string.match(tdintent_pattern);
+    
     const match_button_action_show_reply = button_string.match(tdaction_show_reply_pattern);
     // console.log('match_button_link*********>>>', match_button_link)
     // console.log('match_button_link_parent', match_button_link_parent)
@@ -198,8 +207,17 @@ static is_agent_handoff_command(msg) {
       const button =  TiledeskChatbotUtil.create_action_button_by_match(button_string, match_button_action_show_reply, show_reply);
       return button;
     }
+    else if (match_button_intent && match_button_intent.length && match_button_intent.length === 3) {
+      const show_reply = true;
+      const button =  TiledeskChatbotUtil.create_action_button_by_match(button_string, match_button_intent, show_reply);
+      return button;
+    }
     else if (match_button_link_parent && match_button_link_parent.length && match_button_link_parent.length === 3) {
       const button =  TiledeskChatbotUtil.create_link_button_by_match(button_string, match_button_link_parent, TiledeskChatbotUtil.TARGET_BUTTON_LINK_PARENT);
+      return button;
+    }
+    else if (match_button_link_self && match_button_link_self.length && match_button_link_self.length === 3) {
+      const button =  TiledeskChatbotUtil.create_link_button_by_match(button_string, match_button_link_self, TiledeskChatbotUtil.TARGET_BUTTON_LINK_SELF);
       return button;
     }
     else if (match_button_link && match_button_link.length && match_button_link.length === 3) {

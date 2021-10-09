@@ -1,7 +1,10 @@
 # Client library for Tiledesk nodejs APIs client
 
+### 0.7.12 - online
+- added sendDirectMessage()
+
 ### 0.7.11 - online
-- - bug fix - some projectId to project_id
+- bug fix - some projectId to project_id
 
 ### 0.7.10 - online
 - removed token as explicit parameter in some function calls. token is now an optional constructor parameter. It's also supported by "options" parameter in some function calls.

@@ -707,6 +707,16 @@ class TiledeskClient {
     TiledeskClient.myrequest(
       HTTPREQUEST,
       function(err, response, resbody) {
+        // resbody example:
+        // {
+        //   "success": true,
+        //   "token": "JWT eyJ...",
+        //   "user": {
+        //       "firstname": "Guest",
+        //       "id": "20bb30db-b677-...",
+        //       "fullName": "Guest "
+        //   }
+        // }
         if (response.statusCode === 200) {
           if (callback) {
             callback(null, resbody)
@@ -819,6 +829,56 @@ class TiledeskClient {
       HTTPREQUEST,
       function(err, response, resbody) {
         if (response.statusCode === 200) {
+          if (callback) {
+            callback(null, resbody)
+          }
+        }
+        else if (callback) {
+          callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
+        }
+      }, this.log
+    );
+  }
+
+  sendDirectMessage(msgJSON, callback, options) {
+    let token;
+    if (options && options.token) {
+      token = options.token;
+    }
+    else if (this.token) {
+      token = this.token;
+    }
+    else {
+      throw new Error('token can NOT be null.');
+    }
+    let project_id;
+    if (options && options.project_id) {
+      project_id = options.project_id;
+    }
+    else if (this.project_id) {
+      project_id = this.project_id;
+    }
+    else {
+      throw new Error('project_id can NOT be null.');
+    }
+    const jwt_token = TiledeskClient.fixToken(token)
+    const url = `${this.APIURL}/${project_id}/messages`;
+    const HTTPREQUEST = {
+      url: url,
+      headers: {
+        'Content-Type' : 'application/json',
+        'Authorization': jwt_token
+      },
+      json: msgJSON,
+      method: 'POST'
+    };
+    TiledeskClient.myrequest(
+      HTTPREQUEST,
+      function(err, response, resbody) {
+        if (err) {
+          callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
+        }
+        else if (response.statusCode === 200) {
           if (callback) {
             callback(null, resbody)
           }
