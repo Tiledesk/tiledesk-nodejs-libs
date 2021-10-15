@@ -549,6 +549,53 @@ class TiledeskClient {
     );
   }
 
+  getRequestById(request_id, callback, options) {
+    let token;
+    if (options && options.token) {
+      token = options.token;
+    }
+    else if (this.token) {
+      token = this.token;
+    }
+    else {
+      throw new Error('token can NOT be null.');
+    }
+    let project_id;
+    if (options && options.project_id) {
+      project_id = options.project_id;
+    }
+    else if (this.project_id) {
+      project_id = this.project_id;
+    }
+    else {
+      throw new Error('project_id can NOT be null.');
+    }
+    const jwt_token = TiledeskClient.fixToken(token)
+    const URL = `${this.APIURL}/${project_id}/requests/${request_id}`
+    const HTTPREQUEST = {
+      url: URL,
+      headers: {
+        'Content-Type' : 'application/json',
+        'Authorization': jwt_token
+      },
+      json: true,
+      method: 'GET'
+    };
+    TiledeskClient.myrequest(
+      HTTPREQUEST,
+      function(err, response, resbody) {
+        if (response.statusCode === 200) {
+          if (callback) {
+            callback(null, resbody)
+          }
+        }
+        else if (callback) {
+          callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
+        }
+      }, this.log
+    );
+  }
+
   updateRequestParticipants(request_id, participants, callback, options) {
     let token;
     if (options && options.token) {
@@ -793,6 +840,7 @@ class TiledeskClient {
     );
   }
 
+  /** Send a message to a support conversation. TODO: RENAME IN SEND-SUPPORT-MESSAGE  */
   sendMessage(request_id, msgJSON, callback, options) {
     let token;
     if (options && options.token) {
@@ -840,6 +888,7 @@ class TiledeskClient {
     );
   }
 
+  /** Send a message to a direct/group conversation. TODO: RENAME IN SEND-CHAT-MESSAGE */
   sendDirectMessage(msgJSON, callback, options) {
     let token;
     if (options && options.token) {
@@ -960,9 +1009,9 @@ class TiledeskClient {
       throw new Error('project_id can NOT be null.');
     }
     const jwt_token = TiledeskClient.fixToken(token);
-    if (!this.lead_id) {
-      throw new Error('options.lead_id can NOT be empty.');
-    }
+    // if (!this.lead_id) {
+    //   throw new Error('options.lead_id can NOT be empty.');
+    // }
     const HTTPREQUEST = {
       url: `${this.APIURL}/${project_id}/leads/${lead_id}`, // this.conversation.lead._id
       headers: {

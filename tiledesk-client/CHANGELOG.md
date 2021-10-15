@@ -1,5 +1,11 @@
 # Client library for Tiledesk nodejs APIs client
 
+### 0.7.14 - online
+- added getRequestById()
+
+### 0.7.13 - online
+- bug fix - removed from updateLeadEmailFullname(): throw new Error('options.lead_id can NOT be empty.');
+
 ### 0.7.12 - online
 - added sendDirectMessage()
 
