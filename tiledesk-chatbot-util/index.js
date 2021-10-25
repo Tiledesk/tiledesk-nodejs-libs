@@ -144,9 +144,10 @@ static is_agent_handoff_command(msg) {
   static VIDEO_TAG = 'tdVideo';
   static IMAGE_TAG = 'tdImage';
   static ACTION_TAG = 'tdAction:';
-  static INTENT_TAG = 'tdIntent:';
-  
   static ACTION_SHOW_ECHO_TAG = 'tdActionShowEcho:';
+  static INTENT_TAG = 'tdIntent:';
+  static INTENT_NO_ECHO_TAG = 'tdIntentNoEcho:';
+
   // other
   static AGENT_COMMAND = '\\agent';
 
@@ -182,19 +183,23 @@ static is_agent_handoff_command(msg) {
     const tdaction_tag = TiledeskChatbotUtil.ACTION_TAG; // 'tdAction:';
     const tdaction_pattern = new RegExp('(' + tdaction_tag + ')(\\S+)', 'm');
     
-    const tdaction_show_echo_tag = TiledeskChatbotUtil.ACTION_SHOW_ECHO_TAG; // 'tdActionShowReply:';
+    const tdaction_show_echo_tag = TiledeskChatbotUtil.ACTION_SHOW_ECHO_TAG;
     const tdaction_show_echo_pattern = new RegExp('(' + tdaction_show_echo_tag + ')(\\S+)', 'm');
 
     const tdintent_tag = TiledeskChatbotUtil.INTENT_TAG; // 'tdIntent:';
     const tdintent_pattern = new RegExp('(' + tdintent_tag + ')(\\S+)', 'm');
 
+    const tdintent_no_echo_tag = TiledeskChatbotUtil.INTENT_NO_ECHO_TAG;
+    const tdintent_no_echo_pattern = new RegExp('(' + tdintent_no_echo_tag + ')(\\S+)', 'm');
+
     const match_button_link = button_string.match(tdlink_pattern);
     const match_button_link_parent = button_string.match(tdlink_parent_pattern);
     const match_button_link_self = button_string.match(tdlink_self_pattern);
     const match_button_action = button_string.match(tdaction_pattern);
-    const match_button_intent = button_string.match(tdintent_pattern);
-    
     const match_button_action_show_echo = button_string.match(tdaction_show_echo_pattern);
+    const match_button_intent = button_string.match(tdintent_pattern);
+    const match_button_intent_no_echo = button_string.match(tdintent_no_echo_pattern);
+
     // console.log('match_button_link*********>>>', match_button_link)
     // console.log('match_button_link_parent', match_button_link_parent)
     if (match_button_action && match_button_action.length && match_button_action.length === 3) {
@@ -210,6 +215,11 @@ static is_agent_handoff_command(msg) {
     else if (match_button_intent && match_button_intent.length && match_button_intent.length === 3) {
       const show_echo = true;
       const button =  TiledeskChatbotUtil.create_action_button_by_match(button_string, match_button_intent, show_echo);
+      return button;
+    }
+    else if (match_button_intent_no_echo && match_button_intent_no_echo.length && match_button_intent_no_echo.length === 3) {
+      const show_echo = false;
+      const button =  TiledeskChatbotUtil.create_action_button_by_match(button_string, match_button_intent_no_echo, show_echo);
       return button;
     }
     else if (match_button_link_parent && match_button_link_parent.length && match_button_link_parent.length === 3) {
