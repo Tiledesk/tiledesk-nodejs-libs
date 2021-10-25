@@ -1,0 +1,6 @@
+
+
+var tiledeskClient = new TiledeskClient(options);
+
+tiledeskClient.sendMessage(request_id, msgJSON, callback, options)
+
