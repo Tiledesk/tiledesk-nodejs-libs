@@ -419,7 +419,7 @@ describe('TiledeskChatbotUtil', function() {
 
 describe('TiledeskChatbotUtil', function() {
     describe('parseReply() of tdAction buttons', function() {
-        it('should return a Action button with show_reply = false', function() {
+        it('should return a Action button with show_echo = false', function() {
             const text = 'Intro text\n* Action Button with text tdAction:ACTION-CALLBACK-NAME';
             console.log("parsing text:", text);
             const reply = TiledeskChatbotUtil.parseReply(text);
@@ -435,7 +435,7 @@ describe('TiledeskChatbotUtil', function() {
             assert.strictEqual(reply.message.attributes.attachment.buttons[0].type, TiledeskChatbotUtil.TYPE_BUTTON_ACTION);
             assert.strictEqual(reply.message.attributes.attachment.buttons[0].value, 'Action Button with text');
             assert.strictEqual(reply.message.attributes.attachment.buttons[0].action, 'ACTION-CALLBACK-NAME');
-            assert.strictEqual(reply.message.attributes.attachment.buttons[0].show_reply, false);
+            assert.strictEqual(reply.message.attributes.attachment.buttons[0].show_echo, false);
             // MESSAGE:
             // {
             //     "message": {
@@ -448,7 +448,7 @@ describe('TiledeskChatbotUtil', function() {
             //                     "type": "action",
             //                     "value": "Action Button with text",
             //                     "action": "ACTION-CALLBACK-NAME",
-            //                     "show_reply": false
+            //                     "show_echo": false
             //                 }]
             //             }
             //         }
@@ -460,8 +460,8 @@ describe('TiledeskChatbotUtil', function() {
 
 describe('TiledeskChatbotUtil', function() {
     describe('parseReply() of tdAction buttons', function() {
-        it('should return a Action button with show_reply = true', function() {
-            const text = 'Intro text\n* Action Button with text tdActionShowReply:ACTION-CALLBACK-NAME';
+        it('should return a Action button with show_echo = true', function() {
+            const text = 'Intro text\n* Action Button with text tdActionShowEcho:ACTION-CALLBACK-NAME';
             console.log("parsing text:", text);
             const reply = TiledeskChatbotUtil.parseReply(text);
             console.log("reply:", JSON.stringify(reply));
@@ -476,7 +476,7 @@ describe('TiledeskChatbotUtil', function() {
             assert.strictEqual(reply.message.attributes.attachment.buttons[0].type, TiledeskChatbotUtil.TYPE_BUTTON_ACTION);
             assert.strictEqual(reply.message.attributes.attachment.buttons[0].value, 'Action Button with text');
             assert.strictEqual(reply.message.attributes.attachment.buttons[0].action, 'ACTION-CALLBACK-NAME');
-            assert.strictEqual(reply.message.attributes.attachment.buttons[0].show_reply, true);
+            assert.strictEqual(reply.message.attributes.attachment.buttons[0].show_echo, true);
             // MESSAGE:
             // {
             //     "message": {
@@ -489,7 +489,7 @@ describe('TiledeskChatbotUtil', function() {
             //                     "type": "action",
             //                     "value": "Action Button with text",
             //                     "action": "ACTION-CALLBACK-NAME",
-            //                     "show_reply": true
+            //                     "show_echo": true
             //                 }]
             //             }
             //         }
@@ -501,7 +501,7 @@ describe('TiledeskChatbotUtil', function() {
 
 describe('TiledeskChatbotUtil', function() {
     describe('parseReply() of tdIntent buttons', function() {
-        it('should return an Intent button (aka Action button with show_reply = true)', function() {
+        it('should return an Intent button (aka Action button with show_echo = true)', function() {
             const text = 'Intro text\n* Action Button with text tdIntent:INTENT-NAME';
             console.log("parsing text:", text);
             const reply = TiledeskChatbotUtil.parseReply(text);
@@ -517,7 +517,7 @@ describe('TiledeskChatbotUtil', function() {
             assert.strictEqual(reply.message.attributes.attachment.buttons[0].type, TiledeskChatbotUtil.TYPE_BUTTON_ACTION);
             assert.strictEqual(reply.message.attributes.attachment.buttons[0].value, 'Action Button with text');
             assert.strictEqual(reply.message.attributes.attachment.buttons[0].action, 'INTENT-NAME');
-            assert.strictEqual(reply.message.attributes.attachment.buttons[0].show_reply, true);
+            assert.strictEqual(reply.message.attributes.attachment.buttons[0].show_echo, true);
             // MESSAGE:
             // {
             //     "message": {
@@ -530,7 +530,7 @@ describe('TiledeskChatbotUtil', function() {
             //                     "type": "action",
             //                     "value": "Action Button with text",
             //                     "action": "ACTION-CALLBACK-NAME",
-            //                     "show_reply": true
+            //                     "show_echo": true
             //                 }]
             //             }
             //         }

@@ -30,7 +30,7 @@ class TiledeskChatbotUtil {
   }
 
   /**
- * checks if the message text contains the \agent command
+ * it checks if the message text contains the \agent command
  * @param {*} msg The message
  */
 static is_agent_handoff_command(msg) {
@@ -123,7 +123,7 @@ static is_agent_handoff_command(msg) {
   static LINK_KEY = 'link';
   static TARGET_KEY = 'target';
   static ACTION_KEY = 'action';
-  static SHOW_REPLY_KEY = 'show_reply';
+  static SHOW_ECHO_KEY = 'show_echo';
   static SRC_KEY = 'src';
   static FRAME_TYPE_KEY = 'type';
   static WEBHOOK_KEY = 'webhook';
@@ -146,7 +146,7 @@ static is_agent_handoff_command(msg) {
   static ACTION_TAG = 'tdAction:';
   static INTENT_TAG = 'tdIntent:';
   
-  static ACTION_SHOW_REPLY_TAG = 'tdActionShowReply:';
+  static ACTION_SHOW_ECHO_TAG = 'tdActionShowEcho:';
   // other
   static AGENT_COMMAND = '\\agent';
 
@@ -182,8 +182,8 @@ static is_agent_handoff_command(msg) {
     const tdaction_tag = TiledeskChatbotUtil.ACTION_TAG; // 'tdAction:';
     const tdaction_pattern = new RegExp('(' + tdaction_tag + ')(\\S+)', 'm');
     
-    const tdaction_show_reply_tag = TiledeskChatbotUtil.ACTION_SHOW_REPLY_TAG; // 'tdActionShowReply:';
-    const tdaction_show_reply_pattern = new RegExp('(' + tdaction_show_reply_tag + ')(\\S+)', 'm');
+    const tdaction_show_echo_tag = TiledeskChatbotUtil.ACTION_SHOW_ECHO_TAG; // 'tdActionShowReply:';
+    const tdaction_show_echo_pattern = new RegExp('(' + tdaction_show_echo_tag + ')(\\S+)', 'm');
 
     const tdintent_tag = TiledeskChatbotUtil.INTENT_TAG; // 'tdIntent:';
     const tdintent_pattern = new RegExp('(' + tdintent_tag + ')(\\S+)', 'm');
@@ -194,22 +194,22 @@ static is_agent_handoff_command(msg) {
     const match_button_action = button_string.match(tdaction_pattern);
     const match_button_intent = button_string.match(tdintent_pattern);
     
-    const match_button_action_show_reply = button_string.match(tdaction_show_reply_pattern);
+    const match_button_action_show_echo = button_string.match(tdaction_show_echo_pattern);
     // console.log('match_button_link*********>>>', match_button_link)
     // console.log('match_button_link_parent', match_button_link_parent)
     if (match_button_action && match_button_action.length && match_button_action.length === 3) {
-      const show_reply = false;
-      const button =  TiledeskChatbotUtil.create_action_button_by_match(button_string, match_button_action, show_reply);
+      const show_echo = false;
+      const button =  TiledeskChatbotUtil.create_action_button_by_match(button_string, match_button_action, show_echo);
       return button;
     }
-    else if (match_button_action_show_reply && match_button_action_show_reply.length && match_button_action_show_reply.length === 3) {
-      const show_reply = true;
-      const button =  TiledeskChatbotUtil.create_action_button_by_match(button_string, match_button_action_show_reply, show_reply);
+    else if (match_button_action_show_echo && match_button_action_show_echo.length && match_button_action_show_echo.length === 3) {
+      const show_echo = true;
+      const button =  TiledeskChatbotUtil.create_action_button_by_match(button_string, match_button_action_show_echo, show_echo);
       return button;
     }
     else if (match_button_intent && match_button_intent.length && match_button_intent.length === 3) {
-      const show_reply = true;
-      const button =  TiledeskChatbotUtil.create_action_button_by_match(button_string, match_button_intent, show_reply);
+      const show_echo = true;
+      const button =  TiledeskChatbotUtil.create_action_button_by_match(button_string, match_button_intent, show_echo);
       return button;
     }
     else if (match_button_link_parent && match_button_link_parent.length && match_button_link_parent.length === 3) {
@@ -256,7 +256,7 @@ static is_agent_handoff_command(msg) {
     return button;
   }
 
-  static create_action_button_by_match(button_string, match, show_reply) {
+  static create_action_button_by_match(button_string, match, show_echo) {
     let button = {};
     const command = match[0];
     const action = match[2];
@@ -264,7 +264,7 @@ static is_agent_handoff_command(msg) {
     button[TiledeskChatbotUtil.TYPE_KEY] = TiledeskChatbotUtil.TYPE_BUTTON_ACTION;
     button[TiledeskChatbotUtil.VALUE_KEY] = button_label;
     button[TiledeskChatbotUtil.ACTION_KEY] = action;
-    button[TiledeskChatbotUtil.SHOW_REPLY_KEY] = show_reply;
+    button[TiledeskChatbotUtil.SHOW_ECHO_KEY] = show_echo;
     return button;
   }
 

@@ -2,6 +2,9 @@
 
 This library is on npm: https://www.npmjs.com/package/@tiledesk/tiledesk-chatbot-util
 
+### 0.8.22 - online
+- tdActionShowReply renamed tdActionShowEcho
+
 ### 0.8.20 - online
 - added new synthax for 'parent' link buttons: '<'
 - added new synthax for 'self' link buttons: '>'
