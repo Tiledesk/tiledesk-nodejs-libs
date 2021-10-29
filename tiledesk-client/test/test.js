@@ -8,7 +8,7 @@ var jwt = require('jsonwebtoken');
 // FIRST PROJECT (OR ANOTHER PROJECT) DATA (ID AND NAME)
 const EMAIL = "test@tiledesk.com"; // first user
 const PASSWORD = "testtest";
-const EMAIL2 = "test2@tiledesk.com"; // secondo user
+const EMAIL2 = "test2@tiledesk.com"; // second user
 const PASSWORD2 = "testtest";
 const PROJECT_ID = "6011eafd51245600345cdf72"; // first user project
 const PROJECT_NAME = 'First Test Project' // first project name
@@ -54,12 +54,12 @@ describe('TiledeskClient', function() {
       it('should return a new TiledeskClient', function() {
           const tdclient = new TiledeskClient({
               APIKEY: APIKEY,
-              APIURL: "https://tiledesk-server-pre.herokuapp.com/v3",
+              APIURL: "https://tiledesk-server-pre.herokuapp.com/",
               log: LOG_STATUS
           })
           if (tdclient) {
             assert(tdclient != null);
-            assert(tdclient.APIURL === "https://tiledesk-server-pre.herokuapp.com/v3");
+            assert(tdclient.APIURL === "https://tiledesk-server-pre.herokuapp.com/");
             assert(tdclient.APIKEY === APIKEY);
             assert(tdclient.log === LOG_STATUS);
           }
@@ -400,21 +400,23 @@ describe('TiledeskClient', function() {
 
 // describe('TiledeskClient', function() {
 //     describe('getAllProjectUsers()', function() {
-//         it('gets all the project users', function() {
+//         it('gets all the project users', function(done) {
 //             const tdclient = new TiledeskClient(
 //             {
 //                 APIKEY: APIKEY,
-//                 API_ENDPOINT: API_ENDPOINT,
-//                 log: LOG_STATUS
+//                 APIURL: API_ENDPOINT,
+//                 log: true
 //             })
 //             if (tdclient) {
 //               tdclient.authEmailPassword(EMAIL, PASSWORD, function(err, result) {
+//                 console.log("RESULT:", result);
 //                 tdclient.getAllProjectUsers(
 //                     PROJECT_ID,
 //                     result.token,
 //                     function(err, resbody) {
 //                         if (!err && resbody) {
 //                             assert(resbody.name === PROJECT_NAME);
+//                             done();
 //                         }
 //                         else {
 //                             assert.ok(false);
@@ -481,44 +483,44 @@ describe('TiledeskClient', function() {
     });
 });
 
-// describe('TiledeskClient', function() {
-//     describe('set teammate unavailable', function() {
-//         it('puts the project_user unavailable', function(done) {
-//             const tdclient = new TiledeskClient({
-//                 APIKEY: APIKEY,
-//                 API_ENDPOINT: API_ENDPOINT,
-//                 log: LOG_STATUS
-//             });
-//             if (tdclient) {
-//               assert(tdclient != null);
-//               tdclient.anonymousAuthentication(
-//                 PROJECT_ID,
-//                 function(err, resbody) {
-//                     if (!err && resbody) {
-//                         assert(resbody.token != null);
-//                         const text_value = 'test message';
-//                         const request_id = 'support-group-' + uuidv4();
-//                         // console.log("Sending message to REQUEST-ID:", request_id);
-//                         tdclient.sendMessage(PROJECT_ID, request_id, {text: text_value}, resbody.token, function(err, result) {
-//                             // console.log("RESULT:", result)
-//                             assert(err === null);
-//                             assert(result != null);
-//                             assert(result.text === text_value);
-//                             done();
-//                           });
-//                     }
-//                     else {
-//                         assert.ok(false);
-//                     }
-//                 }
-//               );
-//             }
-//             else {
-//                 assert.ok(false);
-//             }
-//         });
-//     });
-// });
+// // describe('TiledeskClient', function() {
+// //     describe('set teammate unavailable', function() {
+// //         it('puts the project_user unavailable', function(done) {
+// //             const tdclient = new TiledeskClient({
+// //                 APIKEY: APIKEY,
+// //                 API_ENDPOINT: API_ENDPOINT,
+// //                 log: LOG_STATUS
+// //             });
+// //             if (tdclient) {
+// //               assert(tdclient != null);
+// //               tdclient.anonymousAuthentication(
+// //                 PROJECT_ID,
+// //                 function(err, resbody) {
+// //                     if (!err && resbody) {
+// //                         assert(resbody.token != null);
+// //                         const text_value = 'test message';
+// //                         const request_id = 'support-group-' + uuidv4();
+// //                         // console.log("Sending message to REQUEST-ID:", request_id);
+// //                         tdclient.sendMessage(PROJECT_ID, request_id, {text: text_value}, resbody.token, function(err, result) {
+// //                             // console.log("RESULT:", result)
+// //                             assert(err === null);
+// //                             assert(result != null);
+// //                             assert(result.text === text_value);
+// //                             done();
+// //                           });
+// //                     }
+// //                     else {
+// //                         assert.ok(false);
+// //                     }
+// //                 }
+// //               );
+// //             }
+// //             else {
+// //                 assert.ok(false);
+// //             }
+// //         });
+// //     });
+// // });
 
 describe('TiledeskClient', function() {
     describe('sendMessage() anonymous', function() {
@@ -593,59 +595,59 @@ describe('TiledeskClient', function() {
     });
 });
 
-describe('TiledeskClient', function() {
-    describe('sendDirectMessage() by anonymous', function() {
-        it('sends a direct message ANONYM_USER_TOKEN to on-the-fly-anonynous user, "project_id" & "token" are "options" parameters', function(done) {
-            const tdclient = new TiledeskClient({
-                APIKEY: APIKEY,
-                APIURL: API_ENDPOINT,
-                log: true
-            });
-            if (tdclient) {
-              assert(tdclient != null);
-              tdclient.authEmailPassword(
-                EMAIL2,
-                PASSWORD2, 
-                function(err, resbody) {
-                    if (!err && resbody) {
-                        console.log("resbody:", resbody)
-                        assert(resbody.token != null);
-                        assert(resbody.user != null);
-                        assert(resbody.user._id != null);
-                        const text_value = "test message";
-                        const msgJSON = {
-                            "senderFullname": "Guest 1",
-                            "recipient": resbody.user._id,
-                            "text": text_value
-                        }
-                        // console.log("Sending message to REQUEST-ID:", request_id);
-                        tdclient.sendDirectMessage(msgJSON, function(err, result) {
-                            console.log("Message sent:", result)
-                            if (err) {
-                                console.error("An error occurred:", err);
-                                assert(err === null);
-                            }
-                            assert(result != null);
-                            assert(result.text === text_value);
-                            done();
-                          },
-                          {
-                              project_id: PROJECT_ID,
-                              token: USER_TOKEN
-                          });
-                    }
-                    else {
-                        assert.ok(false);
-                    }
-                }
-              );
-            }
-            else {
-                assert.ok(false);
-            }
-        });
-    });
-});
+// describe('TiledeskClient', function() {
+//     describe('sendDirectMessage() by anonymous', function() {
+//         it('sends a direct message ANONYM_USER_TOKEN to on-the-fly-anonynous user, "project_id" & "token" are "options" parameters', function(done) {
+//             const tdclient = new TiledeskClient({
+//                 APIKEY: APIKEY,
+//                 APIURL: API_ENDPOINT,
+//                 log: true
+//             });
+//             if (tdclient) {
+//               assert(tdclient != null);
+//               tdclient.authEmailPassword(
+//                 EMAIL2,
+//                 PASSWORD2, 
+//                 function(err, resbody) {
+//                     if (!err && resbody) {
+//                         console.log("resbody:", resbody)
+//                         assert(resbody.token != null);
+//                         assert(resbody.user != null);
+//                         assert(resbody.user._id != null);
+//                         const text_value = "test message";
+//                         const msgJSON = {
+//                             "senderFullname": "Guest 1",
+//                             "recipient": resbody.user._id,
+//                             "text": text_value
+//                         }
+//                         // console.log("Sending message to REQUEST-ID:", request_id);
+//                         tdclient.sendDirectMessage(msgJSON, function(err, result) {
+//                             console.log("Message sent:", result)
+//                             if (err) {
+//                                 console.error("An error occurred:", err);
+//                                 assert(err === null);
+//                             }
+//                             assert(result != null);
+//                             assert(result.text === text_value);
+//                             done();
+//                           },
+//                           {
+//                               project_id: PROJECT_ID,
+//                               token: USER_TOKEN
+//                           });
+//                     }
+//                     else {
+//                         assert.ok(false);
+//                     }
+//                 }
+//               );
+//             }
+//             else {
+//                 assert.ok(false);
+//             }
+//         });
+//     });
+// });
 
 describe('TiledeskClient', function() {
     describe('getRequests()', function() {

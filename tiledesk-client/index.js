@@ -5,31 +5,31 @@
 const request = require('request')
 
 /**
- * This is the class that handles the communication with Tiledesk's APIs
+ * This class is a NodeJS stub for Tiledesk's REST APIs
  */
 class TiledeskClient {
+
+  static DEFAULT_API_ENDPOINT = "https://api.tiledesk.com/v2";
+  static ASSIGNED_STATUS = 200;
+  static UNASSIGNED_STATUS = 100;
 
   /**
    * Constructor for TiledeskClient object
    *
    * @example
    * const { TiledeskClient } = require('tiledesk-client');
-   * const tdclient = new TiledeskClient({request: request, response: response});
+   * const tdclient = new TiledeskClient({APIKEY: 'THE_API_KEY'});
+   * const tdclient = new TiledeskClient({APIKEY: 'THE_API_KEY', APIURL: 'SELF_HOSTED_INSTANCE_ENDPOINT'});
+   * 
    *
    * @param {Object} options JSON configuration.
    * @param {Object} options.APIKEY Mandatory. Tiledesk APIKEY
-   * @param {Object} options.APIURL Optional. Tiledesk server api endpoint
-   * @param {Object} options.project_id Optional. Tiledesk server api endpoint
-   * @param {Object} options.token Optional. Tiledesk authentication token
+   * @param {Object} options.APIURL Optional. Tiledesk server API endpoint
+   * @param {Object} options.projectId Optional. Tiledesk projectId. Will be used in each call on project's APIs.
+   * @param {Object} options.token Optional. Tiledesk authentication token. Will be used in each call on project's APIs.
    * @param {Object} options.log Optional. If true requests are logged
    * 
-   * 
    */
-  static DEFAULT_API_ENDPOINT = "https://api.tiledesk.com/v2";
-  // static BETA_API_ENDPOINT = "https://tiledesk-server-pre.herokuapp.com";
-  static ASSIGNED_STATUS = 200;
-  static UNASSIGNED_STATUS = 100;
-
   constructor(options) {
     if (!options.APIKEY) {
       throw new Error('APIKEY can NOT be empty.');
@@ -48,8 +48,8 @@ class TiledeskClient {
       this.APIURL = TiledeskClient.DEFAULT_API_ENDPOINT;
     }
 
-    if (options && options.project_id) {
-      this.project_id = options.project_id;
+    if (options && options.projectId) {
+      this.projectId = options.projectId;
     }
 
     if (options && options.token) {
@@ -71,11 +71,9 @@ class TiledeskClient {
     }
   }
 
-  // curl -v -X POST -H 'Content-Type:application/json' -u andrea.leo@f21.it:123456 -d '{"name":"testprj"}' https://api.tiledesk.com/v2/projects
-
-  createProject(project_id, token, callback) {
+  createProject(projectId, token, callback) {
     const jwt_token = TiledeskClient.fixToken(token)
-    const URL = `${this.APIURL}/projects/${project_id}`
+    const URL = `${this.APIURL}/projects/${projectId}`
     const HTTPREQUEST = {
       url: URL,
       headers: {
@@ -106,6 +104,12 @@ class TiledeskClient {
     }, this. log);
   }
 
+  /**
+   * Returns the project's JSON configuration
+   * @param {resultCallback} callback - The callback that handles the response.
+   * @param {Object} options - <b>token</b> - the token for this request. Overrides instance token (if) provided in constructor.
+   * <br><b>projectId</b> - The projectId for this request. Overrides instance projectId (if) provided in constructor.
+   */
   getProjectSettings(callback, options) {
     let token;
     if (options && options.token) {
@@ -117,18 +121,18 @@ class TiledeskClient {
     else {
       throw new Error('token can NOT be null.');
     }
-    let project_id;
-    if (options && options.project_id) {
-      project_id = options.project_id;
+    let projectId;
+    if (options && options.projectId) {
+      projectId = options.projectId;
     }
-    else if (this.project_id) {
-      project_id = this.project_id;
+    else if (this.projectId) {
+      projectId = this.projectId;
     }
     else {
-      throw new Error('project_id can NOT be null.');
+      throw new Error('projectId can NOT be null.');
     }
     const jwt_token = TiledeskClient.fixToken(token)
-    const URL = `${this.APIURL}/projects/${project_id}`
+    const URL = `${this.APIURL}/projects/${projectId}`
     const HTTPREQUEST = {
       url: URL,
       headers: {
@@ -148,27 +152,17 @@ class TiledeskClient {
       else if (callback) {
         callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
       }
-
-      // if (response.statusCode == 200) {
-      //   if (callback) {
-      //     callback(null, resbody)
-      //   }
-      // }
-      // else if (callback) {
-      //   const error_msg = "getProjectSettings. Status code: " + response.statusCode
-      //   callback(error_msg, null)
-      // }
-
-      // if (response.statusCode == 200) {
-      //   callback(null, resbody)
-      // }
-      // else {
-      //   const error_msg = "getProjectSettings. Status code: " + response.statusCode
-      //   callback(error_msg, null)
-      // }
     }, this.log);
   }
 
+  /**
+   * Updates the request's properties
+   * @param {string} request_id - The request ID
+   * @param {Object} properties - The request properties to update.
+   * @param {resultCallback} callback - The callback that handles the response.
+   * @param {Object} options - <b>token</b> - the token for this request. Overrides instance token (if) provided in constructor.
+   * <br><b>projectId</b> - The projectId for this request. Overrides instance projectId (if) provided in constructor.
+   */
   updateRequestProperties(request_id, properties, callback, options) {
     let token;
     if (options && options.token) {
@@ -180,18 +174,18 @@ class TiledeskClient {
     else {
       throw new Error('token can NOT be null.');
     }
-    let project_id;
-    if (options && options.project_id) {
-      project_id = options.project_id;
+    let projectId;
+    if (options && options.projectId) {
+      projectId = options.projectId;
     }
-    else if (this.project_id) {
-      project_id = this.project_id;
+    else if (this.projectId) {
+      projectId = this.projectId;
     }
     else {
-      throw new Error('project_id can NOT be null.');
+      throw new Error('projectId can NOT be null.');
     }
     const jwt_token = TiledeskClient.fixToken(token)
-    var URL = `${this.APIURL}/${project_id}/requests/${request_id}`
+    var URL = `${this.APIURL}/${projectId}/requests/${request_id}`
     data = properties;
     const HTTPREQUEST = {
       url: URL,
@@ -213,14 +207,18 @@ class TiledeskClient {
         else if (callback) {
           callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
         }
-
-        // if (callback) {
-        //   callback(err)
-        // }
       }, this.log
     );
   }
 
+  /**
+   * Updates the request's attributes
+   * @param {string} request_id - The request ID
+   * @param {Object} attributes - The request attributes to update.
+   * @param {resultCallback} callback - The callback that handles the response.
+   * @param {Object} options - <b>token</b> - the token for this request. Overrides instance token (if) provided in constructor.
+   * <br><b>projectId</b> - The projectId for this request. Overrides instance projectId (if) provided in constructor.
+   */
   updateRequestAttributes(request_id, attributes, callback, options) {
     let token;
     if (options && options.token) {
@@ -232,18 +230,18 @@ class TiledeskClient {
     else {
       throw new Error('token can NOT be null.');
     }
-    let project_id;
-    if (options && options.project_id) {
-      project_id = options.project_id;
+    let projectId;
+    if (options && options.projectId) {
+      projectId = options.projectId;
     }
-    else if (this.project_id) {
-      project_id = this.project_id;
+    else if (this.projectId) {
+      projectId = this.projectId;
     }
     else {
-      throw new Error('project_id can NOT be null.');
+      throw new Error('projectId can NOT be null.');
     }
     const jwt_token = TiledeskClient.fixToken(token)
-    var URL = `${this.APIURL}/${project_id}/requests/${request_id}/attributes`
+    var URL = `${this.APIURL}/${projectId}/requests/${request_id}/attributes`
     var data = attributes;
     const HTTPREQUEST = {
       url: URL,
@@ -265,14 +263,17 @@ class TiledeskClient {
         else if (callback) {
           callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
         }
-
-        // if (callback) {
-        //   callback(err)
-        // }
       }, this.log
     );
   }
 
+  /**
+   * Returns a project's User (aka Teammate, is a User invited on a project, with additional properties and a spcific project-userId)
+   * @param {string} user_id - The Teammate ID. Is the specific ID for this user on this project
+   * @param {resultCallback} callback - The callback that handles the response.
+   * @param {Object} options - <b>token</b> - the token for this request. Overrides instance token (if) provided in constructor.
+   * <br><b>projectId</b> - The projectId for this request. Overrides instance projectId (if) provided in constructor.
+   */
   getProjectUser(user_id, callback, options) {
     let token;
     if (options && options.token) {
@@ -284,18 +285,18 @@ class TiledeskClient {
     else {
       throw new Error('token can NOT be null.');
     }
-    let project_id;
-    if (options && options.project_id) {
-      project_id = options.project_id;
+    let projectId;
+    if (options && options.projectId) {
+      projectId = options.projectId;
     }
-    else if (this.project_id) {
-      project_id = this.project_id;
+    else if (this.projectId) {
+      projectId = this.projectId;
     }
     else {
-      throw new Error('project_id can NOT be null.');
+      throw new Error('projectId can NOT be null.');
     }
     const jwt_token = TiledeskClient.fixToken(token)
-    const URL = `${this.APIURL}/${project_id}/project_users/users/${user_id}`
+    const URL = `${this.APIURL}/${projectId}/project_users/users/${user_id}`
     const HTTPREQUEST = {
       url: URL,
       headers: {
@@ -316,22 +317,23 @@ class TiledeskClient {
         else if (callback) {
           callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
         }
-        
-        // if (resbody && resbody[0]) {
-        //   if (callback) {
-        //     callback(err, resbody[0])
-        //   }
-        // }
-        // else {
-        //   if (callback) {
-        //     callback(err, null)
-        //   }
-        // }
       }, this.log
     );
   }
 
-  updateProjectUserCurrentlyLoggedIn(values, callback, options) {
+  /**
+   * Updates the authenticated Teammate's (projectUser). The teammate must be invited to the specified project for the update operation taking success.
+   * @param {Object} properties - The properties to update. Only the provided properties will be updated, the other properties will stay unchanged.<br>
+   * <b>role {string}</b> - The teammate role. Permitted values: 'admin', 'agent'.
+   * <br><b>user_available {boolean}</b> - The teammate availability. 'true' for available, 'false' for unavailable.
+   * <br><b>max_served_chat {number}</b> - The number of concurrent chats the teammate can take at once.
+   * <br><b>attributes {Object}</b> - The teammate custom attributes.
+   * <br><b>settings {Object}</b> - The teammate settings.
+   * @param {resultCallback} callback - The callback that handles the response.
+   * @param {Object} options - <b>token</b> - the token for this request. Overrides instance token (if) provided in constructor.
+   * <br><b>projectId</b> - The projectId for this request. Overrides instance projectId (if) provided in constructor.
+   */
+  updateProjectUserCurrentlyLoggedIn(properties, callback, options) {
     let token;
     if (options && options.token) {
       token = options.token;
@@ -342,25 +344,25 @@ class TiledeskClient {
     else {
       throw new Error('token can NOT be null.');
     }
-    let project_id;
-    if (options && options.project_id) {
-      project_id = options.project_id;
+    let projectId;
+    if (options && options.projectId) {
+      projectId = options.projectId;
     }
-    else if (this.project_id) {
-      project_id = this.project_id;
+    else if (this.projectId) {
+      projectId = this.projectId;
     }
     else {
-      throw new Error('project_id can NOT be null.');
+      throw new Error('projectId can NOT be null.');
     }
     const jwt_token = TiledeskClient.fixToken(token)
-    const URL = `${this.APIURL}/${project_id}/project_users/`
+    const URL = `${this.APIURL}/${projectId}/project_users/`
     const HTTPREQUEST = {
       url: URL,
       headers: {
         'Content-Type' : 'application/json',
         'Authorization': jwt_token
       },
-      json: values,
+      json: properties,
       method: 'PUT'
     };
     TiledeskClient.myrequest(
@@ -378,6 +380,74 @@ class TiledeskClient {
     );
   }
 
+  /**
+   * Updates the Teammate's (projectUser) by ProjectUser's ID. It requires admin role.
+   * @param {string} project_user_id - The teammate ID.
+   * @param {Object} properties - The properties to update. Only the provided properties will be updated, the other properties will stay unchanged.<br>
+   * <b>role {string}</b> - The teammate role. Permitted values: 'admin', 'agent'.
+   * <br><b>user_available {boolean}</b> - The teammate availability. 'true' for available, 'false' for unavailable.
+   * <br><b>max_served_chat {number}</b> - The number of concurrent chats the teammate can take at once.
+   * <br><b>attributes {Object}</b> - The teammate custom attributes.
+   * <br><b>settings {Object}</b> - The teammate settings.
+   * @param {resultCallback} callback - The callback that handles the response.
+   * @param {Object} options - <b>token</b> - the token for this request. Overrides instance token (if) provided in constructor.
+   * <br><b>projectId</b> - The projectId for this request. Overrides instance projectId (if) provided in constructor.
+   */
+   updateProjectUser(project_user_id, properties, callback, options) {
+    let token;
+    if (options && options.token) {
+      token = options.token;
+    }
+    else if (this.token) {
+      token = this.token;
+    }
+    else {
+      throw new Error('token can NOT be null.');
+    }
+    let projectId;
+    if (options && options.projectId) {
+      projectId = options.projectId;
+    }
+    else if (this.projectId) {
+      projectId = this.projectId;
+    }
+    else {
+      throw new Error('projectId can NOT be null.');
+    }
+    const jwt_token = TiledeskClient.fixToken(token)
+    const URL = `${this.APIURL}/${projectId}/project_users/${project_user_id}`
+    const HTTPREQUEST = {
+      url: URL,
+      headers: {
+        'Content-Type' : 'application/json',
+        'Authorization': jwt_token
+      },
+      json: properties,
+      method: 'PUT'
+    };
+    TiledeskClient.myrequest(
+      HTTPREQUEST,
+      function(err, response, resbody) {
+        if (response.statusCode === 200) {
+          if (callback) {
+          callback(null, resbody)
+          }
+        }
+        else if (callback) {
+          callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
+        }
+      }, this.log
+    );
+  }
+
+  /**
+   * Only updates the available status for the specified Teammate. It requires admin role.
+   * @param {string} project_user_id - The teammate ID.
+   * @param {boolean} user_available - The teammate availability. 'true' for available, 'false' for unavailable.
+   * @param {resultCallback} callback - The callback that handles the response.
+   * @param {Object} options - <b>token</b> - the token for this request. Overrides instance token (if) provided in constructor.
+   * <br><b>projectId</b> - The projectId for this request. Overrides instance projectId (if) provided in constructor.
+   */
   updateProjectUserAvailable(project_user_id, user_available, callback, options) {
     let token;
     if (options && options.token) {
@@ -389,18 +459,18 @@ class TiledeskClient {
     else {
       throw new Error('token can NOT be null.');
     }
-    let project_id;
-    if (options && options.project_id) {
-      project_id = options.project_id;
+    let projectId;
+    if (options && options.projectId) {
+      projectId = options.projectId;
     }
-    else if (this.project_id) {
-      project_id = this.project_id;
+    else if (this.projectId) {
+      projectId = this.projectId;
     }
     else {
-      throw new Error('project_id can NOT be null.');
+      throw new Error('projectId can NOT be null.');
     }
     const jwt_token = TiledeskClient.fixToken(token)
-    const URL = `${this.APIURL}/${project_id}/project_users/${project_user_id}`
+    const URL = `${this.APIURL}/${projectId}/project_users/${project_user_id}`
     const HTTPREQUEST = {
       url: URL,
       headers: {
@@ -431,6 +501,14 @@ class TiledeskClient {
     );
   }
 
+  /**
+   * Only updates the attributes for the specified Teammate. It requires admin role.
+   * @param {string} project_user_id - The teammate ID.
+   * @param {Object} attributes - The teammate custom attributes.
+   * @param {resultCallback} callback - The callback that handles the response.
+   * @param {Object} options - <b>token</b> - the token for this request. Overrides instance token (if) provided in constructor.
+   * <br><b>projectId</b> - The projectId for this request. Overrides instance projectId (if) provided in constructor.
+   */
   updateProjectUserAttributes(project_user_id, attributes, callback, options) {
     let token;
     if (options && options.token) {
@@ -442,18 +520,18 @@ class TiledeskClient {
     else {
       throw new Error('token can NOT be null.');
     }
-    let project_id;
-    if (options && options.project_id) {
-      project_id = options.project_id;
+    let projectId;
+    if (options && options.projectId) {
+      projectId = options.projectId;
     }
-    else if (this.project_id) {
-      project_id = this.project_id;
+    else if (this.projectId) {
+      projectId = this.projectId;
     }
     else {
-      throw new Error('project_id can NOT be null.');
+      throw new Error('projectId can NOT be null.');
     }
     const jwt_token = TiledeskClient.fixToken(token)
-    const URL = `${this.APIURL}/${project_id}/project_users/${project_user_id}`
+    const URL = `${this.APIURL}/${projectId}/project_users/${project_user_id}`
     const HTTPREQUEST = {
       url: URL,
       headers: {
@@ -491,20 +569,20 @@ class TiledeskClient {
     else {
       throw new Error('token can NOT be null.');
     }
-    let project_id;
-    if (options && options.project_id) {
-      project_id = options.project_id;
+    let projectId;
+    if (options && options.projectId) {
+      projectId = options.projectId;
     }
-    else if (this.project_id) {
-      project_id = this.project_id;
+    else if (this.projectId) {
+      projectId = this.projectId;
     }
     else {
-      throw new Error('project_id can NOT be null.');
+      throw new Error('projectId can NOT be null.');
     }
     const jwt_token = TiledeskClient.fixToken(token)
     // direction = 1 => oldest must be served first
-    // const URL = `${this.API_ENDPOINT}/${project_id}/requests?status=${status}&limit=${limit}&direction=1`
-    let url = new URL(`${this.APIURL}/${project_id}/requests`)
+    // const URL = `${this.API_ENDPOINT}/${projectId}/requests?status=${status}&limit=${limit}&direction=1`
+    let url = new URL(`${this.APIURL}/${projectId}/requests`)
     url.searchParams.append("status", status);
     url.searchParams.append("limit", limit);
     url.searchParams.append("direction", 1);
@@ -560,18 +638,18 @@ class TiledeskClient {
     else {
       throw new Error('token can NOT be null.');
     }
-    let project_id;
-    if (options && options.project_id) {
-      project_id = options.project_id;
+    let projectId;
+    if (options && options.projectId) {
+      projectId = options.projectId;
     }
-    else if (this.project_id) {
-      project_id = this.project_id;
+    else if (this.projectId) {
+      projectId = this.projectId;
     }
     else {
-      throw new Error('project_id can NOT be null.');
+      throw new Error('projectId can NOT be null.');
     }
     const jwt_token = TiledeskClient.fixToken(token)
-    const URL = `${this.APIURL}/${project_id}/requests/${request_id}`
+    const URL = `${this.APIURL}/${projectId}/requests/${request_id}`
     const HTTPREQUEST = {
       url: URL,
       headers: {
@@ -607,18 +685,18 @@ class TiledeskClient {
     else {
       throw new Error('token can NOT be null.');
     }
-    let project_id;
-    if (options && options.project_id) {
-      project_id = options.project_id;
+    let projectId;
+    if (options && options.projectId) {
+      projectId = options.projectId;
     }
-    else if (this.project_id) {
-      project_id = this.project_id;
+    else if (this.projectId) {
+      projectId = this.projectId;
     }
     else {
-      throw new Error('project_id can NOT be null.');
+      throw new Error('projectId can NOT be null.');
     }
     const jwt_token = TiledeskClient.fixToken(token)
-    const URL = `${this.APIURL}/${project_id}/requests/${request_id}/participants`
+    const URL = `${this.APIURL}/${projectId}/requests/${request_id}/participants`
     const HTTPREQUEST = {
       url: URL,
       headers: {
@@ -654,19 +732,19 @@ class TiledeskClient {
     else {
       throw new Error('token can NOT be null.');
     }
-    let project_id;
-    if (options && options.project_id) {
-      project_id = options.project_id;
+    let projectId;
+    if (options && options.projectId) {
+      projectId = options.projectId;
     }
-    else if (this.project_id) {
-      project_id = this.project_id;
+    else if (this.projectId) {
+      projectId = this.projectId;
     }
     else {
-      throw new Error('project_id can NOT be null.');
+      throw new Error('projectId can NOT be null.');
     }
     const jwt_token = TiledeskClient.fixToken(token)
     const HTTPREQUEST = {
-      url: `${this.APIURL}/${project_id}/widgets`,
+      url: `${this.APIURL}/${projectId}/widgets`,
       method: 'GET',
       json: true
     };
@@ -696,18 +774,18 @@ class TiledeskClient {
     else {
       throw new Error('token can NOT be null.');
     }
-    let project_id;
-    if (options && options.project_id) {
-      project_id = options.project_id;
+    let projectId;
+    if (options && options.projectId) {
+      projectId = options.projectId;
     }
-    else if (this.project_id) {
-      project_id = this.project_id;
+    else if (this.projectId) {
+      projectId = this.projectId;
     }
     else {
-      throw new Error('project_id can NOT be null.');
+      throw new Error('projectId can NOT be null.');
     }
     const jwt_token = TiledeskClient.fixToken(token)
-    const url = `${this.APIURL}/projects/${project_id}/isopen`
+    const url = `${this.APIURL}/projects/${projectId}/isopen`
     const HTTPREQUEST = {
       url: url,
       headers: {
@@ -740,14 +818,14 @@ class TiledeskClient {
     return res_err;
   }
   
-  anonymousAuthentication(project_id, callback) {
+  anonymousAuthentication(projectId, callback) {
     const HTTPREQUEST = {
       url: `${this.APIURL}/auth/signinAnonymously`,
       headers: {
         'Content-Type' : 'application/json'
       },
       json: {
-        "id_project": project_id
+        "id_project": projectId
       },
       method: 'POST'
     };
@@ -852,18 +930,18 @@ class TiledeskClient {
     else {
       throw new Error('token can NOT be null.');
     }
-    let project_id;
-    if (options && options.project_id) {
-      project_id = options.project_id;
+    let projectId;
+    if (options && options.projectId) {
+      projectId = options.projectId;
     }
-    else if (this.project_id) {
-      project_id = this.project_id;
+    else if (this.projectId) {
+      projectId = this.projectId;
     }
     else {
-      throw new Error('project_id can NOT be null.');
+      throw new Error('projectId can NOT be null.');
     }
     const jwt_token = TiledeskClient.fixToken(token)
-    const url = `${this.APIURL}/${project_id}/requests/${request_id}/messages`;
+    const url = `${this.APIURL}/${projectId}/requests/${request_id}/messages`;
     const HTTPREQUEST = {
       url: url,
       headers: {
@@ -888,7 +966,7 @@ class TiledeskClient {
     );
   }
 
-  /** Send a message to a direct/group conversation. TODO: RENAME IN SEND-CHAT-MESSAGE */
+  /** Sends a message to a direct/group conversation. TODO: RENAME IN SEND-CHAT-MESSAGE */
   sendDirectMessage(msgJSON, callback, options) {
     let token;
     if (options && options.token) {
@@ -900,18 +978,18 @@ class TiledeskClient {
     else {
       throw new Error('token can NOT be null.');
     }
-    let project_id;
-    if (options && options.project_id) {
-      project_id = options.project_id;
+    let projectId;
+    if (options && options.projectId) {
+      projectId = options.projectId;
     }
-    else if (this.project_id) {
-      project_id = this.project_id;
+    else if (this.projectId) {
+      projectId = this.projectId;
     }
     else {
-      throw new Error('project_id can NOT be null.');
+      throw new Error('projectId can NOT be null.');
     }
     const jwt_token = TiledeskClient.fixToken(token)
-    const url = `${this.APIURL}/${project_id}/messages`;
+    const url = `${this.APIURL}/${projectId}/messages`;
     const HTTPREQUEST = {
       url: url,
       headers: {
@@ -950,19 +1028,19 @@ class TiledeskClient {
     else {
       throw new Error('token can NOT be null.');
     }
-    let project_id;
-    if (options && options.project_id) {
-      project_id = options.project_id;
+    let projectId;
+    if (options && options.projectId) {
+      projectId = options.projectId;
     }
-    else if (this.project_id) {
-      project_id = this.project_id;
+    else if (this.projectId) {
+      projectId = this.projectId;
     }
     else {
-      throw new Error('project_id can NOT be null.');
+      throw new Error('projectId can NOT be null.');
     }
     const jwt_token = TiledeskClient.fixToken(token)
     const HTTPREQUEST = {
-      url: `${this.APIURL}/${project_id}/events`,
+      url: `${this.APIURL}/${projectId}/events`,
       headers: {
         'Content-Type' : 'application/json',
         'Authorization': jwt_token
@@ -998,22 +1076,22 @@ class TiledeskClient {
     else {
       throw new Error('token can NOT be null.');
     }
-    let project_id;
-    if (options && options.project_id) {
-      project_id = options.project_id;
+    let projectId;
+    if (options && options.projectId) {
+      projectId = options.projectId;
     }
-    else if (this.project_id) {
-      project_id = this.project_id;
+    else if (this.projectId) {
+      projectId = this.projectId;
     }
     else {
-      throw new Error('project_id can NOT be null.');
+      throw new Error('projectId can NOT be null.');
     }
     const jwt_token = TiledeskClient.fixToken(token);
     // if (!this.lead_id) {
     //   throw new Error('options.lead_id can NOT be empty.');
     // }
     const HTTPREQUEST = {
-      url: `${this.APIURL}/${project_id}/leads/${lead_id}`, // this.conversation.lead._id
+      url: `${this.APIURL}/${projectId}/leads/${lead_id}`, // this.conversation.lead._id
       headers: {
         'Content-Type' : 'application/json',
         'Authorization': jwt_token
@@ -1050,21 +1128,21 @@ class TiledeskClient {
     else {
       throw new Error('token can NOT be null.');
     }
-    let project_id;
-    if (options && options.project_id) {
-      project_id = options.project_id;
+    let projectId;
+    if (options && options.projectId) {
+      projectId = options.projectId;
     }
-    else if (this.project_id) {
-      project_id = this.project_id;
+    else if (this.projectId) {
+      projectId = this.projectId;
     }
     else {
-      throw new Error('project_id can NOT be null.');
+      throw new Error('projectId can NOT be null.');
     }
     const jwt_token = TiledeskClient.fixToken(token);
-    let URL = `${this.APIURL}/${project_id}/requests/${request_id}/attributes`
+    let URL = `${this.APIURL}/${projectId}/requests/${request_id}/attributes`
     let data = attributes
     if (properties) {
-      URL = `${this.APIURL}/${project_id}/requests/${request_id}/`
+      URL = `${this.APIURL}/${projectId}/requests/${request_id}/`
       data = properties
     }
     
@@ -1092,7 +1170,24 @@ class TiledeskClient {
     );
   }
 
-  updateDepartment(request_id, dep_id, callback, options) {
+  /**
+ * This callback type is called `resultCallback` and is provided as a return value by each API call.
+ *
+ * @callback resultCallback
+ * @param {Object} result - the response body
+ * @param {Object} error - the error if some occurs, otherwise null
+ */
+
+  /**
+   * Updates the Request department
+   * @param {string} request_id - The request ID
+   * @param {string} dep_id - The new department ID
+   * @param {resultCallback} callback - The callback that handles the response.
+   * @param {Object} options - <b>token</b> - the token for this request. Overrides instance token (if) provided in constructor.
+   * <br><b>projectId</b> - The projectId for this request. Overrides instance projectId (if) provided in constructor.
+   * <br><b>nobot</b> - Optional. Defaults to <i>false</i>. If true ignores (if set) the bot in the Department.
+   */
+  updateRequestDepartment(request_id, dep_id, callback, options) {
     let token;
     if (options && options.token) {
       token = options.token;
@@ -1103,26 +1198,36 @@ class TiledeskClient {
     else {
       throw new Error('token can NOT be null.');
     }
-    let project_id;
-    if (options && options.project_id) {
-      project_id = options.project_id;
+    let projectId;
+    if (options && options.projectId) {
+      projectId = options.projectId;
     }
-    else if (this.project_id) {
-      project_id = this.project_id;
+    else if (this.projectId) {
+      projectId = this.projectId;
     }
     else {
-      throw new Error('project_id can NOT be null.');
+      throw new Error('projectId can NOT be null.');
+    }
+    let nobot_option_defined = false;
+    let nobot = false;
+    if (options && options.nobot) {
+      nobot = options.nobot;
+      nobot_option_defined = true;
+    }
+    let data = {
+      departmentid: dep_id
+    }
+    if (nobot_option_defined) {
+      data['nobot'] = nobot;
     }
     const jwt_token = TiledeskClient.fixToken(token);
     const HTTPREQUEST = {
-      url: `${this.APIURL}/${project_id}/requests/${request_id}/departments`,
+      url: `${this.APIURL}/${projectId}/requests/${request_id}/departments`,
       headers: {
         'Content-Type' : 'application/json',
         'Authorization': jwt_token
       },
-      json: {
-        departmentid: dep_id
-      },
+      json: data,
       method: 'PUT'
     };
     request(
