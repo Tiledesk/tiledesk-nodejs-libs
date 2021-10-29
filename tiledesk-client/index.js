@@ -558,6 +558,7 @@ class TiledeskClient {
     );
   }
 
+  /* DEPRECATED, use getAllRequests */
   getRequests(limit, status, callback, options) {
     let token;
     if (options && options.token) {
@@ -591,6 +592,102 @@ class TiledeskClient {
         url.searchParams.append(key, options.additional_params[key]);
       }
     }
+    // console.log("URL", url.href);
+    const HTTPREQUEST = {
+      url: url.href,
+      headers: {
+        'Content-Type' : 'application/json',
+        'Authorization': jwt_token
+      },
+      json: true,
+      method: 'GET'
+    }
+    TiledeskClient.myrequest(
+      HTTPREQUEST,
+      function(err, response, resbody) {
+        if (response.statusCode === 200) {
+          if (callback) {
+          callback(null, resbody)
+          }
+        }
+        else if (callback) {
+          callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
+        }
+
+        // if (resbody && resbody.requests) {
+        //   if (callback) {
+        //     callback(err, resbody.requests)
+        //   }
+        // }
+        // else {
+        //   // throw
+        //   console.log("Error getting requests. Error:", err, " URL", URL, " token:", jwt_token, " Body:", resbody)
+        // }
+
+      }, this.log
+    );
+  }
+
+  /**
+   * @typedef queryParams
+   * @type {object}
+   * @property {string} sortField - what field to sort the results by. Default field is 'createdAt'
+   * @property {string} direction - sort direction: 1 (asc) or -1 (desc). Return the results in ascending (1) or descending (-1) order. Defaults to desc (-1)
+   * @property {number} page - What page of results to fetch. Defaults to first page.
+   * @property {number} limit - Specifies the maximum number of results to be returned. Default is 40 rows
+   * @property {string} full_text - Executes a fulltext search query
+   * @property {string} status - Filters by request status. Values: 100 for unserved requests, 200 for served requests, 1000 for closed requests, "all" to retrieve all statuses. Default value is status < 1000 so it returns all the opened requests.
+   * @property {string} dept_id - Filters by department's ID
+   * @property {string} lead - Filters by lead's ID
+   * @property {array} participant - Filters by participants (agent or bot)
+   */
+
+  /**
+   * Query project's requests.
+   * @param {queryParams} queryParams - The query parameters.<br>
+   * @param {resultCallback} callback - The callback that handles the response.
+   * @param {Object} options - <b>token</b> - the token for this request. Overrides instance token (if) provided in constructor.
+   * <br><b>projectId</b> - The projectId for this request. Overrides instance projectId (if) provided in constructor.
+   */
+  getAllRequests(queryParams, callback, options) {
+    let token;
+    if (options && options.token) {
+      token = options.token;
+    }
+    else if (this.token) {
+      token = this.token;
+    }
+    else {
+      throw new Error('token can NOT be null.');
+    }
+    let projectId;
+    if (options && options.projectId) {
+      projectId = options.projectId;
+    }
+    else if (this.projectId) {
+      projectId = this.projectId;
+    }
+    else {
+      throw new Error('projectId can NOT be null.');
+    }
+    if (queryParams == null) {
+      queryParams = {}
+    }
+    const jwt_token = TiledeskClient.fixToken(token)
+    // direction = 1 => oldest must be served first
+    // const URL = `${this.API_ENDPOINT}/${projectId}/requests?status=${status}&limit=${limit}&direction=1`
+    let url = new URL(`${this.APIURL}/${projectId}/requests`);
+    for (const [key, value] of Object.entries(queryParams)) {
+      url.searchParams.append(key, value);
+    }
+    // url.searchParams.append("status", status);
+    // url.searchParams.append("limit", limit);
+    // url.searchParams.append("direction", 1);
+    // if (options && options.additional_params) {
+    //   for (let key in options.additional_params) {
+    //     url.searchParams.append(key, options.additional_params[key]);
+    //   }
+    // }
     // console.log("URL", url.href);
     const HTTPREQUEST = {
       url: url.href,
@@ -1170,7 +1267,7 @@ class TiledeskClient {
     );
   }
 
-  /**
+/**
  * This callback type is called `resultCallback` and is provided as a return value by each API call.
  *
  * @callback resultCallback
