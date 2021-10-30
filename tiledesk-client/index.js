@@ -644,7 +644,7 @@ class TiledeskClient {
 
   /**
    * Query project's requests.
-   * @param {queryParams} queryParams - The query parameters.<br>
+   * @param {queryParams} queryParams - The query parameters.
    * @param {resultCallback} callback - The callback that handles the response.
    * @param {Object} options - <b>token</b> - the token for this request. Overrides instance token (if) provided in constructor.
    * <br><b>projectId</b> - The projectId for this request. Overrides instance projectId (if) provided in constructor.
@@ -724,7 +724,14 @@ class TiledeskClient {
     );
   }
 
-  getRequestById(request_id, callback, options) {
+  /**
+   * Query a reuqest by his ID.
+   * @param {queryParams} requestId - The request's ID.
+   * @param {resultCallback} callback - The callback that handles the response.
+   * @param {Object} options - <b>token</b> - the token for this request. Overrides instance token (if) provided in constructor.
+   * <br><b>projectId</b> - The projectId for this request. Overrides instance projectId (if) provided in constructor.
+   */
+  getRequestById(requestId, callback, options) {
     let token;
     if (options && options.token) {
       token = options.token;
@@ -746,7 +753,7 @@ class TiledeskClient {
       throw new Error('projectId can NOT be null.');
     }
     const jwt_token = TiledeskClient.fixToken(token)
-    const URL = `${this.APIURL}/${projectId}/requests/${request_id}`
+    const URL = `${this.APIURL}/${projectId}/requests/${requestId}`
     const HTTPREQUEST = {
       url: URL,
       headers: {

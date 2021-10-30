@@ -25,19 +25,19 @@ let ANONYM_USER_TOKEN = null;
 const FAKE_USER_TOKEN = uuidv4();
 
 describe('TiledeskClient', function() {
-    describe('init() with project_id & token', function() {
+    describe('init() with projectId & token', function() {
       it('should return a new TiledeskClient', function() {
         const tdclient = new TiledeskClient({
             APIKEY: APIKEY,
             APIURL: API_ENDPOINT,
-            project_id: PROJECT_ID,
+            projectId: PROJECT_ID,
             token: FAKE_USER_TOKEN,
             log: LOG_STATUS
         })
           if (tdclient) {
             assert(tdclient != null);
             assert(tdclient.APIURL === API_ENDPOINT);
-            assert(tdclient.project_id === PROJECT_ID);
+            assert(tdclient.projectId === PROJECT_ID);
             assert(tdclient.token === FAKE_USER_TOKEN);
             assert(tdclient.APIKEY === APIKEY);
             assert(tdclient.log === LOG_STATUS);
@@ -186,7 +186,7 @@ describe('TiledeskClient', function() {
         const tdclient = new TiledeskClient({
             APIKEY: APIKEY,
             APIURL: API_ENDPOINT,
-            project_id: PROJECT_ID,
+            projectId: PROJECT_ID,
             token: ANONYM_USER_TOKEN,
             log: LOG_STATUS
         })
@@ -226,7 +226,7 @@ describe('TiledeskClient', function() {
             {
                 APIKEY: APIKEY,
                 APIURL: API_ENDPOINT,
-                project_id: PROJECT_ID,
+                projectId: PROJECT_ID,
                 token: USER_TOKEN,
                 log: LOG_STATUS
             })
@@ -260,7 +260,7 @@ describe('TiledeskClient', function() {
             {
                 APIKEY: APIKEY,
                 APIURL: API_ENDPOINT,
-                project_id: PROJECT_ID,
+                projectId: PROJECT_ID,
                 token: USER_TOKEN,
                 log: LOG_STATUS
             })
@@ -297,7 +297,7 @@ describe('TiledeskClient', function() {
             {
                 APIKEY: APIKEY,
                 APIURL: API_ENDPOINT,
-                project_id: PROJECT_ID,
+                projectId: PROJECT_ID,
                 token: USER_TOKEN,
                 log: LOG_STATUS
             })
@@ -333,7 +333,7 @@ describe('TiledeskClient', function() {
             {
                 APIKEY: APIKEY,
                 APIURL: API_ENDPOINT,
-                project_id: PROJECT_ID,
+                projectId: PROJECT_ID,
                 token: USER_TOKEN,
                 log: LOG_STATUS
             })
@@ -371,7 +371,7 @@ describe('TiledeskClient', function() {
             {
                 APIKEY: APIKEY,
                 APIURL: API_ENDPOINT,
-                project_id: PROJECT_ID,
+                projectId: PROJECT_ID,
                 token: USER_TOKEN,
                 log: LOG_STATUS
             })
@@ -439,7 +439,7 @@ describe('TiledeskClient', function() {
             const tdclient = new TiledeskClient({
                 APIKEY: APIKEY,
                 APIURL: API_ENDPOINT,
-                project_id: PROJECT_ID,
+                projectId: PROJECT_ID,
                 token: ANONYM_USER_TOKEN,
                 log: LOG_STATUS
             });
@@ -464,7 +464,7 @@ describe('TiledeskClient', function() {
             const tdclient = new TiledeskClient({
                 APIKEY: APIKEY,
                 APIURL: API_ENDPOINT,
-                project_id: PROJECT_ID,
+                projectId: PROJECT_ID,
                 token: ANONYM_USER_TOKEN,
                 log: LOG_STATUS
             });
@@ -524,7 +524,7 @@ describe('TiledeskClient', function() {
 
 describe('TiledeskClient', function() {
     describe('sendMessage() anonymous', function() {
-        it('sends a message to a request conversation, "project_id" & "token" as options parameters', function(done) {
+        it('sends a message to a request conversation, "projectId" & "token" as options parameters', function(done) {
             const tdclient = new TiledeskClient({
                 APIKEY: APIKEY,
                 APIURL: API_ENDPOINT,
@@ -548,7 +548,7 @@ describe('TiledeskClient', function() {
                             done();
                           },
                           {
-                              project_id: PROJECT_ID,
+                              projectId: PROJECT_ID,
                               token: ANONYM_USER_TOKEN
                           });
             //         }
@@ -567,11 +567,11 @@ describe('TiledeskClient', function() {
 
 describe('TiledeskClient', function() {
     describe('sendMessage() anonymous', function() {
-        it('sends a message to a request conversation, "project_id" & "token" in constructor()', function(done) {
+        it('sends a message to a request conversation, "projectId" & "token" in constructor()', function(done) {
             const tdclient = new TiledeskClient({
                 APIKEY: APIKEY,
                 APIURL: API_ENDPOINT,
-                project_id: PROJECT_ID,
+                projectId: PROJECT_ID,
                 token: ANONYM_USER_TOKEN,
                 log: LOG_STATUS
             });
@@ -597,7 +597,7 @@ describe('TiledeskClient', function() {
 
 // describe('TiledeskClient', function() {
 //     describe('sendDirectMessage() by anonymous', function() {
-//         it('sends a direct message ANONYM_USER_TOKEN to on-the-fly-anonynous user, "project_id" & "token" are "options" parameters', function(done) {
+//         it('sends a direct message ANONYM_USER_TOKEN to on-the-fly-anonynous user, "projectId" & "token" are "options" parameters', function(done) {
 //             const tdclient = new TiledeskClient({
 //                 APIKEY: APIKEY,
 //                 APIURL: API_ENDPOINT,
@@ -632,7 +632,7 @@ describe('TiledeskClient', function() {
 //                             done();
 //                           },
 //                           {
-//                               project_id: PROJECT_ID,
+//                               projectId: PROJECT_ID,
 //                               token: USER_TOKEN
 //                           });
 //                     }
@@ -650,13 +650,13 @@ describe('TiledeskClient', function() {
 // });
 
 describe('TiledeskClient', function() {
-    describe('getRequests()', function() {
+    describe('getRequests() DEPRECATED', function() {
         it('gets the project requests', (done) => {
             const tdclient = new TiledeskClient(
             {
                 APIKEY: APIKEY,
                 APIURL: API_ENDPOINT,
-                project_id: PROJECT_ID,
+                projectId: PROJECT_ID,
                 token: USER_TOKEN,
                 log: LOG_STATUS
             })
@@ -670,6 +670,100 @@ describe('TiledeskClient', function() {
                 assert(Array.isArray(requests));
                 assert(result.requests.length > 0);
                 done();
+            },
+            {
+                additional_params: {
+                    "no_populate": "true",
+                    "snap_department_routing": "assigned"
+                }
+            });
+                // }
+            //   });
+              
+            // }
+            // else {
+            //     assert.ok(false);
+            // }
+        });
+    });
+});
+
+describe('TiledeskClient', function() {
+    describe('getAllRequests()', function() {
+        it('gets the project requests', (done) => {
+            const tdclient = new TiledeskClient(
+            {
+                APIKEY: APIKEY,
+                APIURL: API_ENDPOINT,
+                projectId: PROJECT_ID,
+                token: USER_TOKEN,
+                log: LOG_STATUS
+            })
+            const limit = 1;
+            tdclient.getAllRequests(
+                {
+                    limit: 1,
+                    status: TiledeskClient.UNASSIGNED_STATUS
+                }, (err, result) => {
+                assert(result);
+                const requests = result.requests;
+                assert(requests);
+                assert(result.requests);
+                assert(Array.isArray(requests));
+                assert(result.requests.length > 0);
+                done();
+            },
+            {
+                additional_params: {
+                    "no_populate": "true",
+                    "snap_department_routing": "assigned"
+                }
+            });
+                // }
+            //   });
+              
+            // }
+            // else {
+            //     assert.ok(false);
+            // }
+        });
+    });
+});
+
+describe('TiledeskClient', function() {
+    describe('getRequestById()', function() {
+        it('gets a request by his ID', (done) => {
+            const tdclient = new TiledeskClient(
+            {
+                APIKEY: APIKEY,
+                APIURL: API_ENDPOINT,
+                projectId: PROJECT_ID,
+                token: USER_TOKEN,
+                log: LOG_STATUS
+            })
+            const limit = 1;
+            tdclient.getAllRequests(
+                {
+                    limit: 1,
+                    status: TiledeskClient.UNASSIGNED_STATUS
+                }, (err, result) => {
+                assert(result);
+                const requests = result.requests;
+                assert(requests);
+                assert(result.requests);
+                assert(Array.isArray(requests));
+                assert(result.requests.length > 0);
+                const request = requests[0];
+                assert(request.request_id != null);
+                first_request_id = request.request_id;
+                tdclient.getRequestById(first_request_id, (err, result) => {
+                    // console.log("RICHIESTA", JSON.stringify(result))
+                    assert(result != null);
+                    const request = result;
+                    assert(request.request_id != null);
+                    assert(request.request_id === first_request_id);
+                    done();
+                });
             },
             {
                 additional_params: {

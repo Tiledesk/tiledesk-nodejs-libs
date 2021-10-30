@@ -7,6 +7,7 @@
 - added updateProjectUser()
 - added documentation with jdoc
 - added getAllRequests()
+- added test case for getRequestById()
 
 ### 0.7.14 - online
 - added getRequestById()
