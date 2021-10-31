@@ -118,7 +118,7 @@ describe('TiledeskClient', function() {
                   lastname:"Wick",
                   email: "john@wick.com"
               };
-              console.log("externalUser", externalUser);
+            //   console.log("externalUser", externalUser);
               var signOptions = {                                                            
                 subject:  'userexternal',
                 audience:  'https://tiledesk.com/projects/' + PROJECT_ID
@@ -523,7 +523,7 @@ describe('TiledeskClient', function() {
 // // });
 
 describe('TiledeskClient', function() {
-    describe('sendMessage() anonymous', function() {
+    describe('sendSupportMessage() anonymous', function() {
         it('sends a message to a request conversation, "projectId" & "token" as options parameters', function(done) {
             const tdclient = new TiledeskClient({
                 APIKEY: APIKEY,
@@ -540,7 +540,7 @@ describe('TiledeskClient', function() {
                         const text_value = 'test message';
                         const request_id = 'support-group-' + uuidv4();
                         // console.log("Sending message to REQUEST-ID:", request_id);
-                        tdclient.sendMessage(request_id, {text: text_value}, function(err, result) {
+                        tdclient.sendSupportMessage(request_id, {text: text_value}, function(err, result) {
                             // console.log("RESULT:", result)
                             assert(err === null);
                             assert(result != null);
@@ -566,7 +566,7 @@ describe('TiledeskClient', function() {
 });
 
 describe('TiledeskClient', function() {
-    describe('sendMessage() anonymous', function() {
+    describe('sendSupportMessage() anonymous', function() {
         it('sends a message to a request conversation, "projectId" & "token" in constructor()', function(done) {
             const tdclient = new TiledeskClient({
                 APIKEY: APIKEY,
@@ -580,7 +580,7 @@ describe('TiledeskClient', function() {
                 const text_value = 'test message';
                 const request_id = 'support-group-' + uuidv4();
                 // console.log("Sending message to REQUEST-ID:", request_id);
-                tdclient.sendMessage(request_id, {text: text_value}, function(err, result) {
+                tdclient.sendSupportMessage(request_id, {text: text_value}, function(err, result) {
                     // console.log("RESULT:", result)
                     assert(err === null);
                     assert(result != null);

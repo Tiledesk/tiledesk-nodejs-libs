@@ -23,11 +23,11 @@ class TiledeskClient {
    * 
    *
    * @param {Object} options JSON configuration.
-   * @param {Object} options.APIKEY Mandatory. Tiledesk APIKEY
-   * @param {Object} options.APIURL Optional. Tiledesk server API endpoint
-   * @param {Object} options.projectId Optional. Tiledesk projectId. Will be used in each call on project's APIs.
-   * @param {Object} options.token Optional. Tiledesk authentication token. Will be used in each call on project's APIs.
-   * @param {Object} options.log Optional. If true requests are logged
+   * @param {string} options.APIKEY Mandatory. Tiledesk APIKEY
+   * @param {string} options.APIURL Optional. Tiledesk server API endpoint
+   * @param {string} options.projectId Optional. Tiledesk projectId. Will be used in each call on project's APIs.
+   * @param {string} options.token Optional. Tiledesk authentication token. Will be used in each call on project's APIs.
+   * @param {boolean} options.log Optional. If true HTTP requests are logged
    * 
    */
   constructor(options) {
@@ -105,10 +105,13 @@ class TiledeskClient {
   }
 
   /**
-   * Returns the project's JSON configuration
+   * Returns the project's JSON configuration<br>
+   * <a href='https://developer.tiledesk.com/apis/rest-api/projects#get-the-project-detail' target='_blank'>REST API</a>
+   * 
    * @param {resultCallback} callback - The callback that handles the response.
-   * @param {Object} options - <b>token</b> - the token for this request. Overrides instance token (if) provided in constructor.
-   * <br><b>projectId</b> - The projectId for this request. Overrides instance projectId (if) provided in constructor.
+   * @param {Object} options - Optional configuration.
+   * @param {string} options.token - The token for this request. Overrides instance token (if) provided in constructor.
+   * @param {string} options.projectId - The token for this request. Overrides instance token (if) provided in constructor.
    */
   getProjectSettings(callback, options) {
     let token;
@@ -156,12 +159,15 @@ class TiledeskClient {
   }
 
   /**
-   * Updates the request's properties
+   * Updates the request's properties.<br>
+   * <a href='https://developer.tiledesk.com/apis/rest-api/requests#update-a-request-by-request_id' target='_blank'>REST API</a>
+   * 
    * @param {string} request_id - The request ID
    * @param {Object} properties - The request properties to update.
    * @param {resultCallback} callback - The callback that handles the response.
-   * @param {Object} options - <b>token</b> - the token for this request. Overrides instance token (if) provided in constructor.
-   * <br><b>projectId</b> - The projectId for this request. Overrides instance projectId (if) provided in constructor.
+   * @param {Object} options - Optional configuration.
+   * @param {string} options.token - The token for this request. Overrides instance token (if) provided in constructor.
+   * @param {string} options.projectId - The token for this request. Overrides instance token (if) provided in constructor.
    */
   updateRequestProperties(request_id, properties, callback, options) {
     let token;
@@ -212,12 +218,15 @@ class TiledeskClient {
   }
 
   /**
-   * Updates the request's attributes
+   * Updates the request's attributes.<br>
+   * <a href='https://developer.tiledesk.com/apis/rest-api/requests#update-the-request-attributes' target='_blank'>REST API</a>
+   * 
    * @param {string} request_id - The request ID
    * @param {Object} attributes - The request attributes to update.
    * @param {resultCallback} callback - The callback that handles the response.
-   * @param {Object} options - <b>token</b> - the token for this request. Overrides instance token (if) provided in constructor.
-   * <br><b>projectId</b> - The projectId for this request. Overrides instance projectId (if) provided in constructor.
+   * @param {Object} options - Optional configuration.
+   * @param {string} options.token - The token for this request. Overrides instance token (if) provided in constructor.
+   * @param {string} options.projectId - The token for this request. Overrides instance token (if) provided in constructor.
    */
   updateRequestAttributes(request_id, attributes, callback, options) {
     let token;
@@ -271,8 +280,9 @@ class TiledeskClient {
    * Returns a project's User (aka Teammate, is a User invited on a project, with additional properties and a spcific project-userId)
    * @param {string} user_id - The Teammate ID. Is the specific ID for this user on this project
    * @param {resultCallback} callback - The callback that handles the response.
-   * @param {Object} options - <b>token</b> - the token for this request. Overrides instance token (if) provided in constructor.
-   * <br><b>projectId</b> - The projectId for this request. Overrides instance projectId (if) provided in constructor.
+   * @param {Object} options - Optional configuration.
+   * @param {string} options.token - The token for this request. Overrides instance token (if) provided in constructor.
+   * @param {string} options.projectId - The token for this request. Overrides instance token (if) provided in constructor.
    */
   getProjectUser(user_id, callback, options) {
     let token;
@@ -322,16 +332,19 @@ class TiledeskClient {
   }
 
   /**
-   * Updates the authenticated Teammate's (projectUser). The teammate must be invited to the specified project for the update operation taking success.
-   * @param {Object} properties - The properties to update. Only the provided properties will be updated, the other properties will stay unchanged.<br>
-   * <b>role {string}</b> - The teammate role. Permitted values: 'admin', 'agent'.
-   * <br><b>user_available {boolean}</b> - The teammate availability. 'true' for available, 'false' for unavailable.
-   * <br><b>max_served_chat {number}</b> - The number of concurrent chats the teammate can take at once.
-   * <br><b>attributes {Object}</b> - The teammate custom attributes.
-   * <br><b>settings {Object}</b> - The teammate settings.
+   * Updates the authenticated Teammate's (projectUser). The teammate must be invited to the specified project for the update operation taking success.<br>
+   * <a href='https://developer.tiledesk.com/apis/rest-api/team#update-the-current-logged-teammate' target='_blank'>REST API</a>
+   * 
+   * @param {Object} properties - The properties to update. Only the provided properties will be updated, the other properties will stay unchanged.
+   * @param {string} properties.role - The teammate role. Permitted values: 'admin', 'agent'.
+   * @param {boolean} properties.user_available - The teammate availability. 'true' for available, 'false' for unavailable.
+   * @param {number} properties.max_served_chat - The number of concurrent chats the teammate can take at once.
+   * @param {Object} properties.attributes - The teammate custom attributes.
+   * @param {Object} properties.settings - The teammate settings.
    * @param {resultCallback} callback - The callback that handles the response.
-   * @param {Object} options - <b>token</b> - the token for this request. Overrides instance token (if) provided in constructor.
-   * <br><b>projectId</b> - The projectId for this request. Overrides instance projectId (if) provided in constructor.
+   * @param {Object} options - Optional configuration.
+   * @param {string} options.token - The token for this request. Overrides instance token (if) provided in constructor.
+   * @param {string} options.projectId - The token for this request. Overrides instance token (if) provided in constructor.
    */
   updateProjectUserCurrentlyLoggedIn(properties, callback, options) {
     let token;
@@ -390,8 +403,9 @@ class TiledeskClient {
    * <br><b>attributes {Object}</b> - The teammate custom attributes.
    * <br><b>settings {Object}</b> - The teammate settings.
    * @param {resultCallback} callback - The callback that handles the response.
-   * @param {Object} options - <b>token</b> - the token for this request. Overrides instance token (if) provided in constructor.
-   * <br><b>projectId</b> - The projectId for this request. Overrides instance projectId (if) provided in constructor.
+   * @param {Object} options - Optional configuration.
+   * @param {string} options.token - The token for this request. Overrides instance token (if) provided in constructor.
+   * @param {string} options.projectId - The token for this request. Overrides instance token (if) provided in constructor.
    */
    updateProjectUser(project_user_id, properties, callback, options) {
     let token;
@@ -445,8 +459,9 @@ class TiledeskClient {
    * @param {string} project_user_id - The teammate ID.
    * @param {boolean} user_available - The teammate availability. 'true' for available, 'false' for unavailable.
    * @param {resultCallback} callback - The callback that handles the response.
-   * @param {Object} options - <b>token</b> - the token for this request. Overrides instance token (if) provided in constructor.
-   * <br><b>projectId</b> - The projectId for this request. Overrides instance projectId (if) provided in constructor.
+   * @param {Object} options - Optional configuration.
+   * @param {string} options.token - The token for this request. Overrides instance token (if) provided in constructor.
+   * @param {string} options.projectId - The token for this request. Overrides instance token (if) provided in constructor.
    */
   updateProjectUserAvailable(project_user_id, user_available, callback, options) {
     let token;
@@ -506,8 +521,9 @@ class TiledeskClient {
    * @param {string} project_user_id - The teammate ID.
    * @param {Object} attributes - The teammate custom attributes.
    * @param {resultCallback} callback - The callback that handles the response.
-   * @param {Object} options - <b>token</b> - the token for this request. Overrides instance token (if) provided in constructor.
-   * <br><b>projectId</b> - The projectId for this request. Overrides instance projectId (if) provided in constructor.
+   * @param {Object} options - Optional configuration.
+   * @param {string} options.token - The token for this request. Overrides instance token (if) provided in constructor.
+   * @param {string} options.projectId - The token for this request. Overrides instance token (if) provided in constructor.
    */
   updateProjectUserAttributes(project_user_id, attributes, callback, options) {
     let token;
@@ -646,8 +662,9 @@ class TiledeskClient {
    * Query project's requests.
    * @param {queryParams} queryParams - The query parameters.
    * @param {resultCallback} callback - The callback that handles the response.
-   * @param {Object} options - <b>token</b> - the token for this request. Overrides instance token (if) provided in constructor.
-   * <br><b>projectId</b> - The projectId for this request. Overrides instance projectId (if) provided in constructor.
+   * @param {Object} options - Optional configuration.
+   * @param {string} options.token - The token for this request. Overrides instance token (if) provided in constructor.
+   * @param {string} options.projectId - The token for this request. Overrides instance token (if) provided in constructor.
    */
   getAllRequests(queryParams, callback, options) {
     let token;
@@ -728,8 +745,9 @@ class TiledeskClient {
    * Query a reuqest by his ID.
    * @param {queryParams} requestId - The request's ID.
    * @param {resultCallback} callback - The callback that handles the response.
-   * @param {Object} options - <b>token</b> - the token for this request. Overrides instance token (if) provided in constructor.
-   * <br><b>projectId</b> - The projectId for this request. Overrides instance projectId (if) provided in constructor.
+   * @param {Object} options - Optional configuration.
+   * @param {string} options.token - The token for this request. Overrides instance token (if) provided in constructor.
+   * @param {string} options.projectId - The token for this request. Overrides instance token (if) provided in constructor.
    */
   getRequestById(requestId, callback, options) {
     let token;
@@ -778,7 +796,17 @@ class TiledeskClient {
     );
   }
 
-  updateRequestParticipants(request_id, participants, callback, options) {
+  /**
+   * Updates the request's partecipants.<br>
+   * REST API: https://developer.tiledesk.com/apis/rest-api/requests#set-the-request-participants
+   * @param {queryParams} requestId - The request's ID.
+   * @param {array} participants - The participants (agent or bot) identifiers array
+   * @param {resultCallback} callback - The callback that handles the response.
+   * @param {Object} options - Optional configuration.
+   * @param {string} options.token - The token for this request. Overrides instance token (if) provided in constructor.
+   * @param {string} options.projectId - The token for this request. Overrides instance token (if) provided in constructor.
+   */
+  updateRequestParticipants(requestId, participants, callback, options) {
     let token;
     if (options && options.token) {
       token = options.token;
@@ -800,7 +828,7 @@ class TiledeskClient {
       throw new Error('projectId can NOT be null.');
     }
     const jwt_token = TiledeskClient.fixToken(token)
-    const URL = `${this.APIURL}/${projectId}/requests/${request_id}/participants`
+    const URL = `${this.APIURL}/${projectId}/requests/${requestId}/participants`
     const HTTPREQUEST = {
       url: URL,
       headers: {
@@ -1023,7 +1051,7 @@ class TiledeskClient {
   }
 
   /** Send a message to a support conversation. TODO: RENAME IN SEND-SUPPORT-MESSAGE  */
-  sendMessage(request_id, msgJSON, callback, options) {
+  sendSupportMessage(request_id, msgJSON, callback, options) {
     let token;
     if (options && options.token) {
       token = options.token;
@@ -1071,7 +1099,7 @@ class TiledeskClient {
   }
 
   /** Sends a message to a direct/group conversation. TODO: RENAME IN SEND-CHAT-MESSAGE */
-  sendDirectMessage(msgJSON, callback, options) {
+  sendChatMessage(msgJSON, callback, options) {
     let token;
     if (options && options.token) {
       token = options.token;
@@ -1287,9 +1315,10 @@ class TiledeskClient {
    * @param {string} request_id - The request ID
    * @param {string} dep_id - The new department ID
    * @param {resultCallback} callback - The callback that handles the response.
-   * @param {Object} options - <b>token</b> - the token for this request. Overrides instance token (if) provided in constructor.
-   * <br><b>projectId</b> - The projectId for this request. Overrides instance projectId (if) provided in constructor.
-   * <br><b>nobot</b> - Optional. Defaults to <i>false</i>. If true ignores (if set) the bot in the Department.
+   * @param {Object} options - Optional configuration.
+   * @param {string} options.token - The token for this request. Overrides instance token (if) provided in constructor.
+   * @param {string} options.projectId - The token for this request. Overrides instance token (if) provided in constructor.
+   * @param {string} options.nobot - Optional. Defaults to <i>false</i>. If true ignores (if set) the bot in the Department.
    */
   updateRequestDepartment(request_id, dep_id, callback, options) {
     let token;

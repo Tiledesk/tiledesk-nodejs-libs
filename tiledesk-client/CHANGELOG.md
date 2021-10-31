@@ -8,6 +8,9 @@
 - added documentation with jdoc
 - added getAllRequests()
 - added test case for getRequestById()
+- sendDirectMessage() renamed in sendChatMessage()
+- sendMessage() renamed in sendSupportMessage()
+
 
 ### 0.7.14 - online
 - added getRequestById()
