@@ -798,7 +798,7 @@ class TiledeskClient {
 
   /**
    * Updates the request's partecipants.<br>
-   * REST API: https://developer.tiledesk.com/apis/rest-api/requests#set-the-request-participants
+   * <a href='https://developer.tiledesk.com/apis/rest-api/requests#set-the-request-participants' target='_blank'>REST API</a>
    * @param {queryParams} requestId - The request's ID.
    * @param {array} participants - The participants (agent or bot) identifiers array
    * @param {resultCallback} callback - The callback that handles the response.
