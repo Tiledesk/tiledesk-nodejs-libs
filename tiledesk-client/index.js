@@ -2,7 +2,8 @@
     Andrea Sponziello - (c) Tiledesk.com
 */
 
-const request = require('request')
+const request = require('request');
+const { v4: uuidv4 } = require('uuid');
 
 /**
  * This class is a NodeJS stub for Tiledesk's REST APIs
@@ -69,6 +70,20 @@ class TiledeskClient {
     else {
       return 'JWT ' + token
     }
+  }
+
+  /** Returns a new request ID for the specified Project.<br>
+   * A request's ID has the format:<br>
+   * <br>
+   * <i>support-group-PROJECT_ID-UNIQUE_ID</i><br>
+   * <br>
+   * <i>UNIQUE_ID</i> MUST be unique in your Project. <b>This method always returns an <i>UUID</i> for the <i>UNIQUE_ID</i> component</b>.
+   * 
+   * @param {string} projectId - The project ID for the new request.
+  */
+  static newRequestId(projectId) {
+    const request_id = 'support-group-' + projectId + '-' + uuidv4().replace(/-/g, '');
+    return request_id;
   }
 
   createProject(projectId, token, callback) {
@@ -162,14 +177,14 @@ class TiledeskClient {
    * Updates the request's properties.<br>
    * <a href='https://developer.tiledesk.com/apis/rest-api/requests#update-a-request-by-request_id' target='_blank'>REST API</a>
    * 
-   * @param {string} request_id - The request ID
+   * @param {string} requestId - The request ID
    * @param {Object} properties - The request properties to update.
    * @param {resultCallback} callback - The callback that handles the response.
    * @param {Object} options - Optional configuration.
    * @param {string} options.token - The token for this request. Overrides instance token (if) provided in constructor.
    * @param {string} options.projectId - The token for this request. Overrides instance token (if) provided in constructor.
    */
-  updateRequestProperties(request_id, properties, callback, options) {
+  updateRequestProperties(requestId, properties, callback, options) {
     let token;
     if (options && options.token) {
       token = options.token;
@@ -191,7 +206,7 @@ class TiledeskClient {
       throw new Error('projectId can NOT be null.');
     }
     const jwt_token = TiledeskClient.fixToken(token)
-    var URL = `${this.APIURL}/${projectId}/requests/${request_id}`
+    var URL = `${this.APIURL}/${projectId}/requests/${requestId}`
     data = properties;
     const HTTPREQUEST = {
       url: URL,
@@ -221,14 +236,14 @@ class TiledeskClient {
    * Updates the request's attributes.<br>
    * <a href='https://developer.tiledesk.com/apis/rest-api/requests#update-the-request-attributes' target='_blank'>REST API</a>
    * 
-   * @param {string} request_id - The request ID
+   * @param {string} requestId - The request ID
    * @param {Object} attributes - The request attributes to update.
    * @param {resultCallback} callback - The callback that handles the response.
    * @param {Object} options - Optional configuration.
    * @param {string} options.token - The token for this request. Overrides instance token (if) provided in constructor.
    * @param {string} options.projectId - The token for this request. Overrides instance token (if) provided in constructor.
    */
-  updateRequestAttributes(request_id, attributes, callback, options) {
+  updateRequestAttributes(requestId, attributes, callback, options) {
     let token;
     if (options && options.token) {
       token = options.token;
@@ -250,7 +265,7 @@ class TiledeskClient {
       throw new Error('projectId can NOT be null.');
     }
     const jwt_token = TiledeskClient.fixToken(token)
-    var URL = `${this.APIURL}/${projectId}/requests/${request_id}/attributes`
+    var URL = `${this.APIURL}/${projectId}/requests/${requestId}/attributes`
     var data = attributes;
     const HTTPREQUEST = {
       url: URL,
@@ -395,7 +410,7 @@ class TiledeskClient {
 
   /**
    * Updates the Teammate's (projectUser) by ProjectUser's ID. It requires admin role.
-   * @param {string} project_user_id - The teammate ID.
+   * @param {string} projectUserId - The teammate ID.
    * @param {Object} properties - The properties to update. Only the provided properties will be updated, the other properties will stay unchanged.<br>
    * <b>role {string}</b> - The teammate role. Permitted values: 'admin', 'agent'.
    * <br><b>user_available {boolean}</b> - The teammate availability. 'true' for available, 'false' for unavailable.
@@ -407,7 +422,7 @@ class TiledeskClient {
    * @param {string} options.token - The token for this request. Overrides instance token (if) provided in constructor.
    * @param {string} options.projectId - The token for this request. Overrides instance token (if) provided in constructor.
    */
-   updateProjectUser(project_user_id, properties, callback, options) {
+   updateProjectUser(projectUserId, properties, callback, options) {
     let token;
     if (options && options.token) {
       token = options.token;
@@ -429,7 +444,7 @@ class TiledeskClient {
       throw new Error('projectId can NOT be null.');
     }
     const jwt_token = TiledeskClient.fixToken(token)
-    const URL = `${this.APIURL}/${projectId}/project_users/${project_user_id}`
+    const URL = `${this.APIURL}/${projectId}/project_users/${projectUserId}`
     const HTTPREQUEST = {
       url: URL,
       headers: {
@@ -456,14 +471,14 @@ class TiledeskClient {
 
   /**
    * Only updates the available status for the specified Teammate. It requires admin role.
-   * @param {string} project_user_id - The teammate ID.
-   * @param {boolean} user_available - The teammate availability. 'true' for available, 'false' for unavailable.
+   * @param {string} projectUserId - The teammate ID.
+   * @param {boolean} userAvailable - The teammate availability. 'true' for available, 'false' for unavailable.
    * @param {resultCallback} callback - The callback that handles the response.
    * @param {Object} options - Optional configuration.
    * @param {string} options.token - The token for this request. Overrides instance token (if) provided in constructor.
    * @param {string} options.projectId - The token for this request. Overrides instance token (if) provided in constructor.
    */
-  updateProjectUserAvailable(project_user_id, user_available, callback, options) {
+  updateProjectUserAvailable(projectUserId, userAvailable, callback, options) {
     let token;
     if (options && options.token) {
       token = options.token;
@@ -485,7 +500,7 @@ class TiledeskClient {
       throw new Error('projectId can NOT be null.');
     }
     const jwt_token = TiledeskClient.fixToken(token)
-    const URL = `${this.APIURL}/${projectId}/project_users/${project_user_id}`
+    const URL = `${this.APIURL}/${projectId}/project_users/${projectUserId}`
     const HTTPREQUEST = {
       url: URL,
       headers: {
@@ -493,7 +508,7 @@ class TiledeskClient {
         'Authorization': jwt_token
       },
       json: {
-        user_available: user_available
+        user_available: userAvailable
       },
       method: 'PUT'
     };
@@ -518,14 +533,14 @@ class TiledeskClient {
 
   /**
    * Only updates the attributes for the specified Teammate. It requires admin role.
-   * @param {string} project_user_id - The teammate ID.
+   * @param {string} projectUserId - The teammate ID.
    * @param {Object} attributes - The teammate custom attributes.
    * @param {resultCallback} callback - The callback that handles the response.
    * @param {Object} options - Optional configuration.
    * @param {string} options.token - The token for this request. Overrides instance token (if) provided in constructor.
    * @param {string} options.projectId - The token for this request. Overrides instance token (if) provided in constructor.
    */
-  updateProjectUserAttributes(project_user_id, attributes, callback, options) {
+  updateProjectUserAttributes(projectUserId, attributes, callback, options) {
     let token;
     if (options && options.token) {
       token = options.token;
@@ -547,7 +562,7 @@ class TiledeskClient {
       throw new Error('projectId can NOT be null.');
     }
     const jwt_token = TiledeskClient.fixToken(token)
-    const URL = `${this.APIURL}/${projectId}/project_users/${project_user_id}`
+    const URL = `${this.APIURL}/${projectId}/project_users/${projectUserId}`
     const HTTPREQUEST = {
       url: URL,
       headers: {
@@ -742,8 +757,8 @@ class TiledeskClient {
   }
 
   /**
-   * Query a reuqest by his ID.
-   * @param {queryParams} requestId - The request's ID.
+   * Gets a reuqest by ID.
+   * @param {string} requestId - The request's ID.
    * @param {resultCallback} callback - The callback that handles the response.
    * @param {Object} options - Optional configuration.
    * @param {string} options.token - The token for this request. Overrides instance token (if) provided in constructor.
@@ -1050,8 +1065,18 @@ class TiledeskClient {
     );
   }
 
-  /** Send a message to a support conversation. TODO: RENAME IN SEND-SUPPORT-MESSAGE  */
-  sendSupportMessage(request_id, msgJSON, callback, options) {
+  /**
+   * Sends a message to a support conversation.<br>
+   * <a href='' target='_blank'>REST API</a>
+   * 
+   * @param {string} requestId - The request's ID.
+   * @param {chatMessage} message - The chat21's message JSON object.
+   * @param {resultCallback} callback - The callback that handles the response.
+   * @param {Object} options - Optional configuration.
+   * @param {string} options.token - The token for this request. Overrides instance token (if) provided in constructor.
+   * @param {string} options.projectId - The token for this request. Overrides instance token (if) provided in constructor.
+   */
+  sendSupportMessage(requestId, message, callback, options) {
     let token;
     if (options && options.token) {
       token = options.token;
@@ -1073,14 +1098,14 @@ class TiledeskClient {
       throw new Error('projectId can NOT be null.');
     }
     const jwt_token = TiledeskClient.fixToken(token)
-    const url = `${this.APIURL}/${projectId}/requests/${request_id}/messages`;
+    const url = `${this.APIURL}/${projectId}/requests/${requestId}/messages`;
     const HTTPREQUEST = {
       url: url,
       headers: {
         'Content-Type' : 'application/json',
         'Authorization': jwt_token
       },
-      json: msgJSON,
+      json: message,
       method: 'POST'
     };
     TiledeskClient.myrequest(
@@ -1098,8 +1123,29 @@ class TiledeskClient {
     );
   }
 
-  /** Sends a message to a direct/group conversation. TODO: RENAME IN SEND-CHAT-MESSAGE */
-  sendChatMessage(msgJSON, callback, options) {
+  /**
+   * The Chat21 message format. More on <a href='https://developer.tiledesk.com/widget/advanced/widget-json-protocol' target='_blank'>messages format (Review this link)</a>.
+   * @typedef chatMessage
+   * @type {Object}
+   * @property {string} senderFullname - The sender full name
+   * @property {string} recipient - The message recipiet's ID
+   * @property {number} text - The message's text
+   * @property {number} type - The message type. Allowed types are 'text' (default), 'image', 'frame'
+   * @property {Object} metadata - The message's metadata. Some type as 'image' or 'frame' need metadata.
+   * @property {Object} attributes - Custom attributes attacched to this message.
+   */
+
+  /**
+   * Sends a message to a direct/group conversation.<br>
+   * <a href='' target='_blank'>REST API</a>
+   * 
+   * @param {chatMessage} message - The chat21's message JSON object.
+   * @param {resultCallback} callback - The callback that handles the response.
+   * @param {Object} options - Optional configuration.
+   * @param {string} options.token - The token for this request. Overrides instance token (if) provided in constructor.
+   * @param {string} options.projectId - The token for this request. Overrides instance token (if) provided in constructor.
+   */
+  sendChatMessage(message, callback, options) {
     let token;
     if (options && options.token) {
       token = options.token;
@@ -1128,7 +1174,7 @@ class TiledeskClient {
         'Content-Type' : 'application/json',
         'Authorization': jwt_token
       },
-      json: msgJSON,
+      json: message,
       method: 'POST'
     };
     TiledeskClient.myrequest(
@@ -1312,15 +1358,15 @@ class TiledeskClient {
 
   /**
    * Updates the Request department
-   * @param {string} request_id - The request ID
-   * @param {string} dep_id - The new department ID
+   * @param {string} requestId - The request ID
+   * @param {string} depId - The new department ID
    * @param {resultCallback} callback - The callback that handles the response.
    * @param {Object} options - Optional configuration.
    * @param {string} options.token - The token for this request. Overrides instance token (if) provided in constructor.
    * @param {string} options.projectId - The token for this request. Overrides instance token (if) provided in constructor.
    * @param {string} options.nobot - Optional. Defaults to <i>false</i>. If true ignores (if set) the bot in the Department.
    */
-  updateRequestDepartment(request_id, dep_id, callback, options) {
+  updateRequestDepartment(requestId, depId, callback, options) {
     let token;
     if (options && options.token) {
       token = options.token;
@@ -1348,14 +1394,14 @@ class TiledeskClient {
       nobot_option_defined = true;
     }
     let data = {
-      departmentid: dep_id
+      departmentid: depId
     }
     if (nobot_option_defined) {
       data['nobot'] = nobot;
     }
     const jwt_token = TiledeskClient.fixToken(token);
     const HTTPREQUEST = {
-      url: `${this.APIURL}/${projectId}/requests/${request_id}/departments`,
+      url: `${this.APIURL}/${projectId}/requests/${requestId}/departments`,
       headers: {
         'Content-Type' : 'application/json',
         'Authorization': jwt_token

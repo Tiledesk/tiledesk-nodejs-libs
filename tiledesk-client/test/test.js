@@ -538,7 +538,7 @@ describe('TiledeskClient', function() {
             //         if (!err && resbody) {
             //             assert(resbody.token != null);
                         const text_value = 'test message';
-                        const request_id = 'support-group-' + uuidv4();
+                        const request_id = TiledeskClient.newRequestId(PROJECT_ID);
                         // console.log("Sending message to REQUEST-ID:", request_id);
                         tdclient.sendSupportMessage(request_id, {text: text_value}, function(err, result) {
                             // console.log("RESULT:", result)
@@ -578,8 +578,7 @@ describe('TiledeskClient', function() {
             if (tdclient) {
               assert(tdclient != null);
                 const text_value = 'test message';
-                const request_id = 'support-group-' + uuidv4();
-                // console.log("Sending message to REQUEST-ID:", request_id);
+                const request_id = TiledeskClient.newRequestId(PROJECT_ID);
                 tdclient.sendSupportMessage(request_id, {text: text_value}, function(err, result) {
                     // console.log("RESULT:", result)
                     assert(err === null);

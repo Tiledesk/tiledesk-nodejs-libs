@@ -10,6 +10,7 @@
 - added test case for getRequestById()
 - sendDirectMessage() renamed in sendChatMessage()
 - sendMessage() renamed in sendSupportMessage()
+- added newRequestId()
 
 
 ### 0.7.14 - online
