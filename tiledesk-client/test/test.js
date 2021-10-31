@@ -76,12 +76,12 @@ describe('TiledeskClient', function() {
             const tdclient = new TiledeskClient({
                 APIKEY: APIKEY,
                 APIURL: API_ENDPOINT,
+                projectId: PROJECT_ID,
                 log: LOG_STATUS
             })
             if (tdclient) {
               assert(tdclient != null);
               tdclient.anonymousAuthentication(
-                PROJECT_ID,
                 function(err, result) {
                     if (!err && result) {
                         assert(result.token != null);

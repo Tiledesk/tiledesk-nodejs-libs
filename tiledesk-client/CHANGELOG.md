@@ -11,6 +11,7 @@
 - sendDirectMessage() renamed in sendChatMessage()
 - sendMessage() renamed in sendSupportMessage()
 - added newRequestId()
+- anonymousAuthentication(callback, options) signature refactored (removed first 'projectId' param, added 'options' param)
 
 
 ### 0.7.14 - online

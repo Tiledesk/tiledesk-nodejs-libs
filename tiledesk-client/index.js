@@ -661,7 +661,7 @@ class TiledeskClient {
 
   /**
    * @typedef queryParams
-   * @type {object}
+   * @type {Object}
    * @property {string} sortField - what field to sort the results by. Default field is 'createdAt'
    * @property {string} direction - sort direction: 1 (asc) or -1 (desc). Return the results in ascending (1) or descending (-1) order. Defaults to desc (-1)
    * @property {number} page - What page of results to fetch. Defaults to first page.
@@ -868,6 +868,14 @@ class TiledeskClient {
     );
   }
 
+  /**
+   * Returns the Widget settings for the selected project.
+   * 
+   * @param {resultCallback} callback - The callback that handles the response.
+   * @param {Object} options - Optional configuration.
+   * @param {string} options.token - The token for this request. Overrides instance token (if) provided in constructor.
+   * @param {string} options.projectId - The token for this request. Overrides instance token (if) provided in constructor.
+   */
   getWidgetSettings(callback, options) {
     let token;
     if (options && options.token) {
@@ -910,6 +918,14 @@ class TiledeskClient {
     );
   }
 
+  /**
+   * Returns the current opening status based on Opening Hours.
+   * 
+   * @param {resultCallback} callback - The callback that handles the response.
+   * @param {Object} options - Optional configuration.
+   * @param {string} options.token - The token for this request. Overrides instance token (if) provided in constructor.
+   * @param {string} options.projectId - The token for this request. Overrides instance token (if) provided in constructor.
+   */
   openNow(callback, options) {
     let token;
     if (options && options.token) {
@@ -965,7 +981,23 @@ class TiledeskClient {
     return res_err;
   }
   
-  anonymousAuthentication(projectId, callback) {
+  /** Returns an anonymous user token to connect to the services.
+   * @param {resultCallback} callback - The callback that handles the response.
+   * @param {Object} options - Optional configuration.
+   * @param {string} options.token - The token for this request. Overrides instance token (if) provided in constructor.
+   * @param {string} options.projectId - The token for this request. Overrides instance token (if) provided in constructor.
+   */
+  anonymousAuthentication(callback, options) {
+    let projectId;
+    if (options && options.projectId) {
+      projectId = options.projectId;
+    }
+    else if (this.projectId) {
+      projectId = this.projectId;
+    }
+    else {
+      throw new Error('projectId can NOT be null.');
+    }
     const HTTPREQUEST = {
       url: `${this.APIURL}/auth/signinAnonymously`,
       headers: {
@@ -997,10 +1029,6 @@ class TiledeskClient {
         else if (callback) {
           callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
         }
-
-        // if (callback) {
-        //   callback(err, response, resbody)
-        // }
       }, this.log
     );
   }
