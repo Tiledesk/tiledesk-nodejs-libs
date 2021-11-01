@@ -1152,9 +1152,6 @@ class TiledeskClient {
    * 
    * @param {chatMessage} message - The chat21's message JSON object.
    * @param {resultCallback} callback - The callback that handles the response.
-   * @param {Object} options - Optional configuration.
-   * @param {string} options.token - The token for this request. Overrides instance token (if) provided in constructor.
-   * @param {string} options.projectId - The token for this request. Overrides instance token (if) provided in constructor.
    */
   sendChatMessage(message, callback) {
     const jwt_token = TiledeskClient.fixToken(this.token)
@@ -1193,7 +1190,7 @@ class TiledeskClient {
    * <a href='https://developer.tiledesk.com/apis/rest-api/events#fire-a-new-custom-event-and-save-it' target='_blank'>REST API</a>
 
    * @param {string} event 
-   * @param {*} callback 
+   * @param {resultCallback} callback - The callback that handles the response.
    */
   fireEvent(event, callback) {
     const jwt_token = TiledeskClient.fixToken(this.token)
