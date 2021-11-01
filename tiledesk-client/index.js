@@ -2,7 +2,8 @@
     Andrea Sponziello - (c) Tiledesk.com
 */
 
-const request = require('request');
+// const request = require('request');
+let axios = require('axios');
 const { v4: uuidv4 } = require('uuid');
 
 /**
@@ -100,7 +101,7 @@ class TiledeskClient {
     };
     TiledeskClient.myrequest(HTTPREQUEST,
     function(err, response, resbody) {
-      if (response.statusCode === 200) {
+      if (response.status === 200) {
         if (callback) {
          callback(null, resbody)
         }
@@ -109,11 +110,11 @@ class TiledeskClient {
         callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
       }
 
-      // if (response.statusCode == 200) {
+      // if (response.status == 200) {
       //   callback(null, resbody)
       // }
       // else {
-      //   const error_msg = "getProjectSettings. Status code: " + response.statusCode
+      //   const error_msg = "getProjectSettings. Status code: " + response.status
       //   callback(error_msg, null)
       // }
     }, this. log);
@@ -157,12 +158,12 @@ class TiledeskClient {
         'Content-Type' : 'application/json',
         'Authorization': jwt_token
       },
-      json: true,
+      // json: true,
       method: 'GET'
     };
     TiledeskClient.myrequest(HTTPREQUEST,
     function(err, response, resbody) {
-      if (response.statusCode === 200) {
+      if (response.status === 200) {
         if (callback) {
          callback(null, resbody)
         }
@@ -220,7 +221,7 @@ class TiledeskClient {
     TiledeskClient.myrequest(
       HTTPREQUEST,
       function(err, response, resbody) {
-        if (response.statusCode === 200) {
+        if (response.status === 200) {
           if (callback) {
            callback(null, resbody)
           }
@@ -279,7 +280,7 @@ class TiledeskClient {
     TiledeskClient.myrequest(
       HTTPREQUEST,
       function(err, response, resbody) {
-        if (response.statusCode === 200) {
+        if (response.status === 200) {
           if (callback) {
            callback(null, resbody)
           }
@@ -328,13 +329,13 @@ class TiledeskClient {
         'Content-Type' : 'application/json',
         'Authorization': jwt_token
       },
-      json: true,
+      // json: true,
       method: 'GET'
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
       function(err, response, resbody) {
-        if (response.statusCode === 200) {
+        if (response.status === 200) {
           if (callback) {
           callback(null, resbody)
           }
@@ -396,7 +397,7 @@ class TiledeskClient {
     TiledeskClient.myrequest(
       HTTPREQUEST,
       function(err, response, resbody) {
-        if (response.statusCode === 200) {
+        if (response.status === 200) {
           if (callback) {
           callback(null, resbody)
           }
@@ -457,7 +458,7 @@ class TiledeskClient {
     TiledeskClient.myrequest(
       HTTPREQUEST,
       function(err, response, resbody) {
-        if (response.statusCode === 200) {
+        if (response.status === 200) {
           if (callback) {
           callback(null, resbody)
           }
@@ -515,7 +516,7 @@ class TiledeskClient {
     TiledeskClient.myrequest(
       HTTPREQUEST,
       function(err, response, resbody) {
-        if (response.statusCode === 200) {
+        if (response.status === 200) {
           if (callback) {
           callback(null, resbody)
           }
@@ -577,7 +578,7 @@ class TiledeskClient {
     TiledeskClient.myrequest(
       HTTPREQUEST,
       function(err, response, resbody) {
-        if (response.statusCode === 200) {
+        if (response.status === 200) {
           if (callback) {
           callback(null, resbody)
           }
@@ -630,13 +631,13 @@ class TiledeskClient {
         'Content-Type' : 'application/json',
         'Authorization': jwt_token
       },
-      json: true,
+      // json: true,
       method: 'GET'
     }
     TiledeskClient.myrequest(
       HTTPREQUEST,
       function(err, response, resbody) {
-        if (response.statusCode === 200) {
+        if (response.status === 200) {
           if (callback) {
           callback(null, resbody)
           }
@@ -674,7 +675,7 @@ class TiledeskClient {
    */
 
   /**
-   * Query project's requests.
+   * Queries project's requests.
    * @param {queryParams} queryParams - The query parameters.
    * @param {resultCallback} callback - The callback that handles the response.
    * @param {Object} options - Optional configuration.
@@ -727,13 +728,13 @@ class TiledeskClient {
         'Content-Type' : 'application/json',
         'Authorization': jwt_token
       },
-      json: true,
+      // json: true,
       method: 'GET'
     }
     TiledeskClient.myrequest(
       HTTPREQUEST,
       function(err, response, resbody) {
-        if (response.statusCode === 200) {
+        if (response.status === 200) {
           if (callback) {
           callback(null, resbody)
           }
@@ -793,13 +794,13 @@ class TiledeskClient {
         'Content-Type' : 'application/json',
         'Authorization': jwt_token
       },
-      json: true,
+      // json: true,
       method: 'GET'
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
       function(err, response, resbody) {
-        if (response.statusCode === 200) {
+        if (response.status === 200) {
           if (callback) {
             callback(null, resbody)
           }
@@ -856,7 +857,7 @@ class TiledeskClient {
     TiledeskClient.myrequest(
       HTTPREQUEST,
       function(err, response, resbody) {
-        if (response.statusCode === 200) {
+        if (response.status === 200) {
           if (callback) {
           callback(null, resbody)
           }
@@ -901,12 +902,12 @@ class TiledeskClient {
     const HTTPREQUEST = {
       url: `${this.APIURL}/${projectId}/widgets`,
       method: 'GET',
-      json: true
+      // json: true
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
       function(err, response, resbody) {
-        if (response.statusCode === 200) {
+        if (response.status === 200) {
           if (callback) {
             callback(null, resbody)
           }
@@ -956,12 +957,12 @@ class TiledeskClient {
        //  'Authorization': jwt_token
       },
       method: 'GET',
-      json: true
+      // json: true
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
       function(err, response, resbody) {
-        if (response.statusCode === 200) {
+        if (response.status === 200) {
             if (callback) {
               callback(null, resbody)
             }
@@ -1021,7 +1022,7 @@ class TiledeskClient {
         //       "fullName": "Guest "
         //   }
         // }
-        if (response.statusCode === 200) {
+        if (response.status === 200) {
           if (callback) {
             callback(null, resbody)
           }
@@ -1040,13 +1041,13 @@ class TiledeskClient {
       headers: {
         'Authorization' : jwt_token
       },
-      json: true,
+      // json: true,
       method: 'POST'
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
       function(err, response, resbody) {
-        if (response.statusCode === 200) {
+        if (response.status === 200) {
           if (callback) {
             callback(null, resbody)
           }
@@ -1077,7 +1078,7 @@ class TiledeskClient {
     TiledeskClient.myrequest(
       HTTPREQUEST,
       function(err, response, resbody) {
-        if (response.statusCode === 200) {
+        if (response.status === 200) {
           if (callback) {
             callback(null, resbody)
           }
@@ -1139,7 +1140,7 @@ class TiledeskClient {
     TiledeskClient.myrequest(
       HTTPREQUEST,
       function(err, response, resbody) {
-        if (response.statusCode === 200) {
+        if (response.status === 200) {
           if (callback) {
             callback(null, resbody)
           }
@@ -1211,7 +1212,7 @@ class TiledeskClient {
         if (err) {
           callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
         }
-        else if (response.statusCode === 200) {
+        else if (response.status === 200) {
           if (callback) {
             callback(null, resbody)
           }
@@ -1257,7 +1258,7 @@ class TiledeskClient {
     TiledeskClient.myrequest(
       HTTPREQUEST,
       function(err, response, resbody) {
-          if (response.statusCode === 200) {
+          if (response.status === 200) {
             if (callback) {
               callback(null, resbody)
             }
@@ -1311,7 +1312,7 @@ class TiledeskClient {
     TiledeskClient.myrequest(
       HTTPREQUEST,
       function(err, response, resbody) {
-        if (response.statusCode === 200) {
+        if (response.status === 200) {
           if (callback) {
             callback(null, resbody)
           }
@@ -1364,7 +1365,7 @@ class TiledeskClient {
     TiledeskClient.myrequest(
       HTTPREQUEST,
       function(err, response, resbody) {
-        if (response.statusCode === 200) {
+        if (response.status === 200) {
           if (callback) {
             callback(null, resbody)
           }
@@ -1440,7 +1441,7 @@ class TiledeskClient {
     request(
       HTTPREQUEST,
       function(err, response, resbody) {
-        if (response.statusCode === 200) {
+        if (response.status === 200) {
           if (callback) {
             callback(null, resbody)
           }
@@ -1454,28 +1455,55 @@ class TiledeskClient {
 
   static myrequest(options, callback, log) {
     if (log) {
-      console.log("API:", options.url);
+      console.log("API URL:", options.url);
+      console.log("** Options:", options);
     }
-    request(
+    axios(
       {
         url: options.url,
-        headers: options.headers,
-        json: options.json,
-        method: options.method
-      },
-      function(err, res, resbody) {
-        if (log) {
-          console.log("** For url:", options.url);
-          console.log("** Options:", options);
-          console.log("** Err:", err);
-          console.log("** Response headers:\n", res.headers);
-          console.log("** Response body:\n", res.body);
-        }
-        if (callback) {
-          callback(err, res, resbody);
-        }
+        method: options.method,
+        data: options.json,
+        headers: options.headers
+      })
+    .then(function (res) {
+      if (log) {
+        console.log("Response for url:", options.url);
+        console.log("Response headers:\n", res.headers);
+        console.log("******** Response for url:", res);
+        console.log("Response body:\n", res.data);
       }
-    );
+      if (callback) {
+          callback(null, res, res.data);
+      }
+    })
+    .catch(function (error) {
+      console.error("Axios call error:", error);
+      if (callback) {
+          callback(error, null, null);
+      }
+    });
+
+
+    // request(
+    //   {
+    //     url: options.url,
+    //     method: options.method,
+    //     json: options.json,
+    //     headers: options.headers
+    //   },
+    //   function(err, res, resbody) {
+    //     if (log) {
+    //       console.log("** For url:", options.url);
+    //       console.log("** Options:", options);
+    //       console.log("** Err:", err);
+    //       console.log("** Response headers:\n", res.headers);
+    //       console.log("** Response body:\n", res.body);
+    //     }
+    //     if (callback) {
+    //       callback(err, res, resbody);
+    //     }
+    //   }
+    // );
   }
 
 }
