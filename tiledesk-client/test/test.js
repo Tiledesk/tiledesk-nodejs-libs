@@ -22,7 +22,7 @@ let USER_TOKEN = null;
 let PROJECT_USER_ID = null;
 let USER_ID = null;
 let ANONYM_USER_TOKEN = null;
-const FAKE_USER_TOKEN = uuidv4();
+const FAKE_USER_TOKEN = 'JWT ' + uuidv4();
 
 describe('TiledeskClient', function() {
     describe('init() with projectId & token', function() {
@@ -38,7 +38,7 @@ describe('TiledeskClient', function() {
             assert(tdclient != null);
             assert(tdclient.APIURL === API_ENDPOINT);
             assert(tdclient.projectId === PROJECT_ID);
-            assert(tdclient.token === FAKE_USER_TOKEN);
+            assert(tdclient.jwt_token === FAKE_USER_TOKEN);
             assert(tdclient.APIKEY === APIKEY);
             assert(tdclient.log === LOG_STATUS);
           }
@@ -564,7 +564,7 @@ describe('TiledeskClient', function() {
 
 describe('TiledeskClient', function() {
     describe('sendSupportMessage() anonymous', function() {
-        it('sends a message to a request conversation, "projectId" & "token" in constructor()', function(done) {
+        it('sends a message to a request conversation', function(done) {
             const tdclient = new TiledeskClient({
                 APIKEY: APIKEY,
                 APIURL: API_ENDPOINT,
@@ -577,7 +577,6 @@ describe('TiledeskClient', function() {
                 const text_value = 'test message';
                 const request_id = TiledeskClient.newRequestId(PROJECT_ID);
                 tdclient.sendSupportMessage(request_id, {text: text_value}, function(err, result) {
-                    // console.log("RESULT:", result)
                     assert(err === null);
                     assert(result != null);
                     assert(result.text === text_value);
@@ -645,44 +644,44 @@ describe('TiledeskClient', function() {
 //     });
 // });
 
-describe('TiledeskClient', function() {
-    describe('getRequests() DEPRECATED', function() {
-        it('gets the project requests', (done) => {
-            const tdclient = new TiledeskClient(
-            {
-                APIKEY: APIKEY,
-                APIURL: API_ENDPOINT,
-                projectId: PROJECT_ID,
-                token: USER_TOKEN,
-                log: LOG_STATUS
-            })
-            const limit = 1;
-            tdclient.getRequests(limit, TiledeskClient.UNASSIGNED_STATUS, (err, result) => {
-                // console.log("result:", JSON.stringify(result));
-                assert(result);
-                const requests = result.requests;
-                assert(requests);
-                assert(result.requests);
-                assert(Array.isArray(requests));
-                assert(result.requests.length > 0);
-                done();
-            },
-            {
-                additional_params: {
-                    "no_populate": "true",
-                    "snap_department_routing": "assigned"
-                }
-            });
-                // }
-            //   });
+// describe('TiledeskClient', function() {
+//     describe('getRequests() DEPRECATED', function() {
+//         it('gets the project requests', (done) => {
+//             const tdclient = new TiledeskClient(
+//             {
+//                 APIKEY: APIKEY,
+//                 APIURL: API_ENDPOINT,
+//                 projectId: PROJECT_ID,
+//                 token: USER_TOKEN,
+//                 log: LOG_STATUS
+//             })
+//             const limit = 1;
+//             tdclient.getRequests(limit, TiledeskClient.UNASSIGNED_STATUS, (err, result) => {
+//                 // console.log("result:", JSON.stringify(result));
+//                 assert(result);
+//                 const requests = result.requests;
+//                 assert(requests);
+//                 assert(result.requests);
+//                 assert(Array.isArray(requests));
+//                 assert(result.requests.length > 0);
+//                 done();
+//             },
+//             {
+//                 additional_params: {
+//                     "no_populate": "true",
+//                     "snap_department_routing": "assigned"
+//                 }
+//             });
+//                 // }
+//             //   });
               
-            // }
-            // else {
-            //     assert.ok(false);
-            // }
-        });
-    });
-});
+//             // }
+//             // else {
+//             //     assert.ok(false);
+//             // }
+//         });
+//     });
+// });
 
 describe('TiledeskClient', function() {
     describe('getAllRequests()', function() {

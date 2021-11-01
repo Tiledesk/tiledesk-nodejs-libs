@@ -1,6 +1,6 @@
 # Client library for Tiledesk nodejs APIs client
 
-### 0.7.15
+### 0.8.0
 - 'project_id' instance property and constructor options property renamed in 'projectId' (camel case)
 - updateDepartment() renamed in updateRequestDepartment()
 - updateRequestDepartment: in options parameter added 'nobot' option
@@ -13,9 +13,9 @@
 - added newRequestId()
 - anonymousAuthentication(callback, options) signature refactored (removed first 'projectId' param, added 'options' param)
 - added Axios. Removed Request.
-- anonymousAuthentication(), customAuthentication(), authEmailPassword() are now 'static'. Signature modifed to provide 'apikey' and options.
+- anonymousAuthentication(), customAuthentication(), authEmailPassword() are now 'static'. Signature modifed to provide 'apikey' and options (APIURL, log).
 - options.projectId and options.token are now mandatory in constructor()
-- removed final 'options' parameter from calls.
+- removed tail 'options' parameter from all calls.
 
 ### 0.7.14 - online
 - added getRequestById()
