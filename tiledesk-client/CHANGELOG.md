@@ -12,7 +12,7 @@
 - sendMessage() renamed in sendSupportMessage()
 - added newRequestId()
 - anonymousAuthentication(callback, options) signature refactored (removed first 'projectId' param, added 'options' param)
-
+- added Axios. Removed Request.
 
 ### 0.7.14 - online
 - added getRequestById()
