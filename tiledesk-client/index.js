@@ -23,25 +23,26 @@ class TiledeskClient {
    * const tdclient = new TiledeskClient({APIKEY: 'THE_API_KEY'});
    * const tdclient = new TiledeskClient({APIKEY: 'THE_API_KEY', APIURL: 'SELF_HOSTED_INSTANCE_ENDPOINT'});
    * 
-   *
    * @param {Object} options JSON configuration.
    * @param {string} options.APIKEY Mandatory. Tiledesk APIKEY
-   * @param {string} options.APIURL Optional. Tiledesk server API endpoint
-   * @param {string} options.projectId Optional. Tiledesk projectId. Will be used in each call on project's APIs.
-   * @param {string} options.token Optional. Tiledesk authentication token. Will be used in each call on project's APIs.
-   * @param {boolean} options.log Optional. If true HTTP requests are logged
-   * 
+   * @param {string} options.projectId Mandatory. Tiledesk projectId. Will be used in each call on project's APIs.
+   * @param {string} options.token Mandatory. Tiledesk authentication token. Will be used in each call on project's APIs.
+   * @param {string} options.APIURL Optional. Tiledesk server API endpoint.
+   * @param {boolean} options.log Optional. If true HTTP requests are logged.
    */
   constructor(options) {
+    // console.log("options:", options)
+
+    if (!options) {
+      throw new Error('options.APIKEY, options.projectId and options.token are mandatory.');
+    }
+
     if (!options.APIKEY) {
-      throw new Error('APIKEY can NOT be empty.');
+      throw new Error('options.APIKEY can NOT be null.');
     }
     else {
       this.APIKEY = options.APIKEY;
     }
-    // if (!options.token) {
-    //   throw new Error('token can NOT be empty.');
-    // }
 
     if (options && options.APIURL) {
       this.APIURL = options.APIURL
@@ -50,11 +51,17 @@ class TiledeskClient {
       this.APIURL = TiledeskClient.DEFAULT_API_ENDPOINT;
     }
 
-    if (options && options.projectId) {
+    if (!options.projectId) {
+      throw new Error('options.projectId can NOT be null.');
+    }
+    else {
       this.projectId = options.projectId;
     }
 
-    if (options && options.token) {
+    if (!options.token) {
+      throw new Error('options.token can NOT be null.');
+    }
+    else {
       this.token = options.token;
     }
 
@@ -129,29 +136,9 @@ class TiledeskClient {
    * @param {string} options.token - The token for this request. Overrides instance token (if) provided in constructor.
    * @param {string} options.projectId - The token for this request. Overrides instance token (if) provided in constructor.
    */
-  getProjectSettings(callback, options) {
-    let token;
-    if (options && options.token) {
-      token = options.token;
-    }
-    else if (this.token) {
-      token = this.token;
-    }
-    else {
-      throw new Error('token can NOT be null.');
-    }
-    let projectId;
-    if (options && options.projectId) {
-      projectId = options.projectId;
-    }
-    else if (this.projectId) {
-      projectId = this.projectId;
-    }
-    else {
-      throw new Error('projectId can NOT be null.');
-    }
-    const jwt_token = TiledeskClient.fixToken(token)
-    const URL = `${this.APIURL}/projects/${projectId}`
+  getProjectSettings(callback) {
+    const jwt_token = TiledeskClient.fixToken(this.token)
+    const URL = `${this.APIURL}/projects/${this.projectId}`
     const HTTPREQUEST = {
       url: URL,
       headers: {
@@ -982,25 +969,27 @@ class TiledeskClient {
     return res_err;
   }
   
-  /** Returns an anonymous user token to connect to the services.
+  /** Returns an anonymous user token to connect to a specific project's services.
+   * @param {resultCallback} projectId - The projectId for this anonymous user.
    * @param {resultCallback} callback - The callback that handles the response.
-   * @param {Object} options - Optional configuration.
-   * @param {string} options.token - The token for this request. Overrides instance token (if) provided in constructor.
-   * @param {string} options.projectId - The token for this request. Overrides instance token (if) provided in constructor.
    */
-  anonymousAuthentication(callback, options) {
-    let projectId;
-    if (options && options.projectId) {
-      projectId = options.projectId;
-    }
-    else if (this.projectId) {
-      projectId = this.projectId;
-    }
-    else {
+  static anonymousAuthentication(projectId, apikey, options, callback) {
+    if (!projectId) {
       throw new Error('projectId can NOT be null.');
     }
+    if (!apikey) {
+      throw new Error('apikey can NOT be null.');
+    }
+    let _log = false;
+    if (options && options.log) {
+      _log = options.log;
+    }
+    let _APIURL = TiledeskClient.DEFAULT_API_ENDPOINT;
+    if (options && options.APIURL) {
+      _APIURL = options.APIURL;
+    }
     const HTTPREQUEST = {
-      url: `${this.APIURL}/auth/signinAnonymously`,
+      url: `${_APIURL}/auth/signinAnonymously`,
       headers: {
         'Content-Type' : 'application/json'
       },
@@ -1030,14 +1019,25 @@ class TiledeskClient {
         else if (callback) {
           callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
         }
-      }, this.log
+      }, _log
     );
   }
 
-  customAuthentication(token, callback) {
-    const jwt_token = TiledeskClient.fixToken(token)
+  static customAuthentication(apikey, token, options, callback) {
+    if (!apikey) {
+      throw new Error('apikey can NOT be null.');
+    }
+    let _log = false;
+    if (options && options.log) {
+      _log = options.log;
+    }
+    let _APIURL = TiledeskClient.DEFAULT_API_ENDPOINT;
+    if (options && options.APIURL) {
+      _APIURL = options.APIURL;
+    }
+    const jwt_token = TiledeskClient.fixToken(token);
     const HTTPREQUEST = {
-      url: `${this.APIURL}/auth/signinWithCustomToken`,
+      url: `${_APIURL}/auth/signinWithCustomToken`,
       headers: {
         'Authorization' : jwt_token
       },
@@ -1059,13 +1059,24 @@ class TiledeskClient {
         // if (callback) {
         //   callback(err, response, resbody)
         // }
-      }, this.log
+      }, _log
     );
   }
 
-  authEmailPassword(email, password, callback) {
+  static authEmailPassword(apikey, email, password, options, callback) {
+    if (!apikey) {
+      throw new Error('apikey can NOT be null.');
+    }
+    let _log = false;
+    if (options && options.log) {
+      _log = options.log;
+    }
+    let _APIURL = TiledeskClient.DEFAULT_API_ENDPOINT;
+    if (options && options.APIURL) {
+      _APIURL = options.APIURL;
+    }
     const HTTPREQUEST = {
-      url: `${this.APIURL}/auth/signin`,
+      url: `${_APIURL}/auth/signin`,
       headers: {
         'Content-Type' : 'application/json'
       },

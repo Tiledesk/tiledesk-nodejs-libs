@@ -13,6 +13,9 @@
 - added newRequestId()
 - anonymousAuthentication(callback, options) signature refactored (removed first 'projectId' param, added 'options' param)
 - added Axios. Removed Request.
+- anonymousAuthentication(), customAuthentication(), authEmailPassword() are now 'static'. Signature modifed to provide 'apikey' and options.
+- options.projectId and options.token are now mandatory in constructor()
+- removed final 'options' parameter from calls.
 
 ### 0.7.14 - online
 - added getRequestById()
