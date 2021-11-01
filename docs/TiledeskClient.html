@@ -154,29 +154,6 @@
 
         <tr>
             
-                <td class="name"><code>APIURL</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Optional. Tiledesk server API endpoint</td>
-        </tr>
-
-    
-
-        <tr>
-            
                 <td class="name"><code>projectId</code></td>
             
 
@@ -193,7 +170,7 @@
 
             
 
-            <td class="description last">Optional. Tiledesk projectId. Will be used in each call on project's APIs.</td>
+            <td class="description last">Mandatory. Tiledesk projectId. Will be used in each call on project's APIs.</td>
         </tr>
 
     
@@ -216,7 +193,30 @@
 
             
 
-            <td class="description last">Optional. Tiledesk authentication token. Will be used in each call on project's APIs.</td>
+            <td class="description last">Mandatory. Tiledesk authentication token. Will be used in each call on project's APIs.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>APIURL</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Optional. Tiledesk server API endpoint.</td>
         </tr>
 
     
@@ -239,7 +239,7 @@
 
             
 
-            <td class="description last">Optional. If true HTTP requests are logged</td>
+            <td class="description last">Optional. If true HTTP requests are logged.</td>
         </tr>
 
     
@@ -287,7 +287,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line11">line 11</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line12">line 12</a>
     </li></ul></dd>
     
 
@@ -343,6 +343,843 @@ const tdclient = new TiledeskClient({APIKEY: 'THE_API_KEY', APIURL: 'SELF_HOSTED
 
     
         <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".anonymousAuthentication"><span class="type-signature">(static) </span>anonymousAuthentication<span class="signature">(projectId, apikey, options, callback)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Returns an anonymous user token to connect to a specific project's services.<br>
+* <a href='https://developer.tiledesk.com/apis/rest-api/authentication#anonymous-authentication-for-a-user.'>REST API<a>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>projectId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#resultCallback">resultCallback</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The projectId for this anonymous user.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>apikey</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Your API key.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">API call options.
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>APIURL</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Optional APIURL for connecting to a Tiledesk self-hosted instance.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>log</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">If true it logs HTTP request.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#resultCallback">resultCallback</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The callback that handles the response.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line952">line 952</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".authEmailPassword"><span class="type-signature">(static) </span>authEmailPassword<span class="signature">(projectId, apikey, options, callback)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Returns a Tiledesk token to connect to Tiledesk services.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>projectId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#resultCallback">resultCallback</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The projectId for this anonymous user.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>apikey</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Your API key.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">API call options.
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>APIURL</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Optional APIURL for connecting to a Tiledesk self-hosted instance.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>log</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">If true it logs HTTP request.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#resultCallback">resultCallback</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The callback that handles the response.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1060">line 1060</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".customAuthentication"><span class="type-signature">(static) </span>customAuthentication<span class="signature">(apikey, token, options, callback)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Returns a Tiledesk token based on a custom token.<br>
+See <a href='https://developer.tiledesk.com/apis/authentication'>JWT authentication</a> for more info.<br>
+<a href='https://developer.tiledesk.com/apis/rest-api/authentication#authentication-with-email-and-password'>REST API<a>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>apikey</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Your API key.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>token</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Your custom token.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">API call options.
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>APIURL</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Optional APIURL for connecting to a Tiledesk self-hosted instance.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>log</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">If true it logs HTTP request.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#resultCallback">resultCallback</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The callback that handles the response.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1012">line 1012</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         
             
@@ -456,7 +1293,7 @@ A request's ID has the format:<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line84">line 84</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line92">line 92</a>
     </li></ul></dd>
     
 
@@ -492,7 +1329,7 @@ A request's ID has the format:<br>
     
 
     
-    <h4 class="name" id="anonymousAuthentication"><span class="type-signature"></span>anonymousAuthentication<span class="signature">(callback, options)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="fireEvent"><span class="type-signature"></span>fireEvent<span class="signature">(event, callback)</span><span class="type-signature"></span></h4>
     
 
     
@@ -500,7 +1337,10 @@ A request's ID has the format:<br>
 
 
 <div class="description">
-    Returns an anonymous user token to connect to the services.
+    Fire a new custom event and save it.<br>
+With this endpoint you can fire a custom event. You event name should be of the form <i>event.emit.EVENT_NAME</i> to correctly identify your custom event.<br>
+You can find the standard Tiledesk events here<br>
+<a href='https://developer.tiledesk.com/apis/rest-api/events#fire-a-new-custom-event-and-save-it' target='_blank'>REST API</a>
 </div>
 
 
@@ -536,13 +1376,36 @@ A request's ID has the format:<br>
 
         <tr>
             
+                <td class="name"><code>event</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
                 <td class="name"><code>callback</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="global.html#resultCallback">resultCallback</a></span>
+<span class="param-type">*</span>
 
 
             
@@ -552,102 +1415,7 @@ A request's ID has the format:<br>
 
             
 
-            <td class="description last">The callback that handles the response.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>options</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Optional configuration.
-                <h6>Properties</h6>
-                
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>token</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The token for this request. Overrides instance token (if) provided in constructor.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>projectId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The token for this request. Overrides instance token (if) provided in constructor.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-            </td>
+            <td class="description last"></td>
         </tr>
 
     
@@ -688,7 +1456,7 @@ A request's ID has the format:<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line990">line 990</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1198">line 1198</a>
     </li></ul></dd>
     
 
@@ -732,7 +1500,7 @@ A request's ID has the format:<br>
 
 
 <div class="description">
-    Query project's requests.
+    Queries project's requests.
 </div>
 
 
@@ -943,7 +1711,7 @@ A request's ID has the format:<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line684">line 684</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line666">line 666</a>
     </li></ul></dd>
     
 
@@ -1176,7 +1944,7 @@ A request's ID has the format:<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line131">line 131</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line139">line 139</a>
     </li></ul></dd>
     
 
@@ -1212,7 +1980,7 @@ A request's ID has the format:<br>
     
 
     
-    <h4 class="name" id="getProjectUser"><span class="type-signature"></span>getProjectUser<span class="signature">(user_id, callback, options)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="getProjectUser"><span class="type-signature"></span>getProjectUser<span class="signature">(userId, callback)</span><span class="type-signature"></span></h4>
     
 
     
@@ -1256,7 +2024,7 @@ A request's ID has the format:<br>
 
         <tr>
             
-                <td class="name"><code>user_id</code></td>
+                <td class="name"><code>userId</code></td>
             
 
             <td class="type">
@@ -1299,101 +2067,6 @@ A request's ID has the format:<br>
         </tr>
 
     
-
-        <tr>
-            
-                <td class="name"><code>options</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Optional configuration.
-                <h6>Properties</h6>
-                
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>token</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The token for this request. Overrides instance token (if) provided in constructor.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>projectId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The token for this request. Overrides instance token (if) provided in constructor.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-            </td>
-        </tr>
-
-    
     </tbody>
 </table>
 
@@ -1431,7 +2104,7 @@ A request's ID has the format:<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line302">line 302</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line287">line 287</a>
     </li></ul></dd>
     
 
@@ -1686,7 +2359,7 @@ A request's ID has the format:<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line767">line 767</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line749">line 749</a>
     </li></ul></dd>
     
 
@@ -1918,7 +2591,7 @@ A request's ID has the format:<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line879">line 879</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line861">line 861</a>
     </li></ul></dd>
     
 
@@ -1954,7 +2627,7 @@ A request's ID has the format:<br>
     
 
     
-    <h4 class="name" id="openNow"><span class="type-signature"></span>openNow<span class="signature">(callback, options)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="openNow"><span class="type-signature"></span>openNow<span class="signature">(callback)</span><span class="type-signature"></span></h4>
     
 
     
@@ -2018,101 +2691,6 @@ A request's ID has the format:<br>
         </tr>
 
     
-
-        <tr>
-            
-                <td class="name"><code>options</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Optional configuration.
-                <h6>Properties</h6>
-                
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>token</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The token for this request. Overrides instance token (if) provided in constructor.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>projectId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The token for this request. Overrides instance token (if) provided in constructor.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-            </td>
-        </tr>
-
-    
     </tbody>
 </table>
 
@@ -2150,7 +2728,7 @@ A request's ID has the format:<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line929">line 929</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line908">line 908</a>
     </li></ul></dd>
     
 
@@ -2406,7 +2984,7 @@ A request's ID has the format:<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1176">line 1176</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1159">line 1159</a>
     </li></ul></dd>
     
 
@@ -2442,7 +3020,7 @@ A request's ID has the format:<br>
     
 
     
-    <h4 class="name" id="sendSupportMessage"><span class="type-signature"></span>sendSupportMessage<span class="signature">(requestId, message, callback, options)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="sendSupportMessage"><span class="type-signature"></span>sendSupportMessage<span class="signature">(requestId, message, callback)</span><span class="type-signature"></span></h4>
     
 
     
@@ -2451,7 +3029,7 @@ A request's ID has the format:<br>
 
 <div class="description">
     Sends a message to a support conversation.<br>
-<a href='' target='_blank'>REST API</a>
+<a href='https://developer.tiledesk.com/apis/rest-api/messages#send-a-message.' target='_blank'>REST API</a>
 </div>
 
 
@@ -2553,101 +3131,6 @@ A request's ID has the format:<br>
         </tr>
 
     
-
-        <tr>
-            
-                <td class="name"><code>options</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Optional configuration.
-                <h6>Properties</h6>
-                
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>token</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The token for this request. Overrides instance token (if) provided in constructor.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>projectId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The token for this request. Overrides instance token (if) provided in constructor.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-            </td>
-        </tr>
-
-    
     </tbody>
 </table>
 
@@ -2685,7 +3168,7 @@ A request's ID has the format:<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1107">line 1107</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1110">line 1110</a>
     </li></ul></dd>
     
 
@@ -2968,7 +3451,7 @@ A request's ID has the format:<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line425">line 425</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line407">line 407</a>
     </li></ul></dd>
     
 
@@ -3246,7 +3729,7 @@ A request's ID has the format:<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line543">line 543</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line525">line 525</a>
     </li></ul></dd>
     
 
@@ -3524,7 +4007,7 @@ A request's ID has the format:<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line481">line 481</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line463">line 463</a>
     </li></ul></dd>
     
 
@@ -3560,7 +4043,7 @@ A request's ID has the format:<br>
     
 
     
-    <h4 class="name" id="updateProjectUserCurrentlyLoggedIn"><span class="type-signature"></span>updateProjectUserCurrentlyLoggedIn<span class="signature">(properties, callback, options)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="updateProjectUserCurrentlyLoggedIn"><span class="type-signature"></span>updateProjectUserCurrentlyLoggedIn<span class="signature">(properties, callback)</span><span class="type-signature"></span></h4>
     
 
     
@@ -3789,101 +4272,6 @@ A request's ID has the format:<br>
         </tr>
 
     
-
-        <tr>
-            
-                <td class="name"><code>options</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Optional configuration.
-                <h6>Properties</h6>
-                
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>token</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The token for this request. Overrides instance token (if) provided in constructor.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>projectId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The token for this request. Overrides instance token (if) provided in constructor.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-            </td>
-        </tr>
-
-    
     </tbody>
 </table>
 
@@ -3921,7 +4309,7 @@ A request's ID has the format:<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line364">line 364</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line346">line 346</a>
     </li></ul></dd>
     
 
@@ -4200,7 +4588,7 @@ A request's ID has the format:<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line246">line 246</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line234">line 234</a>
     </li></ul></dd>
     
 
@@ -4501,7 +4889,7 @@ A request's ID has the format:<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1397">line 1397</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1349">line 1349</a>
     </li></ul></dd>
     
 
@@ -4780,7 +5168,7 @@ A request's ID has the format:<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line824">line 824</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line806">line 806</a>
     </li></ul></dd>
     
 
@@ -5059,7 +5447,7 @@ A request's ID has the format:<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line187">line 187</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line175">line 175</a>
     </li></ul></dd>
     
 
@@ -5111,7 +5499,7 @@ A request's ID has the format:<br>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Sun Oct 31 2021 22:19:13 GMT+0100 (Central European Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Mon Nov 01 2021 21:34:53 GMT+0100 (Central European Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

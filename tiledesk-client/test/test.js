@@ -288,7 +288,7 @@ describe('TiledeskClient', function() {
 
 describe('TiledeskClient', function() {
     describe('getProjectUser()', function() {
-        it('gets the project-user by user_idand verifies that he is AVAILABLE', function(done) {
+        it('gets the project-user by userId and verifies that he is AVAILABLE', function(done) {
             const tdclient = new TiledeskClient(
             {
                 APIKEY: APIKEY,
@@ -323,7 +323,7 @@ describe('TiledeskClient', function() {
 });
 
 describe('TiledeskClient', function() {
-    describe('updateProjectUser()', function() {
+    describe('updateProjectUserCurrentlyLoggedIn()', function() {
         it('updates the project-user status to unavailable', function(done) {
             const tdclient = new TiledeskClient(
             {
