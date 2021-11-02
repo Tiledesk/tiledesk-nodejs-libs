@@ -1,36 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>JSDoc: Source: index.js</title>
-
-    <script src="scripts/prettify/prettify.js"> </script>
-    <script src="scripts/prettify/lang-css.js"> </script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
-</head>
-
-<body>
-
-<div id="main">
-
-    <h1 class="page-title">Source: index.js</h1>
-
-    
-
-
-
-    
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/* 
+/* 
     Andrea Sponziello - (c) Tiledesk.com
 */
 
-const request = require('request');
+// const request = require('request');
+let axios = require('axios');
 const { v4: uuidv4 } = require('uuid');
 
 /**
@@ -70,23 +43,23 @@ class TiledeskClient {
     //   throw new Error('token can NOT be empty.');
     // }
 
-    if (options &amp;&amp; options.APIURL) {
+    if (options && options.APIURL) {
       this.APIURL = options.APIURL
     }
     else {
       this.APIURL = TiledeskClient.DEFAULT_API_ENDPOINT;
     }
 
-    if (options &amp;&amp; options.projectId) {
+    if (options && options.projectId) {
       this.projectId = options.projectId;
     }
 
-    if (options &amp;&amp; options.token) {
+    if (options && options.token) {
       this.token = options.token;
     }
 
     this.log = false;
-    if (options &amp;&amp; options.log) {
+    if (options && options.log) {
       this.log = options.log;
     }
   }
@@ -100,12 +73,12 @@ class TiledeskClient {
     }
   }
 
-  /** Returns a new request ID for the specified Project.&lt;br>
-   * A request's ID has the format:&lt;br>
-   * &lt;br>
-   * &lt;i>support-group-PROJECT_ID-UNIQUE_ID&lt;/i>&lt;br>
-   * &lt;br>
-   * &lt;i>UNIQUE_ID&lt;/i> MUST be UNIQUE in your Project. &lt;b>This method always returns an &lt;i>UUID&lt;/i> for the &lt;i>UNIQUE_ID&lt;/i> component&lt;/b>.
+  /** Returns a new request ID for the specified Project.<br>
+   * A request's ID has the format:<br>
+   * <br>
+   * <i>support-group-PROJECT_ID-UNIQUE_ID</i><br>
+   * <br>
+   * <i>UNIQUE_ID</i> MUST be unique in your Project. <b>This method always returns an <i>UUID</i> for the <i>UNIQUE_ID</i> component</b>.
    * 
    * @param {string} projectId - The project ID for the new request.
   */
@@ -128,7 +101,7 @@ class TiledeskClient {
     };
     TiledeskClient.myrequest(HTTPREQUEST,
     function(err, response, resbody) {
-      if (response.statusCode === 200) {
+      if (response.status === 200) {
         if (callback) {
          callback(null, resbody)
         }
@@ -137,19 +110,19 @@ class TiledeskClient {
         callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
       }
 
-      // if (response.statusCode == 200) {
+      // if (response.status == 200) {
       //   callback(null, resbody)
       // }
       // else {
-      //   const error_msg = "getProjectSettings. Status code: " + response.statusCode
+      //   const error_msg = "getProjectSettings. Status code: " + response.status
       //   callback(error_msg, null)
       // }
     }, this. log);
   }
 
   /**
-   * Returns the project's JSON configuration&lt;br>
-   * &lt;a href='https://developer.tiledesk.com/apis/rest-api/projects#get-the-project-detail' target='_blank'>REST API&lt;/a>
+   * Returns the project's JSON configuration<br>
+   * <a href='https://developer.tiledesk.com/apis/rest-api/projects#get-the-project-detail' target='_blank'>REST API</a>
    * 
    * @param {resultCallback} callback - The callback that handles the response.
    * @param {Object} options - Optional configuration.
@@ -158,7 +131,7 @@ class TiledeskClient {
    */
   getProjectSettings(callback, options) {
     let token;
-    if (options &amp;&amp; options.token) {
+    if (options && options.token) {
       token = options.token;
     }
     else if (this.token) {
@@ -168,7 +141,7 @@ class TiledeskClient {
       throw new Error('token can NOT be null.');
     }
     let projectId;
-    if (options &amp;&amp; options.projectId) {
+    if (options && options.projectId) {
       projectId = options.projectId;
     }
     else if (this.projectId) {
@@ -185,12 +158,12 @@ class TiledeskClient {
         'Content-Type' : 'application/json',
         'Authorization': jwt_token
       },
-      json: true,
+      // json: true,
       method: 'GET'
     };
     TiledeskClient.myrequest(HTTPREQUEST,
     function(err, response, resbody) {
-      if (response.statusCode === 200) {
+      if (response.status === 200) {
         if (callback) {
          callback(null, resbody)
         }
@@ -202,8 +175,8 @@ class TiledeskClient {
   }
 
   /**
-   * Updates the request's properties.&lt;br>
-   * &lt;a href='https://developer.tiledesk.com/apis/rest-api/requests#update-a-request-by-request_id' target='_blank'>REST API&lt;/a>
+   * Updates the request's properties.<br>
+   * <a href='https://developer.tiledesk.com/apis/rest-api/requests#update-a-request-by-request_id' target='_blank'>REST API</a>
    * 
    * @param {string} requestId - The request ID
    * @param {Object} properties - The request properties to update.
@@ -214,7 +187,7 @@ class TiledeskClient {
    */
   updateRequestProperties(requestId, properties, callback, options) {
     let token;
-    if (options &amp;&amp; options.token) {
+    if (options && options.token) {
       token = options.token;
     }
     else if (this.token) {
@@ -224,7 +197,7 @@ class TiledeskClient {
       throw new Error('token can NOT be null.');
     }
     let projectId;
-    if (options &amp;&amp; options.projectId) {
+    if (options && options.projectId) {
       projectId = options.projectId;
     }
     else if (this.projectId) {
@@ -248,7 +221,7 @@ class TiledeskClient {
     TiledeskClient.myrequest(
       HTTPREQUEST,
       function(err, response, resbody) {
-        if (response.statusCode === 200) {
+        if (response.status === 200) {
           if (callback) {
            callback(null, resbody)
           }
@@ -261,8 +234,8 @@ class TiledeskClient {
   }
 
   /**
-   * Updates the request's attributes.&lt;br>
-   * &lt;a href='https://developer.tiledesk.com/apis/rest-api/requests#update-the-request-attributes' target='_blank'>REST API&lt;/a>
+   * Updates the request's attributes.<br>
+   * <a href='https://developer.tiledesk.com/apis/rest-api/requests#update-the-request-attributes' target='_blank'>REST API</a>
    * 
    * @param {string} requestId - The request ID
    * @param {Object} attributes - The request attributes to update.
@@ -273,7 +246,7 @@ class TiledeskClient {
    */
   updateRequestAttributes(requestId, attributes, callback, options) {
     let token;
-    if (options &amp;&amp; options.token) {
+    if (options && options.token) {
       token = options.token;
     }
     else if (this.token) {
@@ -283,7 +256,7 @@ class TiledeskClient {
       throw new Error('token can NOT be null.');
     }
     let projectId;
-    if (options &amp;&amp; options.projectId) {
+    if (options && options.projectId) {
       projectId = options.projectId;
     }
     else if (this.projectId) {
@@ -307,7 +280,7 @@ class TiledeskClient {
     TiledeskClient.myrequest(
       HTTPREQUEST,
       function(err, response, resbody) {
-        if (response.statusCode === 200) {
+        if (response.status === 200) {
           if (callback) {
            callback(null, resbody)
           }
@@ -329,7 +302,7 @@ class TiledeskClient {
    */
   getProjectUser(user_id, callback, options) {
     let token;
-    if (options &amp;&amp; options.token) {
+    if (options && options.token) {
       token = options.token;
     }
     else if (this.token) {
@@ -339,7 +312,7 @@ class TiledeskClient {
       throw new Error('token can NOT be null.');
     }
     let projectId;
-    if (options &amp;&amp; options.projectId) {
+    if (options && options.projectId) {
       projectId = options.projectId;
     }
     else if (this.projectId) {
@@ -356,13 +329,13 @@ class TiledeskClient {
         'Content-Type' : 'application/json',
         'Authorization': jwt_token
       },
-      json: true,
+      // json: true,
       method: 'GET'
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
       function(err, response, resbody) {
-        if (response.statusCode === 200) {
+        if (response.status === 200) {
           if (callback) {
           callback(null, resbody)
           }
@@ -375,8 +348,8 @@ class TiledeskClient {
   }
 
   /**
-   * Updates the authenticated Teammate's (projectUser). The teammate must be invited to the specified project for the update operation taking success.&lt;br>
-   * &lt;a href='https://developer.tiledesk.com/apis/rest-api/team#update-the-current-logged-teammate' target='_blank'>REST API&lt;/a>
+   * Updates the authenticated Teammate's (projectUser). The teammate must be invited to the specified project for the update operation taking success.<br>
+   * <a href='https://developer.tiledesk.com/apis/rest-api/team#update-the-current-logged-teammate' target='_blank'>REST API</a>
    * 
    * @param {Object} properties - The properties to update. Only the provided properties will be updated, the other properties will stay unchanged.
    * @param {string} properties.role - The teammate role. Permitted values: 'admin', 'agent'.
@@ -391,7 +364,7 @@ class TiledeskClient {
    */
   updateProjectUserCurrentlyLoggedIn(properties, callback, options) {
     let token;
-    if (options &amp;&amp; options.token) {
+    if (options && options.token) {
       token = options.token;
     }
     else if (this.token) {
@@ -401,7 +374,7 @@ class TiledeskClient {
       throw new Error('token can NOT be null.');
     }
     let projectId;
-    if (options &amp;&amp; options.projectId) {
+    if (options && options.projectId) {
       projectId = options.projectId;
     }
     else if (this.projectId) {
@@ -424,7 +397,7 @@ class TiledeskClient {
     TiledeskClient.myrequest(
       HTTPREQUEST,
       function(err, response, resbody) {
-        if (response.statusCode === 200) {
+        if (response.status === 200) {
           if (callback) {
           callback(null, resbody)
           }
@@ -439,12 +412,12 @@ class TiledeskClient {
   /**
    * Updates the Teammate's (projectUser) by ProjectUser's ID. It requires admin role.
    * @param {string} projectUserId - The teammate ID.
-   * @param {Object} properties - The properties to update. Only the provided properties will be updated, the other properties will stay unchanged.&lt;br>
-   * &lt;b>role {string}&lt;/b> - The teammate role. Permitted values: 'admin', 'agent'.
-   * &lt;br>&lt;b>user_available {boolean}&lt;/b> - The teammate availability. 'true' for available, 'false' for unavailable.
-   * &lt;br>&lt;b>max_served_chat {number}&lt;/b> - The number of concurrent chats the teammate can take at once.
-   * &lt;br>&lt;b>attributes {Object}&lt;/b> - The teammate custom attributes.
-   * &lt;br>&lt;b>settings {Object}&lt;/b> - The teammate settings.
+   * @param {Object} properties - The properties to update. Only the provided properties will be updated, the other properties will stay unchanged.<br>
+   * <b>role {string}</b> - The teammate role. Permitted values: 'admin', 'agent'.
+   * <br><b>user_available {boolean}</b> - The teammate availability. 'true' for available, 'false' for unavailable.
+   * <br><b>max_served_chat {number}</b> - The number of concurrent chats the teammate can take at once.
+   * <br><b>attributes {Object}</b> - The teammate custom attributes.
+   * <br><b>settings {Object}</b> - The teammate settings.
    * @param {resultCallback} callback - The callback that handles the response.
    * @param {Object} options - Optional configuration.
    * @param {string} options.token - The token for this request. Overrides instance token (if) provided in constructor.
@@ -452,7 +425,7 @@ class TiledeskClient {
    */
    updateProjectUser(projectUserId, properties, callback, options) {
     let token;
-    if (options &amp;&amp; options.token) {
+    if (options && options.token) {
       token = options.token;
     }
     else if (this.token) {
@@ -462,7 +435,7 @@ class TiledeskClient {
       throw new Error('token can NOT be null.');
     }
     let projectId;
-    if (options &amp;&amp; options.projectId) {
+    if (options && options.projectId) {
       projectId = options.projectId;
     }
     else if (this.projectId) {
@@ -485,7 +458,7 @@ class TiledeskClient {
     TiledeskClient.myrequest(
       HTTPREQUEST,
       function(err, response, resbody) {
-        if (response.statusCode === 200) {
+        if (response.status === 200) {
           if (callback) {
           callback(null, resbody)
           }
@@ -508,7 +481,7 @@ class TiledeskClient {
    */
   updateProjectUserAvailable(projectUserId, userAvailable, callback, options) {
     let token;
-    if (options &amp;&amp; options.token) {
+    if (options && options.token) {
       token = options.token;
     }
     else if (this.token) {
@@ -518,7 +491,7 @@ class TiledeskClient {
       throw new Error('token can NOT be null.');
     }
     let projectId;
-    if (options &amp;&amp; options.projectId) {
+    if (options && options.projectId) {
       projectId = options.projectId;
     }
     else if (this.projectId) {
@@ -543,7 +516,7 @@ class TiledeskClient {
     TiledeskClient.myrequest(
       HTTPREQUEST,
       function(err, response, resbody) {
-        if (response.statusCode === 200) {
+        if (response.status === 200) {
           if (callback) {
           callback(null, resbody)
           }
@@ -570,7 +543,7 @@ class TiledeskClient {
    */
   updateProjectUserAttributes(projectUserId, attributes, callback, options) {
     let token;
-    if (options &amp;&amp; options.token) {
+    if (options && options.token) {
       token = options.token;
     }
     else if (this.token) {
@@ -580,7 +553,7 @@ class TiledeskClient {
       throw new Error('token can NOT be null.');
     }
     let projectId;
-    if (options &amp;&amp; options.projectId) {
+    if (options && options.projectId) {
       projectId = options.projectId;
     }
     else if (this.projectId) {
@@ -605,7 +578,7 @@ class TiledeskClient {
     TiledeskClient.myrequest(
       HTTPREQUEST,
       function(err, response, resbody) {
-        if (response.statusCode === 200) {
+        if (response.status === 200) {
           if (callback) {
           callback(null, resbody)
           }
@@ -620,7 +593,7 @@ class TiledeskClient {
   /* DEPRECATED, use getAllRequests */
   getRequests(limit, status, callback, options) {
     let token;
-    if (options &amp;&amp; options.token) {
+    if (options && options.token) {
       token = options.token;
     }
     else if (this.token) {
@@ -630,7 +603,7 @@ class TiledeskClient {
       throw new Error('token can NOT be null.');
     }
     let projectId;
-    if (options &amp;&amp; options.projectId) {
+    if (options && options.projectId) {
       projectId = options.projectId;
     }
     else if (this.projectId) {
@@ -641,12 +614,12 @@ class TiledeskClient {
     }
     const jwt_token = TiledeskClient.fixToken(token)
     // direction = 1 => oldest must be served first
-    // const URL = `${this.API_ENDPOINT}/${projectId}/requests?status=${status}&amp;limit=${limit}&amp;direction=1`
+    // const URL = `${this.API_ENDPOINT}/${projectId}/requests?status=${status}&limit=${limit}&direction=1`
     let url = new URL(`${this.APIURL}/${projectId}/requests`)
     url.searchParams.append("status", status);
     url.searchParams.append("limit", limit);
     url.searchParams.append("direction", 1);
-    if (options &amp;&amp; options.additional_params) {
+    if (options && options.additional_params) {
       for (let key in options.additional_params) {
         url.searchParams.append(key, options.additional_params[key]);
       }
@@ -658,13 +631,13 @@ class TiledeskClient {
         'Content-Type' : 'application/json',
         'Authorization': jwt_token
       },
-      json: true,
+      // json: true,
       method: 'GET'
     }
     TiledeskClient.myrequest(
       HTTPREQUEST,
       function(err, response, resbody) {
-        if (response.statusCode === 200) {
+        if (response.status === 200) {
           if (callback) {
           callback(null, resbody)
           }
@@ -673,7 +646,7 @@ class TiledeskClient {
           callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
         }
 
-        // if (resbody &amp;&amp; resbody.requests) {
+        // if (resbody && resbody.requests) {
         //   if (callback) {
         //     callback(err, resbody.requests)
         //   }
@@ -689,20 +662,20 @@ class TiledeskClient {
 
   /**
    * @typedef queryParams
-   * @type {object}
+   * @type {Object}
    * @property {string} sortField - what field to sort the results by. Default field is 'createdAt'
    * @property {string} direction - sort direction: 1 (asc) or -1 (desc). Return the results in ascending (1) or descending (-1) order. Defaults to desc (-1)
    * @property {number} page - What page of results to fetch. Defaults to first page.
    * @property {number} limit - Specifies the maximum number of results to be returned. Default is 40 rows
    * @property {string} full_text - Executes a fulltext search query
-   * @property {string} status - Filters by request status. Values: 100 for unserved requests, 200 for served requests, 1000 for closed requests, "all" to retrieve all statuses. Default value is status &lt; 1000 so it returns all the opened requests.
+   * @property {string} status - Filters by request status. Values: 100 for unserved requests, 200 for served requests, 1000 for closed requests, "all" to retrieve all statuses. Default value is status < 1000 so it returns all the opened requests.
    * @property {string} dept_id - Filters by department's ID
    * @property {string} lead - Filters by lead's ID
    * @property {array} participant - Filters by participants (agent or bot)
    */
 
   /**
-   * Query project's requests.
+   * Queries project's requests.
    * @param {queryParams} queryParams - The query parameters.
    * @param {resultCallback} callback - The callback that handles the response.
    * @param {Object} options - Optional configuration.
@@ -711,7 +684,7 @@ class TiledeskClient {
    */
   getAllRequests(queryParams, callback, options) {
     let token;
-    if (options &amp;&amp; options.token) {
+    if (options && options.token) {
       token = options.token;
     }
     else if (this.token) {
@@ -721,7 +694,7 @@ class TiledeskClient {
       throw new Error('token can NOT be null.');
     }
     let projectId;
-    if (options &amp;&amp; options.projectId) {
+    if (options && options.projectId) {
       projectId = options.projectId;
     }
     else if (this.projectId) {
@@ -735,7 +708,7 @@ class TiledeskClient {
     }
     const jwt_token = TiledeskClient.fixToken(token)
     // direction = 1 => oldest must be served first
-    // const URL = `${this.API_ENDPOINT}/${projectId}/requests?status=${status}&amp;limit=${limit}&amp;direction=1`
+    // const URL = `${this.API_ENDPOINT}/${projectId}/requests?status=${status}&limit=${limit}&direction=1`
     let url = new URL(`${this.APIURL}/${projectId}/requests`);
     for (const [key, value] of Object.entries(queryParams)) {
       url.searchParams.append(key, value);
@@ -743,7 +716,7 @@ class TiledeskClient {
     // url.searchParams.append("status", status);
     // url.searchParams.append("limit", limit);
     // url.searchParams.append("direction", 1);
-    // if (options &amp;&amp; options.additional_params) {
+    // if (options && options.additional_params) {
     //   for (let key in options.additional_params) {
     //     url.searchParams.append(key, options.additional_params[key]);
     //   }
@@ -755,13 +728,13 @@ class TiledeskClient {
         'Content-Type' : 'application/json',
         'Authorization': jwt_token
       },
-      json: true,
+      // json: true,
       method: 'GET'
     }
     TiledeskClient.myrequest(
       HTTPREQUEST,
       function(err, response, resbody) {
-        if (response.statusCode === 200) {
+        if (response.status === 200) {
           if (callback) {
           callback(null, resbody)
           }
@@ -770,7 +743,7 @@ class TiledeskClient {
           callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
         }
 
-        // if (resbody &amp;&amp; resbody.requests) {
+        // if (resbody && resbody.requests) {
         //   if (callback) {
         //     callback(err, resbody.requests)
         //   }
@@ -794,7 +767,7 @@ class TiledeskClient {
    */
   getRequestById(requestId, callback, options) {
     let token;
-    if (options &amp;&amp; options.token) {
+    if (options && options.token) {
       token = options.token;
     }
     else if (this.token) {
@@ -804,7 +777,7 @@ class TiledeskClient {
       throw new Error('token can NOT be null.');
     }
     let projectId;
-    if (options &amp;&amp; options.projectId) {
+    if (options && options.projectId) {
       projectId = options.projectId;
     }
     else if (this.projectId) {
@@ -821,13 +794,13 @@ class TiledeskClient {
         'Content-Type' : 'application/json',
         'Authorization': jwt_token
       },
-      json: true,
+      // json: true,
       method: 'GET'
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
       function(err, response, resbody) {
-        if (response.statusCode === 200) {
+        if (response.status === 200) {
           if (callback) {
             callback(null, resbody)
           }
@@ -840,8 +813,8 @@ class TiledeskClient {
   }
 
   /**
-   * Updates the request's partecipants.&lt;br>
-   * &lt;a href='https://developer.tiledesk.com/apis/rest-api/requests#set-the-request-participants' target='_blank'>REST API&lt;/a>
+   * Updates the request's partecipants.<br>
+   * <a href='https://developer.tiledesk.com/apis/rest-api/requests#set-the-request-participants' target='_blank'>REST API</a>
    * @param {queryParams} requestId - The request's ID.
    * @param {array} participants - The participants (agent or bot) identifiers array
    * @param {resultCallback} callback - The callback that handles the response.
@@ -851,7 +824,7 @@ class TiledeskClient {
    */
   updateRequestParticipants(requestId, participants, callback, options) {
     let token;
-    if (options &amp;&amp; options.token) {
+    if (options && options.token) {
       token = options.token;
     }
     else if (this.token) {
@@ -861,7 +834,7 @@ class TiledeskClient {
       throw new Error('token can NOT be null.');
     }
     let projectId;
-    if (options &amp;&amp; options.projectId) {
+    if (options && options.projectId) {
       projectId = options.projectId;
     }
     else if (this.projectId) {
@@ -884,7 +857,7 @@ class TiledeskClient {
     TiledeskClient.myrequest(
       HTTPREQUEST,
       function(err, response, resbody) {
-        if (response.statusCode === 200) {
+        if (response.status === 200) {
           if (callback) {
           callback(null, resbody)
           }
@@ -896,9 +869,17 @@ class TiledeskClient {
     );
   }
 
+  /**
+   * Returns the Widget settings for the selected project.
+   * 
+   * @param {resultCallback} callback - The callback that handles the response.
+   * @param {Object} options - Optional configuration.
+   * @param {string} options.token - The token for this request. Overrides instance token (if) provided in constructor.
+   * @param {string} options.projectId - The token for this request. Overrides instance token (if) provided in constructor.
+   */
   getWidgetSettings(callback, options) {
     let token;
-    if (options &amp;&amp; options.token) {
+    if (options && options.token) {
       token = options.token;
     }
     else if (this.token) {
@@ -908,7 +889,7 @@ class TiledeskClient {
       throw new Error('token can NOT be null.');
     }
     let projectId;
-    if (options &amp;&amp; options.projectId) {
+    if (options && options.projectId) {
       projectId = options.projectId;
     }
     else if (this.projectId) {
@@ -921,12 +902,12 @@ class TiledeskClient {
     const HTTPREQUEST = {
       url: `${this.APIURL}/${projectId}/widgets`,
       method: 'GET',
-      json: true
+      // json: true
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
       function(err, response, resbody) {
-        if (response.statusCode === 200) {
+        if (response.status === 200) {
           if (callback) {
             callback(null, resbody)
           }
@@ -938,9 +919,17 @@ class TiledeskClient {
     );
   }
 
+  /**
+   * Returns the current opening status based on Opening Hours.
+   * 
+   * @param {resultCallback} callback - The callback that handles the response.
+   * @param {Object} options - Optional configuration.
+   * @param {string} options.token - The token for this request. Overrides instance token (if) provided in constructor.
+   * @param {string} options.projectId - The token for this request. Overrides instance token (if) provided in constructor.
+   */
   openNow(callback, options) {
     let token;
-    if (options &amp;&amp; options.token) {
+    if (options && options.token) {
       token = options.token;
     }
     else if (this.token) {
@@ -950,7 +939,7 @@ class TiledeskClient {
       throw new Error('token can NOT be null.');
     }
     let projectId;
-    if (options &amp;&amp; options.projectId) {
+    if (options && options.projectId) {
       projectId = options.projectId;
     }
     else if (this.projectId) {
@@ -968,12 +957,12 @@ class TiledeskClient {
        //  'Authorization': jwt_token
       },
       method: 'GET',
-      json: true
+      // json: true
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
       function(err, response, resbody) {
-        if (response.statusCode === 200) {
+        if (response.status === 200) {
             if (callback) {
               callback(null, resbody)
             }
@@ -993,7 +982,23 @@ class TiledeskClient {
     return res_err;
   }
   
-  anonymousAuthentication(projectId, callback) {
+  /** Returns an anonymous user token to connect to the services.
+   * @param {resultCallback} callback - The callback that handles the response.
+   * @param {Object} options - Optional configuration.
+   * @param {string} options.token - The token for this request. Overrides instance token (if) provided in constructor.
+   * @param {string} options.projectId - The token for this request. Overrides instance token (if) provided in constructor.
+   */
+  anonymousAuthentication(callback, options) {
+    let projectId;
+    if (options && options.projectId) {
+      projectId = options.projectId;
+    }
+    else if (this.projectId) {
+      projectId = this.projectId;
+    }
+    else {
+      throw new Error('projectId can NOT be null.');
+    }
     const HTTPREQUEST = {
       url: `${this.APIURL}/auth/signinAnonymously`,
       headers: {
@@ -1017,7 +1022,7 @@ class TiledeskClient {
         //       "fullName": "Guest "
         //   }
         // }
-        if (response.statusCode === 200) {
+        if (response.status === 200) {
           if (callback) {
             callback(null, resbody)
           }
@@ -1025,10 +1030,6 @@ class TiledeskClient {
         else if (callback) {
           callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
         }
-
-        // if (callback) {
-        //   callback(err, response, resbody)
-        // }
       }, this.log
     );
   }
@@ -1040,13 +1041,13 @@ class TiledeskClient {
       headers: {
         'Authorization' : jwt_token
       },
-      json: true,
+      // json: true,
       method: 'POST'
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
       function(err, response, resbody) {
-        if (response.statusCode === 200) {
+        if (response.status === 200) {
           if (callback) {
             callback(null, resbody)
           }
@@ -1077,7 +1078,7 @@ class TiledeskClient {
     TiledeskClient.myrequest(
       HTTPREQUEST,
       function(err, response, resbody) {
-        if (response.statusCode === 200) {
+        if (response.status === 200) {
           if (callback) {
             callback(null, resbody)
           }
@@ -1094,8 +1095,8 @@ class TiledeskClient {
   }
 
   /**
-   * Sends a message to a support conversation.&lt;br>
-   * &lt;a href='' target='_blank'>REST API&lt;/a>
+   * Sends a message to a support conversation.<br>
+   * <a href='' target='_blank'>REST API</a>
    * 
    * @param {string} requestId - The request's ID.
    * @param {chatMessage} message - The chat21's message JSON object.
@@ -1106,7 +1107,7 @@ class TiledeskClient {
    */
   sendSupportMessage(requestId, message, callback, options) {
     let token;
-    if (options &amp;&amp; options.token) {
+    if (options && options.token) {
       token = options.token;
     }
     else if (this.token) {
@@ -1116,7 +1117,7 @@ class TiledeskClient {
       throw new Error('token can NOT be null.');
     }
     let projectId;
-    if (options &amp;&amp; options.projectId) {
+    if (options && options.projectId) {
       projectId = options.projectId;
     }
     else if (this.projectId) {
@@ -1139,7 +1140,7 @@ class TiledeskClient {
     TiledeskClient.myrequest(
       HTTPREQUEST,
       function(err, response, resbody) {
-        if (response.statusCode === 200) {
+        if (response.status === 200) {
           if (callback) {
             callback(null, resbody)
           }
@@ -1152,7 +1153,7 @@ class TiledeskClient {
   }
 
   /**
-   * The Chat21 message format. More on &lt;a href='https://developer.tiledesk.com/widget/advanced/widget-json-protocol' target='_blank'>messages format (Review this link)&lt;/a>.
+   * The Chat21 message format. More on <a href='https://developer.tiledesk.com/widget/advanced/widget-json-protocol' target='_blank'>messages format (Review this link)</a>.
    * @typedef chatMessage
    * @type {Object}
    * @property {string} senderFullname - The sender full name
@@ -1164,8 +1165,8 @@ class TiledeskClient {
    */
 
   /**
-   * Sends a message to a direct/group conversation.&lt;br>
-   * &lt;a href='' target='_blank'>REST API&lt;/a>
+   * Sends a message to a direct/group conversation.<br>
+   * <a href='' target='_blank'>REST API</a>
    * 
    * @param {chatMessage} message - The chat21's message JSON object.
    * @param {resultCallback} callback - The callback that handles the response.
@@ -1175,7 +1176,7 @@ class TiledeskClient {
    */
   sendChatMessage(message, callback, options) {
     let token;
-    if (options &amp;&amp; options.token) {
+    if (options && options.token) {
       token = options.token;
     }
     else if (this.token) {
@@ -1185,7 +1186,7 @@ class TiledeskClient {
       throw new Error('token can NOT be null.');
     }
     let projectId;
-    if (options &amp;&amp; options.projectId) {
+    if (options && options.projectId) {
       projectId = options.projectId;
     }
     else if (this.projectId) {
@@ -1211,7 +1212,7 @@ class TiledeskClient {
         if (err) {
           callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
         }
-        else if (response.statusCode === 200) {
+        else if (response.status === 200) {
           if (callback) {
             callback(null, resbody)
           }
@@ -1225,7 +1226,7 @@ class TiledeskClient {
 
   fireEvent(event, callback, options) {
     let token;
-    if (options &amp;&amp; options.token) {
+    if (options && options.token) {
       token = options.token;
     }
     else if (this.token) {
@@ -1235,7 +1236,7 @@ class TiledeskClient {
       throw new Error('token can NOT be null.');
     }
     let projectId;
-    if (options &amp;&amp; options.projectId) {
+    if (options && options.projectId) {
       projectId = options.projectId;
     }
     else if (this.projectId) {
@@ -1257,7 +1258,7 @@ class TiledeskClient {
     TiledeskClient.myrequest(
       HTTPREQUEST,
       function(err, response, resbody) {
-          if (response.statusCode === 200) {
+          if (response.status === 200) {
             if (callback) {
               callback(null, resbody)
             }
@@ -1273,7 +1274,7 @@ class TiledeskClient {
   
   updateLeadEmailFullname(lead_id, email, fullname, callback, options) {
     let token;
-    if (options &amp;&amp; options.token) {
+    if (options && options.token) {
       token = options.token;
     }
     else if (this.token) {
@@ -1283,7 +1284,7 @@ class TiledeskClient {
       throw new Error('token can NOT be null.');
     }
     let projectId;
-    if (options &amp;&amp; options.projectId) {
+    if (options && options.projectId) {
       projectId = options.projectId;
     }
     else if (this.projectId) {
@@ -1311,7 +1312,7 @@ class TiledeskClient {
     TiledeskClient.myrequest(
       HTTPREQUEST,
       function(err, response, resbody) {
-        if (response.statusCode === 200) {
+        if (response.status === 200) {
           if (callback) {
             callback(null, resbody)
           }
@@ -1325,7 +1326,7 @@ class TiledeskClient {
 
   updateRequest(request_id, properties, attributes, callback, options) {
     let token;
-    if (options &amp;&amp; options.token) {
+    if (options && options.token) {
       token = options.token;
     }
     else if (this.token) {
@@ -1335,7 +1336,7 @@ class TiledeskClient {
       throw new Error('token can NOT be null.');
     }
     let projectId;
-    if (options &amp;&amp; options.projectId) {
+    if (options && options.projectId) {
       projectId = options.projectId;
     }
     else if (this.projectId) {
@@ -1364,7 +1365,7 @@ class TiledeskClient {
     TiledeskClient.myrequest(
       HTTPREQUEST,
       function(err, response, resbody) {
-        if (response.statusCode === 200) {
+        if (response.status === 200) {
           if (callback) {
             callback(null, resbody)
           }
@@ -1392,11 +1393,11 @@ class TiledeskClient {
    * @param {Object} options - Optional configuration.
    * @param {string} options.token - The token for this request. Overrides instance token (if) provided in constructor.
    * @param {string} options.projectId - The token for this request. Overrides instance token (if) provided in constructor.
-   * @param {string} options.nobot - Optional. Defaults to &lt;i>false&lt;/i>. If true ignores (if set) the bot in the Department.
+   * @param {string} options.nobot - Optional. Defaults to <i>false</i>. If true ignores (if set) the bot in the Department.
    */
   updateRequestDepartment(requestId, depId, callback, options) {
     let token;
-    if (options &amp;&amp; options.token) {
+    if (options && options.token) {
       token = options.token;
     }
     else if (this.token) {
@@ -1406,7 +1407,7 @@ class TiledeskClient {
       throw new Error('token can NOT be null.');
     }
     let projectId;
-    if (options &amp;&amp; options.projectId) {
+    if (options && options.projectId) {
       projectId = options.projectId;
     }
     else if (this.projectId) {
@@ -1417,7 +1418,7 @@ class TiledeskClient {
     }
     let nobot_option_defined = false;
     let nobot = false;
-    if (options &amp;&amp; options.nobot) {
+    if (options && options.nobot) {
       nobot = options.nobot;
       nobot_option_defined = true;
     }
@@ -1440,7 +1441,7 @@ class TiledeskClient {
     request(
       HTTPREQUEST,
       function(err, response, resbody) {
-        if (response.statusCode === 200) {
+        if (response.status === 200) {
           if (callback) {
             callback(null, resbody)
           }
@@ -1454,52 +1455,57 @@ class TiledeskClient {
 
   static myrequest(options, callback, log) {
     if (log) {
-      console.log("API:", options.url);
+      console.log("API URL:", options.url);
+      console.log("** Options:", options);
     }
-    request(
+    axios(
       {
         url: options.url,
-        headers: options.headers,
-        json: options.json,
-        method: options.method
-      },
-      function(err, res, resbody) {
-        if (log) {
-          console.log("** For url:", options.url);
-          console.log("** Options:", options);
-          console.log("** Err:", err);
-          console.log("** Response headers:\n", res.headers);
-          console.log("** Response body:\n", res.body);
-        }
-        if (callback) {
-          callback(err, res, resbody);
-        }
+        method: options.method,
+        data: options.json,
+        headers: options.headers
+      })
+    .then(function (res) {
+      if (log) {
+        console.log("Response for url:", options.url);
+        console.log("Response headers:\n", res.headers);
+        console.log("******** Response for url:", res);
+        console.log("Response body:\n", res.data);
       }
-    );
+      if (callback) {
+          callback(null, res, res.data);
+      }
+    })
+    .catch(function (error) {
+      console.error("Axios call error:", error);
+      if (callback) {
+          callback(error, null, null);
+      }
+    });
+
+
+    // request(
+    //   {
+    //     url: options.url,
+    //     method: options.method,
+    //     json: options.json,
+    //     headers: options.headers
+    //   },
+    //   function(err, res, resbody) {
+    //     if (log) {
+    //       console.log("** For url:", options.url);
+    //       console.log("** Options:", options);
+    //       console.log("** Err:", err);
+    //       console.log("** Response headers:\n", res.headers);
+    //       console.log("** Response body:\n", res.body);
+    //     }
+    //     if (callback) {
+    //       callback(err, res, resbody);
+    //     }
+    //   }
+    // );
   }
 
 }
 
-module.exports = { TiledeskClient };</code></pre>
-        </article>
-    </section>
-
-
-
-
-</div>
-
-<nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="TiledeskClient.html">TiledeskClient</a></li></ul><h3><a href="global.html">Global</a></h3>
-</nav>
-
-<br class="clear">
-
-<footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Sun Oct 31 2021 18:51:57 GMT+0100 (Central European Standard Time)
-</footer>
-
-<script> prettyPrint(); </script>
-<script src="scripts/linenumber.js"> </script>
-</body>
-</html>
+module.exports = { TiledeskClient };

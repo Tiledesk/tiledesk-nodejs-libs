@@ -1,0 +1,8 @@
+node_modules
+uploads
+.gitignore
+deploy.sh
+docbuild.sh
+test
+docs
+out

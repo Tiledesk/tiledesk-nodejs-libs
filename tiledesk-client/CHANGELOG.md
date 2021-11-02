@@ -1,11 +1,11 @@
 # Client library for Tiledesk nodejs APIs client
 
-### 0.8.0
+### 0.8.2
 - 'project_id' instance property and constructor options property renamed in 'projectId' (camel case)
 - updateDepartment() renamed in updateRequestDepartment()
 - updateRequestDepartment: in options parameter added 'nobot' option
 - added updateProjectUser()
-- added documentation with jdoc
+- added documentation with jsdoc
 - added getAllRequests()
 - added test case for getRequestById()
 - sendDirectMessage() renamed in sendChatMessage()
