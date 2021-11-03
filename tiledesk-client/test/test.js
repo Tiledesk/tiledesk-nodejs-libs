@@ -151,8 +151,8 @@ describe('TiledeskClient', function() {
               var jwtCustomToken = "JWT " + jwt.sign(externalUser, PROJECT_SECRET, signOptions);
               
               TiledeskClient.customAuthentication(
-                  APIKEY,
                 jwtCustomToken,
+                APIKEY,
                 {
                     APIURL: API_ENDPOINT,
                     log: LOG_STATUS

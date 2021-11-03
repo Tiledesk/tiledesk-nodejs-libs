@@ -786,7 +786,8 @@ class TiledeskClient {
   /**
    * Returns the current opening status based on Opening Hours.
    * 
-   * @param {resultCallback} callback - The callback that handles the response.
+   * @param {resultCallback} callback - The callback that handles the response.<br>
+   * <a href='https://developer.tiledesk.com/apis/rest-api/projects#return-if-the-project-is-open-regarding-operating-hours'>REST API</a>
    */
   openNow(callback) {
     // const jwt_token = TiledeskClient.fixToken(this.token)
@@ -825,7 +826,7 @@ class TiledeskClient {
   
   /** Returns an anonymous user token to connect to a specific project's services.<br>
    * * <a href='https://developer.tiledesk.com/apis/rest-api/authentication#anonymous-authentication-for-a-user.'>REST API<a>
-   * @param {resultCallback} projectId - The projectId for this anonymous user.
+   * @param {string} projectId - The projectId for this anonymous user.
    * @param {string} apikey - Your API key.
    * @param {Object} options - API call options.
    * @param {string} options.APIURL - Optional APIURL for connecting to a Tiledesk self-hosted instance.
@@ -885,14 +886,14 @@ class TiledeskClient {
   /** Returns a Tiledesk token based on a custom token.<br>
    * See <a href='https://developer.tiledesk.com/apis/authentication'>JWT authentication</a> for more info.<br>
    * <a href='https://developer.tiledesk.com/apis/rest-api/authentication#authentication-with-email-and-password'>REST API<a>
-   * @param {string} apikey - Your API key.
    * @param {string} token - Your custom token.
+   * @param {string} apikey - Your API key.
    * @param {Object} options - API call options.
    * @param {string} options.APIURL - Optional APIURL for connecting to a Tiledesk self-hosted instance.
    * @param {string} options.log - If true it logs HTTP request.
    * @param {resultCallback} callback - The callback that handles the response.
    */
-  static customAuthentication(apikey, token, options, callback) {
+  static customAuthentication(token, apikey, options, callback) {
     if (!apikey) {
       throw new Error('apikey can NOT be null.');
     }

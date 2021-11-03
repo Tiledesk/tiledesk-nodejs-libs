@@ -1,5 +1,8 @@
 # Client library for Tiledesk nodejs APIs client
 
+### 0.8.3
+- changed method signature (token first): customAuthentication(token, apikey, options, callback)
+
 ### 0.8.2
 - 'project_id' instance property and constructor options property renamed in 'projectId' (camel case)
 - updateDepartment() renamed in updateRequestDepartment()
