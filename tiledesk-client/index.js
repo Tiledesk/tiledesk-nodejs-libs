@@ -20,8 +20,8 @@ class TiledeskClient {
    *
    * @example
    * const { TiledeskClient } = require('tiledesk-client');
-   * const tdclient = new TiledeskClient({APIKEY: 'THE_API_KEY'});
-   * const tdclient = new TiledeskClient({APIKEY: 'THE_API_KEY', APIURL: 'SELF_HOSTED_INSTANCE_ENDPOINT'});
+   * const tdclient = new TiledeskClient({APIKEY: 'THE_API_KEY', projectId: 'YOUR_PROJECT_ID', token: 'YOUR_AUTH_TOKEN'});
+   * const tdclient = new TiledeskClient({APIKEY: 'THE_API_KEY', projectId: 'YOUR_PROJECT_ID', token: 'YOUR_AUTH_TOKEN', APIURL: 'SELF_HOSTED_INSTANCE_ENDPOINT'});
    * 
    * @param {Object} options JSON configuration.
    * @param {string} options.APIKEY Mandatory. Tiledesk APIKEY
