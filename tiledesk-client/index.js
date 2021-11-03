@@ -825,7 +825,7 @@ class TiledeskClient {
   }
   
   /** Returns an anonymous user token to connect to a specific project's services.<br>
-   * * <a href='https://developer.tiledesk.com/apis/rest-api/authentication#anonymous-authentication-for-a-user.'>REST API<a>
+   * <a href='https://developer.tiledesk.com/apis/rest-api/authentication#anonymous-authentication-for-a-user.'>REST API</a>
    * @param {string} projectId - The projectId for this anonymous user.
    * @param {string} apikey - Your API key.
    * @param {Object} options - API call options.
