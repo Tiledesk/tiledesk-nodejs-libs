@@ -787,7 +787,7 @@ class TiledeskClient {
    * Returns the current opening status based on Opening Hours.
    * 
    * @param {resultCallback} callback - The callback that handles the response.<br>
-   * <a href='https://developer.tiledesk.com/apis/rest-api/projects#return-if-the-project-is-open-regarding-operating-hours'>REST API</a>
+   * <a href='https://developer.tiledesk.com/apis/rest-api/projects#return-if-the-project-is-open-regarding-operating-hours' target='_blank'>REST API</a>
    */
   openNow(callback) {
     // const jwt_token = TiledeskClient.fixToken(this.token)
@@ -825,7 +825,7 @@ class TiledeskClient {
   }
   
   /** Returns an anonymous user token to connect to a specific project's services.<br>
-   * <a href='https://developer.tiledesk.com/apis/rest-api/authentication#anonymous-authentication-for-a-user.'>REST API</a>
+   * <a href='https://developer.tiledesk.com/apis/rest-api/authentication#anonymous-authentication-for-a-user.' target='_blank'>REST API</a>
    * @param {string} projectId - The projectId for this anonymous user.
    * @param {string} apikey - Your API key.
    * @param {Object} options - API call options.
@@ -885,7 +885,7 @@ class TiledeskClient {
 
   /** Returns a Tiledesk token based on a custom token.<br>
    * See <a href='https://developer.tiledesk.com/apis/authentication'>JWT authentication</a> for more info.<br>
-   * <a href='https://developer.tiledesk.com/apis/rest-api/authentication#authentication-with-email-and-password'>REST API<a>
+   * <a href='https://developer.tiledesk.com/apis/rest-api/authentication#authentication-with-email-and-password' target='_blank'>REST API</a>
    * @param {string} token - Your custom token.
    * @param {string} apikey - Your API key.
    * @param {Object} options - API call options.
@@ -934,6 +934,7 @@ class TiledeskClient {
   }
 
   /** Returns a Tiledesk token to connect to Tiledesk services.
+   * <a href='REST API' target='_blank'>https://developer.tiledesk.com/apis/rest-api/authentication#authentication-with-email-and-password</a>
    * @param {resultCallback} projectId - The projectId for this anonymous user.
    * @param {string} apikey - Your API key.
    * @param {Object} options - API call options.
@@ -1242,6 +1243,8 @@ class TiledeskClient {
 
   /**
    * Updates the Request department
+   * <a href='https://developer.tiledesk.com/apis/rest-api/requests#route-a-request-to-a-department' target='_blank'>REST API</a>
+   * 
    * @param {string} requestId - The request ID
    * @param {string} depId - The new department ID
    * @param {Object} options - Optional configuration.

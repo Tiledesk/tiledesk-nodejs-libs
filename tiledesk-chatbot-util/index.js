@@ -7,6 +7,9 @@ const url = require('url');
 
 class TiledeskChatbotUtil {
 
+  static COMMAND_TYPE_MESSAGE = 'message';
+  static COMMAND_TYPE_WAIT = 'wait';
+
   static fullname_email_in(command) {
     if (command.payload &&
         command.payload.fields &&
@@ -94,14 +97,14 @@ static is_agent_handoff_command(msg) {
           }
           // console.log("wait time: " + wait_time)
           var command = {}
-          command.type = "wait"
+          command.type = this.COMMAND_TYPE_WAIT;
           command.time = parseInt(wait_time, 10)
           commands.push(command)
           }
           else {
           // message command
           var command = {}
-          command.type = "message"
+          command.type = this.COMMAND_TYPE_MESSAGE;
           command.text = p.trim()
           commands.push(command)
           // if ( i == parts.length -1 &&
