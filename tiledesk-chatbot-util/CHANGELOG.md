@@ -2,6 +2,9 @@
 
 This library is on npm: https://www.npmjs.com/package/@tiledesk/tiledesk-chatbot-util
 
+### 0.8.24
+- added test for findSplits()
+
 ### 0.8.23 - online
 - introduced command tdIntentNoEcho
 

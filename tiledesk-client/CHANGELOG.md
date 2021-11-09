@@ -1,6 +1,8 @@
 # Client library for Tiledesk nodejs APIs client
 
-### 0.8.3
+### 0.8.4
+
+### 0.8.3 - online
 - changed method signature (token first): customAuthentication(token, apikey, options, callback)
 
 ### 0.8.2
