@@ -544,7 +544,7 @@ class TiledeskClient {
    * @property {string} status - Filters by request status. Values: 100 for unserved requests, 200 for served requests, 1000 for closed requests, "all" to retrieve all statuses. Default value is status < 1000 so it returns all the opened requests.
    * @property {string} dept_id - Filters by department's ID
    * @property {string} lead - Filters by lead's ID
-   * @property {array} participant - Filters by participants (agent or bot)
+   * @property {string} participant - Filters by participant ID (agent or bot)
    */
 
   /**
@@ -685,8 +685,8 @@ class TiledeskClient {
   /**
    * Updates the request's partecipants.<br>
    * <a href='https://developer.tiledesk.com/apis/rest-api/requests#set-the-request-participants' target='_blank'>REST API</a>
-   * @param {queryParams} requestId - The request's ID.
-   * @param {string} participant - The participant ID (agent or bot)
+   * @param {string} requestId - The request's ID.
+   * @param {array} participants - the participants (agents or bots) identifiers array
    * @param {resultCallback} callback - The callback that handles the response.
    */
   updateRequestParticipants(requestId, participants, callback) {
