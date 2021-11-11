@@ -632,7 +632,7 @@ class TiledeskClient {
 
   /**
    * Gets a reuqest by ID.
-   * @param {string} requestId - The request's ID.
+   * @param {string} requestId - The request ID.
    * @param {resultCallback} callback - The callback that handles the response.
    */
   getRequestById(requestId, callback) {
@@ -685,7 +685,7 @@ class TiledeskClient {
   /**
    * Updates the request's partecipants.<br>
    * <a href='https://developer.tiledesk.com/apis/rest-api/requests#set-the-request-participants' target='_blank'>REST API</a>
-   * @param {string} requestId - The request's ID.
+   * @param {string} requestId - The request ID.
    * @param {array} participants - the participants (agents or bots) identifiers array
    * @param {resultCallback} callback - The callback that handles the response.
    */
@@ -988,7 +988,7 @@ class TiledeskClient {
    * Sends a message to a support conversation.<br>
    * <a href='https://developer.tiledesk.com/apis/rest-api/messages#send-a-message.' target='_blank'>REST API</a>
    * 
-   * @param {string} requestId - The request's ID.
+   * @param {string} requestId - The request ID.
    * @param {chatMessage} message - The chat21's message JSON object.
    * @param {resultCallback} callback - The callback that handles the response.
    */
@@ -1163,7 +1163,7 @@ class TiledeskClient {
    * Updates request's properties.<br>
    * <a href='https://developer.tiledesk.com/apis/rest-api/requests#update-a-request-by-request_id' target='_blank'>REST API</a>
    * 
-   * @param {string} requestId - The Request's ID
+   * @param {string} requestId - The request ID
    * @param {requestProperties} properties - The Request's properties
    * @param {resultCallback} callback - The callback that handles the response.
    */
@@ -1200,7 +1200,7 @@ class TiledeskClient {
    * Updates request's 'attributes' property.<br>
    * <a href='https://developer.tiledesk.com/apis/rest-api/requests#update-the-request-attributes' target='_blank'>REST API</a>
    * 
-   * @param {string} requestId - The Request's ID
+   * @param {string} requestId - The request ID
    * @param {Object} attributes - The Request's custom attributes object. It's a payload that carries custom information attached to this request.
    * @param {resultCallback} callback - The callback that handles the response.
    */

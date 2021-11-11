@@ -6,15 +6,17 @@ var jwt = require('jsonwebtoken');
 // FIRST CREATE A USER WITH UI
 // THEN REPORT HERE USER CREDENTIALS AND
 // FIRST PROJECT (OR ANOTHER PROJECT) DATA (ID AND NAME)
+require('dotenv').config();
+console.log("ENV", process.env.test)
 const EMAIL = "test@tiledesk.com"; // first user
 const PASSWORD = "testtest";
 const EMAIL2 = "test2@tiledesk.com"; // second user
 const PASSWORD2 = "testtest";
-const PROJECT_ID = "6011eafd51245600345cdf72"; // first user project
-const PROJECT_NAME = 'First Test Project' // first project name
+const PROJECT_ID = "6011eafd51245600345cdf72";
+const PROJECT_NAME = 'First Test Project'
 const PROJECT_SECRET = "f42349dd-882c-40c8-92ad-7f385f073dce";
 // const REQUEST_ID = 'support-group-5a484009-518f-43ed-96b8-1b23282f64d8';
-const API_ENDPOINT = "https://tiledesk-server-pre.herokuapp.com"; //TiledeskClient.DEFAULT_API_ENDPOINT;
+const API_ENDPOINT = "https://tiledesk-server-pre.herokuapp.com";
 const APIKEY = '____TODO____';
 const LOG_STATUS = false;
 // set during the test

@@ -24,11 +24,6 @@ describe('TiledeskChatbotUtil', function() {
             assert.strictEqual(commands[3].time, 1000);
             assert.strictEqual(commands[4].type, TiledeskChatbotUtil.COMMAND_TYPE_MESSAGE);
             assert.strictEqual(commands[4].text, 'Last message\n* button');
-            // assert.strictEqual(reply.message.text, 'Intro text');
-            // assert.strictEqual(reply.message.type, TiledeskChatbotUtil.TYPE_FRAME);
-            // assert(reply.message.metadata != null);
-            // assert.strictEqual(reply.message.metadata[TiledeskChatbotUtil.FRAME_TYPE_KEY], TiledeskChatbotUtil.TYPE_VIDEO);
-            // assert.strictEqual(reply.message.metadata.src, 'https://VIDEO_HOST/PATH');
         });
     });
 });
