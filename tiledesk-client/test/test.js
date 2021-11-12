@@ -2,23 +2,17 @@ var assert = require('assert');
 const { TiledeskClient } = require('..');
 const { v4: uuidv4 } = require('uuid');
 var jwt = require('jsonwebtoken');
-
-// FIRST CREATE A USER WITH UI
-// THEN REPORT HERE USER CREDENTIALS AND
-// FIRST PROJECT (OR ANOTHER PROJECT) DATA (ID AND NAME)
 require('dotenv').config();
-console.log("ENV", process.env.test)
-const EMAIL = "test@tiledesk.com"; // first user
-const PASSWORD = "testtest";
-const EMAIL2 = "test2@tiledesk.com"; // second user
-const PASSWORD2 = "testtest";
-const PROJECT_ID = "6011eafd51245600345cdf72";
-const PROJECT_NAME = 'First Test Project'
-const PROJECT_SECRET = "f42349dd-882c-40c8-92ad-7f385f073dce";
-// const REQUEST_ID = 'support-group-5a484009-518f-43ed-96b8-1b23282f64d8';
-const API_ENDPOINT = "https://tiledesk-server-pre.herokuapp.com";
-const APIKEY = '____TODO____';
-const LOG_STATUS = false;
+
+const EMAIL = process.env.EMAIL;
+const PASSWORD = process.env.PASSWORD;
+const PROJECT_ID = process.env.PROJECT_ID;
+const PROJECT_NAME = process.env.PROJECT_NAME;
+const PROJECT_SECRET = process.env.PROJECT_SECRET;
+const API_ENDPOINT = process.env.API_ENDPOINT;
+const APIKEY = process.env.APIKEY;
+const LOG_STATUS = (process.env.LOG_STATUS && process.env.LOG_STATUS) === 'true' ? true : false;
+
 // set during the test
 let USER_TOKEN = null;
 let PROJECT_USER_ID = null;
@@ -36,17 +30,17 @@ describe('TiledeskClient', function() {
             token: FAKE_USER_TOKEN,
             log: LOG_STATUS
         })
-          if (tdclient) {
+        if (tdclient) {
             assert(tdclient != null);
             assert(tdclient.APIURL === API_ENDPOINT);
             assert(tdclient.projectId === PROJECT_ID);
             assert(tdclient.jwt_token === FAKE_USER_TOKEN);
             assert(tdclient.APIKEY === APIKEY);
             assert(tdclient.log === LOG_STATUS);
-          }
-          else {
-              assert.ok(false);
-          }
+        }
+        else {
+            assert.ok(false);
+        }
       });
     });
 });
@@ -565,8 +559,8 @@ describe('TiledeskClient', function() {
 // });
 
 describe('TiledeskClient', function() {
-    describe('sendSupportMessage() anonymous', function() {
-        it('sends a message to a request conversation', function(done) {
+    describe('sendSupportMessage() anonymous to create a new request', function() {
+        it('sends a message to a new request conversation to create the support conversation', function(done) {
             const tdclient = new TiledeskClient({
                 APIKEY: APIKEY,
                 APIURL: API_ENDPOINT,
@@ -642,45 +636,6 @@ describe('TiledeskClient', function() {
 //             else {
 //                 assert.ok(false);
 //             }
-//         });
-//     });
-// });
-
-// describe('TiledeskClient', function() {
-//     describe('getRequests() DEPRECATED', function() {
-//         it('gets the project requests', (done) => {
-//             const tdclient = new TiledeskClient(
-//             {
-//                 APIKEY: APIKEY,
-//                 APIURL: API_ENDPOINT,
-//                 projectId: PROJECT_ID,
-//                 token: USER_TOKEN,
-//                 log: LOG_STATUS
-//             })
-//             const limit = 1;
-//             tdclient.getRequests(limit, TiledeskClient.UNASSIGNED_STATUS, (err, result) => {
-//                 // console.log("result:", JSON.stringify(result));
-//                 assert(result);
-//                 const requests = result.requests;
-//                 assert(requests);
-//                 assert(result.requests);
-//                 assert(Array.isArray(requests));
-//                 assert(result.requests.length > 0);
-//                 done();
-//             },
-//             {
-//                 additional_params: {
-//                     "no_populate": "true",
-//                     "snap_department_routing": "assigned"
-//                 }
-//             });
-//                 // }
-//             //   });
-              
-//             // }
-//             // else {
-//             //     assert.ok(false);
-//             // }
 //         });
 //     });
 // });

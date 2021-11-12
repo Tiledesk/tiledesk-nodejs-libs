@@ -1,6 +1,8 @@
 # Client library for Tiledesk nodejs APIs client
 
 ### 0.8.4
+- added README.md synchronized with https://github.com/Tiledesk/tiledesk-docs/blob/master/apis/nodejs/README.md
+- server params for testing moved in .env
 
 ### 0.8.3 - online
 - changed method signature (token first): customAuthentication(token, apikey, options, callback)
