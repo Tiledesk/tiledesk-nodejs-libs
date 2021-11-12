@@ -30,7 +30,7 @@ Alternatively use package.json to import the library in the "dependencies" prope
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@tiledesk/tiledesk-client": "^0.8.4"
+    "@tiledesk/tiledesk-client": "^0.8.5"
   }
 }
 ```
