@@ -1,5 +1,6 @@
 var assert = require('assert');
 const { TiledeskChatbotClient } = require('..');
+const { TiledeskClient } = require('@tiledesk/tiledesk-client');
 
 const APIKEY = "__APIKEY__";
 const API_ENDPOINT = "https://tiledesk-server-pre.herokuapp.com"; //TiledeskClient.DEFAULT_API_ENDPOINT;
@@ -380,9 +381,9 @@ describe('TiledeskChatbotClient', function() {
           const cbclient = new TiledeskChatbotClient({
               APIKEY: APIKEY,
               APIURL: API_ENDPOINT,
-              request_id: "support-group-...",
+              requestId: "support-group-...",
               token: "TOKENUID",
-              project_id: "PROJECTID",
+              projectId: "PROJECTID",
               log: LOG_STATUS
           })
           if (cbclient) {
@@ -412,12 +413,12 @@ describe('TiledeskChatbotClient', function() {
           assert(cbclient.tiledeskClient != null);
           assert(cbclient.tiledeskClient.APIKEY === APIKEY);
           assert(cbclient.tiledeskClient.APIURL === cbclient.APIURL);
-          assert(cbclient.tiledeskClient.project_id === WEBHOOK_REQUEST.body.payload.id_project);
-          assert(cbclient.tiledeskClient.token === WEBHOOK_REQUEST.body.token);
+          assert(cbclient.tiledeskClient.projectId === WEBHOOK_REQUEST.body.payload.id_project);
+          assert(cbclient.tiledeskClient.jwt_token === TiledeskClient.fixToken(WEBHOOK_REQUEST.body.token));
           assert(cbclient.supportRequest != null);
           assert(cbclient.tiledeskClient.log === LOG_STATUS);
           // chatbot object
-          assert(cbclient.request_id === WEBHOOK_REQUEST.body.payload.request.request_id);
+          assert(cbclient.requestId === WEBHOOK_REQUEST.body.payload.request.request_id);
         }
         else {
             assert.ok(false);
@@ -439,8 +440,8 @@ describe('TiledeskClient', function() {
         assert(cbclient.tiledeskClient != null);
         assert(cbclient.tiledeskClient.APIKEY === APIKEY);
         assert(cbclient.tiledeskClient.APIURL === cbclient.APIURL);
-        assert(cbclient.tiledeskClient.project_id === WEBHOOK_REQUEST.body.payload.id_project);
-        assert(cbclient.tiledeskClient.token === WEBHOOK_REQUEST.body.token);
+        assert(cbclient.tiledeskClient.projectId === WEBHOOK_REQUEST.body.payload.id_project);
+        assert(cbclient.tiledeskClient.jwt_token === TiledeskClient.fixToken(WEBHOOK_REQUEST.body.token));
         assert(cbclient.supportRequest != null);
         assert(cbclient.tiledeskClient.log === LOG_STATUS);
         const text_value = 'test message';

@@ -1,6 +1,9 @@
 # Client library for Tiledesk nodejs APIs client
 
-### 0.8.4
+### 0.8.5 - online
+- doc fix
+
+### 0.8.4 - online
 - added README.md synchronized with https://github.com/Tiledesk/tiledesk-docs/blob/master/apis/nodejs/README.md
 - server params for testing moved in .env
 

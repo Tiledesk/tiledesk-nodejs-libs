@@ -2,7 +2,7 @@
     Andrea Sponziello - (c) Tiledesk.com
 */
 
-const request = require('request');
+// const request = require('request');
 // const { TiledeskClient } = require('../tiledesk-client');
 const { TiledeskClient } = require('@tiledesk/tiledesk-client');
 
@@ -22,10 +22,10 @@ class TiledeskChatbotClient {
    * @param {Object} options.request Optional. Express HTTP request object.
    * @param {Object} options.APIKEY Mandatory. Tiledesk APIKEY.
    * @param {Object} options.APIURL Optional. Tiledesk server api endpoint. If not provided, cloud endpoint is used
-   * @param {Object} options.request_id Optional. If options.request is not provided this will be used
+   * @param {Object} options.requestId Optional. If options.request is not provided this will be used
    * @param {Object} options.token Optional. If options.request is not provided this will be used
-   * @param {Object} options.project_id Optional. If options.request is not provided this will be used
-   * @param {Object} options.lead_id Optional. If options.request is not provided this will be used
+   * @param {Object} options.projectId Optional. If options.request is not provided this will be used
+   * @param {Object} options.leadId Optional. If options.request is not provided this will be used
    * @param {Object} options.text Optional. If options.request is not provided this will be used
    * 
    * 
@@ -72,11 +72,11 @@ class TiledeskChatbotClient {
       this.supportRequest = payload.request;
       this.text = payload.text;
       if (this.supportRequest && this.supportRequest.lead) {
-        this.lead_id = this.supportRequest.lead._id
+        this.leadId = this.supportRequest.lead._id
       }
-      this.request_id = this.supportRequest.request_id;
+      this.requestId = this.supportRequest.request_id;
       this.token = body.token;
-      this.project_id = payload.id_project;
+      this.projectId = payload.id_project;
       if (payload && payload.attributes && payload.attributes.action) {
         this.action = payload.attributes.action
       }
@@ -87,8 +87,8 @@ class TiledeskChatbotClient {
     }
     else {
       // request_id
-      if (options.request_id) {
-        this.request_id = options.request_id
+      if (options.requestId) {
+        this.requestId = options.requestId
       }
       else {
         throw new Error('options.request_id can NOT be empty.');
@@ -100,16 +100,16 @@ class TiledeskChatbotClient {
       else {
         throw new Error('options.token can NOT be empty.');
       }
-      // project_id
-      if (options.project_id) {
-        this.project_id = options.project_id
+      // projectId
+      if (options.projectId) {
+        this.projectId = options.projectId
       }
       else {
-        throw new Error('options.project_id can NOT be empty.');
+        throw new Error('options.projectId can NOT be empty.');
       }
       // lead_id
       if (options.lead_id) {
-        this.lead_id = options.lead_id
+        this.leadId = options.leadId
       }
       // text
       if (options.text) {
@@ -118,13 +118,13 @@ class TiledeskChatbotClient {
     }
     // now initialize an instance of TiledeskClient:
     this.tiledeskClient = new TiledeskClient(
-      {
-        project_id: this.project_id,
-        token: this.token,
-        APIURL: this.APIURL,
-        APIKEY: options.APIKEY,
-        log: this.log
-      });
+    {
+      projectId: this.projectId,
+      token: this.token,
+      APIURL: this.APIURL,
+      APIKEY: options.APIKEY,
+      log: this.log
+    });
   }
 
   fixToken(token) {
@@ -137,15 +137,15 @@ class TiledeskChatbotClient {
   }
 
   sendMessage(msg, callback) {
-    this.tiledeskClient.sendMessage(
-      this.request_id,
+    this.tiledeskClient.sendSupportMessage(
+      this.requestId,
       msg,
       callback);
   }
 
   updateRequest(properties, attributes, callback) {
     this.tiledeskClient.updateRequest(
-      this.request_id,
+      this.requestId,
       properties,
       attributes,
       callback);
@@ -153,17 +153,17 @@ class TiledeskChatbotClient {
 
   updateDepartment(dep_id, callback) {
     this.tiledeskClient.updateDepartment(
-      this.request_id,
+      this.requestId,
       dep_id,
       callback);
   }
 
   updateLeadEmailFullname(email, fullname, callback) {
-    if (!this.lead_id) {
+    if (!this.leadId) {
       throw new Error('options.lead_id can NOT be empty.');
     }
     this.tiledeskClient.updateLeadEmailFullname(
-      this.lead_id,
+      this.leadId,
       email,
       fullname,
       callback);

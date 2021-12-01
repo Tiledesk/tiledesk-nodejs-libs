@@ -1,5 +1,9 @@
 # Node.js library to call Tiledesk APIs from an external chatbot 
 
+### 0.5.30 - online
+- removed Request dependency
+- updated to TiledeskClient 0.8.5
+
 ### 0.5.29 - online
 - - bug fix - supportRequest is a public property
 
