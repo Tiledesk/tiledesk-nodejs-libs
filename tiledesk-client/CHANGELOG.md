@@ -1,13 +1,14 @@
 # Client library for Tiledesk nodejs APIs client
 
 ### 0.8.8
-- added deleteRequestParticipant()
+- added deleteRequestParticipant() -> TODO TEST
 - added addRequestParticipant() -> TODO TEST
-- added getAllBots() -> TODO TEST
-- added getBotById() -> TODO TEST
-- added createBot() -> TODO TEST
-- added updateBot() -> TODO TEST
-- added deleteBotById() -> TODO TEST
+- added getAllBots()
+- added getBot()
+- added createBot()
+- added updateBot()
+- added deleteBot()
+- updated documentation
   
 ### 0.8.6 - online
 - TiledeskClient.myrequest callback refactored to take only 2 parameters: err, resbody

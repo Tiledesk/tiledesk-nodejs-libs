@@ -1,10 +1,10 @@
 {
   "name": "@tiledesk/tiledesk-client",
-  "version": "0.8.6",
+  "version": "0.8.7",
   "description": "Javascript (Node.js) SDK for Tiledesk REST APIs",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha --timeout 10000 --exit"
   },
   "repository": {
     "type": "git",

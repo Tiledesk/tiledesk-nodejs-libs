@@ -843,7 +843,7 @@ class TiledeskClient {
       //json: participants,
       method: 'DELETE'
     };
-    myrequest(
+    TiledeskClient.myrequest(
       HTTPREQUEST,
       function(err, resbody) {
         if (err) {
@@ -878,7 +878,7 @@ class TiledeskClient {
       json: {member: participantId},
       method: 'POST'
     };
-    myrequest(
+    TiledeskClient.myrequest(
       HTTPREQUEST,
       function(err, resbody) {
         if (err) {
@@ -915,7 +915,7 @@ class TiledeskClient {
       // json: {member: participant},
       method: 'GET'
     };
-    myrequest(
+    TiledeskClient.myrequest(
       HTTPREQUEST,
       function(err, resbody) {
         if (err) {
@@ -949,7 +949,7 @@ class TiledeskClient {
       // json: {member: participant},
       method: 'GET'
     };
-    myrequest(
+    TiledeskClient.myrequest(
       HTTPREQUEST,
       function(err, resbody) {
         if (err) {
@@ -989,7 +989,7 @@ class TiledeskClient {
       },
       method: 'POST'
     };
-    myrequest(
+    TiledeskClient.myrequest(
       HTTPREQUEST,
       function(err, resbody) {
         if (err) {
@@ -1014,8 +1014,8 @@ class TiledeskClient {
    * @param {string} botUrl - The external bot's endpoint url.
    * @param {resultCallback} callback - The callback that handles the response.
    */
-   updateBot(botName, isExternal, botUrl, callback) {
-    const URL = `${this.APIURL}/${this.projectId}/faq_kb`
+   updateBot(botId, botName, isExternal, botUrl, callback) {
+    const URL = `${this.APIURL}/${this.projectId}/faq_kb/${botId}`
     const HTTPREQUEST = {
       url: URL,
       headers: {
@@ -1029,7 +1029,7 @@ class TiledeskClient {
       },
       method: 'PUT'
     };
-    myrequest(
+    TiledeskClient.myrequest(
       HTTPREQUEST,
       function(err, resbody) {
         if (err) {
@@ -1063,7 +1063,7 @@ class TiledeskClient {
       // json: {member: participant},
       method: 'DELETE'
     };
-    myrequest(
+    TiledeskClient.myrequest(
       HTTPREQUEST,
       function(err, resbody) {
         if (err) {
