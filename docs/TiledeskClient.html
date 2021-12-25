@@ -593,7 +593,7 @@ const tdclient = new TiledeskClient({APIKEY: 'THE_API_KEY', projectId: 'YOUR_PRO
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line836">line 836</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1204">line 1204</a>
     </li></ul></dd>
     
 
@@ -872,7 +872,7 @@ const tdclient = new TiledeskClient({APIKEY: 'THE_API_KEY', projectId: 'YOUR_PRO
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line945">line 945</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1330">line 1330</a>
     </li></ul></dd>
     
 
@@ -1152,7 +1152,7 @@ See <a href='https://developer.tiledesk.com/apis/authentication'>JWT authenticat
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line896">line 896</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1274">line 1274</a>
     </li></ul></dd>
     
 
@@ -1330,6 +1330,742 @@ A request's ID has the format:<br>
     
 
     
+    <h4 class="name" id="addRequestParticipant"><span class="type-signature"></span>addRequestParticipant<span class="signature">(requestId, participantId, callback)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Add a participant to the request's participants.<br>
+<a href='https://developer.tiledesk.com/apis/rest-api/requests#add-a-participant-to-a-request' target='_blank'>REST API</a>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>requestId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The request ID.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>participantId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the participant (agent or bot) identifier</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#resultCallback">resultCallback</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The callback that handles the response.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line870">line 870</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="createBot"><span class="type-signature"></span>createBot<span class="signature">(botName, isExternal, botUrl, callback)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Create a bot.<br>
+<a href='https://developer.tiledesk.com/apis/rest-api/chat-bots/bots#create-a-new-bot' target='_blank'>REST API</a>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>botName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The bot's name.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isExternal</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">'true' if you want an external bot.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>botUrl</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The external bot's endpoint url.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#resultCallback">resultCallback</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The callback that handles the response.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line977">line 977</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="deleteBot"><span class="type-signature"></span>deleteBot<span class="signature">(botId, callback)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Delete a bot by id.<br>
+<a href='https://developer.tiledesk.com/apis/rest-api/chat-bots/bots#delete-a-bot' target='_blank'>REST API</a>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>botId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The bot ID.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#resultCallback">resultCallback</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The callback that handles the response.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1055">line 1055</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="deleteRequestParticipant"><span class="type-signature"></span>deleteRequestParticipant<span class="signature">(requestId, participantId, callback)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Delete a participant from the request's participants.<br>
+<a href='https://developer.tiledesk.com/apis/rest-api/requests#delete-a-participant-from-the-request' target='_blank'>REST API</a>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>requestId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The request ID.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>participantId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the participant (agent or bot) identifier</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#resultCallback">resultCallback</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The callback that handles the response.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line835">line 835</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="fireEvent"><span class="type-signature"></span>fireEvent<span class="signature">(event, callback)</span><span class="type-signature"></span></h4>
     
 
@@ -1457,7 +2193,145 @@ You can find the standard Tiledesk events here<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1080">line 1080</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1487">line 1487</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getAllBots"><span class="type-signature"></span>getAllBots<span class="signature">(callback)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Get all the bots defined in the project.<br>
+<a href='https://developer.tiledesk.com/apis/rest-api/chat-bots/bots#get-all-bots' target='_blank'>REST API</a>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#resultCallback">resultCallback</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The callback that handles the response.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line907">line 907</a>
     </li></ul></dd>
     
 
@@ -1712,7 +2586,168 @@ You can find the standard Tiledesk events here<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line558">line 558</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line627">line 627</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getBot"><span class="type-signature"></span>getBot<span class="signature">(botId, callback)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Get bot by id.<br>
+<a href='https://developer.tiledesk.com/apis/rest-api/chat-bots/bots#get-a-bot-by-id' target='_blank'>REST API</a>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>botId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The bot ID.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#resultCallback">resultCallback</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The callback that handles the response.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line941">line 941</a>
     </li></ul></dd>
     
 
@@ -1945,7 +2980,7 @@ You can find the standard Tiledesk events here<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line140">line 140</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line143">line 143</a>
     </li></ul></dd>
     
 
@@ -2105,7 +3140,7 @@ You can find the standard Tiledesk events here<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line288">line 288</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line302">line 302</a>
     </li></ul></dd>
     
 
@@ -2201,7 +3236,7 @@ You can find the standard Tiledesk events here<br>
 
             
 
-            <td class="description last">The request's ID.</td>
+            <td class="description last">The request ID.</td>
         </tr>
 
     
@@ -2265,7 +3300,7 @@ You can find the standard Tiledesk events here<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line638">line 638</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line707">line 707</a>
     </li></ul></dd>
     
 
@@ -2402,7 +3437,7 @@ You can find the standard Tiledesk events here<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line744">line 744</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1092">line 1092</a>
     </li></ul></dd>
     
 
@@ -2540,7 +3575,7 @@ You can find the standard Tiledesk events here<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line792">line 792</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1150">line 1150</a>
     </li></ul></dd>
     
 
@@ -2701,7 +3736,7 @@ You can find the standard Tiledesk events here<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1041">line 1041</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1438">line 1438</a>
     </li></ul></dd>
     
 
@@ -2798,7 +3833,7 @@ You can find the standard Tiledesk events here<br>
 
             
 
-            <td class="description last">The request's ID.</td>
+            <td class="description last">The request ID.</td>
         </tr>
 
     
@@ -2885,7 +3920,214 @@ You can find the standard Tiledesk events here<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line995">line 995</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1386">line 1386</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="updateBot"><span class="type-signature"></span>updateBot<span class="signature">(botName, isExternal, botUrl, callback)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Update a bot.<br>
+<a href='https://developer.tiledesk.com/apis/rest-api/chat-bots/bots#update-a-bot' target='_blank'>REST API</a>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>botName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The bot's name.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isExternal</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">'true' if you want an external bot.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>botUrl</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The external bot's endpoint url.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#resultCallback">resultCallback</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The callback that handles the response.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1017">line 1017</a>
     </li></ul></dd>
     
 
@@ -3092,7 +4334,7 @@ You can find the standard Tiledesk events here<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1115">line 1115</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1532">line 1532</a>
     </li></ul></dd>
     
 
@@ -3280,7 +4522,7 @@ You can find the standard Tiledesk events here<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line365">line 365</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line399">line 399</a>
     </li></ul></dd>
     
 
@@ -3463,7 +4705,7 @@ You can find the standard Tiledesk events here<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line437">line 437</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line490">line 490</a>
     </li></ul></dd>
     
 
@@ -3646,7 +4888,7 @@ You can find the standard Tiledesk events here<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line398">line 398</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line443">line 443</a>
     </li></ul></dd>
     
 
@@ -3948,7 +5190,7 @@ You can find the standard Tiledesk events here<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line327">line 327</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line351">line 351</a>
     </li></ul></dd>
     
 
@@ -4045,7 +5287,7 @@ You can find the standard Tiledesk events here<br>
 
             
 
-            <td class="description last">The Request's ID</td>
+            <td class="description last">The request ID</td>
         </tr>
 
     
@@ -4132,7 +5374,7 @@ You can find the standard Tiledesk events here<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1207">line 1207</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1644">line 1644</a>
     </li></ul></dd>
     
 
@@ -4388,7 +5630,7 @@ You can find the standard Tiledesk events here<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1254">line 1254</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1701">line 1701</a>
     </li></ul></dd>
     
 
@@ -4432,7 +5674,7 @@ You can find the standard Tiledesk events here<br>
 
 
 <div class="description">
-    Updates the request's partecipants.<br>
+    Updates the request's participants.<br>
 <a href='https://developer.tiledesk.com/apis/rest-api/requests#set-the-request-participants' target='_blank'>REST API</a>
 </div>
 
@@ -4485,7 +5727,7 @@ You can find the standard Tiledesk events here<br>
 
             
 
-            <td class="description last">The request's ID.</td>
+            <td class="description last">The request ID.</td>
         </tr>
 
     
@@ -4572,7 +5814,7 @@ You can find the standard Tiledesk events here<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line692">line 692</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line771">line 771</a>
     </li></ul></dd>
     
 
@@ -4669,7 +5911,7 @@ You can find the standard Tiledesk events here<br>
 
             
 
-            <td class="description last">The Request's ID</td>
+            <td class="description last">The request ID</td>
         </tr>
 
     
@@ -4756,7 +5998,7 @@ You can find the standard Tiledesk events here<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1170">line 1170</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1597">line 1597</a>
     </li></ul></dd>
     
 
@@ -4808,7 +6050,7 @@ You can find the standard Tiledesk events here<br>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Tue Nov 09 2021 10:39:09 GMT+0100 (Central European Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Sat Dec 25 2021 10:56:13 GMT+0100 (Central European Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

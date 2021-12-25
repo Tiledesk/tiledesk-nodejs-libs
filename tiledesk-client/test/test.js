@@ -475,89 +475,6 @@ describe('TiledeskClient', function() {
     });
 });
 
-// // describe('TiledeskClient', function() {
-// //     describe('set teammate unavailable', function() {
-// //         it('puts the project_user unavailable', function(done) {
-// //             const tdclient = new TiledeskClient({
-// //                 APIKEY: APIKEY,
-// //                 API_ENDPOINT: API_ENDPOINT,
-// //                 log: LOG_STATUS
-// //             });
-// //             if (tdclient) {
-// //               assert(tdclient != null);
-// //               tdclient.anonymousAuthentication(
-// //                 PROJECT_ID,
-// //                 function(err, resbody) {
-// //                     if (!err && resbody) {
-// //                         assert(resbody.token != null);
-// //                         const text_value = 'test message';
-// //                         const request_id = 'support-group-' + uuidv4();
-// //                         // console.log("Sending message to REQUEST-ID:", request_id);
-// //                         tdclient.sendMessage(PROJECT_ID, request_id, {text: text_value}, resbody.token, function(err, result) {
-// //                             // console.log("RESULT:", result)
-// //                             assert(err === null);
-// //                             assert(result != null);
-// //                             assert(result.text === text_value);
-// //                             done();
-// //                           });
-// //                     }
-// //                     else {
-// //                         assert.ok(false);
-// //                     }
-// //                 }
-// //               );
-// //             }
-// //             else {
-// //                 assert.ok(false);
-// //             }
-// //         });
-// //     });
-// // });
-
-/** DEPRECATED TEST */
-// describe('TiledeskClient', function() {
-//     describe('sendSupportMessage() anonymous', function() {
-//         it('sends a message to a request conversation, "projectId" & "token" as options parameters', function(done) {
-//             const tdclient = new TiledeskClient({
-//                 APIKEY: APIKEY,
-//                 APIURL: API_ENDPOINT,
-//                 log: LOG_STATUS
-//             });
-//             if (tdclient) {
-//               assert(tdclient != null);
-//             //   tdclient.anonymousAuthentication(
-//             //     PROJECT_ID,
-//             //     function(err, resbody) {
-//             //         if (!err && resbody) {
-//             //             assert(resbody.token != null);
-//                         const text_value = 'test message';
-//                         const request_id = TiledeskClient.newRequestId(PROJECT_ID);
-//                         // console.log("Sending message to REQUEST-ID:", request_id);
-//                         tdclient.sendSupportMessage(request_id, {text: text_value}, function(err, result) {
-//                             // console.log("RESULT:", result)
-//                             assert(err === null);
-//                             assert(result != null);
-//                             assert(result.text === text_value);
-//                             done();
-//                           },
-//                           {
-//                               projectId: PROJECT_ID,
-//                               token: ANONYM_USER_TOKEN
-//                           });
-//             //         }
-//             //         else {
-//             //             assert.ok(false);
-//             //         }
-//             //     }
-//             //   );
-//             }
-//             else {
-//                 assert.ok(false);
-//             }
-//         });
-//     });
-// });
-
 describe('TiledeskClient', function() {
     describe('sendSupportMessage() anonymous to create a new request', function() {
         it('sends a message to a new request conversation to create the support conversation', function(done) {
@@ -586,52 +503,59 @@ describe('TiledeskClient', function() {
     });
 });
 
+describe('TiledeskClient', function() {
+    describe('sendSupportMessage() anonymous to throw an error (text is empty)', function() {
+        it('sends a message to a new request conversation to create the support conversation', function(done) {
+            const tdclient = new TiledeskClient({
+                APIKEY: APIKEY,
+                APIURL: API_ENDPOINT,
+                projectId: PROJECT_ID,
+                token: ANONYM_USER_TOKEN,
+                log: true
+            });
+            if (tdclient) {
+              assert(tdclient != null);
+                const text_value = '';
+                const request_id = TiledeskClient.newRequestId(PROJECT_ID);
+                tdclient.sendSupportMessage(request_id, {text: text_value}, function(err, result) {
+                    console.log("Error", err)
+                    assert(err === null);
+                    assert(result != null);
+                    assert(result.text === text_value);
+                    done();
+                });
+            }
+            else {
+                assert.ok(false);
+            }
+        });
+    });
+});
+
+// DO NOT USE! BUILD ANOTHER ONE, WITH SAME DATA PARADIGM OF THIS TEST (NO STATIC IDS)
 // describe('TiledeskClient', function() {
-//     describe('sendDirectMessage() by anonymous', function() {
-//         it('sends a direct message ANONYM_USER_TOKEN to on-the-fly-anonynous user, "projectId" & "token" are "options" parameters', function(done) {
+//     describe('sendSupportMessage() anonymous to throw an error (text is empty)', function() {
+//         it('sends a message to a new request conversation to create the support conversation', function(done) {
 //             const tdclient = new TiledeskClient({
 //                 APIKEY: APIKEY,
 //                 APIURL: API_ENDPOINT,
-//                 log: true
+//                 projectId: '61bd916e784b470035a73ca4',
+//                 token: 'JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ3ZWJob29rX2VuYWJsZWQiOnRydWUsInR5cGUiOiJpbnRlcm5hbCIsImxhbmd1YWdlIjoiZW4iLCJfaWQiOiI2MWJkOTFjZDc4NGI0NzAwMzVhNzNkN2EiLCJuYW1lIjoiV09QUiIsImRlc2NyaXB0aW9uIjoiV2FyIE9wZXJhdGlvbiBQbGFuIFJlc3BvbnNlIiwiaWRfcHJvamVjdCI6IjYxYmQ5MTZlNzg0YjQ3MDAzNWE3M2NhNCIsInRyYXNoZWQiOmZhbHNlLCJjcmVhdGVkQnkiOiI1ZTA5ZDE2ZDRkMzYxMTAwMTc1MDZkN2YiLCJjcmVhdGVkQXQiOiIyMDIxLTEyLTE4VDA3OjQ2OjIxLjAyOFoiLCJ1cGRhdGVkQXQiOiIyMDIxLTEyLTE4VDA4OjA3OjM4LjI3NFoiLCJfX3YiOjAsIndlYmhvb2tfdXJsIjoiaHR0cHM6Ly93YXJnYW1lcy50aWxlZGVzay5yZXBsLmNvL215dGlsZWRlc2siLCJpYXQiOjE2Mzk4OTYxNTQsImF1ZCI6Imh0dHBzOi8vdGlsZWRlc2suY29tL2JvdHMvNjFiZDkxY2Q3ODRiNDcwMDM1YTczZDdhIiwiaXNzIjoiaHR0cHM6Ly90aWxlZGVzay5jb20iLCJzdWIiOiJib3QiLCJqdGkiOiJmNDVlZTU5Ni0wNTMyLTQ5MzAtODM5My0wYzQ0NGQ4YzE2MjcifQ.D9IEe2Lj-a5-KRcZX8kYAk7TTHwYDjhc-xx0uBINqJY',
+//                 log: false
 //             });
 //             if (tdclient) {
 //               assert(tdclient != null);
-//               tdclient.authEmailPassword(
-//                 EMAIL2,
-//                 PASSWORD2, 
-//                 function(err, resbody) {
-//                     if (!err && resbody) {
-//                         console.log("resbody:", resbody)
-//                         assert(resbody.token != null);
-//                         assert(resbody.user != null);
-//                         assert(resbody.user._id != null);
-//                         const text_value = "test message";
-//                         const msgJSON = {
-//                             "senderFullname": "Guest 1",
-//                             "recipient": resbody.user._id,
-//                             "text": text_value
-//                         }
-//                         // console.log("Sending message to REQUEST-ID:", request_id);
-//                         tdclient.sendDirectMessage(msgJSON, function(err, result) {
-//                             console.log("Message sent:", result)
-//                             if (err) {
-//                                 console.error("An error occurred:", err);
-//                                 assert(err === null);
-//                             }
-//                             assert(result != null);
-//                             assert(result.text === text_value);
-//                             done();
-//                           },
-//                           {
-//                               projectId: PROJECT_ID,
-//                               token: USER_TOKEN
-//                           });
+//                 const text_value = '';
+//                 const request_id = 'support-group-61bd916e784b470035a73ca4-3ce95e2ec392420ab3b3e7d697ec5114';
+//                 tdclient.sendSupportMessage(request_id, {text: text_value}, function(err, result) {
+//                     if (err) {
+//                         console.error("An error occurred:", err)
 //                     }
-//                     else {
-//                         assert.ok(false);
-//                     }
-//                 }
-//               );
+//                     assert.equal(err, null);
+//                     assert.notEqual(result, null);
+//                     assert.equal(result.text, text_value);
+//                     done();
+//                 });
 //             }
 //             else {
 //                 assert.ok(false);

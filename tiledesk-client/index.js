@@ -107,25 +107,28 @@ class TiledeskClient {
       json: true,
       method: 'GET'
     };
-    TiledeskClient.myrequest(HTTPREQUEST,
-    function(err, response, resbody) {
-      if (response.status === 200) {
-        if (callback) {
-         callback(null, resbody)
+    TiledeskClient.myrequest(
+      HTTPREQUEST,
+      function(err, resbody) {
+        if (err) {
+          if (callback) {
+            callback(err);
+          }
         }
-      }
-      else if (callback) {
-        callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
-      }
-
-      // if (response.status == 200) {
-      //   callback(null, resbody)
-      // }
-      // else {
-      //   const error_msg = "getProjectSettings. Status code: " + response.status
-      //   callback(error_msg, null)
-      // }
-    }, this. log);
+        else {
+          if (callback) {
+            callback(null, resbody);
+          }
+        }
+        // if (response.status === 200) {
+        //   if (callback) {
+        //   callback(null, resbody)
+        //   }
+        // }
+        // else if (callback) {
+        //   callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
+        // }
+      }, this. log);
   }
 
   /**
@@ -149,17 +152,28 @@ class TiledeskClient {
       // json: true,
       method: 'GET'
     };
-    TiledeskClient.myrequest(HTTPREQUEST,
-    function(err, response, resbody) {
-      if (response.status === 200) {
-        if (callback) {
-         callback(null, resbody)
+    TiledeskClient.myrequest(
+      HTTPREQUEST,
+      function(err, resbody) {
+        if (err) {
+          if (callback) {
+            callback(err);
+          }
         }
-      }
-      else if (callback) {
-        callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
-      }
-    }, this.log);
+        else {
+          if (callback) {
+            callback(null, resbody);
+          }
+        }
+        // if (response.status === 200) {
+        //   if (callback) {
+        //   callback(null, resbody)
+        //   }
+        // }
+        // else if (callback) {
+        //   callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
+        // }
+      }, this.log);
   }
 
   // /**
@@ -299,15 +313,25 @@ class TiledeskClient {
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
-      function(err, response, resbody) {
-        if (response.status === 200) {
+      function(err, resbody) {
+        if (err) {
           if (callback) {
-          callback(null, resbody)
+            callback(err);
           }
         }
-        else if (callback) {
-          callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
+        else {
+          if (callback) {
+            callback(null, resbody);
+          }
         }
+        // if (response.status === 200) {
+        //   if (callback) {
+        //   callback(null, resbody)
+        //   }
+        // }
+        // else if (callback) {
+        //   callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
+        // }
       }, this.log
     );
   }
@@ -338,15 +362,25 @@ class TiledeskClient {
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
-      function(err, response, resbody) {
-        if (response.status === 200) {
+      function(err, resbody) {
+        if (err) {
           if (callback) {
-          callback(null, resbody)
+            callback(err);
           }
         }
-        else if (callback) {
-          callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
+        else {
+          if (callback) {
+            callback(null, resbody);
+          }
         }
+        // if (response.status === 200) {
+        //   if (callback) {
+        //   callback(null, resbody)
+        //   }
+        // }
+        // else if (callback) {
+        //   callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
+        // }
       }, this.log
     );
   }
@@ -376,15 +410,26 @@ class TiledeskClient {
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
-      function(err, response, resbody) {
-        if (response.status === 200) {
+      function(err, resbody) {
+        if (err) {
           if (callback) {
-          callback(null, resbody)
+            callback(err);
           }
         }
-        else if (callback) {
-          callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
+        else {
+          if (callback) {
+            callback(null, resbody);
+          }
         }
+
+        // if (response.status === 200) {
+        //   if (callback) {
+        //   callback(null, resbody)
+        //   }
+        // }
+        // else if (callback) {
+        //   callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
+        // }
       }, this.log
     );
   }
@@ -411,19 +456,27 @@ class TiledeskClient {
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
-      function(err, response, resbody) {
-        if (response.status === 200) {
+      function(err, resbody) {
+        if (err) {
           if (callback) {
-          callback(null, resbody)
+            callback(err);
           }
         }
-        else if (callback) {
-          callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
+        else {
+          if (callback) {
+            callback(null, resbody);
+          }
         }
-
-        // if (callback) {
-        //   callback(err, resbody)
+        // if (response.status === 200) {
+        //   if (callback) {
+        //   callback(null, resbody)
+        //   }
         // }
+        // else if (callback) {
+        //   callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
+        // }
+
+       
       }, this.log
     );
   }
@@ -450,15 +503,25 @@ class TiledeskClient {
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
-      function(err, response, resbody) {
-        if (response.status === 200) {
+      function(err, resbody) {
+        if (err) {
           if (callback) {
-          callback(null, resbody)
+            callback(err);
           }
         }
-        else if (callback) {
-          callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
+        else {
+          if (callback) {
+            callback(null, resbody);
+          }
         }
+        // if (response.status === 200) {
+        //   if (callback) {
+        //   callback(null, resbody)
+        //   }
+        // }
+        // else if (callback) {
+        //   callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
+        // }
       }, this.log
     );
   }
@@ -533,6 +596,12 @@ class TiledeskClient {
   //   );
   // }
 
+
+  // *******************************************************
+  // ********************* REQUESTS ************************
+  // *******************************************************
+
+
   /**
    * @typedef queryParams
    * @type {Object}
@@ -606,24 +675,24 @@ class TiledeskClient {
     }
     TiledeskClient.myrequest(
       HTTPREQUEST,
-      function(err, response, resbody) {
-        if (response.status === 200) {
+      function(err, resbody) {
+        if (err) {
           if (callback) {
-          callback(null, resbody)
+            callback(err);
           }
         }
-        else if (callback) {
-          callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
+        else {
+          if (callback) {
+            callback(null, resbody);
+          }
         }
-
-        // if (resbody && resbody.requests) {
+        // if (response.status === 200) {
         //   if (callback) {
-        //     callback(err, resbody.requests)
+        //   callback(null, resbody)
         //   }
         // }
-        // else {
-        //   // throw
-        //   console.log("Error getting requests. Error:", err, " URL", URL, " token:", jwt_token, " Body:", resbody)
+        // else if (callback) {
+        //   callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
         // }
 
       }, this.log
@@ -669,21 +738,31 @@ class TiledeskClient {
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
-      function(err, response, resbody) {
-        if (response.status === 200) {
+      function(err, resbody) {
+        if (err) {
           if (callback) {
-            callback(null, resbody)
+            callback(err);
           }
         }
-        else if (callback) {
-          callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
+        else {
+          if (callback) {
+            callback(null, resbody);
+          }
         }
+        // if (response.status === 200) {
+        //   if (callback) {
+        //     callback(null, resbody)
+        //   }
+        // }
+        // else if (callback) {
+        //   callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
+        // }
       }, this.log
     );
   }
 
   /**
-   * Updates the request's partecipants.<br>
+   * Updates the request's participants.<br>
    * <a href='https://developer.tiledesk.com/apis/rest-api/requests#set-the-request-participants' target='_blank'>REST API</a>
    * @param {string} requestId - The request ID.
    * @param {array} participants - the participants (agents or bots) identifiers array
@@ -723,18 +802,287 @@ class TiledeskClient {
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
-      function(err, response, resbody) {
-        if (response.status === 200) {
+      function(err, resbody) {
+        if (err) {
           if (callback) {
-          callback(null, resbody)
+            callback(err);
           }
         }
-        else if (callback) {
-          callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
+        else {
+          if (callback) {
+            callback(null, resbody);
+          }
+        }
+        // if (response.status === 200) {
+        //   if (callback) {
+        //   callback(null, resbody)
+        //   }
+        // }
+        // else if (callback) {
+        //   callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
+        // }
+      }, this.log
+    );
+  }
+
+  /**
+   * Delete a participant from the request's participants.<br>
+   * <a href='https://developer.tiledesk.com/apis/rest-api/requests#delete-a-participant-from-the-request' target='_blank'>REST API</a>
+   * @param {string} requestId - The request ID.
+   * @param {array} participantId - the participant (agent or bot) identifier
+   * @param {resultCallback} callback - The callback that handles the response.
+   */
+  deleteRequestParticipant(requestId, participantId, jwt_token, callback) {
+    const URL = `${this.APIURL}/${this.projectId}/requests/${requestId}/participants/${participantId}`
+    const HTTPREQUEST = {
+      url: URL,
+      headers: {
+        'Content-Type' : 'application/json',
+        'Authorization': this.jwt_token
+      },
+      //json: participants,
+      method: 'DELETE'
+    };
+    myrequest(
+      HTTPREQUEST,
+      function(err, resbody) {
+        if (err) {
+          if (callback) {
+            callback(err);
+          }
+        }
+        else {
+          if (callback) {
+            callback(null, resbody);
+          }
         }
       }, this.log
     );
   }
+  
+  /**
+   * Add a participant to the request's participants.<br>
+   * <a href='https://developer.tiledesk.com/apis/rest-api/requests#add-a-participant-to-a-request' target='_blank'>REST API</a>
+   * @param {string} requestId - The request ID.
+   * @param {array} participantId - the participant (agent or bot) identifier
+   * @param {resultCallback} callback - The callback that handles the response.
+   */
+  addRequestParticipant(requestId, participantId, callback) {
+    const URL = `${this.APIURL}/${this.projectId}/requests/${requestId}/participants`
+    const HTTPREQUEST = {
+      url: URL,
+      headers: {
+        'Content-Type' : 'application/json',
+        'Authorization': this.jwt_token
+      },
+      json: {member: participantId},
+      method: 'POST'
+    };
+    myrequest(
+      HTTPREQUEST,
+      function(err, resbody) {
+        if (err) {
+          if (callback) {
+            callback(err);
+          }
+        }
+        else {
+          if (callback) {
+            callback(null, resbody);
+          }
+        }
+      }, this.log
+    );
+  }
+  
+  // ****************************************************
+  // *********************** BOTS ***********************
+  // ****************************************************
+
+  /**
+   * Get all the bots defined in the project.<br>
+   * <a href='https://developer.tiledesk.com/apis/rest-api/chat-bots/bots#get-all-bots' target='_blank'>REST API</a>
+   * @param {resultCallback} callback - The callback that handles the response.
+   */
+  getAllBots(callback) {
+    const URL = `${this.APIURL}/${this.projectId}/faq_kb`
+    const HTTPREQUEST = {
+      url: URL,
+      headers: {
+        'Content-Type' : 'application/json',
+        'Authorization': this.jwt_token
+      },
+      // json: {member: participant},
+      method: 'GET'
+    };
+    myrequest(
+      HTTPREQUEST,
+      function(err, resbody) {
+        if (err) {
+          if (callback) {
+            callback(err);
+          }
+        }
+        else {
+          if (callback) {
+            callback(null, resbody);
+          }
+        }
+      }, this.log
+    );
+  }
+
+  /**
+   * Get bot by id.<br>
+   * <a href='https://developer.tiledesk.com/apis/rest-api/chat-bots/bots#get-a-bot-by-id' target='_blank'>REST API</a>
+   * @param {string} botId - The bot ID.
+   * @param {resultCallback} callback - The callback that handles the response.
+   */
+   getBot(botId, callback) {
+    const URL = `${this.APIURL}/${this.projectId}/faq_kb/${botId}`
+    const HTTPREQUEST = {
+      url: URL,
+      headers: {
+        'Content-Type' : 'application/json',
+        'Authorization': this.jwt_token
+      },
+      // json: {member: participant},
+      method: 'GET'
+    };
+    myrequest(
+      HTTPREQUEST,
+      function(err, resbody) {
+        if (err) {
+          if (callback) {
+            callback(err);
+          }
+        }
+        else {
+          if (callback) {
+            callback(null, resbody);
+          }
+        }
+      }, this.log
+    );
+  }
+
+  /**
+   * Create a bot.<br>
+   * <a href='https://developer.tiledesk.com/apis/rest-api/chat-bots/bots#create-a-new-bot' target='_blank'>REST API</a>
+   * @param {string} botName - The bot's name.
+   * @param {boolean} isExternal - 'true' if you want an external bot.
+   * @param {string} botUrl - The external bot's endpoint url.
+   * @param {resultCallback} callback - The callback that handles the response.
+   */
+   createBot(botName, isExternal, botUrl, callback) {
+    const URL = `${this.APIURL}/${this.projectId}/faq_kb`
+    const HTTPREQUEST = {
+      url: URL,
+      headers: {
+        'Content-Type' : 'application/json',
+        'Authorization': this.jwt_token
+      },
+      json: {
+        name: botName,
+        external: isExternal,
+        url: botUrl
+      },
+      method: 'POST'
+    };
+    myrequest(
+      HTTPREQUEST,
+      function(err, resbody) {
+        if (err) {
+          if (callback) {
+            callback(err);
+          }
+        }
+        else {
+          if (callback) {
+            callback(null, resbody);
+          }
+        }
+      }, this.log
+    );
+  }
+
+  /**
+   * Update a bot.<br>
+   * <a href='https://developer.tiledesk.com/apis/rest-api/chat-bots/bots#update-a-bot' target='_blank'>REST API</a>
+   * @param {string} botName - The bot's name.
+   * @param {boolean} isExternal - 'true' if you want an external bot.
+   * @param {string} botUrl - The external bot's endpoint url.
+   * @param {resultCallback} callback - The callback that handles the response.
+   */
+   updateBot(botName, isExternal, botUrl, callback) {
+    const URL = `${this.APIURL}/${this.projectId}/faq_kb`
+    const HTTPREQUEST = {
+      url: URL,
+      headers: {
+        'Content-Type' : 'application/json',
+        'Authorization': this.jwt_token
+      },
+      json: {
+        name: botName,
+        external: isExternal,
+        url: botUrl
+      },
+      method: 'PUT'
+    };
+    myrequest(
+      HTTPREQUEST,
+      function(err, resbody) {
+        if (err) {
+          if (callback) {
+            callback(err);
+          }
+        }
+        else {
+          if (callback) {
+            callback(null, resbody);
+          }
+        }
+      }, this.log
+    );
+  }
+
+  /**
+   * Delete a bot by id.<br>
+   * <a href='https://developer.tiledesk.com/apis/rest-api/chat-bots/bots#delete-a-bot' target='_blank'>REST API</a>
+   * @param {string} botId - The bot ID.
+   * @param {resultCallback} callback - The callback that handles the response.
+   */
+   deleteBot(botId, callback) {
+    const URL = `${this.APIURL}/${this.projectId}/faq_kb/${botId}`
+    const HTTPREQUEST = {
+      url: URL,
+      headers: {
+        'Content-Type' : 'application/json',
+        'Authorization': this.jwt_token
+      },
+      // json: {member: participant},
+      method: 'DELETE'
+    };
+    myrequest(
+      HTTPREQUEST,
+      function(err, resbody) {
+        if (err) {
+          if (callback) {
+            callback(err);
+          }
+        }
+        else {
+          if (callback) {
+            callback(null, resbody);
+          }
+        }
+      }, this.log
+    );
+  }
+
+  // ****************************************************
+  // ****************** WIDGET SETTINGS *****************
+  // ****************************************************
 
   /**
    * Returns the Widget settings for the selected project.
@@ -770,15 +1118,25 @@ class TiledeskClient {
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
-      function(err, response, resbody) {
-        if (response.status === 200) {
+      function(err, resbody) {
+        if (err) {
           if (callback) {
-            callback(null, resbody)
+            callback(err);
           }
         }
-        else if (callback) {
-          callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
+        else {
+          if (callback) {
+            callback(null, resbody);
+          }
         }
+        // if (response.status === 200) {
+        //   if (callback) {
+        //     callback(null, resbody)
+        //   }
+        // }
+        // else if (callback) {
+        //   callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
+        // }
       }, this.log
     );
   }
@@ -803,24 +1161,34 @@ class TiledeskClient {
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
-      function(err, response, resbody) {
-        if (response.status === 200) {
-            if (callback) {
-              callback(null, resbody)
-            }
+      function(err, resbody) {
+        if (err) {
+          if (callback) {
+            callback(err);
+          }
         }
-        else if (callback) {
-          callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
+        else {
+          if (callback) {
+            callback(null, resbody);
+          }
         }
+        // if (response.status === 200) {
+        //     if (callback) {
+        //       callback(null, resbody)
+        //     }
+        // }
+        // else if (callback) {
+        //   callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
+        // }
       }, this.log
     );
   }
 
-  static getErr(err, request, response, resbody) {
+  static getErr(err, request, response) {
     let res_err = {}
-    res_err.tiledesk_err = resbody;
     res_err.http_err = err;
     res_err.http_request = request;
+    res_err.http_response = response;
     return res_err;
   }
   
@@ -860,7 +1228,7 @@ class TiledeskClient {
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
-      function(err, response, resbody) {
+      function(err, resbody) {
         // resbody example:
         // {
         //   "success": true,
@@ -871,14 +1239,24 @@ class TiledeskClient {
         //       "fullName": "Guest "
         //   }
         // }
-        if (response.status === 200) {
+        if (err) {
           if (callback) {
-            callback(null, resbody)
+            callback(err);
           }
         }
-        else if (callback) {
-          callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
+        else {
+          if (callback) {
+            callback(null, resbody);
+          }
         }
+        // if (response.status === 200) {
+        //   if (callback) {
+        //     callback(null, resbody)
+        //   }
+        // }
+        // else if (callback) {
+        //   callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
+        // }
       }, _log
     );
   }
@@ -916,19 +1294,26 @@ class TiledeskClient {
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
-      function(err, response, resbody) {
-        if (response.status === 200) {
+      function(err, resbody) {
+        if (err) {
           if (callback) {
-            callback(null, resbody)
+            callback(err);
           }
         }
-        else if (callback) {
-          callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
+        else {
+          if (callback) {
+            callback(null, resbody);
+          }
         }
-
-        // if (callback) {
-        //   callback(err, response, resbody)
+        // if (response.status === 200) {
+        //   if (callback) {
+        //     callback(null, resbody)
+        //   }
         // }
+        // else if (callback) {
+        //   callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
+        // }
+
       }, _log
     );
   }
@@ -967,18 +1352,24 @@ class TiledeskClient {
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
-      function(err, response, resbody) {
-        if (response.status === 200) {
+      function(err, resbody) {
+        if (err) {
           if (callback) {
-            callback(null, resbody)
+            callback(err);
           }
         }
-        else if (callback) {
-          callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
+        else {
+          if (callback) {
+            callback(null, resbody);
+          }
         }
-
-        // if (callback) {
-        //   callback(err, response, resbody)
+        // if (response.status === 200) {
+        //   if (callback) {
+        //     callback(null, resbody)
+        //   }
+        // }
+        // else if (callback) {
+        //   callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
         // }
       }, this.log
     );
@@ -1006,15 +1397,21 @@ class TiledeskClient {
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
-      function(err, response, resbody) {
-        if (response.status === 200) {
+      function(err, resbody) {
+        if (err) {
           if (callback) {
-            callback(null, resbody)
+            callback(err);
           }
         }
-        else if (callback) {
-          callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
+        else {
+          if (callback) {
+            callback(null, resbody);
+          }
         }
+        // else if (callback) {
+        //   console.log("callback here.")
+        //   callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
+        // }
       }, this.log
     );
   }
@@ -1052,18 +1449,28 @@ class TiledeskClient {
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
-      function(err, response, resbody) {
+      function(err, resbody) {
         if (err) {
-          callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
-        }
-        else if (response.status === 200) {
           if (callback) {
-            callback(null, resbody)
+            callback(err);
           }
         }
-        else if (callback) {
-          callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
+        else {
+          if (callback) {
+            callback(null, resbody);
+          }
         }
+        // if (err) {
+        //   callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
+        // }
+        // else if (response.status === 200) {
+        //   if (callback) {
+        //     callback(null, resbody)
+        //   }
+        // }
+        // else if (callback) {
+        //   callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
+        // }
       }, this.log
     );
   }
@@ -1090,15 +1497,25 @@ class TiledeskClient {
    };
     TiledeskClient.myrequest(
       HTTPREQUEST,
-      function(err, response, resbody) {
-          if (response.status === 200) {
-            if (callback) {
-              callback(null, resbody)
-            }
+      function(err, resbody) {
+        if (err) {
+          if (callback) {
+            callback(err);
           }
-          else if (callback) {
-            callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
+        }
+        else {
+          if (callback) {
+            callback(null, resbody);
           }
+        }
+          // if (response.status === 200) {
+          //   if (callback) {
+          //     callback(null, resbody)
+          //   }
+          // }
+          // else if (callback) {
+          //   callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
+          // }
       }, this.log
     );
   }
@@ -1131,15 +1548,25 @@ class TiledeskClient {
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
-      function(err, response, resbody) {
-        if (response.status === 200) {
+      function(err, resbody) {
+        if (err) {
           if (callback) {
-            callback(null, resbody)
+            callback(err);
           }
         }
-        else if (callback) {
-          callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
+        else {
+          if (callback) {
+            callback(null, resbody);
+          }
         }
+        // if (response.status === 200) {
+        //   if (callback) {
+        //     callback(null, resbody)
+        //   }
+        // }
+        // else if (callback) {
+        //   callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
+        // }
       }, this.log
     );
   }
@@ -1183,15 +1610,25 @@ class TiledeskClient {
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
-      function(err, response, resbody) {
-        if (response.status === 200) {
+      function(err, resbody) {
+        if (err) {
           if (callback) {
-            callback(null, resbody)
+            callback(err);
           }
         }
-        else if (callback) {
-          callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
+        else {
+          if (callback) {
+            callback(null, resbody);
+          }
         }
+        // if (response.status === 200) {
+        //   if (callback) {
+        //     callback(null, resbody)
+        //   }
+        // }
+        // else if (callback) {
+        //   callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
+        // }
       }, this.log
     );
   }
@@ -1220,15 +1657,25 @@ class TiledeskClient {
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
-      function(err, response, resbody) {
-        if (response.status === 200) {
+      function(err, resbody) {
+        if (err) {
           if (callback) {
-            callback(null, resbody)
+            callback(err);
           }
         }
-        else if (callback) {
-          callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
+        else {
+          if (callback) {
+            callback(null, resbody);
+          }
         }
+        // if (response.status === 200) {
+        //   if (callback) {
+        //     callback(null, resbody)
+        //   }
+        // }
+        // else if (callback) {
+        //   callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
+        // }
       }, this.log
     );
   }
@@ -1276,15 +1723,25 @@ class TiledeskClient {
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
-      function(err, response, resbody) {
-        if (response.status === 200) {
+      function(err, resbody) {
+        if (err) {
           if (callback) {
-            callback(null, resbody)
+            callback(err);
           }
         }
-        else if (callback) {
-          callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
+        else {
+          if (callback) {
+            callback(null, resbody);
+          }
         }
+        // if (response.status === 200) {
+        //   if (callback) {
+        //     callback(null, resbody)
+        //   }
+        // }
+        // else if (callback) {
+        //   callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
+        // }
       }, this.log
     );
   }
@@ -1308,14 +1765,20 @@ class TiledeskClient {
         console.log("******** Response for url:", res);
         console.log("Response body:\n", res.data);
       }
-      if (callback) {
-          callback(null, res, res.data);
+      if (res && res.status == 200 && res.data) {
+        if (callback) {
+          callback(null, res.data);
+        }
+      }
+      else {
+        if (callback) {
+          callback(TiledeskClient.getErr({message: "Response status not 200"}, options, res), null, null);
+        }
       }
     })
     .catch(function (error) {
-      console.error("Axios call error:", error);
       if (callback) {
-          callback(error, null, null);
+        callback(error, null, null);
       }
     });
 
