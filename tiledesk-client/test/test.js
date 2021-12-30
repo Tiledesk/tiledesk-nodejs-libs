@@ -509,34 +509,32 @@ describe('TiledeskClient', function() {
 });
 
 // TODO: this one never passes. BUG!
-// describe('TiledeskClient', function() {
-//     describe('sendSupportMessage() anonymous to throw an error (text is empty)', function() {
-//         it('sends a message to a new request conversation to create the support conversation', function(done) {
-//             const tdclient = new TiledeskClient({
-//                 APIKEY: APIKEY,
-//                 APIURL: API_ENDPOINT,
-//                 projectId: PROJECT_ID,
-//                 token: ANONYM_USER_TOKEN,
-//                 log: true
-//             });
-//             if (tdclient) {
-//               assert(tdclient != null);
-//                 const text_value = '';
-//                 const request_id = TiledeskClient.newRequestId(PROJECT_ID);
-//                 tdclient.sendSupportMessage(request_id, {text: text_value}, function(err, result) {
-//                     console.log("Error", err)
-//                     assert(err === null);
-//                     assert(result != null);
-//                     assert(result.text === text_value);
-//                     done();
-//                 });
-//             }
-//             else {
-//                 assert.ok(false);
-//             }
-//         });
-//     });
-// });
+describe('TiledeskClient', function() {
+    describe('sendSupportMessage() anonymous to throw an error (text is empty)', function() {
+        it('sends a message to a new request conversation to create the support conversation', function(done) {
+            const tdclient = new TiledeskClient({
+                APIKEY: APIKEY,
+                APIURL: API_ENDPOINT,
+                projectId: PROJECT_ID,
+                token: ANONYM_USER_TOKEN,
+                log: this.LOG_STATUS
+            });
+            if (tdclient) {
+              assert(tdclient != null);
+                const text_value = '';
+                const request_id = TiledeskClient.newRequestId(PROJECT_ID);
+                tdclient.sendSupportMessage(request_id, {text: text_value}, function(err, result) {
+                    //console.log("Error", err)
+                    assert(err);
+                    done();
+                });
+            }
+            else {
+                assert.ok(false);
+            }
+        });
+    });
+});
 
 // DEPRECATED! DO NOT USE! BUILD ANOTHER ONE, WITH SAME DATA PARADIGM OF THIS TEST (NO STATIC IDS)
 // describe('TiledeskClient', function() {
@@ -806,6 +804,65 @@ describe('TiledeskClient', function() {
                             });
                         });
                     });
+                });
+            });
+        });
+    });
+});
+
+describe('TiledeskClient', function() {
+    describe('createDepartment() getAllDepartments() deleteDepartment() getDepartment()', function() {
+        it('creates 2 deps and gets all deps, then deletes the 2 deps.', (done) => {
+            const dep_name1 = "my dep " + uuidv4();
+            const dep_name2 = "my dep " + uuidv4();
+            const tdclient = new TiledeskClient(
+            {
+                APIKEY: APIKEY,
+                APIURL: API_ENDPOINT,
+                projectId: PROJECT_ID,
+                token: USER_TOKEN,
+                log: this.LOG_STATUS
+            })
+            tdclient.createDepartment(dep_name1, null, null, null, (err, result) => {
+                // console.log("result", result);
+                assert(result);
+                assert(result.default === false);
+                assert(result.routing === null);
+                assert(result.name === dep_name1);
+                assert(result._id !== null);
+                const dep1_id = result._id;
+                // console.log("dep1_id", dep1_id)
+                tdclient.createDepartment(dep_name2, 'assigned', null, null, (err, result) => {
+                    // console.log("result", result);
+                    assert(result);
+                    assert(result.default === false);
+                    assert(result.name === dep_name2);
+                    assert(result._id !== null);
+                    const dep2_id = result._id;
+                    // console.log("dep2_id", dep2_id)
+                    tdclient.getDepartment(dep2_id, (err, result) => {
+                        console.log("dep:", result);
+                        assert(!err);
+                        assert(result);
+                        assert(result.default === false);
+                        assert(result.name === dep_name2);
+                        assert(result.routing === 'assigned');
+                        assert(result._id === dep2_id);
+                        tdclient.getAllDepartments((err, result) => {
+                            // console.log("deps:", result.length);
+                            assert(result.length >= 2);
+                            tdclient.deleteDepartment(dep1_id, (err, result) => {
+                                assert(!err);
+                                assert(result);
+                                tdclient.deleteDepartment(dep2_id, (err, result) => {
+                                    assert(!err);
+                                    assert(result);
+                                    done();
+                                });
+                            });
+                        });
+                    });
+                    
                 });
             });
         });

@@ -2,6 +2,9 @@
 
 This library is on npm: https://www.npmjs.com/package/@tiledesk/tiledesk-chatbot-util
 
+### 0.8.25
+- added test for findSplits(): no splits will return "one" command with the message text content
+
 ### 0.8.24
 - added test for findSplits()
 

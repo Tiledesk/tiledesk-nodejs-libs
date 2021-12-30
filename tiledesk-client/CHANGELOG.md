@@ -1,6 +1,31 @@
 # Client library for Tiledesk nodejs APIs client
 
-### 0.8.8
+This library is on npm: https://www.npmjs.com/package/@tiledesk/tiledesk-client
+
+### 0.8.13 - online
+- added getDepartment()
+- added createDepartment()
+- added updateDepartment()
+- added deleteDepartment()
+- added testing
+
+### 0.8.12 - online
+- added getDepartments() -> TODO TEST
+- added getAllDepartments() -> TODO TEST
+
+### 0.8.11
+- added test for empty text
+
+### 0.8.10 - online
+- bug fix: fixToken() call removed from some methods
+
+### 0.8.9 - online
+- bug fix: updateRequestDepartment()
+
+### 0.8.8 - online
+- bug fix
+
+### 0.8.7 - online
 - added deleteRequestParticipant() -> TODO TEST
 - added addRequestParticipant() -> TODO TEST
 - added getAllBots()
@@ -9,7 +34,7 @@
 - added updateBot()
 - added deleteBot()
 - updated documentation
-  
+
 ### 0.8.6 - online
 - TiledeskClient.myrequest callback refactored to take only 2 parameters: err, resbody
 

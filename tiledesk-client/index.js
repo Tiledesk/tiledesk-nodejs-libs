@@ -95,9 +95,9 @@ class TiledeskClient {
     return request_id;
   }
 
-  createProject(projectId, token, callback) {
+  createProject(projectId, callback) {
     // const jwt_token = TiledeskClient.fixToken(token)
-    const URL = `${this.APIURL}/projects/${projectId}`
+    const URL = `${this.APIURL}/projects/${projectId}` // projectId passed as parameter???
     const HTTPREQUEST = {
       url: URL,
       headers: {
@@ -601,7 +601,6 @@ class TiledeskClient {
   // ********************* REQUESTS ************************
   // *******************************************************
 
-
   /**
    * @typedef queryParams
    * @type {Object}
@@ -832,7 +831,7 @@ class TiledeskClient {
    * @param {array} participantId - the participant (agent or bot) identifier
    * @param {resultCallback} callback - The callback that handles the response.
    */
-  deleteRequestParticipant(requestId, participantId, jwt_token, callback) {
+  deleteRequestParticipant(requestId, participantId, callback) {
     const URL = `${this.APIURL}/${this.projectId}/requests/${requestId}/participants/${participantId}`
     const HTTPREQUEST = {
       url: URL,
@@ -895,6 +894,180 @@ class TiledeskClient {
     );
   }
   
+  /**
+   * The Request properties JSON object. <a href='https://developer.tiledesk.com/apis/rest-api/requests#update-a-request-by-request_id' target='_blank'>More info</a>.
+   * @typedef requestProperties
+   * @type {Object}
+   * @property {string} first_text - The sender full name
+   * @property {string} lead - The Lead ID
+   * @property {number} status - The request's status
+   * @property {array} tags - The request's tags. It is an array of {string}
+   * @property {number} rating - The request's rating. A number between 0 and 5.
+   * @property {string} rating_message - The request rating's message.
+   * @property {string} language - The request's language.
+   * @property {string} sourcePage - The web page's URL where the request originated, if one.
+   * 
+   */
+
+  /**
+   * Updates request's properties.<br>
+   * <a href='https://developer.tiledesk.com/apis/rest-api/requests#update-a-request-by-request_id' target='_blank'>REST API</a>
+   * 
+   * @param {string} requestId - The request ID
+   * @param {requestProperties} properties - The Request's properties
+   * @param {resultCallback} callback - The callback that handles the response.
+   */
+   updateRequestProperties(requestId, properties, callback) {
+    //const jwt_token = TiledeskClient.fixToken(this.token);
+    let URL = `${this.APIURL}/${projectId}/requests/${request_id}/`
+    data = properties
+    
+    const HTTPREQUEST = {
+      url: URL,
+      headers: {
+        'Content-Type' : 'application/json',
+        'Authorization': this.jwt_token
+      },
+      json: data,
+      method: 'PATCH'
+    };
+    TiledeskClient.myrequest(
+      HTTPREQUEST,
+      function(err, resbody) {
+        if (err) {
+          if (callback) {
+            callback(err);
+          }
+        }
+        else {
+          if (callback) {
+            callback(null, resbody);
+          }
+        }
+        // if (response.status === 200) {
+        //   if (callback) {
+        //     callback(null, resbody)
+        //   }
+        // }
+        // else if (callback) {
+        //   callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
+        // }
+      }, this.log
+    );
+  }
+
+  /**
+   * Updates request's 'attributes' property.<br>
+   * <a href='https://developer.tiledesk.com/apis/rest-api/requests#update-the-request-attributes' target='_blank'>REST API</a>
+   * 
+   * @param {string} requestId - The request ID
+   * @param {Object} attributes - The Request's custom attributes object. It's a payload that carries custom information attached to this request.
+   * @param {resultCallback} callback - The callback that handles the response.
+   */
+   updateRequestAttributes(requestId, attributes, callback, options) {
+    //const jwt_token = TiledeskClient.fixToken(this.token);
+    let URL = `${this.APIURL}/${this.projectId}/requests/${requestId}/attributes`
+    let data = attributes
+    
+    const HTTPREQUEST = {
+      url: URL,
+      headers: {
+        'Content-Type' : 'application/json',
+        'Authorization': this.jwt_token
+      },
+      json: data,
+      method: 'PATCH'
+    };
+    TiledeskClient.myrequest(
+      HTTPREQUEST,
+      function(err, resbody) {
+        if (err) {
+          if (callback) {
+            callback(err);
+          }
+        }
+        else {
+          if (callback) {
+            callback(null, resbody);
+          }
+        }
+        // if (response.status === 200) {
+        //   if (callback) {
+        //     callback(null, resbody)
+        //   }
+        // }
+        // else if (callback) {
+        //   callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
+        // }
+      }, this.log
+    );
+  }
+
+/**
+ * This callback type is called `resultCallback` and is provided as a return value by each API call.
+ *
+ * @callback resultCallback
+ * @param {Object} result - the response body
+ * @param {Object} error - the error if some occurs, otherwise null
+ */
+
+  /**
+   * Updates the Request department
+   * <a href='https://developer.tiledesk.com/apis/rest-api/requests#route-a-request-to-a-department' target='_blank'>REST API</a>
+   * 
+   * @param {string} requestId - The request ID
+   * @param {string} depId - The new department ID
+   * @param {Object} options - Optional configuration.
+   * @param {string} options.nobot - Optional. Defaults to <i>false</i>. If true ignores (if set) the bot in the Department.
+   * @param {resultCallback} callback - The callback that handles the response.
+   */
+  updateRequestDepartment(requestId, depId, options, callback) {
+    let nobot_option_defined = false;
+    let nobot = false;
+    if (options && options.nobot) {
+      nobot = options.nobot;
+      nobot_option_defined = true;
+    }
+    let data = {
+      departmentid: depId
+    }
+    if (nobot_option_defined) {
+      data['nobot'] = nobot;
+    }
+    const HTTPREQUEST = {
+      url: `${this.APIURL}/${this.projectId}/requests/${requestId}/departments`,
+      headers: {
+        'Content-Type' : 'application/json',
+        'Authorization': this.jwt_token
+      },
+      json: data,
+      method: 'PUT'
+    };
+    TiledeskClient.myrequest(
+      HTTPREQUEST,
+      function(err, resbody) {
+        if (err) {
+          if (callback) {
+            callback(err);
+          }
+        }
+        else {
+          if (callback) {
+            callback(null, resbody);
+          }
+        }
+        // if (response.status === 200) {
+        //   if (callback) {
+        //     callback(null, resbody)
+        //   }
+        // }
+        // else if (callback) {
+        //   callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
+        // }
+      }, this.log
+    );
+  }
+
   // ****************************************************
   // *********************** BOTS ***********************
   // ****************************************************
@@ -1054,6 +1227,229 @@ class TiledeskClient {
    */
    deleteBot(botId, callback) {
     const URL = `${this.APIURL}/${this.projectId}/faq_kb/${botId}`
+    const HTTPREQUEST = {
+      url: URL,
+      headers: {
+        'Content-Type' : 'application/json',
+        'Authorization': this.jwt_token
+      },
+      // json: {member: participant},
+      method: 'DELETE'
+    };
+    TiledeskClient.myrequest(
+      HTTPREQUEST,
+      function(err, resbody) {
+        if (err) {
+          if (callback) {
+            callback(err);
+          }
+        }
+        else {
+          if (callback) {
+            callback(null, resbody);
+          }
+        }
+      }, this.log
+    );
+  }
+
+  // ***********************************************************
+  // *********************** DEPARTMENTS ***********************
+  // ***********************************************************
+
+  /**
+   * Create a new department.<br>
+   * <a href='https://developer.tiledesk.com/apis/rest-api/management-api/departments#create-a-new-department' target='_blank'>REST API</a>
+   * @param {string} name - The department's name.
+   * @param {boolean} routing - (optional) The department routing type. Permitted values: 'assigned', 'pooled' (default).
+   * @param {string} groupId - (optional) The group of users assigned to the department. If not provided the request will be routed through all available users
+   * @param {string} botId - (optional) The bot assigned to the department, if any.
+   * @param {resultCallback} callback - The callback that handles the response.
+   */
+   createDepartment(name, routing, groupId, botId, callback) {
+    const URL = `${this.APIURL}/${this.projectId}/departments`
+    const HTTPREQUEST = {
+      url: URL,
+      headers: {
+        'Content-Type' : 'application/json',
+        'Authorization': this.jwt_token
+      },
+      json: {
+        name: name,
+        routing: routing,
+        id_group: groupId,
+        id_bot: botId
+      },
+      method: 'POST'
+    };
+    TiledeskClient.myrequest(
+      HTTPREQUEST,
+      function(err, resbody) {
+        if (err) {
+          if (callback) {
+            callback(err);
+          }
+        }
+        else {
+          if (callback) {
+            callback(null, resbody);
+          }
+        }
+      }, this.log
+    );
+  }
+
+  /**
+   * Update a new department.<br>
+   * <a href='https://developer.tiledesk.com/apis/rest-api/management-api/departments#update-a-department' target='_blank'>REST API</a>
+   * @param {string} depId - The department's id.
+   * @param {string} name - The department's name.
+   * @param {boolean} routing - (optional) The department routing type. Permitted values: 'assigned', 'pooled' (default).
+   * @param {string} groupId - (optional) The group of users assigned to the department. If not provided the request will be routed through all available users
+   * @param {string} botId - (optional) The bot assigned to the department, if any.
+   * @param {resultCallback} callback - The callback that handles the response.
+   */
+   updateDepartment(depId, name, routing, groupId, botId, callback) {
+    const URL = `${this.APIURL}/${this.projectId}/departments/${depId}`
+    const HTTPREQUEST = {
+      url: URL,
+      headers: {
+        'Content-Type' : 'application/json',
+        'Authorization': this.jwt_token
+      },
+      json: {
+        name: name,
+        routing: routing,
+        id_group: groupId,
+        id_bot: botId
+      },
+      method: 'PUT'
+    };
+    TiledeskClient.myrequest(
+      HTTPREQUEST,
+      function(err, resbody) {
+        if (err) {
+          if (callback) {
+            callback(err);
+          }
+        }
+        else {
+          if (callback) {
+            callback(null, resbody);
+          }
+        }
+      }, this.log
+    );
+  }
+
+  /**
+   * Get a department by id.<br>
+   * <a href='https://developer.tiledesk.com/apis/rest-api/management-api/departments#get-a-department-by-id' target='_blank'>REST API</a>
+   * @param {string} depId - The department ID.
+   * @param {resultCallback} callback - The callback that handles the response.
+   */
+   getDepartment(depId, callback) {
+    const URL = `${this.APIURL}/${this.projectId}/departments/${depId}`
+    const HTTPREQUEST = {
+      url: URL,
+      headers: {
+        'Content-Type' : 'application/json',
+        'Authorization': this.jwt_token
+      },
+      // json: {member: participant},
+      method: 'GET'
+    };
+    TiledeskClient.myrequest(
+      HTTPREQUEST,
+      function(err, resbody) {
+        if (err) {
+          if (callback) {
+            callback(err);
+          }
+        }
+        else {
+          if (callback) {
+            callback(null, resbody);
+          }
+        }
+      }, this.log
+    );
+  }
+
+  /**
+   * Get all the visible (aka active) departments defined in the project.<br>
+   * <a href='https://developer.tiledesk.com/apis/rest-api/management-api/departments#get-all-active-departments' target='_blank'>REST API</a>
+   * @param {resultCallback} callback - The callback that handles the response.
+   */
+   getDepartments(callback) {
+    const URL = `${this.APIURL}/${this.projectId}/departments`
+    const HTTPREQUEST = {
+      url: URL,
+      headers: {
+        'Content-Type' : 'application/json',
+        'Authorization': this.jwt_token
+      },
+      // json: {member: participant},
+      method: 'GET'
+    };
+    TiledeskClient.myrequest(
+      HTTPREQUEST,
+      function(err, resbody) {
+        if (err) {
+          if (callback) {
+            callback(err);
+          }
+        }
+        else {
+          if (callback) {
+            callback(null, resbody);
+          }
+        }
+      }, this.log
+    );
+  }
+
+  /**
+   * Get all the deparments defined in the project.<br>
+   * <a href='https://developer.tiledesk.com/apis/rest-api/management-api/departments#get-all-departments-active-or-hidden' target='_blank'>REST API</a>
+   * @param {resultCallback} callback - The callback that handles the response.
+   */
+   getAllDepartments(callback) {
+    const URL = `${this.APIURL}/${this.projectId}/departments/allstatus`
+    const HTTPREQUEST = {
+      url: URL,
+      headers: {
+        'Content-Type' : 'application/json',
+        'Authorization': this.jwt_token
+      },
+      // json: {member: participant},
+      method: 'GET'
+    };
+    TiledeskClient.myrequest(
+      HTTPREQUEST,
+      function(err, resbody) {
+        if (err) {
+          if (callback) {
+            callback(err);
+          }
+        }
+        else {
+          if (callback) {
+            callback(null, resbody);
+          }
+        }
+      }, this.log
+    );
+  }
+
+  /**
+   * Delete a department by id.<br>
+   * <a href='https://developer.tiledesk.com/apis/rest-api/management-api/departments#delete-a-department' target='_blank'>REST API</a>
+   * @param {string} depId - The department ID.
+   * @param {resultCallback} callback - The callback that handles the response.
+   */
+   deleteDepartment(depId, callback) {
+    const URL = `${this.APIURL}/${this.projectId}/departments/${depId}`
     const HTTPREQUEST = {
       url: URL,
       headers: {
@@ -1436,13 +1832,13 @@ class TiledeskClient {
    * @param {resultCallback} callback - The callback that handles the response.
    */
   sendChatMessage(message, callback) {
-    const jwt_token = TiledeskClient.fixToken(this.token)
+    //const jwt_token = TiledeskClient.fixToken(this.token)
     const url = `${this.APIURL}/${this.projectId}/messages`;
     const HTTPREQUEST = {
       url: url,
       headers: {
         'Content-Type' : 'application/json',
-        'Authorization': jwt_token
+        'Authorization': this.jwt_token
       },
       json: message,
       method: 'POST'
@@ -1533,192 +1929,17 @@ class TiledeskClient {
     if (!leadId) {
       throw new Error('leadId can NOT be null.');
     }
-    const jwt_token = TiledeskClient.fixToken(this.token);
+    //const jwt_token = TiledeskClient.fixToken(this.token);
     const HTTPREQUEST = {
       url: `${this.APIURL}/${this.projectId}/leads/${leadId}`, // this.conversation.lead._id
       headers: {
         'Content-Type' : 'application/json',
-        'Authorization': jwt_token
+        'Authorization': this.jwt_token
       },
       json: {
         email: email,
         fullname: fullname
       },
-      method: 'PUT'
-    };
-    TiledeskClient.myrequest(
-      HTTPREQUEST,
-      function(err, resbody) {
-        if (err) {
-          if (callback) {
-            callback(err);
-          }
-        }
-        else {
-          if (callback) {
-            callback(null, resbody);
-          }
-        }
-        // if (response.status === 200) {
-        //   if (callback) {
-        //     callback(null, resbody)
-        //   }
-        // }
-        // else if (callback) {
-        //   callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
-        // }
-      }, this.log
-    );
-  }
-
-  /**
-   * The Request properties JSON object. <a href='https://developer.tiledesk.com/apis/rest-api/requests#update-a-request-by-request_id' target='_blank'>More info</a>.
-   * @typedef requestProperties
-   * @type {Object}
-   * @property {string} first_text - The sender full name
-   * @property {string} lead - The Lead ID
-   * @property {number} status - The request's status
-   * @property {array} tags - The request's tags. It is an array of {string}
-   * @property {number} rating - The request's rating. A number between 0 and 5.
-   * @property {string} rating_message - The request rating's message.
-   * @property {string} language - The request's language.
-   * @property {string} sourcePage - The web page's URL where the request originated, if one.
-   * 
-   */
-
-  /**
-   * Updates request's properties.<br>
-   * <a href='https://developer.tiledesk.com/apis/rest-api/requests#update-a-request-by-request_id' target='_blank'>REST API</a>
-   * 
-   * @param {string} requestId - The request ID
-   * @param {requestProperties} properties - The Request's properties
-   * @param {resultCallback} callback - The callback that handles the response.
-   */
-  updateRequestProperties(requestId, properties, callback) {
-    const jwt_token = TiledeskClient.fixToken(this.token);
-    let URL = `${this.APIURL}/${projectId}/requests/${request_id}/`
-    data = properties
-    
-    const HTTPREQUEST = {
-      url: URL,
-      headers: {
-        'Content-Type' : 'application/json',
-        'Authorization': jwt_token
-      },
-      json: data,
-      method: 'PATCH'
-    };
-    TiledeskClient.myrequest(
-      HTTPREQUEST,
-      function(err, resbody) {
-        if (err) {
-          if (callback) {
-            callback(err);
-          }
-        }
-        else {
-          if (callback) {
-            callback(null, resbody);
-          }
-        }
-        // if (response.status === 200) {
-        //   if (callback) {
-        //     callback(null, resbody)
-        //   }
-        // }
-        // else if (callback) {
-        //   callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
-        // }
-      }, this.log
-    );
-  }
-
-  /**
-   * Updates request's 'attributes' property.<br>
-   * <a href='https://developer.tiledesk.com/apis/rest-api/requests#update-the-request-attributes' target='_blank'>REST API</a>
-   * 
-   * @param {string} requestId - The request ID
-   * @param {Object} attributes - The Request's custom attributes object. It's a payload that carries custom information attached to this request.
-   * @param {resultCallback} callback - The callback that handles the response.
-   */
-   updateRequestAttributes(requestId, attributes, callback, options) {
-    const jwt_token = TiledeskClient.fixToken(this.token);
-    let URL = `${this.APIURL}/${this.projectId}/requests/${requestId}/attributes`
-    let data = attributes
-    
-    const HTTPREQUEST = {
-      url: URL,
-      headers: {
-        'Content-Type' : 'application/json',
-        'Authorization': jwt_token
-      },
-      json: data,
-      method: 'PATCH'
-    };
-    TiledeskClient.myrequest(
-      HTTPREQUEST,
-      function(err, resbody) {
-        if (err) {
-          if (callback) {
-            callback(err);
-          }
-        }
-        else {
-          if (callback) {
-            callback(null, resbody);
-          }
-        }
-        // if (response.status === 200) {
-        //   if (callback) {
-        //     callback(null, resbody)
-        //   }
-        // }
-        // else if (callback) {
-        //   callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
-        // }
-      }, this.log
-    );
-  }
-
-/**
- * This callback type is called `resultCallback` and is provided as a return value by each API call.
- *
- * @callback resultCallback
- * @param {Object} result - the response body
- * @param {Object} error - the error if some occurs, otherwise null
- */
-
-  /**
-   * Updates the Request department
-   * <a href='https://developer.tiledesk.com/apis/rest-api/requests#route-a-request-to-a-department' target='_blank'>REST API</a>
-   * 
-   * @param {string} requestId - The request ID
-   * @param {string} depId - The new department ID
-   * @param {Object} options - Optional configuration.
-   * @param {string} options.nobot - Optional. Defaults to <i>false</i>. If true ignores (if set) the bot in the Department.
-   * @param {resultCallback} callback - The callback that handles the response.
-   */
-  updateRequestDepartment(requestId, depId, options, callback) {
-    let nobot_option_defined = false;
-    let nobot = false;
-    if (options && options.nobot) {
-      nobot = options.nobot;
-      nobot_option_defined = true;
-    }
-    let data = {
-      departmentid: depId
-    }
-    if (nobot_option_defined) {
-      data['nobot'] = nobot;
-    }
-    const jwt_token = TiledeskClient.fixToken(token);
-    const HTTPREQUEST = {
-      url: `${this.APIURL}/${projectId}/requests/${requestId}/departments`,
-      headers: {
-        'Content-Type' : 'application/json',
-        'Authorization': jwt_token
-      },
-      json: data,
       method: 'PUT'
     };
     TiledeskClient.myrequest(
