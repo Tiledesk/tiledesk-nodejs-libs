@@ -1998,11 +1998,11 @@ class TiledeskClient {
       }
     })
     .catch(function (error) {
+      console.error("An error occurred:", error);
       if (callback) {
         callback(error, null, null);
       }
     });
-
 
     // request(
     //   {

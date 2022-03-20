@@ -2,6 +2,9 @@
 
 This library is on npm: https://www.npmjs.com/package/@tiledesk/tiledesk-client
 
+### 0.8.14 - online
+- added "console.error("An error occurred:", error)" in TiledeskClient.myrequest "catch" block.
+
 ### 0.8.13 - online
 - added getDepartment()
 - added createDepartment()

@@ -69,6 +69,60 @@ static is_agent_handoff_command(msg) {
   }
 }
 
+/**
+ * parses all commands
+ * @param {*} text The text to parse
+ */
+ static parse_directives(text) {
+	let parsed = {
+      'text': null,
+      'directives': null
+  };
+  parsed.findDirective = function (dirname) {
+    if (this.directives == null) {
+    	return null;
+    }
+  	const found_directives = this.directives.filter(e => e.name === dirname);
+    if (found_directives.length >0) {
+      	return found_directives.shift();
+    }
+  };
+  if (!text) {
+    return parsed;
+  }
+
+  let final_msg_text = text;
+  const directive_pattern = /(\\{1}[a-zA-Z_]*)[ ]*(.*)[\r\n]*/m;
+  let match = null;
+  let directives = [];
+  while ((match = directive_pattern.exec(final_msg_text)) != null) {
+    // console.log("match: ", match);
+    // console.log("match.index: ", match.index);
+    // console.log("match[0].length: ", match[0].length);
+    // console.log("match.length:", match.length);
+    if (match.length >= 1) {
+      final_msg_text = final_msg_text.substring(0, match.index) + final_msg_text.substring(match.index + match[0].length);
+      // console.log("partial final_msg_text", final_msg_text);
+      if (match.length >= 2) {
+        let directive = {
+          name: match[1]
+        };
+        if (match.length >= 3 && match[2].trim().length > 0) {
+          directive.parameter = match[2];
+        }
+        directives.push(directive);
+      }
+    }
+  }
+
+  console.log("final text:", final_msg_text);
+  console.log("directives:", directives);
+  parsed.text = final_msg_text.trim();
+  parsed.directives = directives;
+  
+  return parsed;
+}
+
   /* Splits a message in multiple commands using the microlanguage
   \split:TIME
   command \split:TIME must stand on a line of his own as in the following example
@@ -153,6 +207,9 @@ static is_agent_handoff_command(msg) {
 
   // other
   static AGENT_COMMAND = '\\agent';
+  static CLOSE_COMMAND = '\\close';
+  static DEPARTMENT_COMMAND = '\\department';
+  static JSONMESSAGE_COMMAND = '\\jsonmessage';
 
   static parseReply(text) {
       let reply = {

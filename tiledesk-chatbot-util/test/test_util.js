@@ -76,7 +76,7 @@ const { TiledeskChatbotUtil } = require('..');
 /**
   * is_agent_handoff_command() with agent
   */
- describe('TiledeskChatbotUtil', function() {
+describe('TiledeskChatbotUtil', function() {
     describe('This messae only contains the command', function() {
         it('should return agent_handoff != null', function() {
             const msg = {
