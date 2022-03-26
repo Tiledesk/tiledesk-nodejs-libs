@@ -4,6 +4,7 @@
 
 // const request = require('request');
 let axios = require('axios');
+const { request } = require('express');
 const { v4: uuidv4 } = require('uuid');
 
 /**
@@ -69,15 +70,6 @@ class TiledeskClient {
     this.log = false;
     if (options && options.log) {
       this.log = options.log;
-    }
-  }
-
-  static fixToken(token) {
-    if (token.startsWith('JWT ')) {
-      return token
-    }
-    else {
-      return 'JWT ' + token
     }
   }
 
@@ -1007,8 +999,8 @@ class TiledeskClient {
  * This callback type is called `resultCallback` and is provided as a return value by each API call.
  *
  * @callback resultCallback
- * @param {Object} result - the response body
  * @param {Object} error - the error if some occurs, otherwise null
+ * @param {Object} result - the response body
  */
 
   /**
@@ -1068,6 +1060,133 @@ class TiledeskClient {
     );
   }
 
+  // *************************************************************
+  // *********************** ORCHESTRATION ***********************
+  // *************************************************************
+
+  /**
+   * Updates the Request removing the current chatbot (if any) and adding the new one. Then it sends the hidden 'start' message
+   * Orchestration API (Mashup of REST APIs)
+   * 
+   * @param {string} requestId - The request ID
+   * @param {string} botAsPartecipantId - The bot id in the form 'bot_${botId}'.
+   * @param {resultCallback} callback - The callback that handles the response.
+   */
+   changeBot(requestId, botAsPartecipantId, callback) {
+    if (!requestId || !botAsPartecipantId) {
+      callback({'message': 'botAsPartecipantId is undefined'});
+      return;
+    }
+    let message = {
+      text: 'start',
+      attributes: {
+        subtype: 'info'
+      }
+    }
+    this.getRequestById(requestId, (err, result) => {
+      console.log("changeBot.requestId got:", result);
+      if (err) {
+        callback({'message': 'getRequestById() error'});
+      }
+      const request = result;
+      if (request.participantsBots && request.participantsBots.length > 0) {
+        console.log("request already participated by bots", request.participantsBots);
+        const first_bot = request.participantsBots[0];
+        const first_bot_id_as_partecipant = "bot_" + first_bot;
+        this.deleteRequestParticipant(requestId, first_bot_id_as_partecipant, (err) => {
+          this.addParticipantAndMessage(requestId, botAsPartecipantId, message, (err) => {
+            if (err) {
+              callback(err);
+            }
+            else {
+              callback();
+            }
+          });
+        });
+      }
+      else {
+        console.log("request not participated by bots...");
+        this.addParticipantAndMessage(requestId, botAsPartecipantId, message, (err) => {
+          console.log("Bot added. err?", err);
+          if (err) {
+            callback(err);
+          }
+          else {
+            callback();
+          }
+        });
+      }
+    });
+  }
+
+  /**
+   * Updates the Request removing the current chatbot (if any) and adding the new one. Then it sends the optional first message
+   * Orchestration API (Mashup of REST APIs)
+   * 
+   * @param {string} requestId - The request ID
+   * @param {string} botAsPartecipantId - The bot id in the form 'bot_${botId}'.
+   * @param {string} message - Optional. The first message to send as soon as the new bot is added to the conversation. This is used to trigger the greet message from the chatbot, if any is defined.
+   * @param {resultCallback} callback - The callback that handles the response.
+   */
+  changeBotAndMessage(requestId, botAsPartecipantId, message, callback) {
+    if (!requestId || !botAsPartecipantId) {
+      callback({'message': 'botAsPartecipantId is undefined'});
+      return;
+    }
+    this.getRequestById(requestId, (err, result) => {
+      if (err) {
+        callback({'message': 'getRequestById() error'});
+      }
+      const request = result;
+      if (request.participantsBots && request.participantsBots.length > 0) {
+        first_bot = request.participantsBots[0];
+        let first_bot_id_as_partecipant = "bot_" + first_bot;
+        this.deleteRequestParticipant(requestId, first_bot_id_as_partecipant, (err) => {
+          this.addParticipantAndMessage(requestId, botAsPartecipantId, message, (err) => {
+            if (err) {
+              callback(err);
+            }
+            else {
+              callback();
+            }
+          });
+        });
+      }
+      else {
+        this.addParticipantAndMessage(requestId, botAsPartecipantId, message, (err) => {
+          if (err) {
+            callback(err);
+          }
+          else {
+            callback();
+          }
+        });
+      }
+    });
+  }
+
+  // private
+  addParticipantAndMessage(requestId, botAsPartecipantId, message, callback) {
+    this.addRequestParticipant(requestId, botAsPartecipantId, (err, result) => {
+      if (err) {
+        callback(err)
+      }
+      else {
+        console.log("partecipant added.", err);
+        if (message) {
+          this.sendSupportMessage(requestId, message, function(err) {
+            if (err) {
+              callback(err);
+            }
+            else {
+              callback();
+            }
+          });
+        }
+      }
+    });
+  }
+
   // ****************************************************
   // *********************** BOTS ***********************
   // ****************************************************
@@ -1103,6 +1222,36 @@ class TiledeskClient {
         }
       }, this.log
     );
+  }
+
+  /**
+   * Get the first bot with the specified name in the project.<br>
+   * <a href='https://developer.tiledesk.com/apis/rest-api/chat-bots/bots#get-all-bots' target='_blank'>REST API</a>
+   *
+   * @param {string} botName - The bot name.
+   * @param {resultCallback} callback - The callback that handles the response.
+   */
+  findBotByName(botName, callback) {
+    this.getAllBots((err, bots) => {
+      if (err) {
+        callback(err, null);
+        return;
+      }
+      let bot_as_partecipant_id = null;
+      for (i = 0; i < bots.length; i++) {
+        const bot = bots[i];
+        console.log(bot.description)
+        const properties = JSON.parse(bot.description);
+        if (properties && properties.name === name_match && bot.language === user_lang) {
+          console.log("Bot found:", bot.name, bot._id);
+          bot_as_partecipant_id = "bot_" + bot._id;
+          break;
+        }
+      }
+      if (bot_as_partecipant_id) {
+        callback(null, err);
+      }
+    });
   }
 
   /**
@@ -1579,15 +1728,11 @@ class TiledeskClient {
       }, this.log
     );
   }
-
-  static getErr(err, request, response) {
-    let res_err = {}
-    res_err.http_err = err;
-    res_err.http_request = request;
-    res_err.http_response = response;
-    return res_err;
-  }
   
+  // ***************************************************
+  // ****************** AUTHENTICATION *****************
+  // ***************************************************
+
   /** Returns an anonymous user token to connect to a specific project's services.<br>
    * <a href='https://developer.tiledesk.com/apis/rest-api/authentication#anonymous-authentication-for-a-user.' target='_blank'>REST API</a>
    * @param {string} projectId - The projectId for this anonymous user.
@@ -1771,6 +1916,10 @@ class TiledeskClient {
     );
   }
 
+  // **********************************************
+  // ****************** MESSAGING *****************
+  // **********************************************
+
   /**
    * Sends a message to a support conversation.<br>
    * <a href='https://developer.tiledesk.com/apis/rest-api/messages#send-a-message.' target='_blank'>REST API</a>
@@ -1871,6 +2020,10 @@ class TiledeskClient {
     );
   }
 
+  // *******************************************
+  // ****************** EVENTS *****************
+  // *******************************************
+
   /**
    * Fire a new custom event and save it.<br>
    * With this endpoint you can fire a custom event. You event name should be of the form <i>event.emit.EVENT_NAME</i> to correctly identify your custom event.<br>
@@ -1916,6 +2069,10 @@ class TiledeskClient {
     );
   }
   
+  // ******************************************
+  // ****************** LEADS *****************
+  // ******************************************
+
   /**
    * Updates a Lead's email and fullname.<br>
    * <a href='https://developer.tiledesk.com/apis/rest-api/leads#update-a-lead-by-id' target='_blank'>REST API</a>
@@ -1966,6 +2123,10 @@ class TiledeskClient {
       }, this.log
     );
   }
+
+  // ************************************************
+  // ****************** HTTP REQUEST ****************
+  // ************************************************
 
   static myrequest(options, callback, log) {
     if (log) {
@@ -2024,6 +2185,23 @@ class TiledeskClient {
     //     }
     //   }
     // );
+  }
+
+  static getErr(err, request, response) {
+    let res_err = {}
+    res_err.http_err = err;
+    res_err.http_request = request;
+    res_err.http_response = response;
+    return res_err;
+  }
+
+  static fixToken(token) {
+    if (token.startsWith('JWT ')) {
+      return token
+    }
+    else {
+      return 'JWT ' + token
+    }
   }
 
 }

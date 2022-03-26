@@ -636,7 +636,7 @@ describe('TiledeskClient', function() {
                 assert(request.request_id != null);
                 first_request_id = request.request_id;
                 tdclient.getRequestById(first_request_id, (err, result) => {
-                    // console.log("RICHIESTA", JSON.stringify(result))
+                    console.log("RICHIESTA", JSON.stringify(result))
                     assert(result != null);
                     const request = result;
                     assert(request.request_id != null);
@@ -809,6 +809,109 @@ describe('TiledeskClient', function() {
         });
     });
 });
+
+// *********** ORCHESTERATION ***********
+
+describe('TiledeskClient', function() {
+    describe('changeBot()', function() {
+        it('change a conversation bot (who had no bots)', (done) => {
+            const tdclient = new TiledeskClient(
+            {
+                APIKEY: APIKEY,
+                APIURL: API_ENDPOINT,
+                projectId: PROJECT_ID,
+                token: USER_TOKEN,
+                log: false
+            })
+            
+            const text_value = 'test message';
+            const request_id = TiledeskClient.newRequestId(PROJECT_ID);
+            tdclient.sendSupportMessage(request_id, {text: text_value}, function(err, result) {
+                assert(err === null);
+                assert(result != null);
+                assert(result.text === text_value);
+                const bot_name = "my bot " + uuidv4();
+                tdclient.createBot(bot_name, false, null, (err, bot) => {
+                    console.log("bot created:", bot);
+                    assert(bot);
+                    assert(bot.type === 'internal');
+                    assert(bot.name === bot_name);
+                    assert(bot._id !== null);
+                    const bot_id = 'bot_' + bot._id;
+                    tdclient.changeBot(request_id, bot_id, (err) => {
+                        console.log("error?", err);
+                        assert(err == null);
+                        tdclient.getRequestById(request_id, (err, request) => {
+                            console.log("User token:", USER_TOKEN);
+                            console.log("request is:", request);
+                            assert(request.participantsBots != null);
+                            assert(request.participantsBots.length > 0);
+                            assert(request.participantsBots[0] === bot._id);
+                            done();
+                        });
+                    });
+                });
+            });
+        });
+    });
+});
+
+describe('TiledeskClient', function() {
+    describe('changeBot()', function() {
+        it('change a conversation bot (with a previous bot)', (done) => {
+            const tdclient = new TiledeskClient(
+            {
+                APIKEY: APIKEY,
+                APIURL: API_ENDPOINT,
+                projectId: PROJECT_ID,
+                token: USER_TOKEN,
+                log: false
+            })
+            
+            const text_value = 'test message';
+            const request_id = TiledeskClient.newRequestId(PROJECT_ID);
+            tdclient.sendSupportMessage(request_id, {text: text_value}, function(err, result) {
+                assert(err === null);
+                assert(result != null);
+                assert(result.text === text_value);
+                const bot_name = "my bot " + uuidv4();
+                tdclient.createBot(bot_name, false, null, (err, bot) => {
+                    console.log("bot created:", bot);
+                    assert(bot);
+                    assert(bot.type === 'internal');
+                    assert(bot.name === bot_name);
+                    assert(bot._id !== null);
+                    const bot_id = 'bot_' + bot._id;
+                    tdclient.addRequestParticipant(request_id, bot_id, (err, result) => {
+                        const bot_name2 = "my bot " + uuidv4();
+                        tdclient.createBot(bot_name2, false, null, (err, bot) => {
+                            console.log("bot2 created:", bot);
+                            assert(bot);
+                            assert(bot.type === 'internal');
+                            assert(bot.name === bot_name2);
+                            assert(bot._id !== null);
+                            const bot_id2 = 'bot_' + bot._id;
+                            tdclient.changeBot(request_id, bot_id2, (err) => {
+                                console.log("error?", err);
+                                assert(err == null);
+                                tdclient.getRequestById(request_id, (err, request) => {
+                                    console.log("User token:", USER_TOKEN);
+                                    console.log("request2 is:", request);
+                                    assert(request.participantsBots != null);
+                                    assert(request.participantsBots.length > 0);
+                                    assert(request.participantsBots[0] === bot._id);
+                                    done();
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    });
+});
+
+// **************** DEPARTMENTS *****************
 
 describe('TiledeskClient', function() {
     describe('createDepartment() getAllDepartments() deleteDepartment() getDepartment()', function() {
