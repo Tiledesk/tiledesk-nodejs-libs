@@ -823,7 +823,7 @@ describe('TiledeskClient', function() {
                 token: USER_TOKEN,
                 log: false
             })
-            
+            // 1. Creates a request
             const text_value = 'test message';
             const request_id = TiledeskClient.newRequestId(PROJECT_ID);
             tdclient.sendSupportMessage(request_id, {text: text_value}, function(err, result) {
@@ -831,19 +831,18 @@ describe('TiledeskClient', function() {
                 assert(result != null);
                 assert(result.text === text_value);
                 const bot_name = "my bot " + uuidv4();
+                // 2. Creates a bot
                 tdclient.createBot(bot_name, false, null, (err, bot) => {
-                    console.log("bot created:", bot);
+                    // console.log("bot created:", bot);
                     assert(bot);
                     assert(bot.type === 'internal');
                     assert(bot.name === bot_name);
                     assert(bot._id !== null);
                     const bot_id = 'bot_' + bot._id;
+                    // 3. Changes the bot (adding effectively)
                     tdclient.changeBot(request_id, bot_id, (err) => {
-                        console.log("error?", err);
                         assert(err == null);
                         tdclient.getRequestById(request_id, (err, request) => {
-                            console.log("User token:", USER_TOKEN);
-                            console.log("request is:", request);
                             assert(request.participantsBots != null);
                             assert(request.participantsBots.length > 0);
                             assert(request.participantsBots[0] === bot._id);
@@ -868,6 +867,7 @@ describe('TiledeskClient', function() {
                 log: false
             })
             
+            // 1. Creates a request
             const text_value = 'test message';
             const request_id = TiledeskClient.newRequestId(PROJECT_ID);
             tdclient.sendSupportMessage(request_id, {text: text_value}, function(err, result) {
@@ -875,28 +875,29 @@ describe('TiledeskClient', function() {
                 assert(result != null);
                 assert(result.text === text_value);
                 const bot_name = "my bot " + uuidv4();
+                // 2. Creates a bot
                 tdclient.createBot(bot_name, false, null, (err, bot) => {
-                    console.log("bot created:", bot);
+                    // console.log("bot created:", bot);
                     assert(bot);
                     assert(bot.type === 'internal');
                     assert(bot.name === bot_name);
                     assert(bot._id !== null);
                     const bot_id = 'bot_' + bot._id;
+                    // 3. Adds the bot to the request
                     tdclient.addRequestParticipant(request_id, bot_id, (err, result) => {
                         const bot_name2 = "my bot " + uuidv4();
+                        // 4. Creates a second bot
                         tdclient.createBot(bot_name2, false, null, (err, bot) => {
-                            console.log("bot2 created:", bot);
+                            // console.log("bot2 created:", bot);
                             assert(bot);
                             assert(bot.type === 'internal');
                             assert(bot.name === bot_name2);
                             assert(bot._id !== null);
                             const bot_id2 = 'bot_' + bot._id;
+                            // 5. Changes the bot
                             tdclient.changeBot(request_id, bot_id2, (err) => {
-                                console.log("error?", err);
                                 assert(err == null);
                                 tdclient.getRequestById(request_id, (err, request) => {
-                                    console.log("User token:", USER_TOKEN);
-                                    console.log("request2 is:", request);
                                     assert(request.participantsBots != null);
                                     assert(request.participantsBots.length > 0);
                                     assert(request.participantsBots[0] === bot._id);
@@ -944,7 +945,6 @@ describe('TiledeskClient', function() {
                     const dep2_id = result._id;
                     // console.log("dep2_id", dep2_id)
                     tdclient.getDepartment(dep2_id, (err, result) => {
-                        console.log("dep:", result);
                         assert(!err);
                         assert(result);
                         assert(result.default === false);

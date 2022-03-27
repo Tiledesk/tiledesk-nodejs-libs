@@ -2,6 +2,15 @@
 
 This library is on npm: https://www.npmjs.com/package/@tiledesk/tiledesk-client
 
+### 0.8.17 - online
+- log fix
+
+### 0.8.16 - online
+- changeBot() now takes a simple botId ('bot_' prefix constraint removed)
+
+### 0.8.15 - online
+- added orchestration APIs: changeBot, changeBotAndMessage, addParticipantAndMessage
+
 ### 0.8.14 - online
 - added "console.error("An error occurred:", error)" in TiledeskClient.myrequest "catch" block.
 

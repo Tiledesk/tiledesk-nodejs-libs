@@ -287,7 +287,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line12">line 12</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line13">line 13</a>
     </li></ul></dd>
     
 
@@ -593,7 +593,7 @@ const tdclient = new TiledeskClient({APIKEY: 'THE_API_KEY', projectId: 'YOUR_PRO
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1204">line 1204</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1746">line 1746</a>
     </li></ul></dd>
     
 
@@ -872,7 +872,7 @@ const tdclient = new TiledeskClient({APIKEY: 'THE_API_KEY', projectId: 'YOUR_PRO
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1330">line 1330</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1872">line 1872</a>
     </li></ul></dd>
     
 
@@ -1152,7 +1152,7 @@ See <a href='https://developer.tiledesk.com/apis/authentication'>JWT authenticat
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1274">line 1274</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1816">line 1816</a>
     </li></ul></dd>
     
 
@@ -1294,7 +1294,7 @@ A request's ID has the format:<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line93">line 93</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line85">line 85</a>
     </li></ul></dd>
     
 
@@ -1478,7 +1478,398 @@ A request's ID has the format:<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line870">line 870</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line861">line 861</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="changeBot"><span class="type-signature"></span>changeBot<span class="signature">(requestId, botId, callback)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Updates the Request removing the current chatbot (if any) and adding the new one. Then it sends the hidden 'start' message
+Orchestration API (Mashup of REST APIs)
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>requestId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The request ID</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>botId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The id of the bot to add in the conversation.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#resultCallback">resultCallback</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The callback that handles the response.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1075">line 1075</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="changeBotAndMessage"><span class="type-signature"></span>changeBotAndMessage<span class="signature">(requestId, botAsPartecipantId, message, callback)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Updates the Request removing the current chatbot (if any) and adding the new one. Then it sends the optional first message
+Orchestration API (Mashup of REST APIs)
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>requestId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The request ID</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>botAsPartecipantId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The bot id in the form 'bot_${botId}'.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>message</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Optional. The first message to send as soon as the new bot is added to the conversation. This is used to trigger the greet message from the chatbot, if any is defined.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#resultCallback">resultCallback</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The callback that handles the response.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1132">line 1132</a>
     </li></ul></dd>
     
 
@@ -1685,7 +2076,237 @@ A request's ID has the format:<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line977">line 977</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1300">line 1300</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="createDepartment"><span class="type-signature"></span>createDepartment<span class="signature">(name, routing, groupId, botId, callback)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Create a new department.<br>
+<a href='https://developer.tiledesk.com/apis/rest-api/management-api/departments#create-a-new-department' target='_blank'>REST API</a>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The department's name.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>routing</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">(optional) The department routing type. Permitted values: 'assigned', 'pooled' (default).</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>groupId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">(optional) The group of users assigned to the department. If not provided the request will be routed through all available users</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>botId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">(optional) The bot assigned to the department, if any.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#resultCallback">resultCallback</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The callback that handles the response.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1419">line 1419</a>
     </li></ul></dd>
     
 
@@ -1846,7 +2467,168 @@ A request's ID has the format:<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1055">line 1055</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1378">line 1378</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="deleteDepartment"><span class="type-signature"></span>deleteDepartment<span class="signature">(depId, callback)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Delete a department by id.<br>
+<a href='https://developer.tiledesk.com/apis/rest-api/management-api/departments#delete-a-department' target='_blank'>REST API</a>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>depId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The department ID.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#resultCallback">resultCallback</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The callback that handles the response.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1601">line 1601</a>
     </li></ul></dd>
     
 
@@ -2030,7 +2812,168 @@ A request's ID has the format:<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line835">line 835</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line826">line 826</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="findBotByName"><span class="type-signature"></span>findBotByName<span class="signature">(botName, callback)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Get the first bot with the specified name in the project.<br>
+<a href='https://developer.tiledesk.com/apis/rest-api/chat-bots/bots#get-all-bots' target='_blank'>REST API</a>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>botName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The bot name.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#resultCallback">resultCallback</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The callback that handles the response.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1235">line 1235</a>
     </li></ul></dd>
     
 
@@ -2193,7 +3136,7 @@ You can find the standard Tiledesk events here<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1487">line 1487</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line2037">line 2037</a>
     </li></ul></dd>
     
 
@@ -2331,7 +3274,145 @@ You can find the standard Tiledesk events here<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line907">line 907</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1200">line 1200</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getAllDepartments"><span class="type-signature"></span>getAllDepartments<span class="signature">(callback)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Get all the deparments defined in the project.<br>
+<a href='https://developer.tiledesk.com/apis/rest-api/management-api/departments#get-all-departments-active-or-hidden' target='_blank'>REST API</a>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#resultCallback">resultCallback</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The callback that handles the response.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1567">line 1567</a>
     </li></ul></dd>
     
 
@@ -2586,7 +3667,7 @@ You can find the standard Tiledesk events here<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line627">line 627</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line618">line 618</a>
     </li></ul></dd>
     
 
@@ -2747,7 +3828,306 @@ You can find the standard Tiledesk events here<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line941">line 941</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1264">line 1264</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getDepartment"><span class="type-signature"></span>getDepartment<span class="signature">(depId, callback)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Get a department by id.<br>
+<a href='https://developer.tiledesk.com/apis/rest-api/management-api/departments#get-a-department-by-id' target='_blank'>REST API</a>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>depId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The department ID.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#resultCallback">resultCallback</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The callback that handles the response.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1501">line 1501</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getDepartments"><span class="type-signature"></span>getDepartments<span class="signature">(callback)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Get all the visible (aka active) departments defined in the project.<br>
+<a href='https://developer.tiledesk.com/apis/rest-api/management-api/departments#get-all-active-departments' target='_blank'>REST API</a>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#resultCallback">resultCallback</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The callback that handles the response.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1534">line 1534</a>
     </li></ul></dd>
     
 
@@ -2980,7 +4360,7 @@ You can find the standard Tiledesk events here<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line143">line 143</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line135">line 135</a>
     </li></ul></dd>
     
 
@@ -3140,7 +4520,7 @@ You can find the standard Tiledesk events here<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line302">line 302</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line294">line 294</a>
     </li></ul></dd>
     
 
@@ -3300,7 +4680,7 @@ You can find the standard Tiledesk events here<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line707">line 707</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line698">line 698</a>
     </li></ul></dd>
     
 
@@ -3437,7 +4817,7 @@ You can find the standard Tiledesk events here<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1092">line 1092</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1638">line 1638</a>
     </li></ul></dd>
     
 
@@ -3575,7 +4955,7 @@ You can find the standard Tiledesk events here<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1150">line 1150</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1696">line 1696</a>
     </li></ul></dd>
     
 
@@ -3736,7 +5116,7 @@ You can find the standard Tiledesk events here<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1438">line 1438</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1984">line 1984</a>
     </li></ul></dd>
     
 
@@ -3920,7 +5300,7 @@ You can find the standard Tiledesk events here<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1386">line 1386</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1932">line 1932</a>
     </li></ul></dd>
     
 
@@ -4127,7 +5507,260 @@ You can find the standard Tiledesk events here<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1017">line 1017</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1340">line 1340</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="updateDepartment"><span class="type-signature"></span>updateDepartment<span class="signature">(depId, name, routing, groupId, botId, callback)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Update a new department.<br>
+<a href='https://developer.tiledesk.com/apis/rest-api/management-api/departments#update-a-department' target='_blank'>REST API</a>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>depId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The department's id.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The department's name.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>routing</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">(optional) The department routing type. Permitted values: 'assigned', 'pooled' (default).</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>groupId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">(optional) The group of users assigned to the department. If not provided the request will be routed through all available users</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>botId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">(optional) The bot assigned to the department, if any.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#resultCallback">resultCallback</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The callback that handles the response.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1462">line 1462</a>
     </li></ul></dd>
     
 
@@ -4334,7 +5967,7 @@ You can find the standard Tiledesk events here<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1532">line 1532</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line2086">line 2086</a>
     </li></ul></dd>
     
 
@@ -4522,7 +6155,7 @@ You can find the standard Tiledesk events here<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line399">line 399</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line391">line 391</a>
     </li></ul></dd>
     
 
@@ -4705,7 +6338,7 @@ You can find the standard Tiledesk events here<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line490">line 490</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line482">line 482</a>
     </li></ul></dd>
     
 
@@ -4888,7 +6521,7 @@ You can find the standard Tiledesk events here<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line443">line 443</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line435">line 435</a>
     </li></ul></dd>
     
 
@@ -5190,7 +6823,7 @@ You can find the standard Tiledesk events here<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line351">line 351</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line343">line 343</a>
     </li></ul></dd>
     
 
@@ -5374,7 +7007,7 @@ You can find the standard Tiledesk events here<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1644">line 1644</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line959">line 959</a>
     </li></ul></dd>
     
 
@@ -5630,7 +7263,7 @@ You can find the standard Tiledesk events here<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1701">line 1701</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1016">line 1016</a>
     </li></ul></dd>
     
 
@@ -5814,7 +7447,7 @@ You can find the standard Tiledesk events here<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line771">line 771</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line762">line 762</a>
     </li></ul></dd>
     
 
@@ -5998,7 +7631,7 @@ You can find the standard Tiledesk events here<br>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1597">line 1597</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line912">line 912</a>
     </li></ul></dd>
     
 
@@ -6050,7 +7683,7 @@ You can find the standard Tiledesk events here<br>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Sat Dec 25 2021 17:51:46 GMT+0100 (Central European Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Sun Mar 27 2022 12:08:45 GMT+0200 (Central European Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>

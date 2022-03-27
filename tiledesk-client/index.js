@@ -1069,11 +1069,11 @@ class TiledeskClient {
    * Orchestration API (Mashup of REST APIs)
    * 
    * @param {string} requestId - The request ID
-   * @param {string} botAsPartecipantId - The bot id in the form 'bot_${botId}'.
+   * @param {string} botId - The id of the bot to add in the conversation.
    * @param {resultCallback} callback - The callback that handles the response.
    */
-   changeBot(requestId, botAsPartecipantId, callback) {
-    if (!requestId || !botAsPartecipantId) {
+   changeBot(requestId, botId, callback) {
+    if (!requestId || !botId) {
       callback({'message': 'botAsPartecipantId is undefined'});
       return;
     }
@@ -1083,14 +1083,17 @@ class TiledeskClient {
         subtype: 'info'
       }
     }
+    let botAsPartecipantId = botId;
+    if (!botId.startsWith("bot_")) {
+      botAsPartecipantId = "bot_" + botId;
+    }
     this.getRequestById(requestId, (err, result) => {
-      console.log("changeBot.requestId got:", result);
       if (err) {
         callback({'message': 'getRequestById() error'});
       }
       const request = result;
       if (request.participantsBots && request.participantsBots.length > 0) {
-        console.log("request already participated by bots", request.participantsBots);
+        //console.log("request already participated by bots", request.participantsBots);
         const first_bot = request.participantsBots[0];
         const first_bot_id_as_partecipant = "bot_" + first_bot;
         this.deleteRequestParticipant(requestId, first_bot_id_as_partecipant, (err) => {
@@ -1105,9 +1108,7 @@ class TiledeskClient {
         });
       }
       else {
-        console.log("request not participated by bots...");
         this.addParticipantAndMessage(requestId, botAsPartecipantId, message, (err) => {
-          console.log("Bot added. err?", err);
           if (err) {
             callback(err);
           }
@@ -1172,7 +1173,7 @@ class TiledeskClient {
         callback(err)
       }
       else {
-        console.log("partecipant added.", err);
+        //console.log("partecipant added.", err);
         if (message) {
           this.sendSupportMessage(requestId, message, function(err) {
             if (err) {
