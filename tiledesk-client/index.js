@@ -1065,7 +1065,7 @@ class TiledeskClient {
   // *************************************************************
 
   /**
-   * Updates the Request removing the current chatbot (if any) and adding the new one. Then it sends the hidden 'start' message
+   * Updates the Request removing the current chatbot (if any) and adding the new one. Then it sends the hidden 'start' message.
    * Orchestration API (Mashup of REST APIs)
    * 
    * @param {string} requestId - The request ID
@@ -1121,7 +1121,7 @@ class TiledeskClient {
   }
 
   /**
-   * Updates the Request removing the current chatbot (if any) and adding the new one. Then it sends the optional first message
+   * Updates the Request removing the current chatbot (if any) and adding the new one. Then it sends the optional first message.
    * Orchestration API (Mashup of REST APIs)
    * 
    * @param {string} requestId - The request ID
