@@ -1,6 +1,6 @@
 {
   "name": "@tiledesk/tiledesk-client",
-  "version": "0.8.16",
+  "version": "0.8.18",
   "description": "Javascript (Node.js) SDK for Tiledesk REST APIs",
   "main": "index.js",
   "scripts": {

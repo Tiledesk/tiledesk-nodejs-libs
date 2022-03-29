@@ -2,6 +2,9 @@
 
 This library is on npm: https://www.npmjs.com/package/@tiledesk/tiledesk-client
 
+### 0.8.18 - online
+- added getTeam()
+
 ### 0.8.17 - online
 - log fix
 

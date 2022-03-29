@@ -168,127 +168,44 @@ class TiledeskClient {
       }, this.log);
   }
 
-  // /**
-  //  * Updates the request's properties.<br>
-  //  * <a href='https://developer.tiledesk.com/apis/rest-api/requests#update-a-request-by-request_id' target='_blank'>REST API</a>
-  //  * 
-  //  * @param {string} requestId - The request ID
-  //  * @param {Object} properties - The request properties to update.
-  //  * @param {resultCallback} callback - The callback that handles the response.
-  //  * @param {Object} options - Optional configuration.
-  //  * @param {string} options.token - The token for this request. Overrides instance token (if) provided in constructor.
-  //  * @param {string} options.projectId - The token for this request. Overrides instance token (if) provided in constructor.
-  //  */
-  // updateRequestProperties(requestId, properties, callback, options) {
-  //   let token;
-  //   if (options && options.token) {
-  //     token = options.token;
-  //   }
-  //   else if (this.token) {
-  //     token = this.token;
-  //   }
-  //   else {
-  //     throw new Error('token can NOT be null.');
-  //   }
-  //   let projectId;
-  //   if (options && options.projectId) {
-  //     projectId = options.projectId;
-  //   }
-  //   else if (this.projectId) {
-  //     projectId = this.projectId;
-  //   }
-  //   else {
-  //     throw new Error('projectId can NOT be null.');
-  //   }
-  //   const jwt_token = TiledeskClient.fixToken(token)
-  //   var URL = `${this.APIURL}/${projectId}/requests/${requestId}`
-  //   data = properties;
-  //   const HTTPREQUEST = {
-  //     url: URL,
-  //     headers: {
-  //       'Content-Type' : 'application/json',
-  //       'Authorization': jwt_token
-  //     },
-  //     json: data,
-  //     method: 'PATCH'
-  //     };
-  //   TiledeskClient.myrequest(
-  //     HTTPREQUEST,
-  //     function(err, response, resbody) {
-  //       if (response.status === 200) {
-  //         if (callback) {
-  //          callback(null, resbody)
-  //         }
-  //       }
-  //       else if (callback) {
-  //         callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
-  //       }
-  //     }, this.log
-  //   );
-  // }
-
-  // /**
-  //  * Updates the request's attributes.<br>
-  //  * <a href='https://developer.tiledesk.com/apis/rest-api/requests#update-the-request-attributes' target='_blank'>REST API</a>
-  //  * 
-  //  * @param {string} requestId - The request ID
-  //  * @param {Object} attributes - The request attributes to update.
-  //  * @param {resultCallback} callback - The callback that handles the response.
-  //  * @param {Object} options - Optional configuration.
-  //  * @param {string} options.token - The token for this request. Overrides instance token (if) provided in constructor.
-  //  * @param {string} options.projectId - The token for this request. Overrides instance token (if) provided in constructor.
-  //  */
-  // updateRequestAttributes(requestId, attributes, callback, options) {
-  //   let token;
-  //   if (options && options.token) {
-  //     token = options.token;
-  //   }
-  //   else if (this.token) {
-  //     token = this.token;
-  //   }
-  //   else {
-  //     throw new Error('token can NOT be null.');
-  //   }
-  //   let projectId;
-  //   if (options && options.projectId) {
-  //     projectId = options.projectId;
-  //   }
-  //   else if (this.projectId) {
-  //     projectId = this.projectId;
-  //   }
-  //   else {
-  //     throw new Error('projectId can NOT be null.');
-  //   }
-  //   const jwt_token = TiledeskClient.fixToken(token)
-  //   var URL = `${this.APIURL}/${projectId}/requests/${requestId}/attributes`
-  //   var data = attributes;
-  //   const HTTPREQUEST = {
-  //     url: URL,
-  //     headers: {
-  //       'Content-Type' : 'application/json',
-  //       'Authorization': jwt_token
-  //     },
-  //     json: data,
-  //     method: 'PATCH'
-  //   };
-  //   TiledeskClient.myrequest(
-  //     HTTPREQUEST,
-  //     function(err, response, resbody) {
-  //       if (response.status === 200) {
-  //         if (callback) {
-  //          callback(null, resbody)
-  //         }
-  //       }
-  //       else if (callback) {
-  //         callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
-  //       }
-  //     }, this.log
-  //   );
-  // }
+  // ***************************************************
+  // ********************* TEAM ************************
+  // ***************************************************
 
   /**
-   * Returns a project's User (aka Teammate, is a User invited on a project, with additional properties and a spcific project-userId)
-   * @param {string} userId - The Teammate ID. Is the specific ID for this user on this project
+   * Returns all teammates (aka Project Users, Tiledesk Users invited on a specific project are named "Teammates". They have additional properties and a specific project-userId)
+   * @param {resultCallback} callback - The callback that handles the response.
+   */
+   getTeam(callback) {
+    const URL = `${this.APIURL}/${this.projectId}/project_users`
+    const HTTPREQUEST = {
+      url: URL,
+      headers: {
+        'Content-Type' : 'application/json',
+        'Authorization': this.jwt_token
+      },
+      method: 'GET'
+    };
+    TiledeskClient.myrequest(
+      HTTPREQUEST,
+      function(err, resbody) {
+        if (err) {
+          if (callback) {
+            callback(err);
+          }
+        }
+        else {
+          if (callback) {
+            callback(null, resbody);
+          }
+        }
+      }, this.log
+    );
+  }
+
+  /**
+   * Returns a project's User (aka Teammate, is a User invited on a project, with additional properties and a specific project-userId)
+   * @param {string} userId - The Teammate ID. It is the specific ID for this user on this project
    * @param {resultCallback} callback - The callback that handles the response.
    */
   getProjectUser(userId, callback) {

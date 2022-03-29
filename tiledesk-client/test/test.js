@@ -245,6 +245,10 @@ describe('TiledeskClient', function() {
     });
 });
 
+  // ***************************************************
+  // ********************* TEAM ************************
+  // ***************************************************
+
 describe('TiledeskClient', function() {
     describe('updateProjectUser()', function() {
         it('updates the project-user status to AVAILABLE', function(done) {
@@ -390,40 +394,38 @@ describe('TiledeskClient', function() {
     });
 });
 
-// describe('TiledeskClient', function() {
-//     describe('getAllProjectUsers()', function() {
-//         it('gets all the project users', function(done) {
-//             const tdclient = new TiledeskClient(
-//             {
-//                 APIKEY: APIKEY,
-//                 APIURL: API_ENDPOINT,
-//                 log: true
-//             })
-//             if (tdclient) {
-//               tdclient.authEmailPassword(EMAIL, PASSWORD, function(err, result) {
-//                 console.log("RESULT:", result);
-//                 tdclient.getAllProjectUsers(
-//                     PROJECT_ID,
-//                     result.token,
-//                     function(err, resbody) {
-//                         if (!err && resbody) {
-//                             assert(resbody.name === PROJECT_NAME);
-//                             done();
-//                         }
-//                         else {
-//                             assert.ok(false);
-//                         }
-//                     }
-//                 );
-//               })
-              
-//             }
-//             else {
-//                 assert.ok(false);
-//             }
-//         });
-//     });
-// });
+describe('TiledeskClient', function() {
+    describe('getTeam()', function() {
+        it('gets all the project users (the team)', function(done) {
+            const tdclient = new TiledeskClient(
+            {
+                APIKEY: APIKEY,
+                APIURL: API_ENDPOINT,
+                projectId: PROJECT_ID,
+                token: USER_TOKEN,
+                log: LOG_STATUS
+            })
+            if (tdclient) {
+                tdclient.getTeam(
+                    (err, teammates) => {
+                        if (!err && teammates) {
+                            console.log("TEAM IS", teammates);
+                            assert(teammates != null);
+                            assert(teammates.length > 0);
+                            done();
+                        }
+                        else {
+                            assert.ok(false);
+                        }
+                    }
+                );
+            }
+            else {
+                assert.ok(false);
+            }
+        });
+    });
+});
 
 describe('TiledeskClient', function() {
     describe('openNow()', function() {
