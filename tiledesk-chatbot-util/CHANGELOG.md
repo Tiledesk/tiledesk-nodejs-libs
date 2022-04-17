@@ -2,6 +2,12 @@
 
 This library is on npm: https://www.npmjs.com/package/@tiledesk/tiledesk-chatbot-util
 
+### 0.8.29
+- renamed *_COMMAND constants in *_DIRECTIVE
+
+### 0.8.28
+- renamed parse_directives() in parseDirectives()
+
 ### 0.8.27
 - added findDirective() method to parse_directives() return object
 

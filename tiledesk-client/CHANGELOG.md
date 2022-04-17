@@ -2,6 +2,12 @@
 
 This library is on npm: https://www.npmjs.com/package/@tiledesk/tiledesk-client
 
+### 0.8.20
+- added assign() method
+
+### 0.8.19
+- fixed doc getTeam() added REST API doc reference
+
 ### 0.8.18 - online
 - added getTeam()
 

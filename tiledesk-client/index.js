@@ -173,7 +173,8 @@ class TiledeskClient {
   // ***************************************************
 
   /**
-   * Returns all teammates (aka Project Users, Tiledesk Users invited on a specific project are named "Teammates". They have additional properties and a specific project-userId)
+   * Returns all teammates (aka Project Users, Tiledesk Users invited on a specific project are named "Teammates". They have additional properties and a specific project-userId)<br>
+   * <a href='https://developer.tiledesk.com/apis/rest-api/team#get-the-team' target='_blank'>REST API</a>
    * @param {resultCallback} callback - The callback that handles the response.
    */
    getTeam(callback) {
@@ -2002,7 +2003,7 @@ class TiledeskClient {
    * @param {string} fullname - The new Lead fullname
    * @param {resultCallback} callback - The callback that handles the response.
    */
-  updateLeadEmailFullname(leadId, email, fullname, callback, options) {
+  updateLeadEmailFullname(leadId, email, fullname, callback) {
     if (!leadId) {
       throw new Error('leadId can NOT be null.');
     }
@@ -2040,6 +2041,86 @@ class TiledeskClient {
         // else if (callback) {
         //   callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
         // }
+      }, this.log
+    );
+  }
+
+  // **********************************
+  // ************ ROUTING *************
+  // **********************************
+
+  /**
+ * This type is called `assignOptions` and is provided as options to apply to an assign method.
+ *
+ * @callback assignOptions
+ * @param {boolean} nobot - If true, the department chatbot, if any, is ignored and the assign work on humans
+ * @param {boolean} noPopulate - (esperimental) if true the request is left 'dry' (no additional metadata are added)
+ */
+
+  /**
+   * Assign an agent to the specified department using the 'assing' method.<br>
+   * 
+   * @param {string} requestId - The request ID where applying the assignment
+   * @param {string} email - The department ID where applying the assignment
+   * @param {string} fullname - The new Lead fullname
+   * @param {assignOptions} options - The options. If null default options apply
+   * @param {resultCallback} callback - The callback that handles the response.
+   */
+  assign(requestId, departmentId, options, callback) {
+    
+    // const URL = `${this.API_ENDPOINT}/${project_id}/requests/${requestid}/assign`
+    // var json = {
+    //   departmentid: departmentid,
+    //   nobot: true,
+    //   no_populate: true
+    // };
+    // request({
+    //   url: URL,
+    //   headers: {
+    //     'Content-Type' : 'application/json',
+    //     'Authorization': 'JWT '+token
+    //   },
+    //   json: json,
+    //   method: 'PUT'
+    // },
+    // function(err, response, resbody) {
+    //   callback(err, resbody)
+    // });
+
+    const url = `${this.APIURL}/${this.projectId}/requests/${requestId}/assign`;
+    var json = {
+      departmentid: departmentId,
+      nobot: false,
+      no_populate: false
+    };
+    if (options && typeof options.nobot !== 'undefined' && options.nobot == true) {
+      json.nobot = true
+    }
+    if (options && typeof options.noPopulate !== 'undefined' && options.noPopulate == true) {
+      json.no_populate = true
+    }
+    const HTTPREQUEST = {
+      url: url,
+      headers: {
+        'Content-Type' : 'application/json',
+        'Authorization': this.jwt_token
+      },
+      json: json,
+      method: 'PUT'
+    };
+    TiledeskClient.myrequest(
+      HTTPREQUEST,
+      function(err, resbody) {
+        if (err) {
+          if (callback) {
+            callback(err);
+          }
+        }
+        else {
+          if (callback) {
+            callback(null, resbody);
+          }
+        }
       }, this.log
     );
   }

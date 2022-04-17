@@ -45,9 +45,7 @@ static is_agent_handoff_command(msg) {
     }
   }
   const text = msg.text;
-  // console.log("msg.text:", msg.text);
-  // console.log("TiledeskChatbotUtil.AGENT_COMMAND:", TiledeskChatbotUtil.AGENT_COMMAND.replace(/\\\\/g, '\\'));
-  const agent_pattern = new RegExp('^(' + TiledeskChatbotUtil.AGENT_COMMAND.replace(/\\/g, '\\\\') + ')$', 'm');
+  const agent_pattern = new RegExp('^(' + TiledeskChatbotUtil.AGENT_DIRECTIVE.replace(/\\/g, '\\\\') + ')$', 'm');
   // console.log("agent_pattern:", agent_pattern);
   const match_agent = text.match(agent_pattern);
   // console.log("match_agent: ", match_agent);
@@ -59,7 +57,7 @@ static is_agent_handoff_command(msg) {
     const new_msg_text = parts[0].trim()
     // console.log(new_msg_text)
     return {
-      'agent_handoff': TiledeskChatbotUtil.AGENT_COMMAND,
+      'agent_handoff': TiledeskChatbotUtil.AGENT_DIRECTIVE,
       'text': new_msg_text
     }
   }
@@ -73,7 +71,7 @@ static is_agent_handoff_command(msg) {
  * parses all commands
  * @param {*} text The text to parse
  */
- static parse_directives(text) {
+ static parseDirectives(text) {
 	let parsed = {
       'text': null,
       'directives': null
@@ -206,10 +204,13 @@ static is_agent_handoff_command(msg) {
   static INTENT_NO_ECHO_TAG = 'tdIntentNoEcho:';
 
   // other
-  static AGENT_COMMAND = '\\agent';
-  static CLOSE_COMMAND = '\\close';
-  static DEPARTMENT_COMMAND = '\\department';
-  static JSONMESSAGE_COMMAND = '\\jsonmessage';
+  static AGENT_DIRECTIVE = '\\agent';
+  static CLOSE_DIRECTIVE = '\\close';
+  static DEPARTMENT_DIRECTIVE = '\\department';
+  static JSONMESSAGE_DIRECTIVE = '\\jsonmessage';
+  static MESSAGE_DIRECTIVE = '\\message';
+  static HMESSAGE_DIRECTIVE = '\\hmessage';
+  static INTENT_DIRECTIVE = '\\intent';
 
   static parseReply(text) {
       let reply = {

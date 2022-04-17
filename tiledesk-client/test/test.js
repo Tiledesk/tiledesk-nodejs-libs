@@ -571,6 +571,59 @@ describe('TiledeskClient', function() {
 // });
 
 describe('TiledeskClient', function() {
+    describe('Assign the request without a bot', function() {
+        it('sends a message to a new request conversation to create the support conversation, the it assigns the request to a human, bypassing the bot', function(done) {
+            const tdclient = new TiledeskClient({
+                APIKEY: APIKEY,
+                APIURL: API_ENDPOINT,
+                projectId: PROJECT_ID,
+                token: ANONYM_USER_TOKEN,
+                log: LOG_STATUS
+            });
+            if (tdclient) {
+              assert(tdclient != null);
+                const text_value = 'test message';
+                const request_id = TiledeskClient.newRequestId(PROJECT_ID);
+                tdclient.sendSupportMessage(request_id, {text: text_value}, function(err, result) {
+                    assert(err === null);
+                    assert(result != null);
+                    assert(result.text === text_value);
+                    // just to get the departmentId of the request.
+                    const tdclient_user = new TiledeskClient(
+                        {
+                            APIKEY: APIKEY,
+                            APIURL: API_ENDPOINT,
+                            projectId: PROJECT_ID,
+                            token: USER_TOKEN,
+                            log: LOG_STATUS
+                        })
+                        tdclient_user.getRequestById(request_id, (err, result) => {
+                        console.log("RICHIESTA:", err, JSON.stringify(result))
+                        assert(result != null);
+                        const request = result;
+                        assert(request.request_id != null);
+                        assert(request.request_id === request_id);
+                        // done();
+                        const departmentId = request.department._id;
+                        // const departmentName = request.department.name;
+                        tdclient_user.assign(request_id, departmentId, {nobot: true}, (err, result) => {
+                            assert(err === null);
+                            assert(result != null);
+                            console.log("Successfully reassigned request:", request_id);
+                            done();
+                        });
+                    });
+                    
+                });
+            }
+            else {
+                assert.ok(false);
+            }
+        });
+    });
+});
+
+describe('TiledeskClient', function() {
     describe('getAllRequests()', function() {
         it('gets the project requests', (done) => {
             const tdclient = new TiledeskClient(
