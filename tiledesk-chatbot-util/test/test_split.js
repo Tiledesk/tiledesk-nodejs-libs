@@ -43,3 +43,48 @@ describe('TiledeskChatbotUtil', function() {
     });
 });
 
+describe('TiledeskChatbotUtil', function() {
+    describe('splitMessage()', function() {
+        it('should return multiple commands', function() {
+            const text = "Intro text\n-\nsecond message\n-\nthird message";
+            console.log("splitting text:", text);
+            var commands = TiledeskChatbotUtil.splitMessage(text);
+            console.log("Commands:", commands)
+            assert(commands != null);
+            assert(commands.length == 5);
+            
+            assert.strictEqual(commands[0].type, TiledeskChatbotUtil.COMMAND_TYPE_MESSAGE);
+            assert.strictEqual(commands[0].text, 'Intro text');
+            assert.strictEqual(commands[1].type, TiledeskChatbotUtil.COMMAND_TYPE_WAIT);
+            assert.strictEqual(commands[1].time, 1000);
+            assert.strictEqual(commands[2].type, TiledeskChatbotUtil.COMMAND_TYPE_MESSAGE);
+            assert.strictEqual(commands[2].text, 'second message');
+            assert.strictEqual(commands[3].type, TiledeskChatbotUtil.COMMAND_TYPE_WAIT);
+            assert.strictEqual(commands[3].time, 1000);
+            assert.strictEqual(commands[4].type, TiledeskChatbotUtil.COMMAND_TYPE_MESSAGE);
+            assert.strictEqual(commands[4].text, 'third message');
+        });
+    });
+});
+
+describe('TiledeskChatbotUtil', function() {
+    describe('splitMessage()', function() {
+        it('should return multiple commands, first is type WAIT', function() {
+            const text = "-\nIntro text\n-\nsecond message";
+            console.log("splitting text:", text);
+            var commands = TiledeskChatbotUtil.splitMessage(text);
+            console.log("Commands:", commands)
+            assert(commands != null);
+            assert(commands.length == 4);
+            
+            assert.strictEqual(commands[0].type, TiledeskChatbotUtil.COMMAND_TYPE_WAIT);
+            assert.strictEqual(commands[0].time, 1000);
+            assert.strictEqual(commands[1].type, TiledeskChatbotUtil.COMMAND_TYPE_MESSAGE);
+            assert.strictEqual(commands[1].text, 'Intro text');
+            assert.strictEqual(commands[2].type, TiledeskChatbotUtil.COMMAND_TYPE_WAIT);
+            assert.strictEqual(commands[2].time, 1000);
+            assert.strictEqual(commands[3].type, TiledeskChatbotUtil.COMMAND_TYPE_MESSAGE);
+            assert.strictEqual(commands[3].text, 'second message');
+        });
+    });
+});

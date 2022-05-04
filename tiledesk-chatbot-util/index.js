@@ -132,9 +132,12 @@ static is_agent_handoff_command(msg) {
 
   Sends two messages delayed by 1 second
   */
-  static findSplits(text) {
+  static findSplits(text, splitw) {
       var commands = []
-      const split_pattern = /^(\\split[:0-9]*)/mg //ex. \split:500
+      let split_pattern = /^(\\split[:0-9]*)[\r\n]/mg //ex. \split:500
+      if (splitw) {
+        split_pattern = new RegExp("^(" + splitw + "[:0-9]*)[\r\n]", "mg");
+      }
       var parts = text.split(split_pattern)
       for (var i=0; i < parts.length; i++) {
           let p = parts[i]
@@ -166,6 +169,47 @@ static is_agent_handoff_command(msg) {
           //     command.payload = result['fulfillmentMessages'][1].payload
           // }
           }
+      }
+      return commands
+  }
+
+  /* Splits a message in multiple commands using the microlanguage
+  \split:TIME
+  command \split:TIME must stand on a line of his own as in the following example
+  Ex.
+
+  Hi!
+  \split:1000
+  Please tell me your email
+
+  Sends two messages delayed by 1 second
+  */
+  static splitMessage(text, splitw) {
+    var commands = []
+    let split_pattern = /^(-+)[\r\n]/mg //ex. \split:500
+    if (splitw) {
+      console.log("here NOOOO")
+      split_pattern = new RegExp("^(" + splitw + "+)[\r\n]", "mg");
+    }
+    var parts = text.split(split_pattern)
+    console.log("parts:", parts);
+    for (var i=0; i < parts.length; i++) {
+        let p = parts[i]
+        if (i % 2 != 0) {
+          // split command
+          var wait_time = p.length * 1000
+          var command = {}
+          command.type = this.COMMAND_TYPE_WAIT;
+          command.time = wait_time; //parseInt(wait_time, 10)
+          commands.push(command)
+        }
+        else if (p.trim() !== "") {
+          // message command
+          var command = {}
+          command.type = this.COMMAND_TYPE_MESSAGE;
+          command.text = p.trim()
+          commands.push(command)
+        }
       }
       return commands
   }

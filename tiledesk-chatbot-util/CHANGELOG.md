@@ -2,6 +2,12 @@
 
 This library is on npm: https://www.npmjs.com/package/@tiledesk/tiledesk-chatbot-util
 
+### 0.8.31
+- added new splitMessage(text, splitw)
+
+### 0.8.30
+- added optional splitw (the split word) to findSplits(text, splitw)
+
 ### 0.8.29
 - renamed *_COMMAND constants in *_DIRECTIVE
 

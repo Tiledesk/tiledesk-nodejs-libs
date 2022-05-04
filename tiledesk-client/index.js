@@ -829,7 +829,7 @@ class TiledeskClient {
    */
    updateRequestProperties(requestId, properties, callback) {
     //const jwt_token = TiledeskClient.fixToken(this.token);
-    let URL = `${this.APIURL}/${projectId}/requests/${request_id}/`
+    let URL = `${this.APIURL}/${projectId}/requests/${requestId}/`
     data = properties
     
     const HTTPREQUEST = {
