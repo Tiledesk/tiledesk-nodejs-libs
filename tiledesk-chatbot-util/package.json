@@ -1,6 +1,6 @@
 {
   "name": "@tiledesk/tiledesk-chatbot-util",
-  "version": "0.8.31",
+  "version": "0.8.36",
   "description": "This Library implements Tiledesk Microlanguage",
   "main": "index.js",
   "scripts": {

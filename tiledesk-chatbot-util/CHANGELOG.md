@@ -2,6 +2,15 @@
 
 This library is on npm: https://www.npmjs.com/package/@tiledesk/tiledesk-chatbot-util
 
+### 0.8.36
+- splitPars() - bug fix
+
+### 0.8.35
+- introduced splitPars() - splits a message in multiple messages (commands) separated by paragraphs
+
+### 0.8.34
+- bug fixes
+
 ### 0.8.31
 - added new splitMessage(text, splitw)
 

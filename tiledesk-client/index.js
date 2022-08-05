@@ -805,7 +805,8 @@ class TiledeskClient {
   }
   
   /**
-   * The Request properties JSON object. <a href='https://developer.tiledesk.com/apis/rest-api/requests#update-a-request-by-request_id' target='_blank'>More info</a>.
+   * The Request properties JSON object.<br>
+   * <a href='https://developer.tiledesk.com/apis/rest-api/requests#update-a-request-by-request_id' target='_blank'>More info</a>.
    * @typedef requestProperties
    * @type {Object}
    * @property {string} first_text - The sender full name
@@ -828,17 +829,14 @@ class TiledeskClient {
    * @param {resultCallback} callback - The callback that handles the response.
    */
    updateRequestProperties(requestId, properties, callback) {
-    //const jwt_token = TiledeskClient.fixToken(this.token);
-    let URL = `${this.APIURL}/${projectId}/requests/${requestId}/`
-    data = properties
-    
+    let URL = `${this.APIURL}/${this.projectId}/requests/${requestId}/`
     const HTTPREQUEST = {
       url: URL,
       headers: {
         'Content-Type' : 'application/json',
         'Authorization': this.jwt_token
       },
-      json: data,
+      json: properties,
       method: 'PATCH'
     };
     TiledeskClient.myrequest(
@@ -854,14 +852,6 @@ class TiledeskClient {
             callback(null, resbody);
           }
         }
-        // if (response.status === 200) {
-        //   if (callback) {
-        //     callback(null, resbody)
-        //   }
-        // }
-        // else if (callback) {
-        //   callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
-        // }
       }, this.log
     );
   }
@@ -983,6 +973,44 @@ class TiledeskClient {
   // *************************************************************
 
   /**
+   * Updates the Request removing the current chatbot (if any).
+   * 
+   * <b>Orchestration APIs</b> (Mashup of REST APIs)
+   * 
+   * @param {string} requestId - The request ID
+   * @param {resultCallback} callback - The callback that handles the response.
+   */
+   removeCurrentBot(requestId, callback) {
+    if (!requestId) {
+      throw new Error('requestId can NOT be null.');
+    }
+    this.getRequestById(requestId, (err, request) => {
+      if (err) {
+        callback(err);
+      }
+      if (request.participantsBots && request.participantsBots.length > 0) {
+        const first_bot = request.participantsBots[0];
+        const first_bot_id_as_partecipant = this.normalizeBotId(first_bot);
+        this.deleteRequestParticipant(requestId, first_bot_id_as_partecipant, (err) => {
+          if (err) {
+            callback(err);
+          }
+          else {
+            this.updateRequestProperties(requestId, {status: 50}, (err) => {
+              if (err) {
+                callback(err);
+              }
+              else {
+                callback();
+              }
+            });
+          }
+        });
+      }
+    });
+  }
+
+  /**
    * Updates the Request removing the current chatbot (if any) and adding the new one. Then it sends the hidden 'start' message.
    * 
    * <b>Orchestration APIs</b> (Mashup of REST APIs)
@@ -992,19 +1020,18 @@ class TiledeskClient {
    * @param {resultCallback} callback - The callback that handles the response.
    */
    changeBot(requestId, botId, callback) {
-    if (!requestId || !botId) {
-      callback({'message': 'botAsPartecipantId is undefined'});
-      return;
+    if (!requestId) {
+      throw new Error('requestId can NOT be null.');
     }
+    if (!botId) {
+      throw new Error('botId can NOT be null.');
+    }
+    const botAsPartecipantId = this.normalizeBotId(botId);
     let message = {
       text: 'start',
       attributes: {
         subtype: 'info'
       }
-    }
-    let botAsPartecipantId = botId;
-    if (!botId.startsWith("bot_")) {
-      botAsPartecipantId = "bot_" + botId;
     }
     this.getRequestById(requestId, (err, result) => {
       if (err) {
@@ -1045,18 +1072,21 @@ class TiledeskClient {
    * <b>Orchestration APIs</b> (Mashup of REST APIs)
    * 
    * @param {string} requestId - The request ID
-   * @param {string} botAsPartecipantId - The bot id in the form 'bot_${botId}'.
+   * @param {string} botId - The bot ID.
    * @param {string} message - Optional. The first message to send as soon as the new bot is added to the conversation. This is used to trigger the greet message from the chatbot, if any is defined.
    * @param {resultCallback} callback - The callback that handles the response.
    */
-  changeBotAndMessage(requestId, botAsPartecipantId, message, callback) {
-    if (!requestId || !botAsPartecipantId) {
-      callback({'message': 'botAsPartecipantId is undefined'});
-      return;
+  changeBotAndMessage(requestId, botId, message, callback) {
+    if (!requestId) {
+      throw new Error('requestId can NOT be null.');
     }
+    if (!botId) {
+      throw new Error('botId can NOT be null.');
+    }
+    const botAsPartecipantId = this.normalizeBotId(botId);
     this.getRequestById(requestId, (err, result) => {
       if (err) {
-        callback({'message': 'getRequestById() error'});
+        callback({'message': 'getRequestById() error', error: err});
       }
       const request = result;
       if (request.participantsBots && request.participantsBots.length > 0) {
@@ -1086,8 +1116,38 @@ class TiledeskClient {
     });
   }
 
+  /**
+   * Moves the Request to an agent.<br>
+   * <a href='https://developer.tiledesk.com/apis/rest-api/requests#route-a-request-to-a-department' target='_blank'>REST API</a>
+   * 
+   * @param {string} requestId - The request ID
+   * @param {string} depId - The new department ID
+   * @param {resultCallback} callback - The callback that handles the response.
+   */
+  agent(requestId, depId, callback) {
+    if (!requestId) {
+      throw new Error('requestId can NOT be null.');
+    }
+    if (!depId) {
+      throw new Error('depId can NOT be null.');
+    }
+    this.updateRequestDepartment(requestId, depId, {nobot: true}, (err, resbody) => {
+      callback(err, resbody);
+    });
+  }
+
   // private
-  addParticipantAndMessage(requestId, botAsPartecipantId, message, callback) {
+  normalizeBotId(botId) {
+    let botAsPartecipantId = botId;
+    if (!botId.startsWith("bot_")) {
+      botAsPartecipantId = "bot_" + botId;
+    }
+    return botAsPartecipantId;
+  }
+
+  // private
+  addParticipantAndMessage(requestId, botId, message, callback) {
+    const botAsPartecipantId = this.normalizeBotId(botId);
     this.addRequestParticipant(requestId, botAsPartecipantId, (err, result) => {
       if (err) {
         callback(err)
@@ -2067,26 +2127,6 @@ class TiledeskClient {
    * @param {resultCallback} callback - The callback that handles the response.
    */
   assign(requestId, departmentId, options, callback) {
-    
-    // const URL = `${this.API_ENDPOINT}/${project_id}/requests/${requestid}/assign`
-    // var json = {
-    //   departmentid: departmentid,
-    //   nobot: true,
-    //   no_populate: true
-    // };
-    // request({
-    //   url: URL,
-    //   headers: {
-    //     'Content-Type' : 'application/json',
-    //     'Authorization': 'JWT '+token
-    //   },
-    //   json: json,
-    //   method: 'PUT'
-    // },
-    // function(err, response, resbody) {
-    //   callback(err, resbody)
-    // });
-
     const url = `${this.APIURL}/${this.projectId}/requests/${requestId}/assign`;
     var json = {
       departmentid: departmentId,
@@ -2124,6 +2164,74 @@ class TiledeskClient {
       }, this.log
     );
   }
+
+  // /**
+  //  * Finds an agent for the first assignment.<br>
+  //  * 
+  //  * @param {string} requestId - The request ID where applying the assignment
+  //  * @param {string} email - The department ID where applying the assignment
+  //  * @param {string} fullname - The new Lead fullname
+  //  * @param {assignOptions} options - The options. If null default options apply
+  //  * @param {resultCallback} callback - The callback that handles the response.
+  //  */
+  //  agent(requestId, departmentId, options, callback) {
+    
+  //   // const URL = `${this.API_ENDPOINT}/${project_id}/requests/${requestid}/assign`
+  //   // var json = {
+  //   //   departmentid: departmentid,
+  //   //   nobot: true,
+  //   //   no_populate: true
+  //   // };
+  //   // request({
+  //   //   url: URL,
+  //   //   headers: {
+  //   //     'Content-Type' : 'application/json',
+  //   //     'Authorization': 'JWT '+token
+  //   //   },
+  //   //   json: json,
+  //   //   method: 'PUT'
+  //   // },
+  //   // function(err, response, resbody) {
+  //   //   callback(err, resbody)
+  //   // });
+
+  //   const url = `${this.APIURL}/${this.projectId}/requests/${requestId}/assign`;
+  //   var json = {
+  //     departmentid: departmentId,
+  //     nobot: false,
+  //     no_populate: false
+  //   };
+  //   if (options && typeof options.nobot !== 'undefined' && options.nobot == true) {
+  //     json.nobot = true
+  //   }
+  //   if (options && typeof options.noPopulate !== 'undefined' && options.noPopulate == true) {
+  //     json.no_populate = true
+  //   }
+  //   const HTTPREQUEST = {
+  //     url: url,
+  //     headers: {
+  //       'Content-Type' : 'application/json',
+  //       'Authorization': this.jwt_token
+  //     },
+  //     json: json,
+  //     method: 'PUT'
+  //   };
+  //   TiledeskClient.myrequest(
+  //     HTTPREQUEST,
+  //     function(err, resbody) {
+  //       if (err) {
+  //         if (callback) {
+  //           callback(err);
+  //         }
+  //       }
+  //       else {
+  //         if (callback) {
+  //           callback(null, resbody);
+  //         }
+  //       }
+  //     }, this.log
+  //   );
+  // }
 
   // ************************************************
   // ****************** HTTP REQUEST ****************

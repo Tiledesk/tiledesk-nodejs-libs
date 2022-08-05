@@ -2,6 +2,19 @@
 
 This library is on npm: https://www.npmjs.com/package/@tiledesk/tiledesk-client
 
+### 0.8.24
+- bug fix
+
+### 0.8.23
+- bug fix
+
+### 0.8.22
+- bug fix
+
+### 0.8.21
+- HMESSAGE_DIRECTIVE constant renamed to: HIDDEN_MESSAGE_DIRECTIVE
+- Orchestration APIs, added removeCurrentBot() and normalizeBotId()
+
 ### 0.8.20
 - added assign() method
 

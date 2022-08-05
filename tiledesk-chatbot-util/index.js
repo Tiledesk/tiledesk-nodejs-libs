@@ -1,5 +1,4 @@
 /* 
-    ver 0.8.21
     Andrea Sponziello - (c) Tiledesk.com
 */
 
@@ -9,6 +8,7 @@ class TiledeskChatbotUtil {
 
   static COMMAND_TYPE_MESSAGE = 'message';
   static COMMAND_TYPE_WAIT = 'wait';
+  static WAIT_TIME = 500;
 
   static fullname_email_in(command) {
     if (command.payload &&
@@ -81,7 +81,7 @@ static is_agent_handoff_command(msg) {
     	return null;
     }
   	const found_directives = this.directives.filter(e => e.name === dirname);
-    if (found_directives.length >0) {
+    if (found_directives.length > 0) {
       	return found_directives.shift();
     }
   };
@@ -112,16 +112,12 @@ static is_agent_handoff_command(msg) {
       }
     }
   }
-
-  console.log("final text:", final_msg_text);
-  console.log("directives:", directives);
   parsed.text = final_msg_text.trim();
   parsed.directives = directives;
-  
   return parsed;
 }
 
-  /* Splits a message in multiple commands using the microlanguage
+  /* DEPRECATED - Splits a message in multiple commands using the microlanguage
   \split:TIME
   command \split:TIME must stand on a line of his own as in the following example
   Ex.
@@ -184,34 +180,99 @@ static is_agent_handoff_command(msg) {
 
   Sends two messages delayed by 1 second
   */
-  static splitMessage(text, splitw) {
+  static splitMessage(text, splitword) {
     var commands = []
-    let split_pattern = /^(-+)[\r\n]/mg //ex. \split:500
-    if (splitw) {
+    let split_pattern = /^(-+[\r\n])/mg
+    if (splitword) {
       console.log("here NOOOO")
-      split_pattern = new RegExp("^(" + splitw + "+)[\r\n]", "mg");
+      split_pattern = new RegExp("^(" + splitword + "+[\r\n])", "mg");
     }
-    var parts = text.split(split_pattern)
-    console.log("parts:", parts);
+    var parts = text.split(split_pattern);
+    console.log("parts", parts);
+    console.log("parts.length", parts.length);
+    console.log("parts[0]", parts[0]);
+    // console.log("parts[0].type", parts[0]['type']);
+    // if (parts && parts.length === 1 && parts[0]['type'] === this.COMMAND_TYPE_MESSAGE) {
+    //   console.log("NO commands");
+    //   return null;
+    // }
+    // console.log("commands instead!");
     for (var i=0; i < parts.length; i++) {
-        let p = parts[i]
-        if (i % 2 != 0) {
+        let part = parts[i];
+        console.log("part:", part)
+        if (part.match(split_pattern)) {
+          console.log("it is a separator:", part)
+          let separator = part.trim();
           // split command
-          var wait_time = p.length * 1000
+          var wait_time = separator.length * 500
           var command = {}
           command.type = this.COMMAND_TYPE_WAIT;
           command.time = wait_time; //parseInt(wait_time, 10)
           commands.push(command)
         }
-        else if (p.trim() !== "") {
+        else if (part.trim() !== "") {
+          console.log("it is not a separator:", part)
           // message command
-          var command = {}
+          var command = {};
           command.type = this.COMMAND_TYPE_MESSAGE;
-          command.text = p.trim()
-          commands.push(command)
+          command.text = part.trim();
+          commands.push(command);
         }
       }
-      return commands
+      if (commands.length == 1 && commands[0].type === this.COMMAND_TYPE_MESSAGE) {
+        return null;
+      }
+      return commands;
+  }
+
+  /* Splits a message in multiple commands using paragraphs
+  Ex.
+
+  Hi!
+
+  Please tell me your email
+
+  Sends two messages delayed
+  */
+  static splitPars(text) {
+    var commands = []
+    const replace_empty_pars_pattern = new RegExp("([\r\n]{3,})", "mg");
+    const normalized_text = text.replace(replace_empty_pars_pattern, "\n\n");
+    console.log(">> normalized_text", normalized_text);
+    let split_pattern = new RegExp("^([\r\n])", "mg");
+    var parts = normalized_text.split(split_pattern);
+    // console.log("parts", parts);
+    // console.log("parts.length", parts.length);
+    // console.log("parts[0]", parts[0]);
+    for (var i=0; i < parts.length; i++) {
+        let part = parts[i];
+        // console.log("part:", part)
+        if (part.match(split_pattern)) {
+          // console.log("it is a separator:", part)
+          let separator = part.trim();
+          // split command
+          var wait_time = TiledeskChatbotUtil.WAIT_TIME;
+          var command = {}
+          command.type = this.COMMAND_TYPE_WAIT;
+          command.time = wait_time;
+          commands.push(command)
+        }
+        else if (part.trim() !== "") {
+          // console.log("it is not a separator:", part)
+          // message command
+          var command = {};
+          command.type = this.COMMAND_TYPE_MESSAGE;
+          command.message = {
+            text: part.trim()
+          }
+          //command.text = part.trim();
+          commands.push(command);
+        }
+      }
+      if (commands.length == 1 && commands[0].type === this.COMMAND_TYPE_MESSAGE) {
+        return null;
+      }
+      return commands;
   }
 
   static TEXT_KEY = 'text';
@@ -253,7 +314,7 @@ static is_agent_handoff_command(msg) {
   static DEPARTMENT_DIRECTIVE = '\\department';
   static JSONMESSAGE_DIRECTIVE = '\\jsonmessage';
   static MESSAGE_DIRECTIVE = '\\message';
-  static HMESSAGE_DIRECTIVE = '\\hmessage';
+  static HIDDEN_MESSAGE_DIRECTIVE = '\\hmessage';
   static INTENT_DIRECTIVE = '\\intent';
 
   static parseReply(text) {
