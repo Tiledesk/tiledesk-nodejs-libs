@@ -32,7 +32,7 @@ class TiledeskChatbotUtil {
     return null
   }
 
-  /**
+  /** DEPRECATED
  * it checks if the message text contains the \agent command
  * @param {*} msg The message
  */
@@ -88,26 +88,40 @@ static is_agent_handoff_command(msg) {
   if (!text) {
     return parsed;
   }
-
   let final_msg_text = text;
-  const directive_pattern = /(\\{1}[a-zA-Z_]*)[ ]*(.*)[\r\n]*/m;
+  //const directive_pattern = new RegExp("((\\{1}" + this.DIRECTIVE_PREFIX + "[a-zA-Z_]*)|(\\agent))[ ]*(.*)[\r\n]*", "m");
+  //const directive_pattern = new RegExp("((\\{1}_td[a-zA-Z_]*)|(\\agent))[ ]*(.*)[\r\n]*", "m");
+  //const directive_pattern = /(\\{1}_td[a-zA-Z_]*)[ ]*(.*)[\r\n]*/m;
+  const directive_pattern = /((\\{1}_td[a-zA-Z_0-9]*)|(\\agent))[ ]*(.*)[\r\n]*/m;
   let match = null;
   let directives = [];
   while ((match = directive_pattern.exec(final_msg_text)) != null) {
-    // console.log("match: ", match);
-    // console.log("match.index: ", match.index);
-    // console.log("match[0].length: ", match[0].length);
-    // console.log("match.length:", match.length);
+    console.log("match: ", match);
+    console.log("match.index: ", match.index);
+    console.log("match[0].length: ", match[0].length);
+    console.log("match.length:", match.length);
+    const AGENT_DIRECTIVE_CMD = "\\agent"
     if (match.length >= 1) {
       final_msg_text = final_msg_text.substring(0, match.index) + final_msg_text.substring(match.index + match[0].length);
       // console.log("partial final_msg_text", final_msg_text);
       if (match.length >= 2) {
-        let directive = {
-          name: match[1]
-        };
-        if (match.length >= 3 && match[2].trim().length > 0) {
-          directive.parameter = match[2];
+        let directive_name = match[1];
+        if (directive_name !== AGENT_DIRECTIVE_CMD) {
+          // REMOVES THE "DIRECTIVE_PREFIX" from the directive name
+          directive_name = match[1].substring(this.DIRECTIVE_PREFIX.length + 1)
         }
+        else if (directive_name === AGENT_DIRECTIVE_CMD) {
+          directive_name = this.AGENT_DIRECTIVE
+        }
+        let directive = {
+          name: directive_name
+        };
+        console.log("match[3]::", match[4])
+        if (match[1] !== AGENT_DIRECTIVE_CMD && match.length >= 5 && match[4] && match[4].trim().length > 0) {
+          directive.parameter = match[4];
+          console.log("directive.parameter = match[3]", directive.parameter)
+        }
+        console.log("directive:", directive);
         directives.push(directive);
       }
     }
@@ -170,6 +184,7 @@ static is_agent_handoff_command(msg) {
   }
 
   /* Splits a message in multiple commands using the microlanguage
+  DEPRECATED
   \split:TIME
   command \split:TIME must stand on a line of his own as in the following example
   Ex.
@@ -309,14 +324,15 @@ static is_agent_handoff_command(msg) {
   static INTENT_NO_ECHO_TAG = 'tdIntentNoEcho:';
 
   // other
-  static AGENT_DIRECTIVE = '\\agent';
-  static CLOSE_DIRECTIVE = '\\close';
-  static DEPARTMENT_DIRECTIVE = '\\department';
-  static JSONMESSAGE_DIRECTIVE = '\\jsonmessage';
-  static MESSAGE_DIRECTIVE = '\\message';
-  static HIDDEN_MESSAGE_DIRECTIVE = '\\hmessage';
-  static INTENT_DIRECTIVE = '\\intent';
-
+  static DIRECTIVE_PREFIX = '_td';
+  static AGENT_DIRECTIVE = 'agent';
+  static CLOSE_DIRECTIVE = 'close';
+  static DEPARTMENT_DIRECTIVE = 'department';
+  static JSONMESSAGE_DIRECTIVE = 'jsonmessage';
+  static MESSAGE_DIRECTIVE = 'message';
+  static HIDDEN_MESSAGE_DIRECTIVE = 'hmessage';
+  static INTENT_DIRECTIVE = 'intent';
+  
   static parseReply(text) {
       let reply = {
           "message": {}

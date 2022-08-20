@@ -1,7 +1,7 @@
 {
   "name": "@tiledesk/tiledesk-chatbot-util",
-  "version": "0.8.36",
-  "description": "This Library implements Tiledesk Microlanguage",
+  "version": "0.8.37",
+  "description": "This Library implements Tiledesk Markbot",
   "main": "index.js",
   "scripts": {
     "test": "mocha"
@@ -19,7 +19,10 @@
     "chat",
     "support",
     "helpdesk",
-    "chatbot-microlanguage"
+    "markbot",
+    "customer",
+    "service",
+    "customerservice"
   ],
   "author": "Andrea Sponziello",
   "license": "MIT",
@@ -27,7 +30,7 @@
     "url": "https://github.com/Tiledesk/tiledesk-nodejs-libs/issues"
   },
   "homepage": "https://github.com/Tiledesk/tiledesk-nodejs-libs#readme",
-  "dependencies": {
+  "devDependencies": {
     "mocha": "^8.2.1"
   }
 }

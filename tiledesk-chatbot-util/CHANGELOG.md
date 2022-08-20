@@ -2,6 +2,11 @@
 
 This library is on npm: https://www.npmjs.com/package/@tiledesk/tiledesk-chatbot-util
 
+### 0.8.37
+- removed "\" from directive name
+- added directive-prefix. New template to have a directive parsed_ \_td{DIRECTIVE NAME}. This will reduce the necessity to escape the directive names because of their name uniqueness in the Tiledesk domain.
+- "\agent" legacy directive is still supported
+
 ### 0.8.36
 - splitPars() - bug fix
 
