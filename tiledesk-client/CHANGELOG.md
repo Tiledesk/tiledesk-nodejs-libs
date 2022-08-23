@@ -2,6 +2,10 @@
 
 This library is on npm: https://www.npmjs.com/package/@tiledesk/tiledesk-client
 
+### 0.8.29
+- added createIntent()
+- added getIntents()
+
 ### 0.8.24
 - bug fix
 

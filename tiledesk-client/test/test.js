@@ -865,6 +865,52 @@ describe('TiledeskClient', function() {
     });
 });
 
+// *********** INTENTS **********
+
+describe('TiledeskClient', function() {
+    describe('create a Faq, query the faq by intent display name', function() {
+        it('1. create a bot, 2. create a faq, 3. query the faq by intent display name, 4. delete created bot', (done) => {
+            const bot_name = "my bot " + uuidv4();
+            const tdclient = new TiledeskClient(
+            {
+                APIKEY: APIKEY,
+                APIURL: API_ENDPOINT,
+                projectId: PROJECT_ID,
+                token: USER_TOKEN,
+                log: LOG_STATUS
+            })
+            tdclient.createBot(bot_name, false, null, (err, thebot) => {
+                console.log("bot created:", thebot);
+                assert(thebot);
+                assert(thebot.type === 'internal');
+                assert(thebot.name === bot_name);
+                assert(thebot._id !== null);
+                const intent_display_name = "mytestintent"
+                tdclient.createIntent(thebot._id, intent_display_name, "My question", "My answer", "en", false, (err, thefaq) => {
+                    console.log("intent created", thefaq);
+                    assert(thefaq);
+                    tdclient.getIntents(thebot._id, intent_display_name, 0, 0, null, (err, faqs) => {
+                        console.log("the faqs", faqs.length)
+                        assert(faqs.length == 1);
+                        assert(faqs[0]);
+                        assert(faqs[0].intent_display_name === intent_display_name);
+                        tdclient.getIntents(thebot._id, "unknown", 0, 0, null, (err, faqs) => {
+                            console.log("the faqs", faqs.length)
+                            assert(faqs.length == 0);
+                            tdclient.deleteBot(thebot._id, (err, result) => {
+                                assert(!err);
+                                assert(result);
+                                done();
+                            });
+                        });
+                    });
+                    
+                });
+            });
+        });
+    });
+});
+
 // *********** ORCHESTERATION ***********
 
 describe('TiledeskClient', function() {

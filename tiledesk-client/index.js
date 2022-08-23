@@ -1383,6 +1383,107 @@ class TiledeskClient {
     );
   }
 
+  // *******************************************************
+  // *********************** Intents ***********************
+  // *******************************************************
+
+  /**
+   * Create an Intent (aka Faq).<br>
+   * <a href='https://developer.tiledesk.com/apis/rest-api/chat-bots/faq#create-a-new-faq' target='_blank'>REST API</a>
+   * @param {string} botId - The botId. Mandatory
+   * @param {string} intent_display_name - Intent Display Name
+   * @param {string} question - The question
+   * @param {string} answer - The answer
+   * @param {string} language - The bot language
+   * @param {boolean} webhook_enabled - Is fulfillment enabled for this intent?
+   * @param {resultCallback} callback - The callback that handles the response.
+   */
+   createIntent(botId, intentDisplayName, question, answer, language, webhook_enabled, callback) {
+    console.log("createIntent 1")
+    const URL = `${this.APIURL}/${this.projectId}/faq`
+    const HTTPREQUEST = {
+      url: URL,
+      headers: {
+        'Content-Type' : 'application/json',
+        'Authorization': this.jwt_token
+      },
+      json: {
+        id_faq_kb: botId,
+        intent_display_name: intentDisplayName,
+        question: question,
+        answer: answer,
+        language: language,
+        webhook_enabled: webhook_enabled 
+      },
+      method: 'POST'
+    };
+    console.log("createIntent 2")
+    TiledeskClient.myrequest(
+      HTTPREQUEST,
+      function(err, resbody) {
+        if (err) {
+          if (callback) {
+            console.log("createIntent 3")
+            callback(err);
+          }
+        }
+        else {
+          console.log("createIntent 5")
+          if (callback) {
+            console.log("createIntent 4")
+            callback(null, resbody);
+          }
+        }
+      }, this.log
+    );
+  }
+
+  /**
+   * Get bot intents, filtered by parameters<br>
+   * <a href='https://developer.tiledesk.com/apis/rest-api/chat-bots/faq#get-all-faqs-of-a-bot' target='_blank'>REST API</a>
+   * @param {string} id_faq_kb - The bot's id. Mandatory.
+   * @param {string} intent_display_name - Filter by Intent Display Name. Optional
+   * @param {number} page - page number for pagination. Optional
+   * @param {number} limit - results per page. Optional
+   * @param {string} text - executes a full text search on this parameter. Optional
+   * @param {resultCallback} callback - The callback that handles the response.
+   */
+   getIntents(id_faq_kb, intent_display_name, page, limit, text, callback) {
+    const URL = `${this.APIURL}/${this.projectId}/faq`
+    const params = {
+      id_faq_kb: id_faq_kb,
+      intent_display_name: intent_display_name,
+      page: page,
+      limit: limit,
+      text: text
+    };
+    console.log("querying params:", params);
+    const HTTPREQUEST = {
+      url: URL,
+      headers: {
+        'Content-Type' : 'application/json',
+        'Authorization': this.jwt_token
+      },
+      params: params,
+      method: 'GET'
+    };
+    TiledeskClient.myrequest(
+      HTTPREQUEST,
+      function(err, resbody) {
+        if (err) {
+          if (callback) {
+            callback(err);
+          }
+        }
+        else {
+          if (callback) {
+            callback(null, resbody);
+          }
+        }
+      }, true
+    );
+  }
+
   // ***********************************************************
   // *********************** DEPARTMENTS ***********************
   // ***********************************************************
@@ -1668,7 +1769,7 @@ class TiledeskClient {
   }
 
   /**
-   * Returns the current opening status based on Opening Hours.
+   * Returns the current opening status based on Opening Hours (aka Operating hours).
    * 
    * @param {resultCallback} callback - The callback that handles the response.<br>
    * <a href='https://developer.tiledesk.com/apis/rest-api/projects#return-if-the-project-is-open-regarding-operating-hours' target='_blank'>REST API</a>
@@ -2247,14 +2348,14 @@ class TiledeskClient {
         url: options.url,
         method: options.method,
         data: options.json,
+        params: options.params,
         headers: options.headers
       })
     .then(function (res) {
       if (log) {
         console.log("Response for url:", options.url);
         console.log("Response headers:\n", res.headers);
-        console.log("******** Response for url:", res);
-        console.log("Response body:\n", res.data);
+        //console.log("******** Response for url:", res);
       }
       if (res && res.status == 200 && res.data) {
         if (callback) {
