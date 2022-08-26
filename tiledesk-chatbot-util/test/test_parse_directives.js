@@ -149,4 +149,20 @@ JUST WAIT A MOMENT`);
         assert(result.findDirective("Dir2NoParam").name === "Dir2NoParam");
         assert(result.findDirective("Dir3").name === "Dir3");
     });
+
+    it('Finds 1 directive', function() {
+        const msg = "Andrea\n\\_tdWhenOfflineHours reply_with:offline_message";
+        let result = TiledeskChatbotUtil.parseDirectives(msg);
+        console.log("result:", JSON.stringify(result));
+        console.log("directives:", JSON.stringify(result.directives));
+        assert(result != null);
+        assert(result.directives != null);
+        assert.strictEqual(result.directives.length, 1);
+        assert(result.directives[0]);
+        
+        assert(result.directives[0].name === "WhenOfflineHours");
+        assert(result.directives[0].parameter === "reply_with:offline_message");
+        assert(result.text.trim() === "Andrea");
+        assert(result.findDirective("WhenOfflineHours").name === "WhenOfflineHours");
+    });
 });
