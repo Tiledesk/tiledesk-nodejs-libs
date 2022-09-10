@@ -96,10 +96,10 @@ static is_agent_handoff_command(msg) {
   let match = null;
   let directives = [];
   while ((match = directive_pattern.exec(final_msg_text)) != null) {
-    console.log("match: ", match);
-    console.log("match.index: ", match.index);
-    console.log("match[0].length: ", match[0].length);
-    console.log("match.length:", match.length);
+    // console.log("match: ", match);
+    // console.log("match.index: ", match.index);
+    // console.log("match[0].length: ", match[0].length);
+    // console.log("match.length:", match.length);
     const AGENT_DIRECTIVE_CMD = "\\agent"
     if (match.length >= 1) {
       final_msg_text = final_msg_text.substring(0, match.index) + final_msg_text.substring(match.index + match[0].length);
@@ -116,12 +116,12 @@ static is_agent_handoff_command(msg) {
         let directive = {
           name: directive_name
         };
-        console.log("match[3]::", match[4])
+        // console.log("match[3]::", match[4])
         if (match[1] !== AGENT_DIRECTIVE_CMD && match.length >= 5 && match[4] && match[4].trim().length > 0) {
           directive.parameter = match[4];
-          console.log("directive.parameter = match[3]", directive.parameter)
+          // console.log("directive.parameter = match[3]", directive.parameter)
         }
-        console.log("directive:", directive);
+        // console.log("directive:", directive);
         directives.push(directive);
       }
     }
@@ -253,7 +253,7 @@ static is_agent_handoff_command(msg) {
     var commands = []
     const replace_empty_pars_pattern = new RegExp("([\r\n]{3,})", "mg");
     const normalized_text = text.replace(replace_empty_pars_pattern, "\n\n");
-    console.log(">> normalized_text", normalized_text);
+    // console.log(">> normalized_text", normalized_text);
     let split_pattern = new RegExp("^([\r\n])", "mg");
     var parts = normalized_text.split(split_pattern);
     // console.log("parts", parts);

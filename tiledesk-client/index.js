@@ -20,7 +20,7 @@ class TiledeskClient {
    * Constructor for TiledeskClient object
    *
    * @example
-   * const { TiledeskClient } = require('tiledesk-client');
+   * const { TiledeskClient } = require('@tiledesk/tiledesk-client');
    * const tdclient = new TiledeskClient({APIKEY: 'THE_API_KEY', projectId: 'YOUR_PROJECT_ID', token: 'YOUR_AUTH_TOKEN'});
    * const tdclient = new TiledeskClient({APIKEY: 'THE_API_KEY', projectId: 'YOUR_PROJECT_ID', token: 'YOUR_AUTH_TOKEN', APIURL: 'SELF_HOSTED_INSTANCE_ENDPOINT'});
    * 
@@ -68,7 +68,7 @@ class TiledeskClient {
     }
 
     this.log = false;
-    if (options && options.log) {
+    if (options.log) {
       this.log = options.log;
     }
   }

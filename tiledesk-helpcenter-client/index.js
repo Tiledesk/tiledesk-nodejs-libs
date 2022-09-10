@@ -36,19 +36,12 @@ class HelpCenterQuery {
     else {
       this.APIURL = HelpCenterQuery.DEFAULT_API_ENDPOINT;
     }
-
+    
     if (!options.projectId) {
       throw new Error('options.projectId can NOT be null.');
     }
     else {
       this.projectId = options.projectId;
-    }
-
-    if (!options.workspaceId) {
-      throw new Error('options.workspaceId can NOT be null.');
-    }
-    else {
-      this.workspaceId = options.workspaceId;
     }
 
     this.log = false;
@@ -57,32 +50,65 @@ class HelpCenterQuery {
     }
   }
 
-  search(text, maxResults, callback) {
+  async search(workspaceId, text, maxResults, callback) {
 
-    const escaped_text = encodeURI(text);
-    var url = this.APIURL + `/${this.projectId}/${this.workspaceId}/contents/search?text=${escaped_text}&maxresults=${maxResults}`
+    return new Promise((resolve, reject) => {
+      const escaped_text = encodeURI(text);
+      var url = this.APIURL + `/${this.projectId}/${workspaceId}/contents/search?text=${escaped_text}&maxresults=${maxResults}`
 
-    const HTTPREQUEST = {
-      url: url,
-      headers: {
-      },
-      method: 'GET'
-    };
-    this.myrequest(
-      HTTPREQUEST,
-      function(err, resbody) {
-        if (err) {
-          if (callback) {
-            callback(err);
+      const HTTPREQUEST = {
+        url: url,
+        headers: {
+        },
+        method: 'GET'
+      };
+      this.myrequest(
+        HTTPREQUEST,
+        function(err, resbody) {
+          if (err) {
+            if (callback) {
+              callback(err);
+            }
+            reject(err);
           }
-        }
-        else {
-          if (callback) {
-            callback(null, resbody);
+          else {
+            if (callback) {
+              callback(null, resbody);
+            }
+            resolve(resbody);
           }
-        }
-      }, this.log
-    );
+        }, this.log
+      );
+    });
+  }
+
+  async allWorkspaces(callback) {
+    return new Promise((resolve, reject) => {
+      var url = this.APIURL + `/${this.projectId}/workspaces/`
+      const HTTPREQUEST = {
+        url: url,
+        headers: {
+        },
+        method: 'GET'
+      };
+      this.myrequest(
+        HTTPREQUEST,
+        function(err, resbody) {
+          if (err) {
+            if (callback) {
+              callback(err);
+            }
+            reject(err);
+          }
+          else {
+            if (callback) {
+              callback(null, resbody);
+            }
+            resolve(resbody);
+          }
+        }, this.log
+      );
+    });
   }
 
   myrequest(options, callback, log) {

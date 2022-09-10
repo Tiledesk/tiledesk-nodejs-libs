@@ -165,4 +165,19 @@ JUST WAIT A MOMENT`);
         assert(result.text.trim() === "Andrea");
         assert(result.findDirective("WhenOfflineHours").name === "WhenOfflineHours");
     });
+
+    it('Finds 1 directive: hmessqge', function() {
+        const msg = `No problem 🙂
+\\_tdhmessage Main menu`;
+        let result = TiledeskChatbotUtil.parseDirectives(msg);
+        console.log("result:", JSON.stringify(result));
+        console.log("directives:", JSON.stringify(result.directives));
+        assert(result != null);
+        assert(result.directives != null);
+        assert.strictEqual(result.directives.length, 1);
+        assert(result.directives[0]);
+        
+        assert(result.directives[0].name === "hmessage");
+        assert(result.directives[0].parameter === 'Main menu');
+    });
 });

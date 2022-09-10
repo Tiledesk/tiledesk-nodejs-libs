@@ -1,6 +1,6 @@
 {
   "name": "@tiledesk/tiledesk-chatbot-util",
-  "version": "0.8.37",
+  "version": "0.8.38",
   "description": "This Library implements Tiledesk Markbot",
   "main": "index.js",
   "scripts": {
