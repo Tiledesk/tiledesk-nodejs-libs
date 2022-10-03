@@ -1,1 +1,1 @@
-npx mocha ./test/test_parse_directives.js --grep "_test directives_" --exit
+npx mocha ./test/test_parse_directives.js --grep "chained" --exit

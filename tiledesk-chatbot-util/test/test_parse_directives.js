@@ -180,4 +180,22 @@ JUST WAIT A MOMENT`);
         assert(result.directives[0].name === "hmessage");
         assert(result.directives[0].parameter === 'Main menu');
     });
+
+    it('Finds multiple chained directives', function() {
+        const msg = `\\message "not bad at all"
+\\wait
+\\message "wow"
+\\wait
+\\message "relax"`;
+        let result = TiledeskChatbotUtil.parseDirectives(msg);
+        console.log("result:", JSON.stringify(result));
+        console.log("multi directives:", JSON.stringify(result.directives));
+        // assert(result != null);
+        // assert(result.directives != null);
+        // assert.strictEqual(result.directives.length, 1);
+        // assert(result.directives[0]);
+        
+        // assert(result.directives[0].name === "hmessage");
+        // assert(result.directives[0].parameter === 'Main menu');
+    });
 });

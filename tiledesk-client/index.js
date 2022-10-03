@@ -609,65 +609,40 @@ class TiledeskClient {
   }
 
   /**
-   * Gets a reuqest by ID.
+   * Gets a request by ID.
    * @param {string} requestId - The request ID.
    * @param {resultCallback} callback - The callback that handles the response.
    */
-  getRequestById(requestId, callback) {
-    // let token;
-    // if (options && options.token) {
-    //   token = options.token;
-    // }
-    // else if (this.token) {
-    //   token = this.token;
-    // }
-    // else {
-    //   throw new Error('token can NOT be null.');
-    // }
-    // let projectId;
-    // if (options && options.projectId) {
-    //   projectId = options.projectId;
-    // }
-    // else if (this.projectId) {
-    //   projectId = this.projectId;
-    // }
-    // else {
-    //   throw new Error('projectId can NOT be null.');
-    // }
-    // const jwt_token = TiledeskClient.fixToken(token)
-    const URL = `${this.APIURL}/${this.projectId}/requests/${requestId}`
-    const HTTPREQUEST = {
-      url: URL,
-      headers: {
-        'Content-Type' : 'application/json',
-        'Authorization': this.jwt_token
-      },
-      // json: true,
-      method: 'GET'
-    };
-    TiledeskClient.myrequest(
-      HTTPREQUEST,
-      function(err, resbody) {
-        if (err) {
-          if (callback) {
-            callback(err);
+  async getRequestById(requestId, callback) {
+    return new Promise ( (resolve, reject) => {
+      const URL = `${this.APIURL}/${this.projectId}/requests/${requestId}`
+      const HTTPREQUEST = {
+        url: URL,
+        headers: {
+          'Content-Type' : 'application/json',
+          'Authorization': this.jwt_token
+        },
+        method: 'GET'
+      };
+      TiledeskClient.myrequest(
+        HTTPREQUEST,
+        function(err, resbody) {
+          if (err) {
+            reject(error);
+            if (callback) {
+              callback(err);
+            }
           }
-        }
-        else {
-          if (callback) {
-            callback(null, resbody);
+          else {
+            resolve(resbody);
+            if (callback) {
+              callback(null, resbody);
+            }
           }
-        }
-        // if (response.status === 200) {
-        //   if (callback) {
-        //     callback(null, resbody)
-        //   }
-        // }
-        // else if (callback) {
-        //   callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
-        // }
-      }, this.log
-    );
+        }, this.log
+      );
+    })
+    
   }
 
   /**
@@ -678,27 +653,6 @@ class TiledeskClient {
    * @param {resultCallback} callback - The callback that handles the response.
    */
   updateRequestParticipants(requestId, participants, callback) {
-    // let token;
-    // if (options && options.token) {
-    //   token = options.token;
-    // }
-    // else if (this.token) {
-    //   token = this.token;
-    // }
-    // else {
-    //   throw new Error('token can NOT be null.');
-    // }
-    // let projectId;
-    // if (options && options.projectId) {
-    //   projectId = options.projectId;
-    // }
-    // else if (this.projectId) {
-    //   projectId = this.projectId;
-    // }
-    // else {
-    //   throw new Error('projectId can NOT be null.');
-    // }
-    // const jwt_token = TiledeskClient.fixToken(token)
     const URL = `${this.APIURL}/${this.projectId}/requests/${requestId}/participants`
     const HTTPREQUEST = {
       url: URL,
@@ -722,14 +676,6 @@ class TiledeskClient {
             callback(null, resbody);
           }
         }
-        // if (response.status === 200) {
-        //   if (callback) {
-        //   callback(null, resbody)
-        //   }
-        // }
-        // else if (callback) {
-        //   callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
-        // }
       }, this.log
     );
   }
@@ -891,14 +837,6 @@ class TiledeskClient {
             callback(null, resbody);
           }
         }
-        // if (response.status === 200) {
-        //   if (callback) {
-        //     callback(null, resbody)
-        //   }
-        // }
-        // else if (callback) {
-        //   callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
-        // }
       }, this.log
     );
   }
@@ -956,14 +894,6 @@ class TiledeskClient {
             callback(null, resbody);
           }
         }
-        // if (response.status === 200) {
-        //   if (callback) {
-        //     callback(null, resbody)
-        //   }
-        // }
-        // else if (callback) {
-        //   callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
-        // }
       }, this.log
     );
   }
@@ -1027,12 +957,12 @@ class TiledeskClient {
       throw new Error('botId can NOT be null.');
     }
     const botAsPartecipantId = this.normalizeBotId(botId);
-    let message = {
-      text: 'start',
-      attributes: {
-        subtype: 'info'
-      }
-    }
+    // let message = {
+    //   text: 'start',
+    //   attributes: {
+    //     subtype: 'info'
+    //   }
+    // }
     this.getRequestById(requestId, (err, result) => {
       if (err) {
         callback({'message': 'getRequestById() error'});
@@ -1043,7 +973,7 @@ class TiledeskClient {
         const first_bot = request.participantsBots[0];
         const first_bot_id_as_partecipant = "bot_" + first_bot;
         this.deleteRequestParticipant(requestId, first_bot_id_as_partecipant, (err) => {
-          this.addParticipantAndMessage(requestId, botAsPartecipantId, message, (err) => {
+          this.addParticipantAndMessage(requestId, botAsPartecipantId, null, (err) => {
             if (err) {
               callback(err);
             }
@@ -1054,7 +984,7 @@ class TiledeskClient {
         });
       }
       else {
-        this.addParticipantAndMessage(requestId, botAsPartecipantId, message, (err) => {
+        this.addParticipantAndMessage(requestId, botAsPartecipantId, null, (err) => {
           if (err) {
             callback(err);
           }
@@ -1063,6 +993,35 @@ class TiledeskClient {
           }
         });
       }
+    });
+  }
+
+  /**
+   * Updates the Request removing the current chatbot (if any) and adding the new one. Then it sends the hidden 'start' message.
+   * 
+   * <b>Orchestration APIs</b> (Mashup of REST APIs)
+   * 
+   * @param {string} requestId - The request ID
+   * @param {string} botId - The id of the bot to add in the conversation.
+   * @param {resultCallback} callback - The callback that handles the response.
+   */
+   replaceBotByName(requestId, botName, callback) {
+    if (!requestId) {
+      throw new Error('requestId can NOT be null.');
+    }
+    if (!botName) {
+      throw new Error('botName can NOT be null.');
+    }
+    this.findBotByName(botName, (err, bot) => {
+      if (err) {
+        callback(err, null);
+      }
+      else if (!bot) {
+        callback(new Error("Bot " + botName + " not found"), null);
+      }
+      this.changeBot(requestId, bot._id, () => {
+        callback();
+      });
     });
   }
 
@@ -1164,6 +1123,9 @@ class TiledeskClient {
             }
           });
         }
+        else {
+          callback();
+        }
       }
     });
   }
@@ -1218,20 +1180,17 @@ class TiledeskClient {
         callback(err, null);
         return;
       }
-      let bot_as_partecipant_id = null;
-      for (i = 0; i < bots.length; i++) {
+      let bot_found = null;
+      for (let i = 0; i < bots.length; i++) {
         const bot = bots[i];
-        console.log(bot.description)
-        const properties = JSON.parse(bot.description);
-        if (properties && properties.name === name_match && bot.language === user_lang) {
-          console.log("Bot found:", bot.name, bot._id);
-          bot_as_partecipant_id = "bot_" + bot._id;
+        //console.log(bot.name)
+        if (bot.name === botName) {
+          //console.log("Bot found:", bot.name, bot._id);
+          bot_found = bot;
           break;
         }
       }
-      if (bot_as_partecipant_id) {
-        callback(null, err);
-      }
+      callback(null, bot_found);
     });
   }
 
@@ -1399,7 +1358,6 @@ class TiledeskClient {
    * @param {resultCallback} callback - The callback that handles the response.
    */
    createIntent(botId, intentDisplayName, question, answer, language, webhook_enabled, callback) {
-    console.log("createIntent 1")
     const URL = `${this.APIURL}/${this.projectId}/faq`
     const HTTPREQUEST = {
       url: URL,
@@ -1417,20 +1375,16 @@ class TiledeskClient {
       },
       method: 'POST'
     };
-    console.log("createIntent 2")
     TiledeskClient.myrequest(
       HTTPREQUEST,
       function(err, resbody) {
         if (err) {
           if (callback) {
-            console.log("createIntent 3")
             callback(err);
           }
         }
         else {
-          console.log("createIntent 5")
           if (callback) {
-            console.log("createIntent 4")
             callback(null, resbody);
           }
         }
@@ -1457,7 +1411,7 @@ class TiledeskClient {
       limit: limit,
       text: text
     };
-    console.log("querying params:", params);
+    //console.log("querying params:", params);
     const HTTPREQUEST = {
       url: URL,
       headers: {
@@ -1480,7 +1434,7 @@ class TiledeskClient {
             callback(null, resbody);
           }
         }
-      }, true
+      }, false
     );
   }
 
@@ -2374,27 +2328,6 @@ class TiledeskClient {
         callback(error, null, null);
       }
     });
-
-    // request(
-    //   {
-    //     url: options.url,
-    //     method: options.method,
-    //     json: options.json,
-    //     headers: options.headers
-    //   },
-    //   function(err, res, resbody) {
-    //     if (log) {
-    //       console.log("** For url:", options.url);
-    //       console.log("** Options:", options);
-    //       console.log("** Err:", err);
-    //       console.log("** Response headers:\n", res.headers);
-    //       console.log("** Response body:\n", res.body);
-    //     }
-    //     if (callback) {
-    //       callback(err, res, resbody);
-    //     }
-    //   }
-    // );
   }
 
   static getErr(err, request, response) {
