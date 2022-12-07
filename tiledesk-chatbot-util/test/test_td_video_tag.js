@@ -45,7 +45,7 @@ const { TiledeskChatbotUtil } = require('..');
             const text = "Intro text\ntdVideo:https://www.youtube.com/watch?v=MHXO86wKeDY&disturbing_parameter=fake_value";
             console.log("parsing text:", text);
             const reply = TiledeskChatbotUtil.parseReply(text);
-            console.log("reply:", JSON.stringify(reply));
+            console.log("video reply:", JSON.stringify(reply));
             assert(reply.message != null);
             assert(reply.message.text != null);
             assert.strictEqual(reply.message.text, 'Intro text');

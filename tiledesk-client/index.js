@@ -128,9 +128,6 @@ class TiledeskClient {
    * <a href='https://developer.tiledesk.com/apis/rest-api/projects#get-the-project-detail' target='_blank'>REST API</a>
    * 
    * @param {resultCallback} callback - The callback that handles the response.
-   * @param {Object} options - Optional configuration.
-   * @param {string} options.token - The token for this request. Overrides instance token (if) provided in constructor.
-   * @param {string} options.projectId - The token for this request. Overrides instance token (if) provided in constructor.
    */
   getProjectSettings(callback) {
     // const jwt_token = TiledeskClient.fixToken(this.token)
@@ -157,15 +154,45 @@ class TiledeskClient {
             callback(null, resbody);
           }
         }
-        // if (response.status === 200) {
-        //   if (callback) {
-        //   callback(null, resbody)
-        //   }
-        // }
-        // else if (callback) {
-        //   callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
-        // }
       }, this.log);
+  }
+
+  /**
+   * Returns the project's available agents<br>
+   * <a href='https://developer.tiledesk.com/apis/rest-api/projects#return-the-available-agents' target='_blank'>REST API</a>
+   * 
+   * @param {resultCallback} callback - The callback that handles the response.
+   */
+   async getProjectAvailableAgents(callback) {
+    return new Promise( (resolve, reject) => {
+      const URL = `${this.APIURL}/projects/${this.projectId}/users/availables`
+      const HTTPREQUEST = {
+        url: URL,
+        headers: {
+          'Content-Type' : 'application/json',
+          'Authorization': this.jwt_token
+        },
+        // json: true,
+        method: 'GET'
+      };
+      TiledeskClient.myrequest(
+        HTTPREQUEST,
+        function(err, resbody) {
+          if (err) {
+            if (callback) {
+              callback(err);
+            }
+            reject(err);
+          }
+          else {
+            if (callback) {
+              callback(null, resbody);
+            }
+            resolve(resbody);
+          }
+        }, this.log);
+    });
+    
   }
 
   // ***************************************************
@@ -626,18 +653,18 @@ class TiledeskClient {
       };
       TiledeskClient.myrequest(
         HTTPREQUEST,
-        function(err, resbody) {
+        (err, resbody) => {
           if (err) {
-            reject(error);
             if (callback) {
               callback(err);
             }
+            reject(err);
           }
           else {
-            resolve(resbody);
             if (callback) {
               callback(null, resbody);
             }
+            resolve(resbody);
           }
         }, this.log
       );
@@ -896,6 +923,44 @@ class TiledeskClient {
         }
       }, this.log
     );
+  }
+
+  /**
+   * Closes the Request
+   * <a href='https://developer.tiledesk.com/apis/rest-api/requests#close-a-request-by-request_id' target='_blank'>REST API</a>
+   * 
+   * @param {string} requestId - The request ID
+   * @param {resultCallback} callback - The callback that handles the response.
+   */
+  closeRequest(requestId, callback) {
+    return new Promise ( (resolve, reject) => {
+      const HTTPREQUEST = {
+        url: `${this.APIURL}/${this.projectId}/requests/${requestId}/close`,
+        headers: {
+          'Content-Type' : 'application/json',
+          'Authorization': this.jwt_token
+        },
+        json: {},
+        method: 'PUT'
+      };
+      TiledeskClient.myrequest(
+        HTTPREQUEST,
+        function(err, resbody) {
+          if (err) {
+            reject(error);
+            if (callback) {
+              callback(err);
+            }
+          }
+          else {
+            resolve(resbody);
+            if (callback) {
+              callback(null, resbody);
+            }
+          }
+        }, this.log
+      );
+    });
   }
 
   // *************************************************************
@@ -1402,40 +1467,44 @@ class TiledeskClient {
    * @param {string} text - executes a full text search on this parameter. Optional
    * @param {resultCallback} callback - The callback that handles the response.
    */
-   getIntents(id_faq_kb, intent_display_name, page, limit, text, callback) {
-    const URL = `${this.APIURL}/${this.projectId}/faq`
-    const params = {
-      id_faq_kb: id_faq_kb,
-      intent_display_name: intent_display_name,
-      page: page,
-      limit: limit,
-      text: text
-    };
-    //console.log("querying params:", params);
-    const HTTPREQUEST = {
-      url: URL,
-      headers: {
-        'Content-Type' : 'application/json',
-        'Authorization': this.jwt_token
-      },
-      params: params,
-      method: 'GET'
-    };
-    TiledeskClient.myrequest(
-      HTTPREQUEST,
-      function(err, resbody) {
-        if (err) {
-          if (callback) {
-            callback(err);
+   async getIntents(id_faq_kb, intent_display_name, page, limit, text, callback) {
+    return new Promise( (resolve, reject) => {
+      const URL = `${this.APIURL}/${this.projectId}/faq`
+      const params = {
+        id_faq_kb: id_faq_kb,
+        intent_display_name: intent_display_name,
+        page: page,
+        limit: limit,
+        text: text
+      };
+      //console.log("querying params:", params);
+      const HTTPREQUEST = {
+        url: URL,
+        headers: {
+          'Content-Type' : 'application/json',
+          'Authorization': this.jwt_token
+        },
+        params: params,
+        method: 'GET'
+      };
+      TiledeskClient.myrequest(
+        HTTPREQUEST,
+        function(err, resbody) {
+          if (err) {
+            if (callback) {
+              callback(err);
+            }
+            reject(error);
           }
-        }
-        else {
-          if (callback) {
-            callback(null, resbody);
+          else {
+            if (callback) {
+              callback(null, resbody);
+            }
+            resolve(resbody);
           }
-        }
-      }, false
-    );
+        }, false
+      );
+    })
   }
 
   // ***********************************************************
@@ -1966,35 +2035,41 @@ class TiledeskClient {
    */
   sendSupportMessage(requestId, message, callback) {
     // const jwt_token = TiledeskClient.fixToken(this.token);
-    const url = `${this.APIURL}/${this.projectId}/requests/${requestId}/messages`;
-    const HTTPREQUEST = {
-      url: url,
-      headers: {
-        'Content-Type' : 'application/json',
-        'Authorization': this.jwt_token
-      },
-      json: message,
-      method: 'POST'
-    };
-    TiledeskClient.myrequest(
-      HTTPREQUEST,
-      function(err, resbody) {
-        if (err) {
-          if (callback) {
-            callback(err);
+    return new Promise ( (resolve, reject) => {
+
+      
+      const url = `${this.APIURL}/${this.projectId}/requests/${requestId}/messages`;
+      const HTTPREQUEST = {
+        url: url,
+        headers: {
+          'Content-Type' : 'application/json',
+          'Authorization': this.jwt_token
+        },
+        json: message,
+        method: 'POST'
+      };
+      TiledeskClient.myrequest(
+        HTTPREQUEST,
+        function(err, resbody) {
+          if (err) {
+            reject(err);
+            if (callback) {
+              callback(err);
+            }
           }
-        }
-        else {
-          if (callback) {
-            callback(null, resbody);
+          else {
+            resolve(resbody);
+            if (callback) {
+              callback(null, resbody);
+            }
           }
-        }
-        // else if (callback) {
-        //   console.log("callback here.")
-        //   callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
-        // }
-      }, this.log
-    );
+          // else if (callback) {
+          //   console.log("callback here.")
+          //   callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
+          // }
+        }, this.log
+      );
+    });
   }
 
   /**
@@ -2114,50 +2189,47 @@ class TiledeskClient {
    * <a href='https://developer.tiledesk.com/apis/rest-api/leads#update-a-lead-by-id' target='_blank'>REST API</a>
    * 
    * @param {string} leadId - The Lead ID
-   * @param {string} email - The new Lead email
-   * @param {string} fullname - The new Lead fullname
+   * @param {string} email - Lead email update
+   * @param {string} fullname - Lead fullname to update
+   * @param {string} attributes - Lead attributes to update
    * @param {resultCallback} callback - The callback that handles the response.
    */
-  updateLeadEmailFullname(leadId, email, fullname, callback) {
+  updateLeadData(leadId, email, fullname, attributes, callback) {
     if (!leadId) {
       throw new Error('leadId can NOT be null.');
     }
-    //const jwt_token = TiledeskClient.fixToken(this.token);
-    const HTTPREQUEST = {
-      url: `${this.APIURL}/${this.projectId}/leads/${leadId}`, // this.conversation.lead._id
-      headers: {
-        'Content-Type' : 'application/json',
-        'Authorization': this.jwt_token
-      },
-      json: {
-        email: email,
-        fullname: fullname
-      },
-      method: 'PUT'
-    };
-    TiledeskClient.myrequest(
-      HTTPREQUEST,
-      function(err, resbody) {
-        if (err) {
-          if (callback) {
-            callback(err);
+    return new Promise ( (resolve, reject) => {
+      const HTTPREQUEST = {
+        url: `${this.APIURL}/${this.projectId}/leads/${leadId}`,
+        headers: {
+          'Content-Type' : 'application/json',
+          'Authorization': this.jwt_token
+        },
+        json: {
+          email: email,
+          fullname: fullname,
+          attributes: attributes
+        },
+        method: 'PUT'
+      };
+      TiledeskClient.myrequest(
+        HTTPREQUEST,
+        function(err, resbody) {
+          if (err) {
+            reject(err);
+            if (callback) {
+              callback(err);
+            }
           }
-        }
-        else {
-          if (callback) {
-            callback(null, resbody);
+          else {
+            resolve(resbody);
+            if (callback) {
+              callback(null, resbody);
+            }
           }
-        }
-        // if (response.status === 200) {
-        //   if (callback) {
-        //     callback(null, resbody)
-        //   }
-        // }
-        // else if (callback) {
-        //   callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
-        // }
-      }, this.log
-    );
+        }, this.log
+      );
+    });
   }
 
   // **********************************
