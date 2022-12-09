@@ -2,8 +2,23 @@
 
 **This library is on npm: https://www.npmjs.com/package/@tiledesk/tiledesk-client**
 
+### 0.8.39
+- added getProjectAvailableAgents()
+
+### 0.8.38
+- added closeRequest()
+- Added async/await to sendSupportMessage()
+
+### 0.8.37
+- updatedLeadEmailFullname() renamed => updateLead()
+- updateLead() added new "attributes" parameter
+- Added async/await to updateLead()
+
+### 0.8.36
+- Added async/await to getIntents()
+
 ### 0.8.34
-- Added async/await for getRequestById()
+- Added async/await to getRequestById()
 
 ### 0.8.33
 - replaceBotByName() removed hidden start message sending

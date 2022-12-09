@@ -107,9 +107,9 @@ describe('TiledeskClient auth', function() {
                     USER_ID = result.user._id;
                     done();
                 }
-            else {
-                assert.ok(false);
-            }
+                else {
+                    assert.ok(false);
+                }
             });
         // }
         // else {
@@ -200,8 +200,8 @@ describe('TiledeskClient fireEvent()', function() {
     });
 });
 
-describe('getProjectSettings()', function() {
-    it('gets the project settings', function(done) {
+describe('Projects', function() {
+    it('getProjectSettings()', function(done) {
         const tdclient = new TiledeskClient(
         {
             APIKEY: APIKEY,
@@ -227,6 +227,54 @@ describe('getProjectSettings()', function() {
             
         }
         else {
+            assert.ok(false);
+        }
+    });
+
+    it('getProjectAvailableAgents()', function(done) {
+        const tdclient = new TiledeskClient(
+        {
+            APIKEY: APIKEY,
+            APIURL: API_ENDPOINT,
+            projectId: PROJECT_ID,
+            token: USER_TOKEN,
+            log: LOG_STATUS
+        })
+        if (tdclient) {
+            tdclient.getProjectAvailableAgents(
+                function(err, agents) {
+                    if (!err && agents) {
+                        assert(Array.isArray(agents));
+                        done();
+                    }
+                    else {
+                        assert.ok(false);
+                    }
+                }
+            );
+        //   })
+            
+        }
+        else {
+            assert.ok(false);
+        }
+    });
+
+    it('getProjectAvailableAgents() async ', async function() {
+        const tdclient = new TiledeskClient(
+        {
+            APIKEY: APIKEY,
+            APIURL: API_ENDPOINT,
+            projectId: PROJECT_ID,
+            token: USER_TOKEN,
+            log: LOG_STATUS
+        });
+        try {
+            let agents = await tdclient.getProjectAvailableAgents();
+            assert(agents != null);
+            assert(Array.isArray(agents));
+        }
+        catch (err) {
             assert.ok(false);
         }
     });
@@ -623,7 +671,7 @@ describe('Requests', function() {
                 let _request;
                 try {
                     _request = await tdclient.getRequestById(first_request_id);
-                    console.log("Async request", JSON.stringify(result));
+                    //console.log("Async request", JSON.stringify(_request));
                     assert(_request != null);
                     assert(_request.request_id != null);
                     assert(_request.request_id === first_request_id);
@@ -641,6 +689,92 @@ describe('Requests', function() {
                 "snap_department_routing": "assigned"
             }
         });
+    });
+
+    it('Closes a request', function(done) {
+        const tdclient = new TiledeskClient({
+            APIKEY: APIKEY,
+            APIURL: API_ENDPOINT,
+            projectId: PROJECT_ID,
+            token: ANONYM_USER_TOKEN,
+            log: LOG_STATUS
+        });
+        if (tdclient) {
+            assert(tdclient != null);
+            const text_value = 'test message';
+            const request_id = TiledeskClient.newRequestId(PROJECT_ID);
+            tdclient.sendSupportMessage(request_id, {text: text_value}, function(err, result) {
+                assert(err === null);
+                assert(result != null);
+                assert(result.text === text_value);
+                // just to get the departmentId of the request.
+                const tdclient_user = new TiledeskClient(
+                    {
+                        APIKEY: APIKEY,
+                        APIURL: API_ENDPOINT,
+                        projectId: PROJECT_ID,
+                        token: USER_TOKEN,
+                        log: LOG_STATUS
+                    })
+                    tdclient_user.getRequestById(request_id, (err, result) => {
+                    assert(result != null);
+                    const request = result;
+                    assert(request.request_id != null);
+                    assert(request.request_id === request_id);
+                    tdclient_user.closeRequest(request_id, (err, result) => {
+                        assert(err === null);
+                        assert(result != null);
+                        done();
+                    });
+                });
+                
+            });
+        }
+        else {
+            assert.ok(false);
+        }
+    });
+
+    it('Closes a request async version', async function() {
+        const tdclient = new TiledeskClient({
+            APIKEY: APIKEY,
+            APIURL: API_ENDPOINT,
+            projectId: PROJECT_ID,
+            token: ANONYM_USER_TOKEN,
+            log: LOG_STATUS
+        });
+        if (tdclient) {
+            try {
+                assert(tdclient != null);
+                const text_value = 'test message';
+                const request_id = TiledeskClient.newRequestId(PROJECT_ID);
+                const message = await tdclient.sendSupportMessage(request_id, {text: text_value});
+                assert(message != null);
+                assert(message.text === text_value);
+                const tdclient_user = new TiledeskClient(
+                    {
+                        APIKEY: APIKEY,
+                        APIURL: API_ENDPOINT,
+                        projectId: PROJECT_ID,
+                        token: USER_TOKEN,
+                        log: LOG_STATUS
+                    });
+                const request = await tdclient_user.getRequestById(request_id);
+                assert(request != null);
+                assert(request.request_id != null);
+                assert(request.request_id === request_id);
+                const response = await tdclient_user.closeRequest(request_id);
+                assert(response != null);
+            }
+            catch (err) {
+                console.error("An error occurred:", err);
+                assert.ok(false);
+            }
+            
+        }
+        else {
+            assert.ok(false);
+        }
     });
     
 });
@@ -835,8 +969,14 @@ describe('Intents', function() {
                     assert(faqs.length == 1);
                     assert(faqs[0]);
                     assert(faqs[0].intent_display_name === intent_display_name);
-                    tdclient.getIntents(thebot._id, "unknown", 0, 0, null, (err, faqs) => {
+                    tdclient.getIntents(thebot._id, "unknown", 0, 0, null, async (err, faqs) => {
                         assert(faqs.length == 0);
+                        // test the Promise version
+                        const awaited_faqs = await tdclient.getIntents(thebot._id, intent_display_name, 0, 0, null);
+                        assert(awaited_faqs.length == 1);
+                        assert(awaited_faqs[0]);
+                        //console.log("awaited_faqs await", awaited_faqs[0]);
+                        assert(awaited_faqs[0].intent_display_name === intent_display_name);
                         tdclient.deleteBot(thebot._id, (err, result) => {
                             assert(!err);
                             assert(result);
