@@ -2,6 +2,10 @@
 
 **This library is on npm: https://www.npmjs.com/package/@tiledesk/tiledesk-client**
 
+### 0.8.40
+- console.error() log removed from TiledeskClient.myrequest()
+- added test for getRequestById() not found
+
 ### 0.8.39
 - added getProjectAvailableAgents()
 

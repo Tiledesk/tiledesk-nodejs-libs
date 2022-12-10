@@ -691,6 +691,26 @@ describe('Requests', function() {
         });
     });
 
+    it('getRequestById(). gets a not existing request and correctly manages the 404 return status code', (done) => {
+        const tdclient = new TiledeskClient(
+        {
+            APIKEY: APIKEY,
+            APIURL: API_ENDPOINT,
+            projectId: PROJECT_ID,
+            token: USER_TOKEN,
+            log: LOG_STATUS
+        })
+        
+        tdclient.getRequestById("NOT-EXISTING-REQUEST", async (err, result) => {
+            if (err || !result) {
+                //console.log("REQUEST NOT FOUND:", result)
+                assert(!result);
+                done();
+            }
+        });
+        
+    });
+
     it('Closes a request', function(done) {
         const tdclient = new TiledeskClient({
             APIKEY: APIKEY,
