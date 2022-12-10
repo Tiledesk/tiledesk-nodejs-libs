@@ -702,10 +702,12 @@ describe('Requests', function() {
         })
         
         tdclient.getRequestById("NOT-EXISTING-REQUEST", async (err, result) => {
-            if (err || !result) {
-                //console.log("REQUEST NOT FOUND:", result)
-                assert(!result);
+            if (!err && !result) {
+                // console.log("REQUEST NOT FOUND:", result)
                 done();
+            }
+            else {
+                assert.ok(false);
             }
         });
         

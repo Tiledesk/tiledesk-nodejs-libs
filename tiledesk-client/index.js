@@ -654,8 +654,13 @@ class TiledeskClient {
       TiledeskClient.myrequest(
         HTTPREQUEST,
         (err, resbody) => {
-          
-          if (err) {
+          if (err && err.response && err.response.status === 404) {
+            if (callback) {
+              callback(null);
+            }
+            resolve(null);
+          }
+          else if (err) {
             if (callback) {
               callback(err);
             }
