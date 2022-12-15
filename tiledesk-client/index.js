@@ -2,10 +2,10 @@
     Andrea Sponziello - (c) Tiledesk.com
 */
 
-// const request = require('request');
 let axios = require('axios');
 const { request } = require('express');
 const { v4: uuidv4 } = require('uuid');
+let https = require("https");
 
 /**
  * This class is a NodeJS stub for Tiledesk's REST APIs
@@ -29,6 +29,7 @@ class TiledeskClient {
    * @param {string} options.projectId Mandatory. Tiledesk projectId. Will be used in each call on project's APIs.
    * @param {string} options.token Mandatory. Tiledesk authentication token. Will be used in each call on project's APIs.
    * @param {string} options.APIURL Optional. Tiledesk server API endpoint.
+   * @param {string} options.httpsOptions Optional. A JSON with https option as rejectUnauthorized = false
    * @param {boolean} options.log Optional. If true HTTP requests are logged.
    */
   constructor(options) {
@@ -2375,14 +2376,35 @@ class TiledeskClient {
       console.log("API URL:", options.url);
       console.log("** Options:", options);
     }
-    axios(
-      {
-        url: options.url,
-        method: options.method,
-        data: options.json,
-        params: options.params,
-        headers: options.headers
-      })
+    let axios_settings = {
+      url: options.url,
+      method: options.method,
+      data: options.json,
+      params: options.params,
+      headers: options.headers
+    }
+    if (options.url.startsWith("https:") && this.httpsOptions) {
+      const httpsAgent = new https.Agent(this.httpsOptions);
+      axios_settings.httpsAgent = httpsAgent;
+    }
+    else if (options.url.startsWith("https:") && !this.httpsOptions) {
+      // HTTPS default is rejectUnauthorized: false
+      const httpsAgent = new https.Agent({
+        rejectUnauthorized: false,
+      });
+      axios_settings.httpsAgent = httpsAgent;
+    }
+    
+    // axios(
+    //   {
+    //     url: options.url,
+    //     method: options.method,
+    //     data: options.json,
+    //     params: options.params,
+    //     httpsAgent: httpsAgent,
+    //     headers: options.headers
+    //   })
+    axios(axios_settings)
     .then(function (res) {
       if (log) {
         console.log("Response for url:", options.url);

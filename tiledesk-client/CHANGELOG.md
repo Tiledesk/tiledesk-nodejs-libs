@@ -2,6 +2,10 @@
 
 **This library is on npm: https://www.npmjs.com/package/@tiledesk/tiledesk-client**
 
+### 0.8.42 - online
+- added options.httpsOptions (supports additional options ex. rejectUnauthorized = true|false)
+- added default to rejectUnauthorized = false on https connections
+
 ### 0.8.41
 - getRequestById() not-found simply sends "null", removed error
 
