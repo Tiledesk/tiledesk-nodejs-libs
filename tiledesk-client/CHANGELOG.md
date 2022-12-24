@@ -2,6 +2,22 @@
 
 **This library is on npm: https://www.npmjs.com/package/@tiledesk/tiledesk-client**
 
+### 0.9.5 - online
+- sendSupportMessage() async fix.
+
+### 0.9.4 - online
+- improved testing with multiple sendSupportMessage()
+
+### 0.9.3 - online
+- added sendEmail
+
+### 0.9.3 - online
+- debug log => console.log("Tiledesk Client v 0.9.x: url.startsWith https: && httpsOptions")
+- bug fixed this.httpsOptions in static myrequest
+
+### 0.9.2 - online
+- test method static version09()
+
 ### 0.8.42 - online
 - added options.httpsOptions (supports additional options ex. rejectUnauthorized = true|false)
 - added default to rejectUnauthorized = false on https connections

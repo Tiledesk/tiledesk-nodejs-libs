@@ -33,7 +33,7 @@ class TiledeskClient {
    * @param {boolean} options.log Optional. If true HTTP requests are logged.
    */
   constructor(options) {
-    // console.log("options:", options)
+    // console.log("...options:", options)
 
     if (!options) {
       throw new Error('options.APIKEY, options.projectId and options.token are mandatory.');
@@ -68,6 +68,10 @@ class TiledeskClient {
       this.jwt_token = TiledeskClient.fixToken(options.token)
     }
 
+    if (options.httpsOptions) {
+      this.httpsOptions = options.httpsOptions;
+    }
+
     this.log = false;
     if (options.log) {
       this.log = options.log;
@@ -88,6 +92,10 @@ class TiledeskClient {
     return request_id;
   }
 
+  static version09() {
+    console.log("Tiledesk Client v 0.9.x");
+  }
+
   createProject(projectId, callback) {
     // const jwt_token = TiledeskClient.fixToken(token)
     const URL = `${this.APIURL}/projects/${projectId}` // projectId passed as parameter???
@@ -98,7 +106,8 @@ class TiledeskClient {
         'Authorization': this.jwt_token
       },
       json: true,
-      method: 'GET'
+      method: 'GET',
+      httpsOptions: this.httpsOptions
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
@@ -113,14 +122,6 @@ class TiledeskClient {
             callback(null, resbody);
           }
         }
-        // if (response.status === 200) {
-        //   if (callback) {
-        //   callback(null, resbody)
-        //   }
-        // }
-        // else if (callback) {
-        //   callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
-        // }
       }, this. log);
   }
 
@@ -140,7 +141,8 @@ class TiledeskClient {
         'Authorization': this.jwt_token
       },
       // json: true,
-      method: 'GET'
+      method: 'GET',
+      httpsOptions: this.httpsOptions
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
@@ -174,7 +176,8 @@ class TiledeskClient {
           'Authorization': this.jwt_token
         },
         // json: true,
-        method: 'GET'
+        method: 'GET',
+        httpsOptions: this.httpsOptions
       };
       TiledeskClient.myrequest(
         HTTPREQUEST,
@@ -213,7 +216,8 @@ class TiledeskClient {
         'Content-Type' : 'application/json',
         'Authorization': this.jwt_token
       },
-      method: 'GET'
+      method: 'GET',
+      httpsOptions: this.httpsOptions
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
@@ -247,7 +251,8 @@ class TiledeskClient {
         'Authorization': this.jwt_token
       },
       // json: true,
-      method: 'GET'
+      method: 'GET',
+      httpsOptions: this.httpsOptions
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
@@ -262,14 +267,6 @@ class TiledeskClient {
             callback(null, resbody);
           }
         }
-        // if (response.status === 200) {
-        //   if (callback) {
-        //   callback(null, resbody)
-        //   }
-        // }
-        // else if (callback) {
-        //   callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
-        // }
       }, this.log
     );
   }
@@ -296,7 +293,8 @@ class TiledeskClient {
         'Authorization': this.jwt_token
       },
       json: properties,
-      method: 'PUT'
+      method: 'PUT',
+      httpsOptions: this.httpsOptions
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
@@ -311,14 +309,6 @@ class TiledeskClient {
             callback(null, resbody);
           }
         }
-        // if (response.status === 200) {
-        //   if (callback) {
-        //   callback(null, resbody)
-        //   }
-        // }
-        // else if (callback) {
-        //   callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
-        // }
       }, this.log
     );
   }
@@ -344,7 +334,8 @@ class TiledeskClient {
         'Authorization': this.jwt_token
       },
       json: properties,
-      method: 'PUT'
+      method: 'PUT',
+      httpsOptions: this.httpsOptions
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
@@ -359,15 +350,6 @@ class TiledeskClient {
             callback(null, resbody);
           }
         }
-
-        // if (response.status === 200) {
-        //   if (callback) {
-        //   callback(null, resbody)
-        //   }
-        // }
-        // else if (callback) {
-        //   callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
-        // }
       }, this.log
     );
   }
@@ -390,7 +372,8 @@ class TiledeskClient {
       json: {
         user_available: userAvailable
       },
-      method: 'PUT'
+      method: 'PUT',
+      httpsOptions: this.httpsOptions
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
@@ -405,16 +388,6 @@ class TiledeskClient {
             callback(null, resbody);
           }
         }
-        // if (response.status === 200) {
-        //   if (callback) {
-        //   callback(null, resbody)
-        //   }
-        // }
-        // else if (callback) {
-        //   callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
-        // }
-
-       
       }, this.log
     );
   }
@@ -437,7 +410,8 @@ class TiledeskClient {
       json: {
         attributes: attributes
       },
-      method: 'PUT'
+      method: 'PUT',
+      httpsOptions: this.httpsOptions
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
@@ -452,14 +426,6 @@ class TiledeskClient {
             callback(null, resbody);
           }
         }
-        // if (response.status === 200) {
-        //   if (callback) {
-        //   callback(null, resbody)
-        //   }
-        // }
-        // else if (callback) {
-        //   callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
-        // }
       }, this.log
     );
   }
@@ -608,7 +574,8 @@ class TiledeskClient {
         'Authorization': this.jwt_token
       },
       // json: true,
-      method: 'GET'
+      method: 'GET',
+      httpsOptions: this.httpsOptions
     }
     TiledeskClient.myrequest(
       HTTPREQUEST,
@@ -650,7 +617,8 @@ class TiledeskClient {
           'Content-Type' : 'application/json',
           'Authorization': this.jwt_token
         },
-        method: 'GET'
+        method: 'GET',
+        httpsOptions: this.httpsOptions
       };
       TiledeskClient.myrequest(
         HTTPREQUEST,
@@ -695,7 +663,8 @@ class TiledeskClient {
         'Authorization': this.jwt_token
       },
       json: participants,
-      method: 'PUT'
+      method: 'PUT',
+      httpsOptions: this.httpsOptions
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
@@ -730,7 +699,8 @@ class TiledeskClient {
         'Authorization': this.jwt_token
       },
       //json: participants,
-      method: 'DELETE'
+      method: 'DELETE',
+      httpsOptions: this.httpsOptions
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
@@ -765,7 +735,8 @@ class TiledeskClient {
         'Authorization': this.jwt_token
       },
       json: {member: participantId},
-      method: 'POST'
+      method: 'POST',
+      httpsOptions: this.httpsOptions
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
@@ -817,7 +788,8 @@ class TiledeskClient {
         'Authorization': this.jwt_token
       },
       json: properties,
-      method: 'PATCH'
+      method: 'PATCH',
+      httpsOptions: this.httpsOptions
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
@@ -856,7 +828,8 @@ class TiledeskClient {
         'Authorization': this.jwt_token
       },
       json: data,
-      method: 'PATCH'
+      method: 'PATCH',
+      httpsOptions: this.httpsOptions
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
@@ -913,7 +886,8 @@ class TiledeskClient {
         'Authorization': this.jwt_token
       },
       json: data,
-      method: 'PUT'
+      method: 'PUT',
+      httpsOptions: this.httpsOptions
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
@@ -948,7 +922,8 @@ class TiledeskClient {
           'Authorization': this.jwt_token
         },
         json: {},
-        method: 'PUT'
+        method: 'PUT',
+        httpsOptions: this.httpsOptions
       };
       TiledeskClient.myrequest(
         HTTPREQUEST,
@@ -1220,7 +1195,8 @@ class TiledeskClient {
         'Authorization': this.jwt_token
       },
       // json: {member: participant},
-      method: 'GET'
+      method: 'GET',
+      httpsOptions: this.httpsOptions
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
@@ -1281,7 +1257,8 @@ class TiledeskClient {
         'Authorization': this.jwt_token
       },
       // json: {member: participant},
-      method: 'GET'
+      method: 'GET',
+      httpsOptions: this.httpsOptions
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
@@ -1321,7 +1298,8 @@ class TiledeskClient {
         external: isExternal,
         url: botUrl
       },
-      method: 'POST'
+      method: 'POST',
+      httpsOptions: this.httpsOptions
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
@@ -1361,7 +1339,8 @@ class TiledeskClient {
         external: isExternal,
         url: botUrl
       },
-      method: 'PUT'
+      method: 'PUT',
+      httpsOptions: this.httpsOptions
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
@@ -1395,7 +1374,8 @@ class TiledeskClient {
         'Authorization': this.jwt_token
       },
       // json: {member: participant},
-      method: 'DELETE'
+      method: 'DELETE',
+      httpsOptions: this.httpsOptions
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
@@ -1445,7 +1425,8 @@ class TiledeskClient {
         language: language,
         webhook_enabled: webhook_enabled 
       },
-      method: 'POST'
+      method: 'POST',
+      httpsOptions: this.httpsOptions
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
@@ -1492,7 +1473,8 @@ class TiledeskClient {
           'Authorization': this.jwt_token
         },
         params: params,
-        method: 'GET'
+        method: 'GET',
+        httpsOptions: this.httpsOptions
       };
       TiledeskClient.myrequest(
         HTTPREQUEST,
@@ -1541,7 +1523,8 @@ class TiledeskClient {
         id_group: groupId,
         id_bot: botId
       },
-      method: 'POST'
+      method: 'POST',
+      httpsOptions: this.httpsOptions
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
@@ -1584,7 +1567,8 @@ class TiledeskClient {
         id_group: groupId,
         id_bot: botId
       },
-      method: 'PUT'
+      method: 'PUT',
+      httpsOptions: this.httpsOptions
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
@@ -1618,7 +1602,8 @@ class TiledeskClient {
         'Authorization': this.jwt_token
       },
       // json: {member: participant},
-      method: 'GET'
+      method: 'GET',
+      httpsOptions: this.httpsOptions
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
@@ -1651,7 +1636,8 @@ class TiledeskClient {
         'Authorization': this.jwt_token
       },
       // json: {member: participant},
-      method: 'GET'
+      method: 'GET',
+      httpsOptions: this.httpsOptions
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
@@ -1684,7 +1670,8 @@ class TiledeskClient {
         'Authorization': this.jwt_token
       },
       // json: {member: participant},
-      method: 'GET'
+      method: 'GET',
+      httpsOptions: this.httpsOptions
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
@@ -1718,7 +1705,8 @@ class TiledeskClient {
         'Authorization': this.jwt_token
       },
       // json: {member: participant},
-      method: 'DELETE'
+      method: 'DELETE',
+      httpsOptions: this.httpsOptions
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
@@ -1737,6 +1725,11 @@ class TiledeskClient {
     );
   }
 
+  // ****************************************************
+  // ****************** WIDGET SETTINGS *****************
+  // ****************************************************
+
+  
   // ****************************************************
   // ****************** WIDGET SETTINGS *****************
   // ****************************************************
@@ -1771,6 +1764,7 @@ class TiledeskClient {
     const HTTPREQUEST = {
       url: `${this.APIURL}/${this.projectId}/widgets`,
       method: 'GET',
+      httpsOptions: this.httpsOptions
       // json: true
     };
     TiledeskClient.myrequest(
@@ -1814,6 +1808,7 @@ class TiledeskClient {
        //  'Authorization': jwt_token
       },
       method: 'GET',
+      httpsOptions: this.httpsOptions
       // json: true
     };
     TiledeskClient.myrequest(
@@ -1877,21 +1872,12 @@ class TiledeskClient {
       json: {
         "id_project": projectId
       },
-      method: 'POST'
+      method: 'POST',
+      httpsOptions: this.httpsOptions
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
       function(err, resbody) {
-        // resbody example:
-        // {
-        //   "success": true,
-        //   "token": "JWT eyJ...",
-        //   "user": {
-        //       "firstname": "Guest",
-        //       "id": "20bb30db-b677-...",
-        //       "fullName": "Guest "
-        //   }
-        // }
         if (err) {
           if (callback) {
             callback(err);
@@ -1902,14 +1888,6 @@ class TiledeskClient {
             callback(null, resbody);
           }
         }
-        // if (response.status === 200) {
-        //   if (callback) {
-        //     callback(null, resbody)
-        //   }
-        // }
-        // else if (callback) {
-        //   callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
-        // }
       }, _log
     );
   }
@@ -1943,7 +1921,8 @@ class TiledeskClient {
         'Authorization' : jwt_token
       },
       // json: true,
-      method: 'POST'
+      method: 'POST',
+      httpsOptions: this.httpsOptions
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
@@ -2001,7 +1980,8 @@ class TiledeskClient {
         email: email,
         password: password
       },
-      method: 'POST'
+      method: 'POST',
+      httpsOptions: this.httpsOptions
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
@@ -2053,7 +2033,8 @@ class TiledeskClient {
           'Authorization': this.jwt_token
         },
         json: message,
-        method: 'POST'
+        method: 'POST',
+        httpsOptions: this.httpsOptions
       };
       TiledeskClient.myrequest(
         HTTPREQUEST,
@@ -2108,7 +2089,8 @@ class TiledeskClient {
         'Authorization': this.jwt_token
       },
       json: message,
-      method: 'POST'
+      method: 'POST',
+      httpsOptions: this.httpsOptions
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
@@ -2123,19 +2105,48 @@ class TiledeskClient {
             callback(null, resbody);
           }
         }
-        // if (err) {
-        //   callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
-        // }
-        // else if (response.status === 200) {
-        //   if (callback) {
-        //     callback(null, resbody)
-        //   }
-        // }
-        // else if (callback) {
-        //   callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
-        // }
       }, this.log
     );
+  }
+
+  /**
+   * Send an email message<br>
+   * 
+   * @param {string} subject - The message subject
+   * @param {string} body - The message body
+   * @param {string} email - The recipient's email address.
+   */
+   async sendEmail(message, callback) {
+    return new Promise ( (resolve, reject) => {
+      const url = `${this.APIURL}/${this.projectId}/emails/send`;
+      const HTTPREQUEST = {
+        url: url,
+        headers: {
+          'Content-Type' : 'application/json',
+          'Authorization': this.jwt_token
+        },
+        json: message,
+        method: 'POST',
+        httpsOptions: this.httpsOptions
+      };
+      TiledeskClient.myrequest(
+        HTTPREQUEST,
+        function(err, resbody) {
+          if (err) {
+            reject(err);
+            if (callback) {
+              callback(err);
+            }
+          }
+          else {
+            resolve(resbody);
+            if (callback) {
+              callback(null, resbody);
+            }
+          }
+        }, this.log
+      );
+    });
   }
 
   // *******************************************
@@ -2160,7 +2171,8 @@ class TiledeskClient {
         'Authorization': this.jwt_token
       },
       json: event,
-      method: 'POST'
+      method: 'POST',
+      httpsOptions: this.httpsOptions
    };
     TiledeskClient.myrequest(
       HTTPREQUEST,
@@ -2217,7 +2229,8 @@ class TiledeskClient {
           fullname: fullname,
           attributes: attributes
         },
-        method: 'PUT'
+        method: 'PUT',
+        httpsOptions: this.httpsOptions
       };
       TiledeskClient.myrequest(
         HTTPREQUEST,
@@ -2280,7 +2293,8 @@ class TiledeskClient {
         'Authorization': this.jwt_token
       },
       json: json,
-      method: 'PUT'
+      method: 'PUT',
+      httpsOptions: this.httpsOptions
     };
     TiledeskClient.myrequest(
       HTTPREQUEST,
@@ -2383,18 +2397,24 @@ class TiledeskClient {
       params: options.params,
       headers: options.headers
     }
-    if (options.url.startsWith("https:") && this.httpsOptions) {
-      const httpsAgent = new https.Agent(this.httpsOptions);
+    // console.log("options.url.startsWith(https:)", options.url.startsWith("https:"))
+    // console.log("this.httpsOptions", this.httpsOptions)
+    
+    if (options.url.startsWith("https:") && options.httpsOptions) {
+      // console.log("Tiledesk Client v 0.9.x: url.startsWith https: && httpsOptions");
+      const httpsAgent = new https.Agent(options.httpsOptions);
       axios_settings.httpsAgent = httpsAgent;
     }
-    else if (options.url.startsWith("https:") && !this.httpsOptions) {
+    else if (options.url.startsWith("https:") && !options.httpsOptions) {
       // HTTPS default is rejectUnauthorized: false
+      // console.log("Tiledesk Client v 0.9.x: url.startsWith https: && NOT httpsOptions");
       const httpsAgent = new https.Agent({
         rejectUnauthorized: false,
       });
       axios_settings.httpsAgent = httpsAgent;
     }
     
+    // console.log("Using axios settings:", axios_settings)
     // axios(
     //   {
     //     url: options.url,
