@@ -31,6 +31,6 @@
   },
   "homepage": "https://github.com/Tiledesk/tiledesk-nodejs-libs#readme",
   "devDependencies": {
-    "mocha": "^8.2.1"
+    "mocha": "^10.0.0"
   }
 }
