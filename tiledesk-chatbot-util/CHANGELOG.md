@@ -2,6 +2,9 @@
 
 This library is on npm: https://www.npmjs.com/package/@tiledesk/tiledesk-chatbot-util
 
+### 0.8.39
+- fixed tdIntent:{PARAMS}
+
 ### 0.8.38
 - log fix
 

@@ -2,6 +2,9 @@
 
 **This library is on npm: https://www.npmjs.com/package/@tiledesk/tiledesk-client**
 
+### 0.9.6 - online
+- fixed stringyfied some logs
+
 ### 0.9.5 - online
 - sendSupportMessage() async fix.
 

@@ -369,7 +369,8 @@ static is_agent_handoff_command(msg) {
     const tdaction_show_echo_pattern = new RegExp('(' + tdaction_show_echo_tag + ')(\\S+)', 'm');
 
     const tdintent_tag = TiledeskChatbotUtil.INTENT_TAG; // 'tdIntent:';
-    const tdintent_pattern = new RegExp('(' + tdintent_tag + ')(\\S+)', 'm');
+    // const tdintent_pattern = new RegExp('(' + tdintent_tag + ')(\\S+)', 'm');
+    const tdintent_pattern = new RegExp('(' + tdintent_tag + ')(.+)', 'm');
 
     const tdintent_no_echo_tag = TiledeskChatbotUtil.INTENT_NO_ECHO_TAG;
     const tdintent_no_echo_pattern = new RegExp('(' + tdintent_no_echo_tag + ')(\\S+)', 'm');
@@ -386,7 +387,7 @@ static is_agent_handoff_command(msg) {
     // console.log('match_button_link_parent', match_button_link_parent)
     if (match_button_action && match_button_action.length && match_button_action.length === 3) {
       const show_echo = false;
-      const button =  TiledeskChatbotUtil.create_action_button_by_match(button_string, match_button_action, show_echo);
+      const button = TiledeskChatbotUtil.create_action_button_by_match(button_string, match_button_action, show_echo);
       return button;
     }
     else if (match_button_action_show_echo && match_button_action_show_echo.length && match_button_action_show_echo.length === 3) {
@@ -455,7 +456,7 @@ static is_agent_handoff_command(msg) {
     const button_label = button_string.replace(command,'').trim();
     button[TiledeskChatbotUtil.TYPE_KEY] = TiledeskChatbotUtil.TYPE_BUTTON_ACTION;
     button[TiledeskChatbotUtil.VALUE_KEY] = button_label;
-    button[TiledeskChatbotUtil.ACTION_KEY] = action;
+    button[TiledeskChatbotUtil.ACTION_KEY] = action.trim();
     button[TiledeskChatbotUtil.SHOW_ECHO_KEY] = show_echo;
     return button;
   }
