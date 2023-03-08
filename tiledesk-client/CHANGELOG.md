@@ -2,6 +2,9 @@
 
 **This library is on npm: https://www.npmjs.com/package/@tiledesk/tiledesk-client**
 
+### 0.10.0 - online
+- updated to /v3 endpoint
+
 ### 0.9.6 - online
 - fixed stringyfied some logs
 

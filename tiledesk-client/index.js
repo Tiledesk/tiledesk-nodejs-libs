@@ -12,7 +12,7 @@ let https = require("https");
  */
 class TiledeskClient {
 
-  static DEFAULT_API_ENDPOINT = "https://api.tiledesk.com/v2";
+  static DEFAULT_API_ENDPOINT = "https://api.tiledesk.com/v3";
   static ASSIGNED_STATUS = 200;
   static UNASSIGNED_STATUS = 100;
 
