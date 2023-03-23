@@ -736,7 +736,7 @@ describe('Requests', function() {
 
 
     
-    it('Assign the request without a bot. Sends a message to a new request conversation to create the support conversation, the it assigns the request to a human, bypassing the bot', function(done) {
+    it('Assign the request without a bot. Sends a message to a new request conversation to create the support conversation, then it assigns the request to a human, bypassing the bot', function(done) {
         const tdclient = new TiledeskClient({
             APIKEY: APIKEY,
             APIURL: API_ENDPOINT,
@@ -778,6 +778,44 @@ describe('Requests', function() {
                     });
                 });
                 
+            });
+        }
+        else {
+            assert.ok(false);
+        }
+    });
+
+    it('Moves the request to an agent. Sends a message to a new request conversation to create the support conversation, then it assigns the request to a human', function(done) {
+        const tdclient = new TiledeskClient({
+            APIKEY: APIKEY,
+            APIURL: API_ENDPOINT,
+            projectId: PROJECT_ID,
+            token: ANONYM_USER_TOKEN,
+            log: LOG_STATUS
+        });
+        if (tdclient) {
+            assert(tdclient != null);
+            const text_value = 'test message2';
+            const request_id = TiledeskClient.newRequestId(PROJECT_ID);
+            tdclient.sendSupportMessage(request_id, {text: text_value}, function(err, result) {
+                assert(err === null);
+                assert(result != null);
+                assert(result.text === text_value);
+                const tdclient_user = new TiledeskClient(
+                    {
+                        APIKEY: APIKEY,
+                        APIURL: API_ENDPOINT,
+                        projectId: PROJECT_ID,
+                        token: USER_TOKEN,
+                        log: LOG_STATUS
+                    })
+                tdclient_user.moveToAgent(request_id, (err, result) => {
+                    // console.log("RESULT:::", result);
+                    assert(err === null);
+                    assert(result != null);
+                    //console.log("Successfully assigned request:", request_id);
+                    done();
+                });
             });
         }
         else {

@@ -1123,7 +1123,7 @@ class TiledeskClient {
   }
 
   /**
-   * Moves the Request to an agent.<br>
+   * Moves the Request to an agent on the specific department.<br>
    * <a href='https://developer.tiledesk.com/apis/rest-api/requests#route-a-request-to-a-department' target='_blank'>REST API</a>
    * 
    * @param {string} requestId - The request ID
@@ -1140,6 +1140,40 @@ class TiledeskClient {
     this.updateRequestDepartment(requestId, depId, {nobot: true}, (err, resbody) => {
       callback(err, resbody);
     });
+  }
+
+  /**
+   * Moves the current conversation to an agent following the current request department rules. If no department is connected to the request it will move to the Default Department
+   * <a href='https://developer.tiledesk.com/apis/rest-api/requests#route-a-request-to-a-department' target='_blank'>REST API</a>
+   * 
+   * @param {string} requestId - The request ID
+   * @param {resultCallback} callback - The callback that handles the response.
+   */
+  moveToAgent(requestId, callback) {
+    const HTTPREQUEST = {
+      url: `${this.APIURL}/${this.projectId}/requests/${requestId}/agent`,
+      headers: {
+        'Content-Type' : 'application/json',
+        'Authorization': this.jwt_token
+      },
+      method: 'PUT',
+      httpsOptions: this.httpsOptions
+    };
+    TiledeskClient.myrequest(
+      HTTPREQUEST,
+      function(err, resbody) {
+        if (err) {
+          if (callback) {
+            callback(err);
+          }
+        }
+        else {
+          if (callback) {
+            callback(null, resbody);
+          }
+        }
+      }, this.log
+    );
   }
 
   // private
