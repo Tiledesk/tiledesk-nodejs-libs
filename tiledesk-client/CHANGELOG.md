@@ -2,6 +2,9 @@
 
 **This library is on npm: https://www.npmjs.com/package/@tiledesk/tiledesk-client**
 
+### 0.10.2 - online
+- fixed reject/resolve (callback or .then/.catch) in sendSupportMessage()
+
 ### 0.10.1 - online
 - added moveToAgent() method
 

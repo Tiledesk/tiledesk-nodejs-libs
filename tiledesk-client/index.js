@@ -2074,15 +2074,19 @@ class TiledeskClient {
         HTTPREQUEST,
         function(err, resbody) {
           if (err) {
-            reject(err);
             if (callback) {
               callback(err);
             }
+            else {
+              reject(err);
+            }
           }
           else {
-            resolve(resbody);
             if (callback) {
               callback(null, resbody);
+            }
+            else {
+              resolve(resbody);
             }
           }
           // else if (callback) {
