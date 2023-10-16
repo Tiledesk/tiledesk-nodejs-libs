@@ -2156,7 +2156,7 @@ class TiledeskClient {
    */
    async sendEmail(message, callback) {
     return new Promise ( (resolve, reject) => {
-      const url = `${this.APIURL}/${this.projectId}/emails/send`;
+      const url = `${this.APIURL}/${this.projectId}/emails/internal/send`;
       const HTTPREQUEST = {
         url: url,
         headers: {
@@ -2242,6 +2242,7 @@ class TiledeskClient {
   // ******************************************
 
   /**
+   * DEPRECATED
    * Updates a Lead's email and fullname.<br>
    * <a href='https://developer.tiledesk.com/apis/rest-api/leads#update-a-lead-by-id' target='_blank'>REST API</a>
    * 
@@ -2267,6 +2268,58 @@ class TiledeskClient {
           fullname: fullname,
           attributes: attributes
         },
+        method: 'PUT',
+        httpsOptions: this.httpsOptions
+      };
+      TiledeskClient.myrequest(
+        HTTPREQUEST,
+        function(err, resbody) {
+          if (err) {
+            reject(err);
+            if (callback) {
+              callback(err);
+            }
+          }
+          else {
+            resolve(resbody);
+            if (callback) {
+              callback(null, resbody);
+            }
+          }
+        }, this.log
+      );
+    });
+  }
+
+  /**
+   * Updates a Lead's email and fullname.<br>
+   * <a href='https://developer.tiledesk.com/apis/rest-api/leads#update-a-lead-by-id' target='_blank'>REST API</a>
+   * 
+   * @param {string} leadId - The Lead ID
+   * @param {string} nativeAttributes - native attributes: name, email, phone etc.
+   * @param {string} attributes - Lead custom attributes
+   * @param {resultCallback} callback - The callback that handles the response.
+   */
+  updateLead(leadId, nativeAttributes, attributes, tags, callback) {
+    if (!leadId) {
+      throw new Error('leadId can NOT be null.');
+    }
+    let jsonData = {}
+    if (nativeAttributes) {
+      for (const [key, value] of Object.entries(nativeAttributes)) {
+        jsonData[key] = value;
+      }
+    }
+    jsonData.attributes = attributes;
+    jsonData.tags = tags;
+    return new Promise ( (resolve, reject) => {
+      const HTTPREQUEST = {
+        url: `${this.APIURL}/${this.projectId}/leads/${leadId}`,
+        headers: {
+          'Content-Type' : 'application/json',
+          'Authorization': this.jwt_token
+        },
+        json: jsonData,
         method: 'PUT',
         httpsOptions: this.httpsOptions
       };

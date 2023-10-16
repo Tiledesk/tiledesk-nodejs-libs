@@ -2,6 +2,12 @@
 
 **This library is on npm: https://www.npmjs.com/package/@tiledesk/tiledesk-client**
 
+### 0.10.4 - online
+- /emails/send => /emails/internal/send
+
+### 0.10.3 - online
+- deprecated leadUpdateData() for leadUpdate()
+
 ### 0.10.2 - online
 - fixed reject/resolve (callback or .then/.catch) in sendSupportMessage()
 
