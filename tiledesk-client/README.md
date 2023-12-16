@@ -327,5 +327,7 @@ const tdclient = new TiledeskClient({
 })
 </pre>
 
+PS: Just remember that the test/test.js is the best place to get working examples of how the library works!
+
 
 
