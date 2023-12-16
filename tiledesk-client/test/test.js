@@ -835,7 +835,7 @@ describe('Requests', function() {
         tdclient.getAllRequests(
             {
                 limit: 1,
-                status: TiledeskClient.UNASSIGNED_STATUS
+                status: TiledeskClient.ASSIGNED_STATUS
             }, (err, result) => {
             assert(result);
             const requests = result.requests;
@@ -867,7 +867,7 @@ describe('Requests', function() {
         tdclient.getAllRequests(
             {
                 limit: 1,
-                status: TiledeskClient.UNASSIGNED_STATUS
+                status: TiledeskClient.ASSIGNED_STATUS
             }, (err, result) => {
             assert(result);
             const requests = result.requests;
