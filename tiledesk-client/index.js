@@ -779,33 +779,37 @@ class TiledeskClient {
    * @param {requestProperties} properties - The Request's properties
    * @param {resultCallback} callback - The callback that handles the response.
    */
-   updateRequestProperties(requestId, properties, callback) {
-    let URL = `${this.APIURL}/${this.projectId}/requests/${requestId}/`
-    const HTTPREQUEST = {
-      url: URL,
-      headers: {
-        'Content-Type' : 'application/json',
-        'Authorization': this.jwt_token
-      },
-      json: properties,
-      method: 'PATCH',
-      httpsOptions: this.httpsOptions
-    };
-    TiledeskClient.myrequest(
-      HTTPREQUEST,
-      function(err, resbody) {
-        if (err) {
-          if (callback) {
-            callback(err);
+   async updateRequestProperties(requestId, properties, callback) {
+    return new Promise( (resolve, reject) => {
+      let URL = `${this.APIURL}/${this.projectId}/requests/${requestId}/`
+      const HTTPREQUEST = {
+        url: URL,
+        headers: {
+          'Content-Type' : 'application/json',
+          'Authorization': this.jwt_token
+        },
+        json: properties,
+        method: 'PATCH',
+        httpsOptions: this.httpsOptions
+      };
+      TiledeskClient.myrequest(
+        HTTPREQUEST,
+        function(err, resbody) {
+          if (err) {
+            if (callback) {
+              callback(err);
+            }
+            reject(error);
           }
-        }
-        else {
-          if (callback) {
-            callback(null, resbody);
+          else {
+            if (callback) {
+              callback(null, resbody);
+            }
+            resolve(resbody);
           }
-        }
-      }, this.log
-    );
+        }, this.log
+      );
+    });
   }
 
   /**
@@ -2242,6 +2246,47 @@ class TiledeskClient {
   // ******************************************
 
   /**
+   * Gets the Lead.<br>
+   * <a href='https://developer.tiledesk.com/apis/rest-api/leads#get-a-lead-by-id' target='_blank'>REST API</a>
+   * 
+   * @param {string} leadId - The Lead ID
+   * @param {resultCallback} callback - The callback that handles the response.
+   */
+  async getLeadById(leadId, callback) {
+    return new Promise ( (resolve, reject) => {
+      if (!leadId) {
+        throw new Error('leadId can NOT be null.');
+      }
+      const HTTPREQUEST = {
+        url: `${this.APIURL}/${this.projectId}/leads/${leadId}`,
+        headers: {
+          'Content-Type' : 'application/json',
+          'Authorization': this.jwt_token
+        },
+        method: 'GET',
+        httpsOptions: this.httpsOptions
+      };
+      TiledeskClient.myrequest(
+        HTTPREQUEST,
+        function(err, resbody) {
+          if (err) {
+            reject(err);
+            if (callback) {
+              callback(err);
+            }
+          }
+          else {
+            resolve(resbody);
+            if (callback) {
+              callback(null, resbody);
+            }
+          }
+        }, this.log
+      );
+    });
+  }
+
+  /**
    * DEPRECATED
    * Updates a Lead's email and fullname.<br>
    * <a href='https://developer.tiledesk.com/apis/rest-api/leads#update-a-lead-by-id' target='_blank'>REST API</a>
@@ -2298,6 +2343,7 @@ class TiledeskClient {
    * @param {string} leadId - The Lead ID
    * @param {string} nativeAttributes - native attributes: name, email, phone etc.
    * @param {string} attributes - Lead custom attributes
+   * @param {string} tags - Lead tags
    * @param {resultCallback} callback - The callback that handles the response.
    */
   updateLead(leadId, nativeAttributes, attributes, tags, callback) {

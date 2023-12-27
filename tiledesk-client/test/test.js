@@ -677,6 +677,74 @@ describe('Messaging', function() {
     });
 });
 
+// *******************************************************
+  // ********************* LEADS ************************
+  // *******************************************************
+
+describe('Leads', function() {
+    it('updateLead(), getLeadById()', function(done) {
+        const tdclient = new TiledeskClient({
+            APIKEY: APIKEY,
+            APIURL: API_ENDPOINT,
+            projectId: PROJECT_ID,
+            token: ANONYM_USER_TOKEN,
+            log: LOG_STATUS
+        });
+        if (tdclient) {
+            assert(tdclient != null);
+            const text_value = 'test message';
+            const request_id = TiledeskClient.newRequestId(PROJECT_ID);
+            tdclient.sendSupportMessage(request_id, {text: text_value}, function(err, result) {
+                assert(err === null);
+                assert(result != null);
+                assert(result.text === text_value);
+                const tdclient_user = new TiledeskClient(
+                    {
+                        APIKEY: APIKEY,
+                        APIURL: API_ENDPOINT,
+                        projectId: PROJECT_ID,
+                        token: USER_TOKEN,
+                        log: LOG_STATUS
+                    })
+                    tdclient_user.getRequestById(request_id, (err, request) => {
+                    console.log("REQUEST:", err, JSON.stringify(request))
+                    console.log("lead:", request.lead._id)
+                    // done();
+                    tdclient_user.getLeadById(request.lead._id, (err, lead) => {
+                        assert(err === null);
+                        assert(lead != null);
+                        console.log("Got lead:", lead);
+                        let tags = [ "ticket1", "ticket2"];
+                        tdclient_user.updateLead(lead._id, null, null, tags, (err, lead) => {
+                            console.log("Got updated lead:", lead);
+                            assert(err === null);
+                            assert(lead !== null);
+                            assert(lead.tags != null);
+                            assert(lead.tags.length === 2);
+                            assert(lead.tags[0] === "ticket1");
+                            assert(lead.tags[1] === "ticket2");
+                            tdclient_user.updateLead(lead._id, {"fullname": "My Name"}, null, null, (err, lead) => {
+                                console.log("Got updated lead 2:", lead);
+                                assert(err === null);
+                                assert(lead != null);
+                                assert(lead.fullname === "My Name");
+                                assert(lead.tags != null);
+                                assert(lead.tags.length === 2);
+                                assert(lead.tags[0] === "ticket1");
+                                assert(lead.tags[1] === "ticket2");
+                                done();
+                            });
+                        });
+                    });
+                });
+            });
+        }
+        else {
+            assert.ok(false);
+        }
+    });
+});
+
   // *******************************************************
   // ********************* REQUESTS ************************
   // *******************************************************
@@ -835,7 +903,7 @@ describe('Requests', function() {
         tdclient.getAllRequests(
             {
                 limit: 1,
-                status: TiledeskClient.ASSIGNED_STATUS
+                status: TiledeskClient.UNASSIGNED_STATUS
             }, (err, result) => {
             assert(result);
             const requests = result.requests;
@@ -867,7 +935,7 @@ describe('Requests', function() {
         tdclient.getAllRequests(
             {
                 limit: 1,
-                status: TiledeskClient.ASSIGNED_STATUS
+                status: TiledeskClient.UNASSIGNED_STATUS
             }, (err, result) => {
             assert(result);
             const requests = result.requests;
@@ -892,6 +960,77 @@ describe('Requests', function() {
                     assert(_request != null);
                     assert(_request.request_id != null);
                     assert(_request.request_id === first_request_id);
+                    done();
+                }
+                catch (error) {
+                    console.error("Error on async request", error);
+                    process.exit(0);
+                }
+            });
+        },
+        {
+            additional_params: {
+                "no_populate": "true",
+                "snap_department_routing": "assigned"
+            }
+        });
+    });
+
+    it('updateRequestProperties()', (done) => {
+        const tdclient = new TiledeskClient(
+        {
+            APIKEY: APIKEY,
+            APIURL: API_ENDPOINT,
+            projectId: PROJECT_ID,
+            token: USER_TOKEN,
+            log: LOG_STATUS
+        })
+        const limit = 1;
+        tdclient.getAllRequests(
+            {
+                limit: 1,
+                status: TiledeskClient.UNASSIGNED_STATUS
+            }, (err, result) => {
+            assert(result);
+            const requests = result.requests;
+            assert(requests);
+            assert(result.requests);
+            assert(Array.isArray(requests));
+            assert(result.requests.length > 0);
+            const request = requests[0];
+            assert(request.request_id != null);
+            first_request_id = request.request_id;
+            tdclient.getRequestById(first_request_id, async (err, result) => {
+                //console.log("RICHIESTA", JSON.stringify(result))
+                assert(result != null);
+                const request = result;
+                assert(request.request_id != null);
+                assert(request.request_id === first_request_id);
+                // async/await version
+                let _request;
+                try {
+                    _request = await tdclient.getRequestById(first_request_id);
+                    //console.log("Async request", JSON.stringify(_request));
+                    assert(_request != null);
+                    assert(_request.request_id != null);
+                    assert(_request.request_id === first_request_id);
+                    _request_with_tags = await tdclient.updateRequestProperties(first_request_id, {
+                        "tags": [
+                            {
+                                "tag": "ticket1",
+                                "color": "#43B1F2"
+                            },
+                            {
+                                "tag": "ticket2",
+                                "color": "#f0806f"
+                            }
+                        ]
+                    });
+                    // console.log("REQUESTIS:", _request_with_tags);
+                    assert(_request_with_tags.tags !== null);
+                    assert(_request_with_tags.tags.length === 2);
+                    assert(_request_with_tags.tags[0].tag === "ticket1");
+                    assert(_request_with_tags.tags[1].tag === "ticket2");
                     done();
                 }
                 catch (error) {

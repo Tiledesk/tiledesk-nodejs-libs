@@ -2,6 +2,11 @@
 
 **This library is on npm: https://www.npmjs.com/package/@tiledesk/tiledesk-client**
 
+### 0.10.5
+- added test 'updateRequestProperties()'
+- added getLeadById()
+- added test 'updateLead(), getLeadById()'
+
 ### 0.10.4 - online
 - /emails/send => /emails/internal/send
 
