@@ -2337,7 +2337,7 @@ class TiledeskClient {
   }
 
   /**
-   * Updates a Lead's email and fullname.<br>
+   * Update Lead's data<br>
    * <a href='https://developer.tiledesk.com/apis/rest-api/leads#update-a-lead-by-id' target='_blank'>REST API</a>
    * 
    * @param {string} leadId - The Lead ID
@@ -2367,6 +2367,53 @@ class TiledeskClient {
         },
         json: jsonData,
         method: 'PUT',
+        httpsOptions: this.httpsOptions
+      };
+      TiledeskClient.myrequest(
+        HTTPREQUEST,
+        function(err, resbody) {
+          if (err) {
+            reject(err);
+            if (callback) {
+              callback(err);
+            }
+          }
+          else {
+            resolve(resbody);
+            if (callback) {
+              callback(null, resbody);
+            }
+          }
+        }, this.log
+      );
+    });
+  }
+
+  /**
+   * Update Lead's data<br>
+   * <a href='https://developer.tiledesk.com/apis/rest-api/leads#update-a-lead-by-id' target='_blank'>REST API</a>
+   * 
+   * @param {string} tagName - The tag name
+   * @param {string} tagColor - the tag color (i.e. "#43B1F2")
+   * @param {resultCallback} callback - The callback that handles the response.
+   */
+  addTag(tagName, tagColor, callback) {
+    if (!tagName) {
+      throw new Error('tagName can NOT be null.');
+    }
+    let jsonData = {
+      "tag": tagName,
+      "color": tagColor? tagColor : "#43B1F2"
+    }
+    return new Promise ( (resolve, reject) => {
+      const HTTPREQUEST = {
+        url: `${this.APIURL}/${this.projectId}/tags/`,
+        headers: {
+          'Content-Type' : 'application/json',
+          'Authorization': this.jwt_token
+        },
+        json: jsonData,
+        method: 'POST',
         httpsOptions: this.httpsOptions
       };
       TiledeskClient.myrequest(

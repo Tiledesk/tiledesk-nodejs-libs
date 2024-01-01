@@ -707,16 +707,16 @@ describe('Leads', function() {
                         log: LOG_STATUS
                     })
                     tdclient_user.getRequestById(request_id, (err, request) => {
-                    console.log("REQUEST:", err, JSON.stringify(request))
-                    console.log("lead:", request.lead._id)
+                    // console.log("REQUEST:", err, JSON.stringify(request))
+                    // console.log("lead:", request.lead._id)
                     // done();
                     tdclient_user.getLeadById(request.lead._id, (err, lead) => {
                         assert(err === null);
                         assert(lead != null);
-                        console.log("Got lead:", lead);
+                        // console.log("Got lead:", lead);
                         let tags = [ "ticket1", "ticket2"];
                         tdclient_user.updateLead(lead._id, null, null, tags, (err, lead) => {
-                            console.log("Got updated lead:", lead);
+                            // console.log("Got updated lead:", lead);
                             assert(err === null);
                             assert(lead !== null);
                             assert(lead.tags != null);
@@ -724,7 +724,6 @@ describe('Leads', function() {
                             assert(lead.tags[0] === "ticket1");
                             assert(lead.tags[1] === "ticket2");
                             tdclient_user.updateLead(lead._id, {"fullname": "My Name"}, null, null, (err, lead) => {
-                                console.log("Got updated lead 2:", lead);
                                 assert(err === null);
                                 assert(lead != null);
                                 assert(lead.fullname === "My Name");
@@ -976,7 +975,7 @@ describe('Requests', function() {
         });
     });
 
-    it('updateRequestProperties()', (done) => {
+    it('updateRequestProperties() with some tag', (done) => {
         const tdclient = new TiledeskClient(
         {
             APIKEY: APIKEY,
@@ -1044,6 +1043,27 @@ describe('Requests', function() {
                 "no_populate": "true",
                 "snap_department_routing": "assigned"
             }
+        });
+    });
+
+    it('addTag(). Creates a tag', (done) => {
+        const tdclient = new TiledeskClient(
+        {
+            APIKEY: APIKEY,
+            APIURL: API_ENDPOINT,
+            projectId: PROJECT_ID,
+            token: USER_TOKEN,
+            log: LOG_STATUS
+        });
+        let tag_name = "TAG-" + uuidv4();
+        tdclient.addTag(tag_name, null, (err, result) => {
+            if (err) {
+                console.error("Error adding a tag:", err);
+            }
+            assert(err === null);
+            assert(result);
+            assert(result.tag === tag_name);
+            done();
         });
     });
 
