@@ -807,33 +807,37 @@ class TiledeskClient {
    * @param {requestProperties} properties - The Request's properties
    * @param {resultCallback} callback - The callback that handles the response.
    */
-   updateRequestProperties(requestId, properties, callback) {
-    let URL = `${this.APIURL}/${this.projectId}/requests/${requestId}/`
-    const HTTPREQUEST = {
-      url: URL,
-      headers: {
-        'Content-Type' : 'application/json',
-        'Authorization': this.jwt_token
-      },
-      json: properties,
-      method: 'PATCH',
-      httpsOptions: this.httpsOptions
-    };
-    TiledeskClient.myrequest(
-      HTTPREQUEST,
-      function(err, resbody) {
-        if (err) {
-          if (callback) {
-            callback(err);
+   async updateRequestProperties(requestId, properties, callback) {
+    return new Promise( (resolve, reject) => {
+      let URL = `${this.APIURL}/${this.projectId}/requests/${requestId}/`
+      const HTTPREQUEST = {
+        url: URL,
+        headers: {
+          'Content-Type' : 'application/json',
+          'Authorization': this.jwt_token
+        },
+        json: properties,
+        method: 'PATCH',
+        httpsOptions: this.httpsOptions
+      };
+      TiledeskClient.myrequest(
+        HTTPREQUEST,
+        function(err, resbody) {
+          if (err) {
+            if (callback) {
+              callback(err);
+            }
+            reject(error);
           }
-        }
-        else {
-          if (callback) {
-            callback(null, resbody);
+          else {
+            if (callback) {
+              callback(null, resbody);
+            }
+            resolve(resbody);
           }
-        }
-      }, this.log
-    );
+        }, this.log
+      );
+    });
   }
 
   /**
@@ -2102,15 +2106,19 @@ class TiledeskClient {
         HTTPREQUEST,
         function(err, resbody) {
           if (err) {
-            reject(err);
             if (callback) {
               callback(err);
             }
+            else {
+              reject(err);
+            }
           }
           else {
-            resolve(resbody);
             if (callback) {
               callback(null, resbody);
+            }
+            else {
+              resolve(resbody);
             }
           }
           // else if (callback) {
@@ -2180,7 +2188,7 @@ class TiledeskClient {
    */
    async sendEmail(message, callback) {
     return new Promise ( (resolve, reject) => {
-      const url = `${this.APIURL}/${this.projectId}/emails/send`;
+      const url = `${this.APIURL}/${this.projectId}/emails/internal/send`;
       const HTTPREQUEST = {
         url: url,
         headers: {
@@ -2266,6 +2274,48 @@ class TiledeskClient {
   // ******************************************
 
   /**
+   * Gets the Lead.&lt;br>
+   * &lt;a href='https://developer.tiledesk.com/apis/rest-api/leads#get-a-lead-by-id' target='_blank'>REST API&lt;/a>
+   * 
+   * @param {string} leadId - The Lead ID
+   * @param {resultCallback} callback - The callback that handles the response.
+   */
+  async getLeadById(leadId, callback) {
+    return new Promise ( (resolve, reject) => {
+      if (!leadId) {
+        throw new Error('leadId can NOT be null.');
+      }
+      const HTTPREQUEST = {
+        url: `${this.APIURL}/${this.projectId}/leads/${leadId}`,
+        headers: {
+          'Content-Type' : 'application/json',
+          'Authorization': this.jwt_token
+        },
+        method: 'GET',
+        httpsOptions: this.httpsOptions
+      };
+      TiledeskClient.myrequest(
+        HTTPREQUEST,
+        function(err, resbody) {
+          if (err) {
+            reject(err);
+            if (callback) {
+              callback(err);
+            }
+          }
+          else {
+            resolve(resbody);
+            if (callback) {
+              callback(null, resbody);
+            }
+          }
+        }, this.log
+      );
+    });
+  }
+
+  /**
+   * DEPRECATED
    * Updates a Lead's email and fullname.&lt;br>
    * &lt;a href='https://developer.tiledesk.com/apis/rest-api/leads#update-a-lead-by-id' target='_blank'>REST API&lt;/a>
    * 
@@ -2291,6 +2341,59 @@ class TiledeskClient {
           fullname: fullname,
           attributes: attributes
         },
+        method: 'PUT',
+        httpsOptions: this.httpsOptions
+      };
+      TiledeskClient.myrequest(
+        HTTPREQUEST,
+        function(err, resbody) {
+          if (err) {
+            reject(err);
+            if (callback) {
+              callback(err);
+            }
+          }
+          else {
+            resolve(resbody);
+            if (callback) {
+              callback(null, resbody);
+            }
+          }
+        }, this.log
+      );
+    });
+  }
+
+  /**
+   * Updates a Lead's email and fullname.&lt;br>
+   * &lt;a href='https://developer.tiledesk.com/apis/rest-api/leads#update-a-lead-by-id' target='_blank'>REST API&lt;/a>
+   * 
+   * @param {string} leadId - The Lead ID
+   * @param {string} nativeAttributes - native attributes: name, email, phone etc.
+   * @param {string} attributes - Lead custom attributes
+   * @param {string} tags - Lead tags
+   * @param {resultCallback} callback - The callback that handles the response.
+   */
+  updateLead(leadId, nativeAttributes, attributes, tags, callback) {
+    if (!leadId) {
+      throw new Error('leadId can NOT be null.');
+    }
+    let jsonData = {}
+    if (nativeAttributes) {
+      for (const [key, value] of Object.entries(nativeAttributes)) {
+        jsonData[key] = value;
+      }
+    }
+    jsonData.attributes = attributes;
+    jsonData.tags = tags;
+    return new Promise ( (resolve, reject) => {
+      const HTTPREQUEST = {
+        url: `${this.APIURL}/${this.projectId}/leads/${leadId}`,
+        headers: {
+          'Content-Type' : 'application/json',
+          'Authorization': this.jwt_token
+        },
+        json: jsonData,
         method: 'PUT',
         httpsOptions: this.httpsOptions
       };
@@ -2546,7 +2649,7 @@ module.exports = { TiledeskClient };</code></pre>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Thu Mar 23 2023 15:35:23 GMT+0100 (Central European Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Mon Jan 01 2024 11:15:09 GMT+0100 (Central European Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>
