@@ -1,0 +1,1 @@
+npx mocha ./test/chatbot1.js --timeout 10000 --exit

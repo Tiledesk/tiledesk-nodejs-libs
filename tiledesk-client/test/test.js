@@ -1422,7 +1422,11 @@ describe('Orchestration', function() {
                         assert(request.participantsBots != null);
                         assert(request.participantsBots.length > 0);
                         assert(request.participantsBots[0] === bot._id);
-                        done();
+                        tdclient.deleteBot(bot._id, (err, result) => {
+                            assert(!err);
+                            assert(result);
+                            done();
+                        });
                     });
                 });
             });
@@ -1437,7 +1441,7 @@ describe('Orchestration', function() {
             projectId: PROJECT_ID,
             token: USER_TOKEN,
             log: false
-        })
+        });
         
         // 1. Creates a request
         const text_value = 'test message';
@@ -1447,6 +1451,8 @@ describe('Orchestration', function() {
             assert(result != null);
             assert(result.text === text_value);
             const bot_name = "my bot " + uuidv4();
+            let bot1_id;
+            let bot2_id;
             // 2. Creates a bot
             tdclient.createBot(bot_name, false, null, (err, bot) => {
                 // console.log("bot created:", bot);
@@ -1454,6 +1460,7 @@ describe('Orchestration', function() {
                 assert(bot.type === 'internal');
                 assert(bot.name === bot_name);
                 assert(bot._id !== null);
+                bot1_id = bot._id;
                 const bot_id = 'bot_' + bot._id;
                 // 3. Adds the bot to the request
                 tdclient.addRequestParticipant(request_id, bot_id, (err, result) => {
@@ -1461,6 +1468,7 @@ describe('Orchestration', function() {
                     // 4. Creates a second bot
                     tdclient.createBot(bot_name2, false, null, (err, bot) => {
                         // console.log("bot2 created:", bot);
+                        bot2_id = bot._id;
                         assert(bot);
                         assert(bot.type === 'internal');
                         assert(bot.name === bot_name2);
@@ -1473,7 +1481,15 @@ describe('Orchestration', function() {
                                 assert(request.participantsBots != null);
                                 assert(request.participantsBots.length > 0);
                                 assert(request.participantsBots[0] === bot._id);
-                                done();
+                                tdclient.deleteBot(bot1_id, (err, result) => {
+                                    assert(!err);
+                                    assert(result);
+                                    tdclient.deleteBot(bot2_id, (err, result) => {
+                                        assert(!err);
+                                        assert(result);
+                                        done();
+                                    });
+                                });
                             });
                         });
                     });
@@ -1500,9 +1516,12 @@ describe('Orchestration', function() {
             assert(result != null);
             assert(result.text === text_value);
             const bot_name = "my bot " + uuidv4();
+            let bot1_id;
+            let bot2_id;
             // 2. Creates a bot
             tdclient.createBot(bot_name, false, null, (err, bot) => {
                 // console.log("bot created:", bot);
+                bot1_id = bot._id;
                 assert(bot);
                 assert(bot.type === 'internal');
                 assert(bot.name === bot_name);
@@ -1514,6 +1533,7 @@ describe('Orchestration', function() {
                     // 4. Creates a second bot
                     tdclient.createBot(bot_name2, false, null, (err, bot) => {
                         // console.log("bot2 created:", bot);
+                        bot2_id = bot._id;
                         assert(bot);
                         assert(bot.type === 'internal');
                         assert(bot.name === bot_name2);
@@ -1526,7 +1546,15 @@ describe('Orchestration', function() {
                                 assert(request.participantsBots != null);
                                 assert(request.participantsBots.length > 0);
                                 assert(request.participantsBots[0] === bot_id2);
-                                done();
+                                tdclient.deleteBot(bot1_id, (err, result) => {
+                                    assert(!err);
+                                    assert(result);
+                                    tdclient.deleteBot(bot2_id, (err, result) => {
+                                        assert(!err);
+                                        assert(result);
+                                        done();
+                                    });
+                                });
                             });
                         });
                     });
