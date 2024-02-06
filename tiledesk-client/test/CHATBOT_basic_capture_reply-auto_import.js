@@ -138,7 +138,7 @@ describe('CHATBOT: Capture User Reply', async () => {
                     USER_ADMIN_TOKEN = result.token;
                     // console.log("USER_ADMIN_TOKEN:", USER_ADMIN_TOKEN);
                     // USER_ID = result.user._id;
-                    const bot = require('./basic_capture_reply_bot.js').bot;
+                    const bot = require('./CHATBOT_basic_capture_reply_bot.js').bot;
                     // console.log("bot:", bot);
                     try {
                         const data = await importChatbot(bot, TILEDESK_PROJECT_ID, USER_ADMIN_TOKEN);

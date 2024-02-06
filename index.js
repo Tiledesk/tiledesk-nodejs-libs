@@ -1,10 +1,28 @@
 const express = require('express');
+require('dotenv').config();
 const bodyParser = require('body-parser');
 // const { TiledeskClient } = require('@tiledesk/tiledesk-client');
 const { TiledeskClient } = require('./tiledesk-client');
 
 const app = express();
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
+const mqttTest = require("./mqtt-route");
+const mqtt_route = mqttTest.router
+app.use("/mqttTestRoute", mqtt_route);
+
+mqttTest.startApp(
+  {
+    CHAT_API_ENDPOINT: process.env.CHAT_API_ENDPOINT,
+    MQTT_ENDPOINT: process.env.MQTT_ENDPOINT,
+    API_ENDPOINT: process.env.API_ENDPOINT,
+    LOG_STATUS: false
+  }, () => {
+  console.log("mqttTestRoute route successfully started.");
+  var port = process.env.PORT || 3000;
+  app.listen(port, function () {
+    console.log('App listening on port ', port);
+  });
+});
 
 app.get('/', (req, res) => {
   res.send('Hello Tiledesk nodejs APIs!')
@@ -143,6 +161,6 @@ app.post('/fireevent', (req, res) => {
     );
   })
 
-app.listen(3000, () => {
-  console.log('server started');
-});
+// app.listen(3000, () => {
+//   console.log('server started');
+// });

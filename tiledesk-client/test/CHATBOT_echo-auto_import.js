@@ -137,7 +137,7 @@ describe('CHATBOT: Echo bot', async () => {
                     USER_ADMIN_TOKEN = result.token;
                     // console.log("USER_ADMIN_TOKEN:", USER_ADMIN_TOKEN);
                     // USER_ID = result.user._id;
-                    const bot = require('./echo_bot.js').bot;
+                    const bot = require('./CHATBOT_echo_bot.js').bot;
                     // console.log("bot:", bot);
                     try {
                         const data = await importChatbot(bot, TILEDESK_PROJECT_ID, USER_ADMIN_TOKEN);
