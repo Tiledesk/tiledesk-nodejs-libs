@@ -2,6 +2,10 @@
 
 **This library is on npm: https://www.npmjs.com/package/@tiledesk/tiledesk-client**
 
+### 0.10.6
+- added support for tags
+- added mqtt-route.js with /connect endpoint
+
 ### 0.10.5
 - added test 'updateRequestProperties()'
 - added getLeadById()

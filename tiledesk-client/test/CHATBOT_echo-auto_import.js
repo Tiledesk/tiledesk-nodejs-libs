@@ -95,7 +95,7 @@ let user1 = {
 let group_id;
 let group_name;
 
-describe('CHATBOT: Echo bot', async () => {
+describe('CHATBOT: Echo bot (~1s)', async () => {
   
     before(() => {
         return new Promise(async (resolve, reject) => {

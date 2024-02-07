@@ -95,7 +95,7 @@ let user1 = {
 let group_id;
 let group_name;
 
-describe('CHATBOT: Delete attribute with form', async () => {
+describe('CHATBOT: Delete attribute with form (~10s)', async () => {
     // this.timeout(20000);
     before(() => {
         return new Promise(async (resolve, reject) => {

@@ -6,7 +6,8 @@ const { TiledeskClient } = require('./tiledesk-client');
 
 const app = express();
 // app.use(bodyParser.json());
-const mqttTest = require("./mqtt-route");
+const mqttTest = require('./tiledesk-client/mqtt-route');
+// const mqttTest = require("./mqtt-route");
 const mqtt_route = mqttTest.router
 app.use("/mqttTestRoute", mqtt_route);
 

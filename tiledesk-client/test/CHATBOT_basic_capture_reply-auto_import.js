@@ -96,7 +96,7 @@ let user1 = {
 let group_id;
 let group_name;
 
-describe('CHATBOT: Capture User Reply', async () => {
+describe('CHATBOT: Capture User Reply (~4s)', async () => {
   
     before(() => {
         return new Promise(async (resolve, reject) => {

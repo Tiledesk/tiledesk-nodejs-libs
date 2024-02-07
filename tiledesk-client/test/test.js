@@ -106,8 +106,8 @@ describe('TiledeskClient auth', function() {
             });
     });
     
-    it('customAuthentication. should return the auth token', function(done) {
-            console.log("Inizio custom auth"); 
+    it('customAuthentication. should return the auth token (<1s)', function(done) {
+            // console.log("Start custom auth"); 
             var externalUserId = uuidv4();
             var externalUser = {
                 _id: externalUserId,
@@ -120,7 +120,7 @@ describe('TiledeskClient auth', function() {
             audience:  'https://tiledesk.com/projects/' + PROJECT_ID
             };
             var jwtCustomToken = "JWT " + jwt.sign(externalUser, PROJECT_SECRET, signOptions);
-            console.log("Token creato.")
+            // console.log("Token created.")
             TiledeskClient.customAuthentication(
             jwtCustomToken,
             APIKEY,
@@ -130,7 +130,7 @@ describe('TiledeskClient auth', function() {
             },
             function(err, result) {
                 if (!err && result) {
-                    console.log("Authenticated with result.token", result.token);
+                    // console.log("Authenticated with result.token", result.token);
                     assert(result.token != null);
                     done();
                 }
