@@ -2,6 +2,9 @@
 
 **This library is on npm: https://www.npmjs.com/package/@tiledesk/tiledesk-client**
 
+### 0.10.8
+- log fix
+
 ### 0.10.7
 - fix: added libs mqtt, body-parser to packege.json
 

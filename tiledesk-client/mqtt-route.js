@@ -85,7 +85,7 @@ router.post('/connect', async (req, res) => {
 });
 
 async function startApp(settings, completionCallback) {
-  console.log("Starting Tilebot...", settings);
+  console.log("Starting MQTT Test route...", settings);
 
   if (settings.LOG_STATUS === true) {
     LOG_STATUS = settings.LOG_STATUS;
