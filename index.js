@@ -1,13 +1,13 @@
 const express = require('express');
 require('dotenv').config();
 const bodyParser = require('body-parser');
-// const { TiledeskClient } = require('@tiledesk/tiledesk-client');
-const { TiledeskClient } = require('./tiledesk-client');
+const { TiledeskClient } = require('@tiledesk/tiledesk-client');
+// const { TiledeskClient } = require('./tiledesk-client');
 
 const app = express();
 // app.use(bodyParser.json());
-const mqttTest = require('./tiledesk-client/mqtt-route');
-// const mqttTest = require("./mqtt-route");
+// const mqttTest = require('./tiledesk-client/mqtt-route');
+const mqttTest = require('@tiledesk/tiledesk-client/mqtt-route');
 const mqtt_route = mqttTest.router
 app.use("/mqttTestRoute", mqtt_route);
 
