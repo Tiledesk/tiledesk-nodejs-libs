@@ -2,6 +2,9 @@
 
 **This library is on npm: https://www.npmjs.com/package/@tiledesk/tiledesk-client**
 
+### 0.10.10
+- check post missing params errors on mqtt-route /connect
+
 ### 0.10.9
 - mqtt route settings removed from startApp and moved in post /connect
 

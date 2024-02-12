@@ -26,9 +26,28 @@ router.post('/connect', async (req, res) => {
   }
 
   const projectId = req.body.projectId;
+
   const MQTT_ENDPOINT = req.body.MQTT_ENDPOINT;
+  if (!MQTT_ENDPOINT) {
+    console.log("Error: MQTT_ENDPOINT is mandatory");
+    res.status(405).send({success: false, message: "MQTT_ENDPOINT is mandatory"});
+    return;
+  }
+
   const CHAT_API_ENDPOINT = req.body.CHAT_API_ENDPOINT;
+  if (!CHAT_API_ENDPOINT) {
+    console.log("Error: CHAT_API_ENDPOINT is mandatory");
+    res.status(405).send({success: false, message: "CHAT_API_ENDPOINT is mandatory"});
+    return;
+  }
+
   const API_ENDPOINT = req.body.API_ENDPOINT;
+  if (!API_ENDPOINT) {
+    console.log("Error: API_ENDPOINT is mandatory");
+    res.status(405).send({success: false, message: "API_ENDPOINT is mandatory"});
+    return;
+  }
+
   let userdata;
   try {
     userdata = await createAnonymousUser(projectId, API_ENDPOINT);
