@@ -8,14 +8,16 @@ const bodyParser = require('body-parser');
 router.use(bodyParser.json({limit: '50mb'}));
 router.use(bodyParser.urlencoded({ extended: true , limit: '50mb'}));
 
-let CHAT_API_ENDPOINT;
-let MQTT_ENDPOINT;
-let API_ENDPOINT;
+// let CHAT_API_ENDPOINT;
+// let MQTT_ENDPOINT;
+// let API_ENDPOINT;
 let LOG_STATUS = false;
 
 router.post('/connect', async (req, res) => {
   if (req && req.body && req.body.projectId) {
-    console.log("Testing mqtt on projectId:", req.body.projectId);
+    if (LOG_STATUS) {
+      console.log("Testing mqtt on projectId:", req.body.projectId);
+    }
   }
   else {
     console.error("Error: projectId is required");
@@ -24,9 +26,12 @@ router.post('/connect', async (req, res) => {
   }
 
   const projectId = req.body.projectId;
+  const MQTT_ENDPOINT = req.body.MQTT_ENDPOINT;
+  const CHAT_API_ENDPOINT = req.body.CHAT_API_ENDPOINT;
+  const API_ENDPOINT = req.body.API_ENDPOINT;
   let userdata;
   try {
-    userdata = await createAnonymousUser(projectId);
+    userdata = await createAnonymousUser(projectId, API_ENDPOINT);
     if (!userdata) {
       res.status(405).send({success: false, message: "Anonymous authentication failed"});
       return;
@@ -91,34 +96,34 @@ async function startApp(settings, completionCallback) {
     LOG_STATUS = settings.LOG_STATUS;
   }
 
-  if (!settings.CHAT_API_ENDPOINT) {
-    throw new Error("(MQTT Test route) settings.CHAT_API_ENDPOINT is mandatory.");
-  }
-  else {
-    CHAT_API_ENDPOINT = settings.CHAT_API_ENDPOINT;
-    if (LOG_STATUS) {console.log("(MQTT Test route) CHAT_API_ENDPOINT:", CHAT_API_ENDPOINT);}
-  }
+  // if (!settings.CHAT_API_ENDPOINT) {
+  //   throw new Error("(MQTT Test route) settings.CHAT_API_ENDPOINT is mandatory.");
+  // }
+  // else {
+  //   CHAT_API_ENDPOINT = settings.CHAT_API_ENDPOINT;
+  //   if (LOG_STATUS) {console.log("(MQTT Test route) CHAT_API_ENDPOINT:", CHAT_API_ENDPOINT);}
+  // }
 
-  if (!settings.MQTT_ENDPOINT) {
-    throw new Error("(MQTT Test route) settings.MQTT_ENDPOINT is mandatory.");
-  }
-  else {
-    MQTT_ENDPOINT = settings.MQTT_ENDPOINT;
-    if (LOG_STATUS) {console.log("(MQTT Test route) settings.MQTT_ENDPOINT:", MQTT_ENDPOINT);}
-  }
+  // if (!settings.MQTT_ENDPOINT) {
+  //   throw new Error("(MQTT Test route) settings.MQTT_ENDPOINT is mandatory.");
+  // }
+  // else {
+  //   MQTT_ENDPOINT = settings.MQTT_ENDPOINT;
+  //   if (LOG_STATUS) {console.log("(MQTT Test route) settings.MQTT_ENDPOINT:", MQTT_ENDPOINT);}
+  // }
 
-  if (!settings.API_ENDPOINT) {
-    throw new Error("(MQTT Test route) settings.API_ENDPOINT is mandatory.");
-  }
-  else {
-    API_ENDPOINT = settings.API_ENDPOINT;
-    if (LOG_STATUS) {console.log("(MQTT Test route) settings.API_ENDPOINT:", API_ENDPOINT);}
-  }
+  // if (!settings.API_ENDPOINT) {
+  //   throw new Error("(MQTT Test route) settings.API_ENDPOINT is mandatory.");
+  // }
+  // else {
+  //   API_ENDPOINT = settings.API_ENDPOINT;
+  //   if (LOG_STATUS) {console.log("(MQTT Test route) settings.API_ENDPOINT:", API_ENDPOINT);}
+  // }
 
   completionCallback();
 }
 
-async function createAnonymousUser(tiledeskProjectId) {
+async function createAnonymousUser(tiledeskProjectId, API_ENDPOINT) {
   ANONYMOUS_TOKEN_URL = API_ENDPOINT + '/auth/signinAnonymously';
   if (LOG_STATUS) {
       console.log("(MQTT Test route) Getting ANONYMOUS_TOKEN_URL:", ANONYMOUS_TOKEN_URL);

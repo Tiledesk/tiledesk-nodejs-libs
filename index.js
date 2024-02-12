@@ -6,16 +6,16 @@ const { TiledeskClient } = require('@tiledesk/tiledesk-client');
 
 const app = express();
 // app.use(bodyParser.json());
-// const mqttTest = require('./tiledesk-client/mqtt-route');
-const mqttTest = require('@tiledesk/tiledesk-client/mqtt-route');
+const mqttTest = require('./tiledesk-client/mqtt-route');
+// const mqttTest = require('@tiledesk/tiledesk-client/mqtt-route');
 const mqtt_route = mqttTest.router
 app.use("/mqttTestRoute", mqtt_route);
 
 mqttTest.startApp(
   {
-    CHAT_API_ENDPOINT: process.env.CHAT_API_ENDPOINT,
-    MQTT_ENDPOINT: process.env.MQTT_ENDPOINT,
-    API_ENDPOINT: process.env.API_ENDPOINT,
+    // CHAT_API_ENDPOINT: process.env.CHAT_API_ENDPOINT,
+    // MQTT_ENDPOINT: process.env.MQTT_ENDPOINT,
+    // API_ENDPOINT: process.env.API_ENDPOINT,
     LOG_STATUS: false
   }, () => {
   console.log("mqttTestRoute route successfully started.");
