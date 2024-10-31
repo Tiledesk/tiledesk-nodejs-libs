@@ -2,3 +2,5 @@
 /tiledesk-client/node_modules
 
 /tiledesk-client/test_env
+/mqtt-route/node_modules
+.env
