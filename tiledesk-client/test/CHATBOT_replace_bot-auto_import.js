@@ -6,7 +6,6 @@ const axios = require('axios');
 const { TiledeskClient } = require('..');
 
 const LOG_STATUS = (process.env.LOG_STATUS && process.env.LOG_STATUS) === 'true' ? true : false;
-
 let EMAIL = "";
 if (process.env && process.env.EMAIL) {
 	EMAIL = process.env.EMAIL
@@ -23,25 +22,14 @@ else {
     throw new Error(".env.PASSWORD is mandatory");
 }
 
-// let BOT_ID = "";
-// if (process.env && process.env.BASIC_CAPTURE_REPLY_ID) {
-// 	BOT_ID = process.env.BASIC_CAPTURE_REPLY_ID
-// }
-// else {
-//     throw new Error(".env.BASIC_CAPTURE_REPLY_ID is mandatory");
-// }
-
-// console.log("process.env.AUTOMATION_TEST_TILEDESK_PROJECT_ID:", process.env.AUTOMATION_TEST_TILEDESK_PROJECT_ID);
 let TILEDESK_PROJECT_ID = "";
 if (process.env && process.env.AUTOMATION_TEST_TILEDESK_PROJECT_ID) {
 	TILEDESK_PROJECT_ID = process.env.AUTOMATION_TEST_TILEDESK_PROJECT_ID
-    // console.log("TILEDESK_PROJECT_ID:", TILEDESK_PROJECT_ID);
 }
 else {
     throw new Error(".env.AUTOMATION_TEST_TILEDESK_PROJECT_ID is mandatory");
 }
 
-// console.log("process.env.AUTOMATION_TEST_MQTT_ENDPOINT:", process.env.AUTOMATION_TEST_MQTT_ENDPOINT);
 let MQTT_ENDPOINT = "";
 if (process.env && process.env.AUTOMATION_TEST_MQTT_ENDPOINT) {
 	MQTT_ENDPOINT = process.env.AUTOMATION_TEST_MQTT_ENDPOINT
@@ -70,6 +58,7 @@ else {
 }
 
 let BOT_ID = null;
+let BOT_ID_2 = null;
 let USER_ADMIN_TOKEN = null;
 
 let config = {
@@ -94,9 +83,8 @@ let user1 = {
 };
 
 let group_id;
-let group_name;
 
-describe('CHATBOT: Capture User Reply (~4s)', async () => {
+describe('CHATBOT: Replace bot (~2s)', async () => {
   
     before(() => {
         return new Promise(async (resolve, reject) => {
@@ -113,12 +101,12 @@ describe('CHATBOT: Capture User Reply (~4s)', async () => {
             user1.token = userdata.token;
             user1.tiledesk_token = userdata.tiledesk_token;
             
-            // console.log("user1:", user1);
+            // console.log("Message delay check.");
             if (LOG_STATUS) {
                 console.log("MQTT endpoint:", config.MQTT_ENDPOINT);
                 console.log("API endpoint:", config.CHAT_API_ENDPOINT);
                 console.log("Tiledesk Project Id:", config.TILEDESK_PROJECT_ID);
-                console.log("Connecting......");    
+                console.log("Connecting...");    
             }
             TiledeskClient.authEmailPassword(
                 process.env.APIKEY,
@@ -138,19 +126,22 @@ describe('CHATBOT: Capture User Reply (~4s)', async () => {
                     USER_ADMIN_TOKEN = result.token;
                     // console.log("USER_ADMIN_TOKEN:", USER_ADMIN_TOKEN);
                     // USER_ID = result.user._id;
-                    const bot = require('./CHATBOT_basic_capture_reply_bot.js').bot;
+                    const bot1 = require('./CHATBOT_replace_bot.js').bot;
+                    const bot2 = require('./CHATBOT_replaced_bot_1.js').bot;
                     // console.log("bot:", bot);
                     try {
-                        const data = await importChatbot(bot, TILEDESK_PROJECT_ID, USER_ADMIN_TOKEN);
+                        const bot1_data = await importChatbot(bot1, TILEDESK_PROJECT_ID, USER_ADMIN_TOKEN);
+                        const bot2_data = await importChatbot(bot2, TILEDESK_PROJECT_ID, USER_ADMIN_TOKEN);
+                        // UNUSED: bot2_data
                         // console.log("chatbot_id:", data._id);
-                        BOT_ID = data._id;
+                        BOT_ID = bot1_data._id;
+                        BOT_ID_2 = bot2_data._id;
                         // process.exit(0);
                         chatClient1.connect(user1.userid, user1.token, () => {
                             if (LOG_STATUS) {
                                 console.log("chatClient1 connected and subscribed.");
                             }
                             group_id = "support-group-" + TILEDESK_PROJECT_ID + "-" + uuidv4().replace(/-+/g, "");
-                            group_name = "Echo bot test group => " + group_id;
                             resolve();
                         });
                     }
@@ -179,65 +170,68 @@ describe('CHATBOT: Capture User Reply (~4s)', async () => {
             tdclient.deleteBot(BOT_ID, (err, result) => {
                 assert(!err);
                 assert(result);
-                done();
+                tdclient.deleteBot(BOT_ID_2, (err, result) => {
+                    assert(!err);
+                    assert(result);
+                    done();
+                });
             });
         });
     });
 
-    it('capture reply', (done) => {
+    it('get replace bot 1 reply', (done) => {
+        const message_text = uuidv4().replace(/-+/g, "");
+        let time_sent = Date.now();
         let handler = chatClient1.onMessageAdded((message, topic) => {
             if (LOG_STATUS) {
                 console.log("> Incoming message [sender:" + message.sender_fullname + "]: ", message);
             }
             if (
                 message &&
-                message.text === "What is your name?" &&
-                message.attributes.intentName ===  "welcome" &&
-                message.sender_fullname === "Basic Capture Reply"
+                message.sender_fullname === "Replaced bot 1" &&
+                message.text === "I'm replace bot 1"
             ) {
                 if (LOG_STATUS) {
-                    console.log("> Incoming message from 'welcome' intent ok.");
-                }
-                setTimeout( () => {
-                    chatClient1.sendMessage(
-                        "Andrea",
-                        'text',
-                        recipient_id,
-                        "Test support group",
-                        user1.fullname,
-                        {projectId: config.TILEDESK_PROJECT_ID},
-                        null, // no metadata
-                        'group',
-                        (err, msg) => {
-                            if (err) {
-                                console.error("Error send:", err);
-                            }
-                            if (LOG_STATUS) {
-                                console.log("Message Sent ok:", msg);
-                            }
-                        }
-                    );
-                }, 2000);
-            }
-            else if (
-                message &&
-                message.text ===  "Hi Andrea" &&
-                message.sender_fullname === "Basic Capture Reply"
-            ) {
-                if (LOG_STATUS) {
-                    console.log("> Got:" , message.text);
+                    console.log("> Incoming message from 'Replaced bot 1' is ok.");
                 }
                 done();
+                // chatClient1.sendMessage(
+                //     message_text,
+                //     'text',
+                //     recipient_id,
+                //     "Test support group",
+                //     user1.fullname,
+                //     {projectId: config.TILEDESK_PROJECT_ID},
+                //     null, // no metadata
+                //     'group',
+                //     (err, msg) => {
+                //         if (err) {
+                //             console.error("Error send:", err);
+                //         }
+                //         if (LOG_STATUS) {
+                //             console.log("Message Sent ok:", msg);
+                //         }
+                //     }
+                // );
             }
-            else {
-                // console.log("Message not computed:", message.text);
-            }
+            // else if (
+            //     message &&
+            //     message.text ===  message_text &&
+            //     message.sender_fullname === "Echo bot"
+            // ) {
+            //     if (LOG_STATUS) {
+            //         console.log("> Got echo.");
+            //     }
+            //     done();
+            // }
+            // else {
+            //     // console.log("Message not computed:", message.text);
+            // }
         });
         if (LOG_STATUS) {
-            console.log("Sending test message...");
+            console.log("Triggering Conversation...");
         }
         let recipient_id = group_id;
-        // let recipient_fullname = group_name;
         triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, (err) => {
             if (err) {
                 console.error("An error occurred while triggering echo bot conversation:", err);
@@ -357,8 +351,8 @@ async function triggerConversation(request_id, chatbot_id, token, callback) {
             callback(err);
         }
     });
+    
 }
-
 
 async function importChatbot(bot_data, tiledeskProjectId, token) {
     IMPORT_URL = API_ENDPOINT + `/${tiledeskProjectId}/faq_kb/importjson/null/?create=true`;
