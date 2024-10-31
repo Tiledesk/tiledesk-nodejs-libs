@@ -163,6 +163,12 @@ const bot = {
                     "_tdActionId": "a89032a6-86cf-4bfc-aa12-bc35adc8c469",
                     "_tdActionType": "delete",
                     "variableName": "userEmail"
+                },
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "a89032a6-86cf-4bfc-aa12-bc35adc8c470",
+                    "_tdActionType": "delete",
+                    "variableName": "userFullname"
                 }
             ],
             "intent_display_name": "welcome2",

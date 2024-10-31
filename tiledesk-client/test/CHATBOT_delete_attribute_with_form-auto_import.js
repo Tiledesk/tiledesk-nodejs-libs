@@ -339,7 +339,7 @@ describe('CHATBOT: Delete attribute with form (~10s)', async () => {
                 console.error("An error occurred while triggering echo bot conversation:", err);
             }
         });
-    }).timeout(15000);
+    }).timeout(25000);
 });
 
 async function createAnonymousUser(tiledeskProjectId) {
