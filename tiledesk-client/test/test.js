@@ -252,6 +252,7 @@ describe('Projects', function() {
         //   tdclient.authEmailPassword(EMAIL, PASSWORD, function(err, result) {
             tdclient.getProjectSettings(
                 function(err, resbody) {
+                    // console.log("eeeeeerrrr", err);
                     if (!err && resbody) {
                         assert(resbody.name === PROJECT_NAME);
                         done();
@@ -1400,10 +1401,12 @@ describe('Orchestration', function() {
             token: USER_TOKEN,
             log: false
         })
-        // 1. Creates a request
+        // console.log("Creates a request");
         const text_value = 'test message';
         const request_id = TiledeskClient.newRequestId(PROJECT_ID);
+        // console.log("================================= Creating request:", text_value, request_id)
         tdclient.sendSupportMessage(request_id, {text: text_value}, function(err, result) {
+            // console.log("sendSupportMessage sent:", text_value, request_id)
             assert(err === null);
             assert(result != null);
             assert(result.text === text_value);
@@ -1416,10 +1419,12 @@ describe('Orchestration', function() {
                 assert(bot.name === bot_name);
                 assert(bot._id !== null);
                 const bot_id = 'bot_' + bot._id;
-                // 3. Changes the bot (adding effectively)
+                // console.log("Changes the bot (adding effectively)");
                 tdclient.changeBot(request_id, bot_id, (err) => {
+                    // console.log("Errror changeBot():", err)
                     assert(err == null);
                     tdclient.getRequestById(request_id, (err, request) => {
+                        // console.log("Errror changeBot() 2:", err)
                         assert(request.participantsBots != null);
                         assert(request.participantsBots.length > 0);
                         assert(request.participantsBots[0] === bot._id);
@@ -1603,7 +1608,6 @@ describe('Departments', function() {
                         assert(result.routing === 'assigned');
                         assert(result._id === dep2_id);
                         tdclient.getAllDepartments((err, result) => {
-                            // console.log("deps:", result.length);
                             assert(result.length >= 2);
                             tdclient.deleteDepartment(dep1_id, (err, result) => {
                                 assert(!err);
