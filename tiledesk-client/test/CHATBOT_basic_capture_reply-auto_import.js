@@ -113,12 +113,12 @@ describe('CHATBOT: Capture User Reply (~4s)', async () => {
             user1.token = userdata.token;
             user1.tiledesk_token = userdata.tiledesk_token;
             
-            // console.log("Message delay check.");
+            console.log("user1:", user1);
             if (LOG_STATUS) {
                 console.log("MQTT endpoint:", config.MQTT_ENDPOINT);
                 console.log("API endpoint:", config.CHAT_API_ENDPOINT);
                 console.log("Tiledesk Project Id:", config.TILEDESK_PROJECT_ID);
-                console.log("Connecting...");    
+                console.log("Connecting......");    
             }
             TiledeskClient.authEmailPassword(
                 process.env.APIKEY,
@@ -136,13 +136,13 @@ describe('CHATBOT: Capture User Reply (~4s)', async () => {
                     assert(result.user._id !== null);
                     assert(result.user.email !== null);
                     USER_ADMIN_TOKEN = result.token;
-                    // console.log("USER_ADMIN_TOKEN:", USER_ADMIN_TOKEN);
+                    console.log("USER_ADMIN_TOKEN:", USER_ADMIN_TOKEN);
                     // USER_ID = result.user._id;
                     const bot = require('./CHATBOT_basic_capture_reply_bot.js').bot;
-                    // console.log("bot:", bot);
+                    console.log("bot:", bot);
                     try {
                         const data = await importChatbot(bot, TILEDESK_PROJECT_ID, USER_ADMIN_TOKEN);
-                        // console.log("chatbot_id:", data._id);
+                        console.log("chatbot_id:", data._id);
                         BOT_ID = data._id;
                         // process.exit(0);
                         chatClient1.connect(user1.userid, user1.token, () => {

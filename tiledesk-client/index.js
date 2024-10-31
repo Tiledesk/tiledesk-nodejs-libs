@@ -2042,7 +2042,7 @@ class TiledeskClient {
         // else if (callback) {
         //   callback(TiledeskClient.getErr(err, HTTPREQUEST, response, resbody), null);
         // }
-      }, this.log
+      }, _log
     );
   }
 

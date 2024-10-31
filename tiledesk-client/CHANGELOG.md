@@ -2,7 +2,10 @@
 
 **This library is on npm: https://www.npmjs.com/package/@tiledesk/tiledesk-client**
 
-### 0.10.10
+### 0.10.11 - not online
+- fixed log in authEmailPassword(): this.log => _log
+
+### 0.10.10 - online
 - check post missing params errors on mqtt-route /connect
 
 ### 0.10.9
