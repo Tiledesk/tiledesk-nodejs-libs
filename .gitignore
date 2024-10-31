@@ -1,0 +1,4 @@
+/node_modules
+/tiledesk-client/node_modules
+
+/tiledesk-client/test_env
