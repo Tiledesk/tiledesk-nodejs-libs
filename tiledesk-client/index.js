@@ -1763,6 +1763,40 @@ class TiledeskClient {
     );
   }
 
+  /**
+   * Get a group by id.<br>
+   * <a href='https://developer.tiledesk.com/apis/rest-api/management-api/groups#get-the-group-by-id' target='_blank'>REST API</a>
+   * @param {string} groupId - The group ID.
+   * @param {resultCallback} callback - The callback that handles the response.
+   */
+  getGroup(groupId, callback) {
+    const URL = `${this.APIURL}/${this.projectId}/groups/${groupId}`
+    const HTTPREQUEST = {
+      url: URL,
+      headers: {
+        'Content-Type' : 'application/json',
+        'Authorization': this.jwt_token
+      },
+      method: 'GET',
+      httpsOptions: this.httpsOptions
+    };
+    TiledeskClient.myrequest(
+      HTTPREQUEST,
+      function(err, resbody) {
+        if (err) {
+          if (callback) {
+            callback(err);
+          }
+        }
+        else {
+          if (callback) {
+            callback(null, resbody);
+          }
+        }
+      }, this.log
+    );
+  }
+
   // ****************************************************
   // ****************** WIDGET SETTINGS *****************
   // ****************************************************

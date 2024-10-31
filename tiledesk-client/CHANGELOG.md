@@ -4,6 +4,7 @@
 
 ### 0.10.11 - not online
 - fixed log in authEmailPassword(): this.log => _log
+- added getGroup() - untested
 
 ### 0.10.10 - online
 - check post missing params errors on mqtt-route /connect
