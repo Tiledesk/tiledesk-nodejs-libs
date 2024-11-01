@@ -5,6 +5,7 @@
 ### 0.10.11 - not online
 - fixed log in authEmailPassword(): this.log => _log
 - added getGroup() - untested
+- added check on request in changeBot() => if (request && request.participantsBots && request.participantsBots.length > 0)...
 
 ### 0.10.10 - online
 - check post missing params errors on mqtt-route /connect

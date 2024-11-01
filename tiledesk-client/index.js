@@ -1008,19 +1008,12 @@ class TiledeskClient {
       throw new Error('botId can NOT be null.');
     }
     const botAsPartecipantId = this.normalizeBotId(botId);
-    // let message = {
-    //   text: 'start',
-    //   attributes: {
-    //     subtype: 'info'
-    //   }
-    // }
     this.getRequestById(requestId, (err, result) => {
       if (err) {
         callback({'message': 'getRequestById() error'});
       }
       const request = result;
-      if (request.participantsBots && request.participantsBots.length > 0) {
-        //console.log("request already participated by bots", request.participantsBots);
+      if (request && request.participantsBots && request.participantsBots.length > 0) {
         const first_bot = request.participantsBots[0];
         const first_bot_id_as_partecipant = "bot_" + first_bot;
         this.deleteRequestParticipant(requestId, first_bot_id_as_partecipant, (err) => {
