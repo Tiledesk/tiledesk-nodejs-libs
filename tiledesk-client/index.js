@@ -799,7 +799,7 @@ class TiledeskClient {
             if (callback) {
               callback(err);
             }
-            reject(error);
+            reject(err);
           }
           else {
             if (callback) {
@@ -933,7 +933,7 @@ class TiledeskClient {
         HTTPREQUEST,
         function(err, resbody) {
           if (err) {
-            reject(error);
+            reject(err);
             if (callback) {
               callback(err);
             }
@@ -1514,7 +1514,7 @@ class TiledeskClient {
             if (callback) {
               callback(err);
             }
-            reject(error);
+            reject(err);
           }
           else {
             if (callback) {

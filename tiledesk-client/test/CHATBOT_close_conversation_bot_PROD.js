@@ -60,7 +60,7 @@ const bot = {
                 {
                     "_tdActionTitle": "",
                     "_tdActionId": "a133b1b6-7a60-4925-8b78-38c43c6dc9d1",
-                    "url": "http://35.198.150.252/api/{{project_id}}/requests/{{conversation_id}}",
+                    "url": "https://api.tiledesk.com/v3/{{project_id}}/requests/{{conversation_id}}",
                     "headersString": {
                         "Content-Type": "*/*",
                         "Cache-Control": "no-cache",

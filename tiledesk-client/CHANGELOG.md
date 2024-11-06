@@ -2,7 +2,12 @@
 
 **This library is on npm: https://www.npmjs.com/package/@tiledesk/tiledesk-client**
 
-### 0.10.11 - not online
+
+### 0.10.12 - online
+- fixed reject(error) => reject(err) in closeRequest()
+- added test test/CHATBOT_close_conversation_bot-auto_import.js
+
+### 0.10.11 - online
 - fixed log in authEmailPassword(): this.log => _log
 - added getGroup() - untested
 - added check on request in changeBot() => if (request && request.participantsBots && request.participantsBots.length > 0)...
