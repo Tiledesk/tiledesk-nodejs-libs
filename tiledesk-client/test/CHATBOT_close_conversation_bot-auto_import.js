@@ -118,7 +118,7 @@ describe('CHATBOT: Close Conversation (~2s)', async () => {
                     assert(result.user._id !== null);
                     assert(result.user.email !== null);
                     USER_ADMIN_TOKEN = result.token;
-                    const bot1 = require('./CHATBOT_close_conversation_bot').bot;
+                    const bot1 = require('./chatbots/CHATBOT_close_conversation_bot.js').bot;
                     try {
                         const bot1_data = await importChatbot(bot1, TILEDESK_PROJECT_ID, USER_ADMIN_TOKEN);
                         BOT_ID = bot1_data._id;

@@ -148,8 +148,8 @@ describe('CHATBOT: Change department (~2s)', async () => {
                     USER_ADMIN_TOKEN = result.token;
                     // console.log("USER_ADMIN_TOKEN:", USER_ADMIN_TOKEN);
                     // USER_ID = result.user._id;
-                    const bot = require('./chatbot_utils/CHATBOT_change_department_bot.js').bot;
-                    const bot_dep2 = require('./chatbot_utils/CHATBOT_change_department_bot2.js').bot;
+                    const bot = require('./chatbots/CHATBOT_change_department_bot.js').bot;
+                    const bot_dep2 = require('./chatbots/CHATBOT_change_department_bot2.js').bot;
 
                     const tdClientTest = new TiledeskCLientTest({
                         APIURL: API_ENDPOINT,

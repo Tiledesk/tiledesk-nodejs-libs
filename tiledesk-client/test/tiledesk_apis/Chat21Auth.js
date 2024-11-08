@@ -9,6 +9,11 @@ class Chat21Auth {
         this.LOG = LOG
     }
 
+    /**
+     * 
+     * @param {*} token 
+     * @returns 
+     */
     async signInWithCustomToken(token) {
       return new Promise((resolve, reject) => {
         const HTTPREQUEST = {
