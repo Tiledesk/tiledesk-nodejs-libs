@@ -1059,9 +1059,11 @@ class TiledeskClient {
     this.findBotByName(botName, (err, bot) => {
       if (err) {
         callback(err, null);
+        return;
       }
       else if (!bot) {
         callback(new Error("Bot " + botName + " not found"), null);
+        return;
       }
       this.changeBot(requestId, bot._id, () => {
         callback();

@@ -1,0 +1,687 @@
+const bot = {
+    "webhook_enabled": false,
+    "language": "en",
+    "name": "JSON Attribute bug",
+    "type": "tilebot",
+    "attributes": {
+        "variables": {
+            "gpt_reply": "gpt_reply",
+            "result": "result",
+            "status": "status",
+            "error": "error",
+            "kb_body": "kb_body",
+            "kb_url": "kb_url",
+            "transcript_sample": "transcript_sample",
+            "flow_attributes": "flow_attributes",
+            "bad_attribute": "bad_attribute"
+        }
+    },
+    "intents": [
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "0d961beb-f110-4d62-90ad-2d9b00e58929",
+                    "url": "https://5f2eecc3-87fe-4e17-ab99-6d24e063dd70-00-357btkikl6pcl.spock.replit.dev/",
+                    "headersString": {
+                        "Content-Type": "*/*",
+                        "Cache-Control": "no-cache",
+                        "User-Agent": "TiledeskBotRuntime",
+                        "Accept": "*/*"
+                    },
+                    "settings": {
+                        "timeout": 20000
+                    },
+                    "jsonBody": null,
+                    "bodyType": "none",
+                    "formData": [],
+                    "assignStatusTo": "status",
+                    "assignErrorTo": "error",
+                    "method": "GET",
+                    "_tdActionType": "webrequestv2",
+                    "assignResultTo": "result",
+                    "trueIntent": "#f5e02ad3-949d-4f73-985e-001fb1f5fcd8",
+                    "falseIntent": "#d75eb890-0703-435e-9bd8-a219d50fcf56"
+                }
+            ],
+            "intent_display_name": "untitled_block_2",
+            "intent_id": "5fa719da-1c68-4ebc-b074-ffa255a9aa1f",
+            "language": "en",
+            "attributes": {
+                "position": {
+                    "x": 2313,
+                    "y": 338
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "7307cc5e-49a8-4c7c-aefe-7743e0a65006",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                }
+            }
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "088cc549-f3ad-4e25-9862-13e8ad1aede7",
+                    "_tdActionType": "reply",
+                    "attributes": {
+                        "disableInputMessage": false,
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "{{gpt_reply.summary}}",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": []
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            ],
+            "intent_display_name": "untitled_block_1",
+            "intent_id": "ed7e8127-249f-47fc-bf09-7c3ae0dc0319",
+            "language": "en",
+            "attributes": {
+                "position": {
+                    "x": 1374,
+                    "y": 43
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "e977c48e-79f9-4619-a5aa-1e46810757fa",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                }
+            }
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionType": "intent",
+                    "intentName": "#8493c095-29a4-4f64-80d9-2e530d37469b",
+                    "_tdActionId": "12da94e4a86e438f81999f3f6ca0fd63"
+                }
+            ],
+            "intent_display_name": "start",
+            "intent_id": "0bf789c7-1397-4c85-ae7d-37c0bd350be6",
+            "question": "\\start",
+            "language": "en",
+            "attributes": {
+                "position": {
+                    "x": 720,
+                    "y": 1633
+                },
+                "nextBlockAction": {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "f30303e3-0f00-4d9c-baa9-54c61525831a",
+                    "_tdActionType": "intent"
+                }
+            }
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionType": "reply",
+                    "text": "I didn't understand. Can you rephrase your question?",
+                    "attributes": {
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "I didn't understand. Can you rephrase your question?",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": []
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "_tdActionId": "5d1ee162c56941eb80004200d359e8f3"
+                }
+            ],
+            "intent_display_name": "defaultFallback",
+            "intent_id": "751702a4-095a-4952-a059-ffee75694891",
+            "language": "en",
+            "attributes": {
+                "position": {
+                    "x": 417,
+                    "y": 690
+                },
+                "nextBlockAction": {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "c8b53b11-6c25-4f3d-b0f6-04939bd21d9c",
+                    "_tdActionType": "intent"
+                }
+            }
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "f3a17c76-d1ef-444e-a47d-f415b0c688f9",
+                    "_tdActionType": "reply",
+                    "attributes": {
+                        "disableInputMessage": false,
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "Updating KB",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": []
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            ],
+            "intent_display_name": "welcome",
+            "intent_id": "8493c095-29a4-4f64-80d9-2e530d37469b",
+            "language": "en",
+            "attributes": {
+                "position": {
+                    "x": 1070,
+                    "y": 1558
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "e6a40619-12c0-476c-993c-5969714b0f05",
+                    "_tdActionType": "intent",
+                    "intentName": "#9dd73301-566c-4455-b4fe-c177e2496da1"
+                }
+            }
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "b21de0e9-01a1-435a-929e-99b29cc83f00",
+                    "_tdActionType": "reply",
+                    "attributes": {
+                        "disableInputMessage": false,
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "update failed: {{error}}",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": []
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            ],
+            "intent_display_name": "error",
+            "intent_id": "55f8f588-2e14-48d2-995a-bff027a129f6",
+            "language": "en",
+            "attributes": {
+                "position": {
+                    "x": 1847,
+                    "y": 1000
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "f0a6318c-bc3b-46d2-84cd-a15b7aaa835b",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                }
+            }
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "b946063f-1218-475c-85aa-e76080cc51cf",
+                    "_tdActionType": "reply",
+                    "attributes": {
+                        "disableInputMessage": false,
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "Posting...",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": []
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "d7a4fee0-23b2-494d-9074-428d69ce704e",
+                    "url": "https://api.tiledesk.com/v3/6565047fdd64fd001323f37c/kb",
+                    "headersString": {
+                        "Content-Type": "application/json",
+                        "Cache-Control": "no-cache",
+                        "User-Agent": "TiledeskBotRuntime",
+                        "Accept": "*/*"
+                    },
+                    "settings": {
+                        "timeout": 20000
+                    },
+                    "jsonBody": "{\n\"name\": \" on 2024-11-09 19:05\",\n\"source\":\" on 2024-11-09 19:05\",\n\"content\": \"To change your password, go to the tiledesk.com website and navigate to Profile > Recover Password.\",\n\"type\":\"text\",\n\"namespace\": \"66eaccb34f282e001310f3be\"\n}",
+                    "bodyType": "json",
+                    "formData": [],
+                    "assignStatusTo": "status",
+                    "assignErrorTo": "error",
+                    "method": "POST",
+                    "_tdActionType": "webrequestv2",
+                    "assignResultTo": "result",
+                    "trueIntent": "#5dee38e0-4771-4a3f-b1fe-d29777a610fa",
+                    "falseIntent": "#55f8f588-2e14-48d2-995a-bff027a129f6"
+                }
+            ],
+            "intent_display_name": "update",
+            "intent_id": "999eb866-8762-4bfa-9443-b80517285a04",
+            "language": "en",
+            "attributes": {
+                "position": {
+                    "x": 1546,
+                    "y": 507
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "1bfe722a-c389-4e1a-bb92-1894d2d953db",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                }
+            }
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "d45e5be3-d6dd-457d-9724-b0e5185a4bb8",
+                    "_tdActionType": "reply",
+                    "attributes": {
+                        "disableInputMessage": false,
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "update ok",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": []
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            ],
+            "intent_display_name": "ok",
+            "intent_id": "5dee38e0-4771-4a3f-b1fe-d29777a610fa",
+            "language": "en",
+            "attributes": {
+                "position": {
+                    "x": 2011,
+                    "y": 427
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "d8a1f19c-990b-449b-814e-ff33fe7d0f4f",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                }
+            }
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "8c591ba5-27bc-450c-bbe0-11bfd07a3705",
+                    "_tdActionType": "reply",
+                    "attributes": {
+                        "disableInputMessage": false,
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "finiti!",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": []
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "finito2",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": []
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            ],
+            "intent_display_name": "untitled_block_5",
+            "intent_id": "d270174c-393b-40ee-af40-041a9dec7fe7",
+            "language": "en",
+            "attributes": {
+                "position": {
+                    "x": 2251,
+                    "y": 635
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "c7a7811e-53e5-4e05-a428-29dd549556d9",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                }
+            }
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "4306ce24-40a0-4889-b250-f91dd00c6a7e",
+                    "_tdActionType": "reply",
+                    "attributes": {
+                        "disableInputMessage": false,
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "error {{error}}",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": []
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            ],
+            "intent_display_name": "untitled_block_4",
+            "intent_id": "d75eb890-0703-435e-9bd8-a219d50fcf56",
+            "language": "en",
+            "attributes": {
+                "position": {
+                    "x": 2780,
+                    "y": 616
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "cfa5b9f2-0b39-4d63-9708-fe44eec1a79a",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                }
+            }
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "65e3e2c6-214a-4d0d-9958-8e2982249ad8",
+                    "_tdActionType": "reply",
+                    "attributes": {
+                        "disableInputMessage": false,
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "result: {{result}}",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": []
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            ],
+            "intent_display_name": "untitled_block_3",
+            "intent_id": "f5e02ad3-949d-4f73-985e-001fb1f5fcd8",
+            "language": "en",
+            "attributes": {
+                "position": {
+                    "x": 2799,
+                    "y": 303
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "fee152eb-c0f4-47c1-aea5-8dbd9fbb1bd6",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                }
+            }
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "ee384c55-861d-4caa-89e8-19dd133be175",
+                    "_tdActionType": "reply",
+                    "attributes": {
+                        "disableInputMessage": false,
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "message shown",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": []
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            ],
+            "intent_display_name": "success should show",
+            "intent_id": "bb1b1001-3f0d-4b1c-b88a-263c000cfad0",
+            "language": "en",
+            "attributes": {
+                "position": {
+                    "x": 2346.5,
+                    "y": 1388
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "a942b56a-0625-4293-b95d-85b5addff495",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                }
+            }
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "7df7e7fb-ac52-46d4-a10f-926a262546ab",
+                    "_tdActionType": "replyv2",
+                    "attributes": {
+                        "disableInputMessage": false,
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "FINE!",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": []
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "noInputTimeout": 10000
+                }
+            ],
+            "intent_display_name": "untitled_block_6",
+            "intent_id": "7646b40c-e323-45e7-9965-586257a84693",
+            "language": "en",
+            "attributes": {
+                "position": {
+                    "x": 1946,
+                    "y": 690
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "80702255-d4f8-4e82-a384-049929fd30d0",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                }
+            }
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "e90346f7-1d40-4827-a7e9-befbad97e600",
+                    "_tdActionType": "setattribute-v2",
+                    "operation": {
+                        "operands": [
+                            {
+                                "value": "{\n        \"lastErrorObject\": {\n            \"n\": 1,\n            \"updatedExisting\": false,\n            \"upserted\": \"67311e04b385c73d4722f805\"\n        },\n        \"value\": {\n            \"_id\": \"67311e04b385c73d4722f805\",\n            \"id_project\": \"6565047fdd64fd001323f37c\",\n            \"source\": \" on 2024-11-09 19:05\",\n            \"type\": \"text\",\n            \"__v\": 0,\n            \"content\": \"To change your password, go to the tiledesk.com website and navigate to Profile > Recover Password.\",\n            \"createdAt\": \"2024-11-10T20:56:36.829Z\",\n            \"name\": \" on 2024-11-09 19:05\",\n            \"namespace\": \"66eaccb34f282e001310f3be\",\n            \"status\": -1,\n            \"updatedAt\": \"2024-11-10T20:56:36.829Z\"\n        },\n        \"ok\": 1,\n        \"$clusterTime\": {\n            \"clusterTime\": \"7435757462294102075\",\n            \"signature\": {\n                \"hash\": \"kXoL0HMIRWEsV8MVVHQ9r+RcLy0=\",\n                \"keyId\": \"7393409939454033994\"\n            }\n        },\n        \"operationTime\": \"7435757462294102074\"\n    }",
+                                "isVariable": false,
+                                "function": "JSONparse"
+                            }
+                        ],
+                        "operators": []
+                    },
+                    "destination": "bad_attribute"
+                }
+            ],
+            "intent_display_name": "json attribute",
+            "intent_id": "9dd73301-566c-4455-b4fe-c177e2496da1",
+            "language": "en",
+            "attributes": {
+                "position": {
+                    "x": 1534,
+                    "y": 1552
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "e937758e-f02c-4627-a0b0-fda5687ded92",
+                    "_tdActionType": "intent",
+                    "intentName": "#bb1b1001-3f0d-4b1c-b88a-263c000cfad0"
+                }
+            }
+        }
+    ]
+}
+
+module.exports = { bot: bot };
