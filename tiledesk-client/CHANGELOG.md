@@ -2,6 +2,8 @@
 
 **This library is on npm: https://www.npmjs.com/package/@tiledesk/tiledesk-client**
 
+### 0.10.13 - online
+- fix: added return on err callbacks of this.findBotByName()
 
 ### 0.10.12 - online
 - fixed reject(error) => reject(err) in closeRequest()
