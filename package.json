@@ -12,7 +12,7 @@
     "axios": "^0.21.1"
   },
   "scripts": {
-    "test": "../mocha",
+    "test": "cd tiledesk-client && npm test",
     "start": "node index.js"
   },
   "keywords": [],
