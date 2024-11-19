@@ -35,8 +35,37 @@ class Auth {
                     }
                 }, this.LOG
               );
-        });
-        
+        }); 
+    }
+
+    async signUpEmailPassword(email, password){
+      return new Promise((resolve, reject)=> {
+        const HTTPREQUEST = {
+            url: `${this.APIURL}/auth/signup`,
+            headers: {
+              'Content-Type' : 'application/json'
+            },
+            json: {
+              email: email,
+              password: password,
+              firstname: 'Test',
+              lastname: 'User'
+            },
+            method: 'POST',
+            httpsOptions: this.httpsOptions
+        };
+        Utils.myrequest(
+          HTTPREQUEST,
+          function(err, resbody) {
+            if (err) {
+              reject(err)
+            }
+            else {
+              resolve(resbody)
+            }
+          }, this.LOG
+        );
+      }); 
     }
 
     async createAnonymousUser(tiledeskProjectId) {
