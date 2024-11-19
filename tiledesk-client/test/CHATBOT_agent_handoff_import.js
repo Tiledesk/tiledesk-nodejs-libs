@@ -97,18 +97,7 @@ let user1 = {
     lastname: '1',
 };
 
-let user_agent = {}
-user_agent = {
-    status: 100,
-    _id: '673b5a4f21dfa5001320461c',
-    email: 'agent@tiledesk.com',
-    firstname: 'Test',
-    lastname: 'User',
-    emailverified: false,
-    createdAt: '2024-11-18T15:16:31.597Z',
-    updatedAt: '2024-11-18T15:16:31.597Z',
-    __v: 0
-}
+let user_agent = {};
 let agent_project_user = {};
 
 let group_id;
@@ -193,7 +182,7 @@ describe('CHATBOT: Agent Handoff action', async () => {
             assert(response_addToProject, "Expect response_addToProject exist")
             assert(response_addToProject._id, "Expect response_addToProject._id exist")
             assert.equal(response_addToProject.id_user, user_agent._id, `Expect user_agent._id to be ${user_agent._id} but got: ${response_addToProject.id_user}`)
-            agent_project_user = response_addToProject
+            agent_project_user = response_addToProject;
             /** SET AGENT AS AVAILABLE */
             /** skip if 3rd parameter of addUserToProject( .., .., true) is set to true */
 
