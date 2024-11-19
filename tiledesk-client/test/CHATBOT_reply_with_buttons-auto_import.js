@@ -6,7 +6,7 @@ const axios = require('axios');
 const { TiledeskClient } = require('../index.js');
 
 const Auth = require('./tiledesk_apis/TdAuthApi.js');
-const TiledeskCLientTest = require('./tiledesk_apis/index.js');
+const TiledeskClientTest = require('./tiledesk_apis/index.js');
 const Chat21Auth = require('./tiledesk_apis/Chat21Auth.js')
 
 const LOG_STATUS = (process.env.LOG_STATUS && process.env.LOG_STATUS) === 'true' ? true : false;
@@ -146,7 +146,7 @@ describe('CHATBOT: Reply with buttons', async () => {
 
             const bot = require('./chatbots/CHATBOT_reply_with_buttons.js').bot;
             
-            const tdClientTest = new TiledeskCLientTest({
+            const tdClientTest = new TiledeskClientTest({
                 APIURL: API_ENDPOINT,
                 PROJECT_ID: TILEDESK_PROJECT_ID,
                 TOKEN: USER_ADMIN_TOKEN
@@ -172,7 +172,7 @@ describe('CHATBOT: Reply with buttons', async () => {
 
     after(function (done) {
         chatClient1.close(async () => {
-            const tdClientTest = new TiledeskCLientTest({
+            const tdClientTest = new TiledeskClientTest({
                 APIURL: API_ENDPOINT,
                 PROJECT_ID: TILEDESK_PROJECT_ID,
                 TOKEN: USER_ADMIN_TOKEN

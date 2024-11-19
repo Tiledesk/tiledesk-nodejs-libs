@@ -44,6 +44,7 @@ class TiledeskClientTest {
         this.chatbot = new Chatbot(this.APIURL, this.PROJECT_ID, this.JWT_TOKEN)
         this.request = new Request(this.APIURL, this.PROJECT_ID, this.JWT_TOKEN);
         this.user = new User(this.APIURL, this.PROJECT_ID, this.JWT_TOKEN);
+
     }
 
     static fixToken(token) {

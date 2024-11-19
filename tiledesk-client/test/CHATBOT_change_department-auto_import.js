@@ -9,7 +9,7 @@ const LOG_STATUS = (process.env.LOG_STATUS && process.env.LOG_STATUS) === 'true'
 
 
 const Auth = require('./tiledesk_apis/TdAuthApi.js');
-const TiledeskCLientTest = require('./tiledesk_apis/index.js');
+const TiledeskClientTest = require('./tiledesk_apis/index.js');
 const Chat21Auth = require('./tiledesk_apis/Chat21Auth.js')
 
 let EMAIL = "";
@@ -151,7 +151,7 @@ describe('CHATBOT: Change department (~2s)', async () => {
                     const bot = require('./chatbots/CHATBOT_change_department_bot.js').bot;
                     const bot_dep2 = require('./chatbots/CHATBOT_change_department_bot2.js').bot;
 
-                    const tdClientTest = new TiledeskCLientTest({
+                    const tdClientTest = new TiledeskClientTest({
                         APIURL: API_ENDPOINT,
                         PROJECT_ID: TILEDESK_PROJECT_ID,
                         TOKEN: USER_ADMIN_TOKEN
@@ -205,7 +205,7 @@ describe('CHATBOT: Change department (~2s)', async () => {
 
     after(function  (done) {
         chatClient1.close(async () => {
-            const tdClientTest = new TiledeskCLientTest({
+            const tdClientTest = new TiledeskClientTest({
                     APIURL: API_ENDPOINT,
                     PROJECT_ID: TILEDESK_PROJECT_ID,
                     TOKEN: USER_ADMIN_TOKEN
