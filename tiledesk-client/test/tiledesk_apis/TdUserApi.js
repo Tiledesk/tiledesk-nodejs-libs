@@ -94,13 +94,13 @@ class User {
     }); 
   }
 
-  async removeUser(){
+  async removeUser(token){
     return new Promise((resolve, reject)=> {
       const HTTPREQUEST = {
           url: `${this.APIURL}/users`,
           headers: {
             'Content-Type' : 'application/json',
-            'Authorization': this.JWT_TOKEN
+            'Authorization': token
           },
           method: 'DELETE',
           httpsOptions: this.httpsOptions
