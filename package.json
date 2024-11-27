@@ -11,8 +11,12 @@
     "mqtt": "^4.3.7",
     "axios": "^0.21.1"
   },
+  "devDependencies": {
+    "jsonwebtoken": "^8.5.1",
+    "mocha": "^8.2.1"
+  },
   "scripts": {
-    "test": "../mocha",
+    "test": "cd tiledesk-client && npm test",
     "start": "node index.js"
   },
   "keywords": [],

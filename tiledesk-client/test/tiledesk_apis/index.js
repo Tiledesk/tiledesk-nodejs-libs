@@ -1,5 +1,9 @@
 const Department = require('./TdDeparmentApi')
-const Project = require ('./TdProjectsApi')
+const Project = require('./TdProjectsApi')
+const Request = require('./TdRequestApi')
+const User = require('./TdUserApi')
+const Lead = require('./TdLeadApi')
+const Tag = require('./TdTagApi')
 const Chatbot = require('./TdChatbotApi')
 
 class TiledeskClientTest {
@@ -40,6 +44,11 @@ class TiledeskClientTest {
         this.project = new Project(this.APIURL, this.PROJECT_ID, this.JWT_TOKEN)
         this.department = new Department(this.APIURL, this.PROJECT_ID, this.JWT_TOKEN);
         this.chatbot = new Chatbot(this.APIURL, this.PROJECT_ID, this.JWT_TOKEN)
+        this.request = new Request(this.APIURL, this.PROJECT_ID, this.JWT_TOKEN);
+        this.user = new User(this.APIURL, this.PROJECT_ID, this.JWT_TOKEN,);
+        this.lead = new Lead(this.APIURL, this.PROJECT_ID, this.JWT_TOKEN);
+        this.tag = new Tag(this.APIURL, this.PROJECT_ID, this.JWT_TOKEN);
+
     }
 
     static fixToken(token) {
