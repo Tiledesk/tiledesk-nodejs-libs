@@ -1,9 +1,10 @@
 class Project {
 
-    constructor(APIURL, PROJECT_ID, JWT_TOKEN){
+    constructor(APIURL, PROJECT_ID, JWT_TOKEN, LOG){
         this.APIURL = APIURL;
         this.PROJECT_ID = PROJECT_ID;
         this.JWT_TOKEN = JWT_TOKEN;
+        this.LOG = LOG;
     }
 
 

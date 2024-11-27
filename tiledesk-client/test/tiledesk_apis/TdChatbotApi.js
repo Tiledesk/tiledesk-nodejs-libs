@@ -6,7 +6,7 @@ class Chatbot {
         this.APIURL = APIURL;
         this.PROJECT_ID = PROJECT_ID;
         this.JWT_TOKEN = JWT_TOKEN;
-        this.log = LOG;
+        this.LOG = LOG
     }
 
     async getAllChatbotFromProject(){
@@ -31,18 +31,12 @@ class Chatbot {
                 HTTPREQUEST,
                 function (err, resbody) {
                     if (err) {
-                        reject(error)
-                        if (callback) {
-                            callback(err);
-                        }
+                        reject(err)
                     }
                     else {
                         resolve(resbody);
-                        if (callback) {
-                            callback(null, resbody); 
-                        }
                     }
-                }, this.log
+                }, this.LOG
             );
         });
 
@@ -66,15 +60,9 @@ class Chatbot {
                 function (err, resbody) {
                     if (err) {
                         reject(error)
-                        if (callback) {
-                            callback(err);
-                        }
                     }
                     else {
-                        resolve(resbody);
-                        if (callback) {
-                            callback(null, resbody); 
-                        }
+                        resolve(resbody)
                     }
                 }, this.log
             );

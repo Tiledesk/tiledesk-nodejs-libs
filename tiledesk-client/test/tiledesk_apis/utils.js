@@ -33,6 +33,8 @@ class Utils {
           });
           axios_settings.httpsAgent = httpsAgent;
         }
+
+
         
         // console.log("Using axios settings:", axios_settings)
         // axios(
@@ -51,18 +53,21 @@ class Utils {
             console.log("Response headers:\n", JSON.stringify(res.headers));
             // console.log("******** Response for url:", res);
           }
+          
           if (res && res.status == 200 && res.data) {
             if (callback) {
               callback(null, res.data);
             }
           }
           else {
+            
             if (callback) {
               callback(Utils.getErr({message: "Response status not 200"}, options, res), null, null);
             }
           }
         })
         .catch(function (error) {
+          console.log('errrrrr', error)
           if (callback) {
             callback(error, null, null);
           }
