@@ -179,7 +179,6 @@ describe('CHATBOT: Hidden message action', async () => {
                 assert.ok(false);
             });
             assert(result.success === true);
-            console.log('doneeeeee')
             done();
         });
     });
@@ -191,31 +190,95 @@ describe('CHATBOT: Hidden message action', async () => {
                 PROJECT_ID: TILEDESK_PROJECT_ID,
                 TOKEN: USER_ADMIN_TOKEN
             });
+            let buttonTextIsPressed = false;
             chatClient1.onMessageAdded(async (message, topic) => {
+                const message_text = 'draft_request'
                 if(message.recipient !== recipient_id){
                     reject();
                     return;
                 }
-                
+
                 if (LOG_STATUS) {
                     console.log(">(1) Incoming message [sender:" + message.sender_fullname + "]: ", message);
                 }
 
                 if (
                     message &&
-                    message.sender_fullname === "Hidden message Bot"
+                    message.attributes.intentName ===  "welcome" &&
+                    message.sender_fullname === "Hidden message Chatbot"
                 ) {
                     if (LOG_STATUS) {
                         console.log("> Incoming message from 'welcome' intent ok.");
                     }
 
-                    assert(message.attributes, "Expect message.attributes exist")
-                    assert(message.text, "Expect msg.text exist")
-                    assert.equal(msg.text, 'this is an hidden message', `Expect msg.text to be 'this is an hidden message' but got: ${msg.text} `)
-
                     assert.equal(request.draft, true, "Expect request.draft to be equal to true")
-                    resolve();                 
-                } 
+                    
+                    assert(message.attributes, "Expect message.attributes exist")
+                    assert(message.attributes.commands, "Expect message.attributes.commands")
+                    assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                    let commands = message.attributes.commands
+                    let command = commands[1]
+                    assert.equal(command.type, 'message')
+                    assert(command.message, "Expect command.message exist")
+                    let msg = command.message
+                    assert(msg.type)
+                    assert.equal(msg.type, 'text', "Expect msg.type to be 'text'")
+                    assert(msg.text, "Expect msg.text exist")
+                    assert.equal(msg.text, 'Test hidden message', `Expect msg.text to be 'Test hidden message' but got: ${msg.text} `)
+                    
+                    //check buttons 
+                    assert(msg.attributes, "Expect msg.attribues exist")
+                    assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
+                    assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
+                    assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
+                    
+                    let button1 = msg.attributes.attachment.buttons[0]
+                    assert.strictEqual(button1.value, message_text, 'Expect button1 to have "draft_request" as text')
+                    assert(button1.action)
+
+                    chatClient1.sendMessage(
+                        message_text,
+                        'text',
+                        recipient_id,
+                        "Test support group",
+                        user1.fullname,
+                        {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
+                        null, // no metadata
+                        'group',
+                        (err, msg) => {
+                            if (err) {
+                                console.error("Error send:", err);
+                            }
+                            if (LOG_STATUS) {
+                                console.log("Message Sent ok:", msg);
+                            }
+                            assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
+                            buttonTextIsPressed = true
+                        }
+                    );
+
+                                 
+                } else if(buttonTextIsPressed && 
+                    message.sender_fullname === "Hidden message Chatbot"
+                ){  
+                    assert(message.attributes)
+                    assert(message.attributes.intentName)
+                    assert.equal(message.attributes.intentName, 'draft')
+
+                    //check command of type text
+                    assert(message.attributes, "Expect message.attributes exist")
+                    assert(message.attributes.commands, "Expect message.attributes.commands")
+                    assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                    let commands = message.attributes.commands
+                    let command = commands[1]
+                    assert.equal(command.type, 'message')
+                    assert(command.message, "Expect command.message exist")
+                    let msg = command.message
+                    assert.equal(msg.text, "hidden message sent: ok")
+                    assert.equal(msg.type, 'text')
+
+                    resolve();    
+                }
 
             });
             if (LOG_STATUS) {
@@ -246,37 +309,101 @@ describe('CHATBOT: Hidden message action', async () => {
                 PROJECT_ID: TILEDESK_PROJECT_ID,
                 TOKEN: USER_ADMIN_TOKEN
             });
+            let buttonTextIsPressed = false;
             chatClient1.onMessageAdded(async (message, topic) => {
+                const message_text = 'no_draft_request'
                 if(message.recipient !== recipient_id){
                     reject();
                     return;
                 }
-                let LOG_STATUS = true
+                
                 if (LOG_STATUS) {
                     console.log(">(1) Incoming message [sender:" + message.sender_fullname + "]: ", message);
                 }
 
                 if (
                     message &&
-                    message.sender_fullname === "Hidden message Bot"
+                    message.attributes.intentName ===  "welcome" &&
+                    message.sender_fullname === "Hidden message Chatbot"
                 ) {
                     if (LOG_STATUS) {
                         console.log("> Incoming message from 'welcome' intent ok.");
                     }
 
-                    assert(message.attributes, "Expect message.attributes exist")
-                    assert(message.text, "Expect msg.text exist")
-                    assert.notEqual(msg.text, 'this is an hidden message', `Expect msg.text to be 'this is an hidden message' but got: ${msg.text} `)
-
                     assert.equal(request.draft, false, "Expect request.draft to be equal to true")
-                    resolve();                 
+                    
+                    assert(message.attributes, "Expect message.attributes exist")
+                    assert(message.attributes.commands, "Expect message.attributes.commands")
+                    assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                    let commands = message.attributes.commands
+                    let command = commands[1]
+                    assert.equal(command.type, 'message')
+                    assert(command.message, "Expect command.message exist")
+                    let msg = command.message
+                    assert(msg.type)
+                    assert.equal(msg.type, 'text', "Expect msg.type to be 'text'")
+                    assert(msg.text, "Expect msg.text exist")
+                    assert.equal(msg.text, 'Test hidden message', `Expect msg.text to be 'Test hidden message' but got: ${msg.text} `)
+                    
+                    //check buttons 
+                    assert(msg.attributes, "Expect msg.attribues exist")
+                    assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
+                    assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
+                    assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
+                    
+                    let button1 = msg.attributes.attachment.buttons[1]
+                    
+                    assert.strictEqual(button1.value, message_text, 'Expect button1 to have "no_draft_request" as text')
+                    assert(button1.action)
+
+                    chatClient1.sendMessage(
+                        message_text,
+                        'text',
+                        recipient_id,
+                        "Test support group",
+                        user1.fullname,
+                        {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
+                        null, // no metadata
+                        'group',
+                        (err, msg) => {
+                            if (err) {
+                                console.error("Error send:", err);
+                            }
+                            if (LOG_STATUS) {
+                                console.log("Message Sent ok:", msg);
+                            }
+                            assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
+                            buttonTextIsPressed = true
+                        }
+                    );                 
                 } 
+                else if(buttonTextIsPressed && 
+                    message.sender_fullname === "Hidden message Chatbot"
+                ){  
+                    assert(message.attributes)
+                    assert(message.attributes.intentName)
+                    assert.equal(message.attributes.intentName, 'no_draft')
+
+                    //check command of type text
+                    assert(message.attributes, "Expect message.attributes exist")
+                    assert(message.attributes.commands, "Expect message.attributes.commands")
+                    assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                    let commands = message.attributes.commands
+                    let command = commands[1]
+                    assert.equal(command.type, 'message')
+                    assert(command.message, "Expect command.message exist")
+                    let msg = command.message
+                    assert.equal(msg.text, "hidden message not sent: ok")
+                    assert.equal(msg.type, 'text')
+
+                    resolve();    
+                }
 
             });
             if (LOG_STATUS) {
                 console.log("Sending test message...");
             }
-            let recipient_id = group_id;
+            let recipient_id = group_id+'_1';
             // let recipient_fullname = group_name;
             triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
                 if (err) {
