@@ -14,6 +14,32 @@ class Chatbot {
         
     }
 
+    
+    async getChatbotById(chatbot_id){
+        return new Promise((resolve, reject) => {
+            const URL = `${this.APIURL}/${this.PROJECT_ID}/faq_kb/${chatbot_id}`
+            const HTTPREQUEST = {
+                url: URL,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': this.JWT_TOKEN
+                },
+                method: 'GET',
+                httpsOptions: this.httpsOptions
+            };
+            Utils.myrequest(
+                HTTPREQUEST,
+                function (err, resbody) {
+                    if (err) {
+                        reject(err)
+                    }
+                    else {
+                        resolve(resbody);
+                    }
+                }, this.LOG
+            );
+        });
+    }
 
     async deleteChatbot(chatbot_id){
         return new Promise((resolve, reject) => {
@@ -39,7 +65,6 @@ class Chatbot {
                 }, this.LOG
             );
         });
-
     }
 
     async importChatbot(bot_data){
