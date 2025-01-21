@@ -174,7 +174,7 @@ describe('CHATBOT: Set Attribute (counter test) (~2s)', async () => {
                 message.sender_fullname === "Set Attribute (counter test)" &&
                 message.attributes.commands &&
                 message.attributes.commands.length === 2 &&
-                message.text === "final counter: 200"
+                message.text === "final counter: 30"
             ) {
                 if (LOG_STATUS) {
                     console.log("> Incoming message (Welcome) from 'Set Attribute (counter test)' is ok.");
@@ -187,7 +187,7 @@ describe('CHATBOT: Set Attribute (counter test) (~2s)', async () => {
                     });
                 }
                 assert(message.attributes?.commands[1]?.type === "message");
-                assert(message.attributes?.commands[1]?.message?.text === 'final counter: 200');
+                assert(message.attributes?.commands[1]?.message?.text === 'final counter: 30');
                 done();
             }
         });

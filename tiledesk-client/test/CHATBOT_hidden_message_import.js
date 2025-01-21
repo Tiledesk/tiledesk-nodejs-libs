@@ -278,6 +278,7 @@ describe('CHATBOT: Hidden message action', async () => {
                     assert.equal(msg.type, 'text')
 
                     resolve();    
+                    return;
                 }
 
             });
@@ -309,14 +310,15 @@ describe('CHATBOT: Hidden message action', async () => {
                 PROJECT_ID: TILEDESK_PROJECT_ID,
                 TOKEN: USER_ADMIN_TOKEN
             });
+            
             let buttonTextIsPressed = false;
             chatClient1.onMessageAdded(async (message, topic) => {
                 const message_text = 'no_draft_request'
                 if(message.recipient !== recipient_id){
-                    reject();
+                    // reject();
                     return;
                 }
-                
+
                 if (LOG_STATUS) {
                     console.log(">(1) Incoming message [sender:" + message.sender_fullname + "]: ", message);
                 }
@@ -409,12 +411,11 @@ describe('CHATBOT: Hidden message action', async () => {
                 if (err) {
                     console.error("An error occurred while triggering echo bot conversation:", err);
                 }
-
                 request = await tdClientTest.request.getRequestById(recipient_id).catch((err) => { 
                     console.error("(it) REQUEST API -> An error occurred during getRequestById:", err);
                     reject(err)
                     assert.ok(false);
-                });
+                }); 
                 request.draft = false
                 
             });

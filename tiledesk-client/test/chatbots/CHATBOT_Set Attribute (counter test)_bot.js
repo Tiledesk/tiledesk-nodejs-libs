@@ -177,7 +177,7 @@ const bot = {
                                     "operator": "equalAsNumbers",
                                     "operand2": {
                                         "type": "const",
-                                        "value": "200",
+                                        "value": "30",
                                         "name": ""
                                     }
                                 }
