@@ -150,7 +150,7 @@ describe('CHATBOT: Add tags action', async () => {
             })
            
             const data = await tdClientTest.chatbot.importChatbot(bot).catch((err) => { 
-                console.log('errrr-->', err); 
+                console.error(err); 
                 reject(err);
             })
             BOT_ID = data._id;

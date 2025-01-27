@@ -174,7 +174,7 @@ describe('CHATBOT: Agent Handoff action', async () => {
 
             /** ADD AGENT TO PROJECT */
             const response_addToProject = await tdClientTest.user.addUserToProject(user_agent.email, 'admin', true).catch((err) => {
-                console.log('errrr-->', err); 
+                console.error(err); 
                 reject(err);
                 assert.ok(false);
             });
@@ -188,7 +188,7 @@ describe('CHATBOT: Agent Handoff action', async () => {
 
             const bot = require('./chatbots/CHATBOT_agent_handoff_bot.js').bot;
             const data = await tdClientTest.chatbot.importChatbot(bot).catch((err) => { 
-                console.log('errrr-->', err); 
+                console.error(err); 
                 reject(err);
             })
             BOT_ID = data._id;

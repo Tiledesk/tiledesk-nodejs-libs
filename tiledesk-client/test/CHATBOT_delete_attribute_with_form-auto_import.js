@@ -95,7 +95,7 @@ let user1 = {
 let group_id;
 let group_name;
 
-describe('CHATBOT: Delete attribute with form (~10s)', async () => {
+describe('CHATBOT: Delete attribute with form', async () => {
     // this.timeout(20000);
     before(() => {
         return new Promise(async (resolve, reject) => {
@@ -182,7 +182,7 @@ describe('CHATBOT: Delete attribute with form (~10s)', async () => {
         });
     });
 
-    it('ask data and restart with deleted attribute', (done) => {
+    it('ask data and restart with deleted attribute  (~11s)', (done) => {
         let start_sent = false;
         let handler = chatClient1.onMessageAdded((message, topic) => {
             

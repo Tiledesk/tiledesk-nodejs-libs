@@ -96,7 +96,7 @@ let user1 = {
 let group_id;
 let group_name;
 
-describe('CHATBOT: Capture User Reply (~4s)', async () => {
+describe('CHATBOT: Capture User Reply', async () => {
   
     before(() => {
         return new Promise(async (resolve, reject) => {
@@ -184,7 +184,7 @@ describe('CHATBOT: Capture User Reply (~4s)', async () => {
         });
     });
 
-    it('capture reply', (done) => {
+    it('capture reply  (~3s)', (done) => {
         let handler = chatClient1.onMessageAdded((message, topic) => {
             if (LOG_STATUS) {
                 console.log("> Incoming message [sender:" + message.sender_fullname + "]: ", message);

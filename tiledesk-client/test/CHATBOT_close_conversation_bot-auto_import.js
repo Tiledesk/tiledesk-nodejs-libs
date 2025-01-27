@@ -80,7 +80,7 @@ let user1 = {
 
 let group_id;
 
-describe('CHATBOT: Close Conversation (~2s)', async () => {
+describe('CHATBOT: Close Conversation', async () => {
   
     before(() => {
         return new Promise(async (resolve, reject) => {
@@ -160,7 +160,7 @@ describe('CHATBOT: Close Conversation (~2s)', async () => {
         });
     });
 
-    it('close conversation', (done) => {
+    it('close conversation (~2s)', (done) => {
         const message_text = uuidv4().replace(/-+/g, "");
         let time_sent = Date.now();
         let handler = chatClient1.onMessageAdded((message, topic) => {

@@ -84,7 +84,7 @@ let user1 = {
 
 let group_id;
 
-describe('CHATBOT: JSON Attribute bug regression (~2s)', async () => {
+describe('CHATBOT: JSON Attribute bug regression', async () => {
   
     before(() => {
         return new Promise(async (resolve, reject) => {
@@ -171,7 +171,7 @@ describe('CHATBOT: JSON Attribute bug regression (~2s)', async () => {
         });
     });
 
-    it('must get a message back from the bot', (done) => {
+    it('must get a message back from the bot (~2s)', (done) => {
         const message_text = uuidv4().replace(/-+/g, "");
         let handler = chatClient1.onMessageAdded((message, topic) => {
             if (LOG_STATUS) {

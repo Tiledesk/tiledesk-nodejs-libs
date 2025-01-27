@@ -80,7 +80,7 @@ let user1 = {
 
 let group_id;
 
-describe('CHATBOT: Set Attribute (~2s)', async () => {
+describe('CHATBOT: Set Attribute', async () => {
   
     before(() => {
         return new Promise(async (resolve, reject) => {
@@ -160,7 +160,7 @@ describe('CHATBOT: Set Attribute (~2s)', async () => {
         });
     });
 
-    it('set attribute reply', (done) => {
+    it('set attribute reply (~1s)', (done) => {
         const message_text = uuidv4().replace(/-+/g, "");
         let time_sent = Date.now();
         let handler = chatClient1.onMessageAdded((message, topic) => {

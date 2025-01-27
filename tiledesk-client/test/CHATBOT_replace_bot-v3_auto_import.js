@@ -90,7 +90,7 @@ let group_id;
 let request;
 let chatbot_2_slug;
 
-describe('CHATBOT: Replace bot v3 (~2s)', async () => {
+describe('CHATBOT: Replace bot v3', async () => {
     before(() => {
         return new Promise(async (resolve, reject) => {
             if (LOG_STATUS) {
@@ -138,7 +138,7 @@ describe('CHATBOT: Replace bot v3 (~2s)', async () => {
             })
 
             const data2 = await tdClientTest.chatbot.importChatbot(replacedBot).catch((err) => { 
-                console.log('errrr-->', err); 
+                console.error(err); 
                 reject(err);
             })
             BOT_ID_2 = data2._id;
@@ -149,7 +149,7 @@ describe('CHATBOT: Replace bot v3 (~2s)', async () => {
 
             
             const data = await tdClientTest.chatbot.importChatbot(bot).catch((err) => { 
-                console.log('errrr-->', err); 
+                console.error(err); 
                 reject(err);
             })
             BOT_ID = data._id;
@@ -185,7 +185,7 @@ describe('CHATBOT: Replace bot v3 (~2s)', async () => {
         });
     });
 
-    it('Replace Bot by Id', () => {
+    it('Replace Bot by Id (~1s)', () => {
         return new Promise((resolve, reject)=> {
             let buttonTextIsPressed = false;
             const tdClientTest = new TiledeskClientTest({
@@ -321,7 +321,7 @@ describe('CHATBOT: Replace bot v3 (~2s)', async () => {
         });
     });
 
-    it('Replace Bot by slug', () => {
+    it('Replace Bot by slug (~1s)', () => {
         return new Promise((resolve, reject)=> {
             let buttonTextIsPressed = false;
             const tdClientTest = new TiledeskClientTest({
@@ -457,7 +457,7 @@ describe('CHATBOT: Replace bot v3 (~2s)', async () => {
         });
     });
 
-    it('Replace Bot by slug (with a variable for slug value)', () => {
+    it('Replace Bot by slug (with a variable for slug value) (~1s)', () => {
         return new Promise((resolve, reject)=> {
             let buttonTextIsPressed = false;
             const tdClientTest = new TiledeskClientTest({
@@ -593,7 +593,7 @@ describe('CHATBOT: Replace bot v3 (~2s)', async () => {
         });
     });
 
-    it('Replace Bot by slug and block (with variables for both slug and block value)', () => {
+    it('Replace Bot by slug and block (with variables for both slug and block value) (~1s)', () => {
         return new Promise((resolve, reject)=> {
             let buttonTextIsPressed = false;
             const tdClientTest = new TiledeskClientTest({

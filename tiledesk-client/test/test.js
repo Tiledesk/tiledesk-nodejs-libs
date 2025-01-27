@@ -59,7 +59,7 @@ describe('TiledeskClient', function() {
 
 describe('TiledeskClient auth', function() {
     
-    it('anonymousAuthentication. should return the auth token', function(done) {
+    it('anonymousAuthentication. should return the auth token (~100ms)', function(done) {
         TiledeskClient.anonymousAuthentication(
         PROJECT_ID,
         APIKEY,
@@ -80,7 +80,7 @@ describe('TiledeskClient auth', function() {
         });
     });
     
-    it('authEmailPassword should return the auth token', function(done) {
+    it('authEmailPassword should return the auth token (~300ms)', function(done) {
             TiledeskClient.authEmailPassword(
                 APIKEY,
                 EMAIL,
@@ -106,7 +106,7 @@ describe('TiledeskClient auth', function() {
             });
     });
     
-    it('customAuthentication. should return the auth token (<1s)', function(done) {
+    it('customAuthentication. should return the auth token  (~2s)', function(done) {
             // console.log("Start custom auth"); 
             var externalUserId = uuidv4();
             var externalUser = {
@@ -192,7 +192,6 @@ describe('TiledeskClient auth', function() {
     //           }
     //         })
     //         .catch(function (error) {
-    //             console.log("EEEEEEERRRROOOOORRRRRR",error)
     //             process.exit(1);
     //           if (callback) {
     //             callback(error, null, null);
@@ -203,7 +202,7 @@ describe('TiledeskClient auth', function() {
 });
 
 describe('TiledeskClient fireEvent()', function() {
-    it('should return the event echo json if fired correctly', function(done) {
+    it('should return the event echo json if fired correctly (~100ms)', function(done) {
         const tdclient = new TiledeskClient({
             APIKEY: APIKEY,
             APIURL: API_ENDPOINT,
@@ -239,7 +238,7 @@ describe('TiledeskClient fireEvent()', function() {
 });
 
 describe('Projects', function() {
-    it('getProjectSettings()', function(done) {
+    it('getProjectSettings() (~100ms)', function(done) {
         const tdclient = new TiledeskClient(
         {
             APIKEY: APIKEY,
@@ -252,7 +251,6 @@ describe('Projects', function() {
         //   tdclient.authEmailPassword(EMAIL, PASSWORD, function(err, result) {
             tdclient.getProjectSettings(
                 function(err, resbody) {
-                    // console.log("eeeeeerrrr", err);
                     if (!err && resbody) {
                         assert(resbody.name === PROJECT_NAME);
                         done();
@@ -270,7 +268,7 @@ describe('Projects', function() {
         }
     });
 
-    it('getProjectAvailableAgents()', function(done) {
+    it('getProjectAvailableAgents() (~100ms)', function(done) {
         const tdclient = new TiledeskClient(
         {
             APIKEY: APIKEY,
@@ -299,7 +297,7 @@ describe('Projects', function() {
         }
     });
 
-    it('getProjectAvailableAgents() async ', async function() {
+    it('getProjectAvailableAgents() async (~100ms)', async function() {
         const tdclient = new TiledeskClient(
         {
             APIKEY: APIKEY,
@@ -324,7 +322,7 @@ describe('Projects', function() {
   // ***************************************************
 
 describe('Team', function() {
-    it('updateProjectUser(). updates the project-user status to AVAILABLE', function(done) {
+    it('updateProjectUser(). updates the project-user status to AVAILABLE (~100ms)', function(done) {
         const tdclient = new TiledeskClient(
         {
             APIKEY: APIKEY,
@@ -357,7 +355,7 @@ describe('Team', function() {
         }
     });
 
-    it('getProjectUser() gets the project-user by userId and verifies that he is AVAILABLE', function(done) {
+    it('getProjectUser() gets the project-user by userId and verifies that he is AVAILABLE (~100ms)', function(done) {
         const tdclient = new TiledeskClient(
         {
             APIKEY: APIKEY,
@@ -389,7 +387,7 @@ describe('Team', function() {
         }
     });
     
-    it('updateProjectUserCurrentlyLoggedIn(). updates the project-user status to unavailable', function(done) {
+    it('updateProjectUserCurrentlyLoggedIn(). updates the project-user status to unavailable (~100ms)', function(done) {
         const tdclient = new TiledeskClient(
         {
             APIKEY: APIKEY,
@@ -423,7 +421,7 @@ describe('Team', function() {
         }
     });
     
-    it('getProjectUser(). verifies the project-user status is unavailable', function(done) {
+    it('getProjectUser(). verifies the project-user status is unavailable (~100ms)', function(done) {
         const tdclient = new TiledeskClient(
         {
             APIKEY: APIKEY,
@@ -454,7 +452,7 @@ describe('Team', function() {
     });
 
 
-    it('getTeam(). gets all the project users (the team)', function(done) {
+    it('getTeam(). gets all the project users (the team) (~100ms)', function(done) {
         const tdclient = new TiledeskClient(
         {
             APIKEY: APIKEY,
@@ -484,7 +482,7 @@ describe('Team', function() {
 });
 
 describe('openNow()', function() {
-    it('should return false because of project not having open hours setup', function(done) {
+    it('should return false because of project not having open hours setup (~100ms)', function(done) {
         const tdclient = new TiledeskClient({
             APIKEY: APIKEY,
             APIURL: API_ENDPOINT,
@@ -509,7 +507,7 @@ describe('openNow()', function() {
 
 
 describe('getWidgetSettings()', function() {
-    it('Widget settings JSON', function(done) {
+    it('Widget settings JSON (~100ms)', function(done) {
         const tdclient = new TiledeskClient({
             APIKEY: APIKEY,
             APIURL: API_ENDPOINT,
@@ -538,7 +536,7 @@ describe('getWidgetSettings()', function() {
 
 describe('Messaging', function() {
 
-    it('sendSupportMessage() on 6 different requests', function(done) {
+    it('sendSupportMessage() on 6 different requests (~1s)', function(done) {
         const tdclient = new TiledeskClient({
             APIKEY: APIKEY,
             APIURL: API_ENDPOINT,
@@ -597,7 +595,7 @@ describe('Messaging', function() {
         }
     });
 
-    it('SendEmail()', function(done) {
+    it('SendEmail() (~100ms)', function(done) {
         if (!process.env.TEST_EMAIL) {
             console.log("WARNING: TEST_EMAIL not defined, sendEmail() test skipped.");
             done();
@@ -635,7 +633,7 @@ describe('Messaging', function() {
         }
     });
 
-    it('SendEmail() async', async function() {
+    it('SendEmail() async (~100ms)', async function() {
         if (!process.env.TEST_EMAIL) {
             console.log("WARNING: TEST_EMAIL not defined, sendEmail() async test skipped.");
             done();
@@ -684,7 +682,7 @@ describe('Messaging', function() {
   // *******************************************************
 
 describe('Leads', function() {
-    it('updateLead(), getLeadById()', function(done) {
+    it('updateLead(), getLeadById() (~600ms)', function(done) {
         const tdclient = new TiledeskClient({
             APIKEY: APIKEY,
             APIURL: API_ENDPOINT,
@@ -751,7 +749,7 @@ describe('Leads', function() {
   // *******************************************************
 
 describe('Requests', function() {
-    it('sendSupportMessage() anonymous to create a new request. sends a message to a new request conversation to create the support conversation', function(done) {
+    it('sendSupportMessage() anonymous to create a new request. sends a message to a new request conversation to create the support conversation (~200ms)', function(done) {
         const tdclient = new TiledeskClient({
             APIKEY: APIKEY,
             APIURL: API_ENDPOINT,
@@ -805,7 +803,7 @@ describe('Requests', function() {
 
 
     
-    it('Assign the request without a bot. Sends a message to a new request conversation to create the support conversation, then it assigns the request to a human, bypassing the bot', function(done) {
+    it('Assign the request without a bot. Sends a message to a new request conversation to create the support conversation, then it assigns the request to a human, bypassing the bot (~500ms)', function(done) {
         const tdclient = new TiledeskClient({
             APIKEY: APIKEY,
             APIURL: API_ENDPOINT,
@@ -854,7 +852,7 @@ describe('Requests', function() {
         }
     });
 
-    it('Moves the request to an agent. Sends a message to a new request conversation to create the support conversation, then it assigns the request to a human', function(done) {
+    it('Moves the request to an agent. Sends a message to a new request conversation to create the support conversation, then it assigns the request to a human (~400ms)', function(done) {
         const tdclient = new TiledeskClient({
             APIKEY: APIKEY,
             APIURL: API_ENDPOINT,
@@ -892,7 +890,7 @@ describe('Requests', function() {
         }
     });
 
-    it('getAllRequests(). gets the project requests', (done) => {
+    it('getAllRequests(). gets the project requests (~100ms)', (done) => {
         const tdclient = new TiledeskClient(
         {
             APIKEY: APIKEY,
@@ -900,6 +898,7 @@ describe('Requests', function() {
             projectId: PROJECT_ID,
             token: USER_TOKEN,
             log: LOG_STATUS
+            
         })
         tdclient.getAllRequests(
             {
@@ -923,7 +922,7 @@ describe('Requests', function() {
     });
     
 
-    it('getRequestById(). gets a request by his ID', (done) => {
+    it('getRequestById(). gets a request by his ID (~400ms)', (done) => {
         const tdclient = new TiledeskClient(
         {
             APIKEY: APIKEY,
@@ -977,7 +976,7 @@ describe('Requests', function() {
         });
     });
 
-    it('updateRequestProperties() with some tag', (done) => {
+    it('updateRequestProperties() with some tag (~500ms)', (done) => {
         const tdclient = new TiledeskClient(
         {
             APIKEY: APIKEY,
@@ -1048,7 +1047,7 @@ describe('Requests', function() {
         });
     });
 
-    it('addTag(). Creates a tag', (done) => {
+    it('addTag(). Creates a tag (~100ms)', (done) => {
         const tdclient = new TiledeskClient(
         {
             APIKEY: APIKEY,
@@ -1069,7 +1068,7 @@ describe('Requests', function() {
         });
     });
 
-    it('getRequestById(). gets a not existing request and correctly manages the 404 return status code', (done) => {
+    it('getRequestById(). gets a not existing request and correctly manages the 404 return status code (~100ms)', (done) => {
         const tdclient = new TiledeskClient(
         {
             APIKEY: APIKEY,
@@ -1091,7 +1090,7 @@ describe('Requests', function() {
         
     });
 
-    it('Closes a request', function(done) {
+    it('Closes a request (~500ms)', function(done) {
         const tdclient = new TiledeskClient({
             APIKEY: APIKEY,
             APIURL: API_ENDPOINT,
@@ -1135,7 +1134,7 @@ describe('Requests', function() {
         }
     });
 
-    it('Closes a request async version', async function() {
+    it('Closes a request async version (~500ms)', async function() {
         const tdclient = new TiledeskClient({
             APIKEY: APIKEY,
             APIURL: API_ENDPOINT,
@@ -1185,7 +1184,7 @@ describe('Requests', function() {
 
 describe('Bots', function() {
     
-    it('createBot(). creates a native bot, then deletes it', (done) => {
+    it('createBot(). creates a native bot, then deletes it (~200ms)', (done) => {
         const bot_name = "my bot " + uuidv4();
         const tdclient = new TiledeskClient(
         {
@@ -1211,7 +1210,7 @@ describe('Bots', function() {
     
 
     
-    it('updateBot(). creates, updates and deletes a native bot', (done) => {
+    it('updateBot(). creates, updates and deletes a native bot (~300ms)', (done) => {
         const bot_name = "my bot " + uuidv4();
         const tdclient = new TiledeskClient(
         {
@@ -1245,7 +1244,7 @@ describe('Bots', function() {
         });
     });
 
-    it('getBot(). gets a bot by id: 1. create a bot, 2. query bots, 3. delete created bot', (done) => {
+    it('getBot(). gets a bot by id: 1. create a bot, 2. query bots, 3. delete created bot (~300ms)', (done) => {
         const bot_name = "my bot " + uuidv4();
         const tdclient = new TiledeskClient(
         {
@@ -1271,7 +1270,7 @@ describe('Bots', function() {
         });
     });
 
-    it('findBotByName(). gets a bot by name: 1. create a bot, 2. find bot by name, 3. delete created bot', (done) => {
+    it('findBotByName(). gets a bot by name: 1. create a bot, 2. find bot by name, 3. delete created bot (~300ms)', (done) => {
         const bot_name = "my bot " + uuidv4();
         const tdclient = new TiledeskClient(
         {
@@ -1299,7 +1298,7 @@ describe('Bots', function() {
         });
     });
 
-    it('getAllBots(). creates 2 bots and gets all bots, then deletes the 2 bots.', (done) => {
+    it('getAllBots(). creates 2 bots and gets all bots, then deletes the 2 bots (~500ms)', (done) => {
         const bot_name1 = "my bot " + uuidv4();
         const bot_name2 = "my bot " + uuidv4();
         const tdclient = new TiledeskClient(
@@ -1345,7 +1344,7 @@ describe('Bots', function() {
 
 describe('Intents', function() {
     
-    it('create a Faq, query the faq by intent display name. 1. create a bot, 2. create a faq, 3. query the faq by intent display name, 4. delete created bot', (done) => {
+    it('create a Faq, query the faq by intent display name. 1. create a bot, 2. create a faq, 3. query the faq by intent display name, 4. delete created bot (~600ms)', (done) => {
         const bot_name = "my bot " + uuidv4();
         const tdclient = new TiledeskClient(
         {
@@ -1392,7 +1391,7 @@ describe('Intents', function() {
 // *********** ORCHESTERATION ***********
 
 describe('Orchestration', function() {
-    it('changeBot(). change a conversation bot (who had no bots)', (done) => {
+    it('changeBot(). change a conversation bot (who had no bots) (~1s)', (done) => {
         const tdclient = new TiledeskClient(
         {
             APIKEY: APIKEY,
@@ -1439,7 +1438,7 @@ describe('Orchestration', function() {
         });
     });
 
-    it('changeBot(). change a conversation bot (with a previous bot)', (done) => {
+    it('changeBot(). change a conversation bot (with a previous bot) (~1s)', (done) => {
         const tdclient = new TiledeskClient(
         {
             APIKEY: APIKEY,
@@ -1504,7 +1503,7 @@ describe('Orchestration', function() {
         });
     });
 
-    it('replaceBot(). replace a conversation bot by bot-name (with a previous bot)', (done) => {
+    it('replaceBot(). replace a conversation bot by bot-name (with a previous bot) (~1s)', (done) => {
         const tdclient = new TiledeskClient(
         {
             APIKEY: APIKEY,
@@ -1574,7 +1573,7 @@ describe('Orchestration', function() {
 // **************** DEPARTMENTS *****************
 
 describe('Departments', function() {
-        it('createDepartment() getAllDepartments() deleteDepartment() getDepartment(). Creates 2 deps and gets all deps, then deletes the 2 deps.', (done) => {
+        it('createDepartment() getAllDepartments() deleteDepartment() getDepartment(). Creates 2 deps and gets all deps, then deletes the 2 deps. (~600ms)', (done) => {
             const dep_name1 = "my dep " + uuidv4();
             const dep_name2 = "my dep " + uuidv4();
             const tdclient = new TiledeskClient(

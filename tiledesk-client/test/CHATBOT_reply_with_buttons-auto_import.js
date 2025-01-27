@@ -153,7 +153,7 @@ describe('CHATBOT: Reply with buttons', async () => {
             })
 
             const data = await tdClientTest.chatbot.importChatbot(bot).catch((err) => { 
-                console.log('errrr-->', err); 
+                console.error(err); 
                 reject(err);
             })
             BOT_ID = data._id;
@@ -544,7 +544,7 @@ describe('CHATBOT: Reply with buttons', async () => {
         })
     })
 
-    it('advanced reply: use case 2 --> no_input (~12s)', () => {
+    it('advanced reply: use case 2 --> no_input (~10s)', () => {
         return new Promise((resolve, reject)=>{
             let noInputCase = false;
             chatClient1.onMessageAdded((message, topic) => {

@@ -104,7 +104,7 @@ let user1 = {
 let group_id;
 let group_name;
 
-describe('CHATBOT: Change department (~2s)', async () => {
+describe('CHATBOT: Change department', async () => {
   
     before(() => {
         return new Promise(async (resolve, reject) => {
@@ -160,16 +160,16 @@ describe('CHATBOT: Change department (~2s)', async () => {
                     try {
 
                         const data = await tdClientTest.chatbot.importChatbot(bot).catch((err) => { 
-                            console.log('errrr-->', err); 
+                            console.error(err);  
                             reject(err);
                         })
 
                         const data2 = await tdClientTest.chatbot.importChatbot(bot_dep2).catch((err) => {
-                            console.log('errrr-->', err); 
+                            console.error(err); 
                             reject(err);
                         })
                         const dep_test1 = await tdClientTest.department.createDepartment('dep test1', data2._id).catch((err) => {
-                            console.log('errrr-->', err); 
+                            console.error(err); 
                             reject(err);
                         });
 
@@ -226,7 +226,7 @@ describe('CHATBOT: Change department (~2s)', async () => {
         });
     });
 
-    it('change department from DEFAULT to "dep test1" ', (done) => {
+    it('change department from DEFAULT to "dep test1" (~2s)', (done) => {
         let handler = chatClient1.onMessageAdded((message, topic) => {            
             if (LOG_STATUS) {
                 console.log("> Incoming message [sender:" + message.sender_fullname + "]: ", message);

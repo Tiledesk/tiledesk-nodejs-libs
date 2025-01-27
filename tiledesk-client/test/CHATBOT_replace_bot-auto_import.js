@@ -84,7 +84,7 @@ let user1 = {
 
 let group_id;
 
-describe('CHATBOT: Replace bot (~2s)', async () => {
+describe('CHATBOT: Replace bot', async () => {
   
     before(() => {
         return new Promise(async (resolve, reject) => {
@@ -179,7 +179,7 @@ describe('CHATBOT: Replace bot (~2s)', async () => {
         });
     });
 
-    it('get replace bot 1 reply', (done) => {
+    it('get replace bot 1 reply  (~2s)', (done) => {
         const message_text = uuidv4().replace(/-+/g, "");
         let time_sent = Date.now();
         let handler = chatClient1.onMessageAdded((message, topic) => {

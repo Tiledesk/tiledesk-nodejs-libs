@@ -95,7 +95,7 @@ let user1 = {
 let group_id;
 let group_name;
 
-describe('CHATBOT: Echo bot (~1s)', async () => {
+describe('CHATBOT: Echo bot', async () => {
   
     before(() => {
         return new Promise(async (resolve, reject) => {
@@ -183,7 +183,7 @@ describe('CHATBOT: Echo bot (~1s)', async () => {
         });
     });
 
-    it('echo bot greetings', (done) => {
+    it('echo bot greetings (~1s)', (done) => {
         const message_text = uuidv4().replace(/-+/g, "");
         let time_sent = Date.now();
         let handler = chatClient1.onMessageAdded((message, topic) => {
