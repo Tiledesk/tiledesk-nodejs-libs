@@ -3,7 +3,7 @@ const { v4: uuidv4 } = require('uuid');
 const { Chat21Client } = require('../chat21client.js');
 require('dotenv').config();
 const axios = require('axios');
-const { TiledeskClient } = require('..');
+const { TiledeskClient } = require('../index.js');
 
 const LOG_STATUS = (process.env.LOG_STATUS && process.env.LOG_STATUS) === 'true' ? true : false;
 

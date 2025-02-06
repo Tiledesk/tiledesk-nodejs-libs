@@ -5,6 +5,7 @@ const User = require('./TdUserApi')
 const Lead = require('./TdLeadApi')
 const Tag = require('./TdTagApi')
 const Chatbot = require('./TdChatbotApi')
+const {TiledeskClient} = require('../../index.js')
 
 class TiledeskClientTest {
 
