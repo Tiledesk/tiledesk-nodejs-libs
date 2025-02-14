@@ -141,7 +141,7 @@ describe('CHATBOT: Hidden message action', async () => {
             assert(result.user.email !== null);
             USER_ADMIN_TOKEN = result.token;
 
-            const bot = require('./chatbots/CHATBOT_hidden_message_bot.js').bot;
+            const bot = require('./chatbots/hidden_message_bot.js').bot;
            
             const tdClientTest = new TiledeskClientTest({
                 APIURL: API_ENDPOINT,
@@ -303,6 +303,7 @@ describe('CHATBOT: Hidden message action', async () => {
     //     })
     // })
 
+
     it('NOT Send hidden message to conversation (~1s)', () => {
         return new Promise((resolve, reject)=> {
             const tdClientTest = new TiledeskClientTest({
@@ -410,12 +411,6 @@ describe('CHATBOT: Hidden message action', async () => {
                 if (err) {
                     console.error("An error occurred while triggering echo bot conversation:", err);
                 }
-                request = await tdClientTest.request.getRequestById(recipient_id).catch((err) => { 
-                    console.error("(it) REQUEST API -> An error occurred during getRequestById:", err);
-                    reject(err)
-                    assert.ok(false);
-                }); 
-                
             });
         })
     })

@@ -137,7 +137,7 @@ describe('CHATBOT: Random Reply action', async () => {
             assert(result.user.email !== null);
             USER_ADMIN_TOKEN = result.token;
 
-            const bot = require('./chatbots/CHATBOT_random_reply_bot.js').bot;
+            const bot = require('./chatbots/random_reply_bot.js').bot;
             
             const tdClientTest = new TiledeskClientTest({
                 APIURL: API_ENDPOINT,

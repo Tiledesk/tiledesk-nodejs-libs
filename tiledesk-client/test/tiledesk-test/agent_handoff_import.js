@@ -186,7 +186,7 @@ describe('CHATBOT: Agent Handoff action', async () => {
             /** SET AGENT AS AVAILABLE */
             /** skip if 3rd parameter of addUserToProject( .., .., true) is set to true */
 
-            const bot = require('./chatbots/CHATBOT_agent_handoff_bot.js').bot;
+            const bot = require('./chatbots/agent_handoff_bot.js').bot;
             const data = await tdClientTest.chatbot.importChatbot(bot).catch((err) => { 
                 console.error(err); 
                 reject(err);
@@ -278,6 +278,7 @@ describe('CHATBOT: Agent Handoff action', async () => {
                         reject(err)
                         assert.ok(false);
                     });
+                    
                     assert.strictEqual(request.participantsBots.length, 0, `Expect request.participantsBots.length = 0 but got: ${request.participantsBots.length}`)
                     assert(request.participants)
                     assert(request.participantsAgents)

@@ -144,7 +144,7 @@ describe('CHATBOT: Reply with buttons', async () => {
             assert(result.user.email !== null);
             USER_ADMIN_TOKEN = result.token;
 
-            const bot = require('./chatbots/CHATBOT_reply_with_buttons.js').bot;
+            const bot = require('./chatbots/reply_with_buttons.js').bot;
             
             const tdClientTest = new TiledeskClientTest({
                 APIURL: API_ENDPOINT,

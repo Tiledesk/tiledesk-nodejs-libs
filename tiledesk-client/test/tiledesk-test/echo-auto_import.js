@@ -22,17 +22,29 @@ else {
     throw new Error(".env.PASSWORD is mandatory");
 }
 
+// let ECHO_BOT_ID = "";
+// if (process.env && process.env.ECHO_BOT_ID) {
+// 	ECHO_BOT_ID = process.env.ECHO_BOT_ID
+// }
+// else {
+//     throw new Error(".env.ECHO_BOT_ID is mandatory");
+// }
+
+// console.log("process.env.AUTOMATION_TEST_TILEDESK_PROJECT_ID:", process.env.AUTOMATION_TEST_TILEDESK_PROJECT_ID);
 let TILEDESK_PROJECT_ID = "";
 if (process.env && process.env.AUTOMATION_TEST_TILEDESK_PROJECT_ID) {
 	TILEDESK_PROJECT_ID = process.env.AUTOMATION_TEST_TILEDESK_PROJECT_ID
+    // console.log("TILEDESK_PROJECT_ID:", TILEDESK_PROJECT_ID);
 }
 else {
     throw new Error(".env.AUTOMATION_TEST_TILEDESK_PROJECT_ID is mandatory");
 }
 
+// console.log("process.env.AUTOMATION_TEST_MQTT_ENDPOINT:", process.env.AUTOMATION_TEST_MQTT_ENDPOINT);
 let MQTT_ENDPOINT = "";
 if (process.env && process.env.AUTOMATION_TEST_MQTT_ENDPOINT) {
 	MQTT_ENDPOINT = process.env.AUTOMATION_TEST_MQTT_ENDPOINT
+    // console.log("MQTT_ENDPOINT:", MQTT_ENDPOINT);
 }
 else {
     throw new Error(".env.AUTOMATION_TEST_MQTT_ENDPOINT is mandatory");
@@ -41,6 +53,7 @@ else {
 let API_ENDPOINT = "";
 if (process.env && process.env.AUTOMATION_TEST_API_ENDPOINT) {
 	API_ENDPOINT = process.env.AUTOMATION_TEST_API_ENDPOINT
+    // console.log("API_ENDPOINT:", API_ENDPOINT);
 }
 else {
     throw new Error(".env.AUTOMATION_TEST_API_ENDPOINT is mandatory");
@@ -49,6 +62,7 @@ else {
 let CHAT_API_ENDPOINT = "";
 if (process.env && process.env.AUTOMATION_TEST_CHAT_API_ENDPOINT) {
 	CHAT_API_ENDPOINT = process.env.AUTOMATION_TEST_CHAT_API_ENDPOINT
+    // console.log("CHAT_API_ENDPOINT:", CHAT_API_ENDPOINT);
 }
 else {
     throw new Error(".env.AUTOMATION_TEST_CHAT_API_ENDPOINT is mandatory");
@@ -79,14 +93,16 @@ let user1 = {
 };
 
 let group_id;
+let group_name;
 
-describe('CHATBOT: Set Attribute (counter test)', async () => {
-    // this.timeout(20000);
+describe('CHATBOT: Echo bot', async () => {
+  
     before(() => {
         return new Promise(async (resolve, reject) => {
             let userdata;
             try {
                 userdata = await createAnonymousUser(TILEDESK_PROJECT_ID);
+                // console.log("Anonymous login ok:", userdata);
             }
             catch(error) {
                 console.error("An error occurred during anonym auth:", error);
@@ -96,6 +112,7 @@ describe('CHATBOT: Set Attribute (counter test)', async () => {
             user1.token = userdata.token;
             user1.tiledesk_token = userdata.tiledesk_token;
             
+            // console.log("Message delay check.");
             if (LOG_STATUS) {
                 console.log("MQTT endpoint:", config.MQTT_ENDPOINT);
                 console.log("API endpoint:", config.CHAT_API_ENDPOINT);
@@ -118,15 +135,21 @@ describe('CHATBOT: Set Attribute (counter test)', async () => {
                     assert(result.user._id !== null);
                     assert(result.user.email !== null);
                     USER_ADMIN_TOKEN = result.token;
-                    const bot1 = require('./chatbots/CHATBOT_Set Attribute (counter test)_bot.js').bot;
+                    // console.log("USER_ADMIN_TOKEN:", USER_ADMIN_TOKEN);
+                    // USER_ID = result.user._id;
+                    const bot = require('./chatbots/echo_bot.js').bot;
+                    // console.log("bot:", bot);
                     try {
-                        const bot1_data = await importChatbot(bot1, TILEDESK_PROJECT_ID, USER_ADMIN_TOKEN);
-                        BOT_ID = bot1_data._id;
+                        const data = await importChatbot(bot, TILEDESK_PROJECT_ID, USER_ADMIN_TOKEN);
+                        // console.log("chatbot_id:", data._id);
+                        BOT_ID = data._id;
+                        // process.exit(0);
                         chatClient1.connect(user1.userid, user1.token, () => {
                             if (LOG_STATUS) {
                                 console.log("chatClient1 connected and subscribed.");
                             }
                             group_id = "support-group-" + TILEDESK_PROJECT_ID + "-" + uuidv4().replace(/-+/g, "");
+                            group_name = "Echo bot test group => " + group_id;
                             resolve();
                         });
                     }
@@ -160,41 +183,64 @@ describe('CHATBOT: Set Attribute (counter test)', async () => {
         });
     });
 
-    it('set attribute (counter) reply (~2s)', (done) => {
+    it('echo bot greetings (~1s)', (done) => {
         const message_text = uuidv4().replace(/-+/g, "");
         let time_sent = Date.now();
         let handler = chatClient1.onMessageAdded((message, topic) => {
             if (LOG_STATUS) {
                 console.log("> Incoming message [sender:" + message.sender_fullname + "]: ", message);
-                console.log("commands:", message?.attributes?.commands);
-                console.log("commands.length:", message?.attributes?.commands?.length);
             }
             if (
                 message &&
-                message.sender_fullname === "Set Attribute (counter test)" &&
-                message.attributes.commands &&
-                message.attributes.commands.length === 2 &&
-                message.text === "final counter: 30"
+                message.attributes.intentName ===  "welcome" &&
+                message.sender_fullname === "Echo bot"
             ) {
                 if (LOG_STATUS) {
-                    console.log("> Incoming message (Welcome) from 'Set Attribute (counter test)' is ok.");
-                    let i = 0;
-                    message.attributes.commands.forEach(c => {
-                        // if (c.type === "message"
-                        console.log("command [" + i + "]:", c);
-                        console.log("command [" + i + "].message.attributes.attachment:", c.message?.attributes?.attachment);
-                        i++;
-                    });
+                    console.log("> Incoming message from 'welcome' intent ok.");
                 }
-                assert(message.attributes?.commands[1]?.type === "message");
-                assert(message.attributes?.commands[1]?.message?.text === 'final counter: 30');
+                // let text = message.text.trim();
+                // let time_received = Date.now();
+                // let delay = time_received - time_sent;
+                // console.log("Echo bot delay:" + delay + "ms");
+                // done();
+                chatClient1.sendMessage(
+                    message_text,
+                    'text',
+                    recipient_id,
+                    "Test support group",
+                    user1.fullname,
+                    {projectId: config.TILEDESK_PROJECT_ID},
+                    null, // no metadata
+                    'group',
+                    (err, msg) => {
+                        if (err) {
+                            console.error("Error send:", err);
+                        }
+                        if (LOG_STATUS) {
+                            console.log("Message Sent ok:", msg);
+                        }
+                    }
+                );
+            }
+            else if (
+                message &&
+                message.text ===  message_text &&
+                message.sender_fullname === "Echo bot"
+            ) {
+                if (LOG_STATUS) {
+                    console.log("> Got echo.");
+                }
                 done();
+            }
+            else {
+                // console.log("Message not computed:", message.text);
             }
         });
         if (LOG_STATUS) {
-            console.log("Triggering Conversation...");
+            console.log("Sending test message...");
         }
         let recipient_id = group_id;
+        // let recipient_fullname = group_name;
         triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, (err) => {
             if (err) {
                 console.error("An error occurred while triggering echo bot conversation:", err);

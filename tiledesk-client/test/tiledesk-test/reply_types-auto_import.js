@@ -9,7 +9,6 @@ const Auth = require('../tiledesk_apis/TdAuthApi.js');
 const TiledeskClientTest = require('../tiledesk_apis/index.js');
 const Chat21Auth = require('../tiledesk_apis/Chat21Auth.js')
 
-
 const LOG_STATUS = (process.env.LOG_STATUS && process.env.LOG_STATUS) === 'true' ? true : false;
 let EMAIL = "";
 if (process.env && process.env.EMAIL) {
@@ -99,11 +98,8 @@ let user1 = {
 
 let group_id;
 let group_name;
-let request;
-let tagsArray = [];
-let pushTagsToList = false;
 
-describe('CHATBOT: Add tags action', async () => {
+describe('CHATBOT: Reply types', async () => {
     before(() => {
         return new Promise(async (resolve, reject) => {
             if (LOG_STATUS) {
@@ -127,7 +123,7 @@ describe('CHATBOT: Add tags action', async () => {
             user1.userid = chat21data.userid;
             user1.token = chat21data.token;
             user1.tiledesk_token = userdata.token;
-            
+
             /**AUTH WITH CREDENTIALS TILEDESK */
             let result = await auth.authEmailPassword(EMAIL, PASSWORD).catch((err) => { 
                 console.error("(before) ADMIN Auth -> An error occurred during emailPassword auth:", err);
@@ -141,20 +137,20 @@ describe('CHATBOT: Add tags action', async () => {
             assert(result.user.email !== null);
             USER_ADMIN_TOKEN = result.token;
 
-            const bot = require('./chatbots/CHATBOT_add_tags_bot.js').bot;
-           
+            const bot = require('./chatbots/reply_types_bot.js').bot;
+            
             const tdClientTest = new TiledeskClientTest({
                 APIURL: API_ENDPOINT,
                 PROJECT_ID: TILEDESK_PROJECT_ID,
                 TOKEN: USER_ADMIN_TOKEN
             })
-           
+
             const data = await tdClientTest.chatbot.importChatbot(bot).catch((err) => { 
                 console.error(err); 
                 reject(err);
             })
             BOT_ID = data._id;
-            
+
             chatClient1.connect(user1.userid, user1.token, () => {
                 if (LOG_STATUS) {
                     console.log("chatClient1 connected and subscribed.");
@@ -177,28 +173,16 @@ describe('CHATBOT: Add tags action', async () => {
             const result = await tdClientTest.chatbot.deleteChatbot(BOT_ID).catch((err) => { 
                 assert.ok(false);
             });
-            //remove pushed tags
-            if(pushTagsToList){
-                for (const tag of tagsArray) {
-                    await tdClientTest.tag.deleteTag(tag._id).catch((err) => { 
-                        assert.ok(false);
-                    });
-                }
-                done();
-            }
+            assert(result.success === true);
+            done();
         });
     });
 
-    it('Add tag to conversation (~1s)', () => {
+    it('Type text: expect to receive intent "text" (~1s)', () => {
         return new Promise((resolve, reject)=> {
             let buttonTextIsPressed = false;
-            const tdClientTest = new TiledeskClientTest({
-                APIURL: API_ENDPOINT,
-                PROJECT_ID: TILEDESK_PROJECT_ID,
-                TOKEN: USER_ADMIN_TOKEN
-            });
-            chatClient1.onMessageAdded(async (message, topic) => {
-                const message_text = 'conversation'
+            chatClient1.onMessageAdded((message, topic) => {
+                const message_text = 'text'
                 if(message.recipient !== recipient_id){
                     reject();
                     return;
@@ -209,7 +193,7 @@ describe('CHATBOT: Add tags action', async () => {
                 if (
                     message &&
                     message.attributes.intentName ===  "welcome" &&
-                    message.sender_fullname === "Add tags Chatbot"
+                    message.sender_fullname === "Reply types Chatbot"
                 ) {
                     if (LOG_STATUS) {
                         console.log("> Incoming message from 'welcome' intent ok.");
@@ -224,7 +208,7 @@ describe('CHATBOT: Add tags action', async () => {
                     assert(command.message, "Expect command.message exist")
                     let msg = command.message
                     assert(msg.text, "Expect msg.text exist")
-                    assert.equal(msg.text, 'Add tag', `Expect msg.text to be 'Add tag' but got: ${msg.text} `)
+                    assert.equal(msg.text, 'Test reply type', `Expect msg.text to be 'Test reply type' but got: ${msg.text} `)
 
                     //check buttons 
                     assert(msg.attributes, "Expect msg.attribues exist")
@@ -233,9 +217,10 @@ describe('CHATBOT: Add tags action', async () => {
                     assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
                     
                     let button1 = msg.attributes.attachment.buttons[0]
-                    assert.strictEqual(button1.value, message_text, 'Expect button1 to have "conversation" as text')
+                    assert.strictEqual(button1.value, message_text, 'Expect button1 to have "usecase1" as text')
                     assert(button1.action)
-
+                    
+                    // done();
                     chatClient1.sendMessage(
                         message_text,
                         'text',
@@ -256,12 +241,17 @@ describe('CHATBOT: Add tags action', async () => {
                             buttonTextIsPressed = true
                         }
                     );
-                      
-                    // resolve()                 
-                } else if( buttonTextIsPressed &&
-                    message &&  message.sender_fullname === "Add tags Chatbot"
-                ){
 
+                                  
+                }
+                else if(buttonTextIsPressed && 
+                    message.sender_fullname === "Reply types Chatbot"
+                ){  
+                    assert(message.attributes)
+                    assert(message.attributes.intentName)
+                    assert.equal(message.attributes.intentName, 'text')
+
+                    //check command of type text
                     assert(message.attributes, "Expect message.attributes exist")
                     assert(message.attributes.commands, "Expect message.attributes.commands")
                     assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
@@ -270,60 +260,37 @@ describe('CHATBOT: Add tags action', async () => {
                     assert.equal(command.type, 'message')
                     assert(command.message, "Expect command.message exist")
                     let msg = command.message
-                    assert(msg.text, "Expect msg.text exist")
-                    assert.equal(msg.text, 'tag_ok', `Expect msg.text to be 'tag_ok' but got: ${msg.text} `)
-
-    
-                    let requestAfter = await tdClientTest.request.getRequestById(recipient_id).catch((err) => { 
-                        console.error("(it) REQUEST API -> An error occurred during getRequestById:", err);
-                        reject(err)
-                        assert.ok(false);
-                    });
-                    assert(requestAfter.tags)
-                    assert.notEqual(request.tags.length,requestAfter.tags.length, `Expect request.tags to be different after tags is added but got equals`)
-                    const found_tagConv1 = requestAfter.tags.some(obj => obj.tag === 'tagConv1');
-                    assert.strictEqual(found_tagConv1, true, `Expect request.tags to to have "tagConv1" tag obj, but no one is found into array`);
-                    const found_tagConv2 = requestAfter.tags.some(obj => obj.tag === 'tagConv2');
-                    assert.strictEqual(found_tagConv2, true, `Expect request.tags to to have "tagConv2" tag obj, but no one is found into array`);
-                    resolve();
-                    
+                    assert.equal(msg.text, "text_type")
+                    assert.equal(msg.type, 'text')
+                    //intent 'text
+                    resolve()   
                 }
                 else {
                     // console.log("Message not computed:", message.text);
                 }
 
+                
+
+                
             });
             if (LOG_STATUS) {
                 console.log("Sending test message...");
             }
             let recipient_id = group_id;
             // let recipient_fullname = group_name;
-            triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
+            triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, (err) => {
                 if (err) {
                     console.error("An error occurred while triggering echo bot conversation:", err);
                 }
-
-                request = await tdClientTest.request.getRequestById(recipient_id).catch((err) => { 
-                    console.error("(it) REQUEST API -> An error occurred during getRequestById:", err);
-                    reject(err)
-                    assert.ok(false);
-                });
-                
             });
         })
     })
 
-    it('Add tag to lead (~1s)', () => {
+    it('Type image: expect to receive intent "image" (~1s)', () => {
         return new Promise((resolve, reject)=> {
-            let buttonTextIsPressed = false;
-            const tdClientTest = new TiledeskClientTest({
-                APIURL: API_ENDPOINT,
-                PROJECT_ID: TILEDESK_PROJECT_ID,
-                TOKEN: USER_ADMIN_TOKEN
-            });
-            
-            chatClient1.onMessageAdded(async (message, topic) => {
-                const message_text = 'lead'
+            let buttonImageIsPressed = false;
+            chatClient1.onMessageAdded((message, topic) => {
+                const message_text = 'image'
                 if(message.recipient !== recipient_id){
                     reject();
                     return;
@@ -334,7 +301,7 @@ describe('CHATBOT: Add tags action', async () => {
                 if (
                     message &&
                     message.attributes.intentName ===  "welcome" &&
-                    message.sender_fullname === "Add tags Chatbot"
+                    message.sender_fullname === "Reply types Chatbot"
                 ) {
                     if (LOG_STATUS) {
                         console.log("> Incoming message from 'welcome' intent ok.");
@@ -349,7 +316,7 @@ describe('CHATBOT: Add tags action', async () => {
                     assert(command.message, "Expect command.message exist")
                     let msg = command.message
                     assert(msg.text, "Expect msg.text exist")
-                    assert.equal(msg.text, 'Add tag', `Expect msg.text to be 'Add tag' but got: ${msg.text} `)
+                    assert.equal(msg.text, 'Test reply type', `Expect msg.text to be 'Test reply type' but got: ${msg.text} `)
 
                     //check buttons 
                     assert(msg.attributes, "Expect msg.attribues exist")
@@ -358,9 +325,10 @@ describe('CHATBOT: Add tags action', async () => {
                     assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
                     
                     let button2 = msg.attributes.attachment.buttons[1]
-                    assert.strictEqual(button2.value, message_text, 'Expect button2 to have "lead" as text')
+                    assert.strictEqual(button2.value, message_text, 'Expect button2 to have "image" as text')
                     assert(button2.action)
-
+                    
+                    // done();
                     chatClient1.sendMessage(
                         message_text,
                         'text',
@@ -378,16 +346,20 @@ describe('CHATBOT: Add tags action', async () => {
                                 console.log("Message Sent ok:", msg);
                             }
                             assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
-                            buttonTextIsPressed = true
+                            buttonImageIsPressed = true
                         }
                     );
-                      
-                    // resolve()                 
-                } else if( buttonTextIsPressed &&
-                    message &&  message.sender_fullname === "Add tags Chatbot"
-                ){
 
-                    
+                                  
+                }
+                else if(buttonImageIsPressed && 
+                    message.sender_fullname === "Reply types Chatbot"
+                ){  
+                    assert(message.attributes)
+                    assert(message.attributes.intentName)
+                    assert.equal(message.attributes.intentName, 'image')
+
+                    //check command of type text
                     assert(message.attributes, "Expect message.attributes exist")
                     assert(message.attributes.commands, "Expect message.attributes.commands")
                     assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
@@ -396,58 +368,39 @@ describe('CHATBOT: Add tags action', async () => {
                     assert.equal(command.type, 'message')
                     assert(command.message, "Expect command.message exist")
                     let msg = command.message
-                    assert(msg.text, "Expect msg.text exist")
-                    assert.equal(msg.text, 'tag_ok', `Expect msg.text to be 'tag_ok' but got: ${msg.text} `)
-
-    
-                    let requestAfter = await tdClientTest.request.getRequestById(recipient_id).catch((err) => { 
-                        console.error("(it) REQUEST API -> An error occurred during getRequestById:", err);
-                        reject(err)
-                        assert.ok(false);
-                    });
-                    assert(requestAfter.lead.tags)
-                    assert.notEqual(request.lead.tags.length,requestAfter.lead.tags.length, `Expect request.lead.tags to be different after tags is added but got equals`)
-                    const found_tagLead1 = requestAfter.lead.tags.includes('tagLead1')
-                    assert.strictEqual(found_tagLead1, true, `Expect request.lead.tags to to have "tagLead1" tag, but no one is found into array`);
-                    resolve();
-                    
+                    assert.equal(msg.text, "image_type")
+                    assert.equal(msg.type, 'image')
+                    assert(msg.metadata, "Expect msg.metadata exist")
+                    assert(msg.metadata.src, "Expect msg.metadata.src exist")
+                    assert(msg.metadata.downloadURL, "Expect msg.metadata.downloadURL exist")
+                    assert.equal(msg.metadata.type, 'image/png', "Expect msg.metadata.type === 'image/png'")
+                
+                    //intent 'text
+                    resolve()   
                 }
                 else {
                     // console.log("Message not computed:", message.text);
                 }
-
+                
             });
             if (LOG_STATUS) {
                 console.log("Sending test message...");
             }
-            let recipient_id = group_id + '_1';
+            let recipient_id = group_id +'_1';
             // let recipient_fullname = group_name;
-            triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
+            triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, (err) => {
                 if (err) {
                     console.error("An error occurred while triggering echo bot conversation:", err);
                 }
-
-                request = await tdClientTest.request.getRequestById(recipient_id).catch((err) => { 
-                    console.error("(it) REQUEST API -> An error occurred during getRequestById:", err);
-                    reject(err)
-                    assert.ok(false);
-                });
-                
             });
         })
     })
 
-    it('Add tag to conversation as variable attributes (~1s)', () => {
+    it('Type frame: expect to receive intent "frame" (~1s)', () => {
         return new Promise((resolve, reject)=> {
-            let buttonTextIsPressed = false;
-            const tdClientTest = new TiledeskClientTest({
-                APIURL: API_ENDPOINT,
-                PROJECT_ID: TILEDESK_PROJECT_ID,
-                TOKEN: USER_ADMIN_TOKEN
-            });
-            
-            chatClient1.onMessageAdded(async (message, topic) => {
-                const message_text = 'conversation_var'
+            let buttonFrameIsPressed = false;
+            chatClient1.onMessageAdded((message, topic) => {
+                const message_text = 'frame'
                 if(message.recipient !== recipient_id){
                     reject();
                     return;
@@ -459,7 +412,7 @@ describe('CHATBOT: Add tags action', async () => {
                 if (
                     message &&
                     message.attributes.intentName ===  "welcome" &&
-                    message.sender_fullname === "Add tags Chatbot"
+                    message.sender_fullname === "Reply types Chatbot"
                 ) {
                     if (LOG_STATUS) {
                         console.log("> Incoming message from 'welcome' intent ok.");
@@ -474,7 +427,7 @@ describe('CHATBOT: Add tags action', async () => {
                     assert(command.message, "Expect command.message exist")
                     let msg = command.message
                     assert(msg.text, "Expect msg.text exist")
-                    assert.equal(msg.text, 'Add tag', `Expect msg.text to be 'Add tag' but got: ${msg.text} `)
+                    assert.equal(msg.text, 'Test reply type', `Expect msg.text to be 'Test reply type' but got: ${msg.text} `)
 
                     //check buttons 
                     assert(msg.attributes, "Expect msg.attribues exist")
@@ -483,9 +436,10 @@ describe('CHATBOT: Add tags action', async () => {
                     assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
                     
                     let button3 = msg.attributes.attachment.buttons[2]
-                    assert.strictEqual(button3.value, message_text, 'Expect button3 to have "conversation_var" as text')
+                    assert.strictEqual(button3.value, message_text, 'Expect button3 to have "frame" as text')
                     assert(button3.action)
-
+                    
+                    // done();
                     chatClient1.sendMessage(
                         message_text,
                         'text',
@@ -503,16 +457,20 @@ describe('CHATBOT: Add tags action', async () => {
                                 console.log("Message Sent ok:", msg);
                             }
                             assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
-                            buttonTextIsPressed = true
+                            buttonFrameIsPressed = true
                         }
                     );
-                      
-                    // resolve()                 
-                } else if( buttonTextIsPressed &&
-                    message &&  message.sender_fullname === "Add tags Chatbot"
-                ){
 
-                    
+                                  
+                }
+                else if(buttonFrameIsPressed && 
+                    message.sender_fullname === "Reply types Chatbot"
+                ){  
+                    assert(message.attributes)
+                    assert(message.attributes.intentName)
+                    assert.equal(message.attributes.intentName, 'frame')
+
+                    //check command of type text
                     assert(message.attributes, "Expect message.attributes exist")
                     assert(message.attributes.commands, "Expect message.attributes.commands")
                     assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
@@ -521,72 +479,52 @@ describe('CHATBOT: Add tags action', async () => {
                     assert.equal(command.type, 'message')
                     assert(command.message, "Expect command.message exist")
                     let msg = command.message
-                    assert(msg.text, "Expect msg.text exist")
-                    assert.equal(msg.text, 'tag_ok', `Expect msg.text to be 'tag_ok' but got: ${msg.text} `)
-
-                    
-                    let requestAfter = await tdClientTest.request.getRequestById(recipient_id).catch((err) => { 
-                        console.error("(it) REQUEST API -> An error occurred during getRequestById:", err);
-                        reject(err)
-                        assert.ok(false);
-                    });
-                    assert(requestAfter.tags)
-                    assert.notEqual(request.tags.length,requestAfter.tags.length, `Expect request.tags to be different after tags is added but got equals`)
-                    const found_tagConv1 = requestAfter.tags.some(obj => obj.tag === 'tagConv1');
-                    assert.strictEqual(found_tagConv1, true, `Expect request.tags to to have "tagConv1" tag obj, but no one is found into array`);
-                    const found_tagConvVar1 = requestAfter.tags.some(obj => obj.tag === 'tagConvVar1');
-                    assert.strictEqual(found_tagConvVar1, true, `Expect request.tags to to have "tagConvVar1" tag obj, but no one is found into array`);
-                    resolve();
-                    
+                    assert.equal(msg.text, "frame_type")
+                    assert.equal(msg.type, 'frame')
+                    assert(msg.metadata, "Expect msg.metadata exist")
+                    assert(msg.metadata.src, "Expect msg.metadata.src exist")
+                    assert.equal(msg.metadata.type, 'frame', "Expect msg.metadata.type === 'frame'")
+                
+                    //intent 'text
+                    resolve()   
                 }
                 else {
                     // console.log("Message not computed:", message.text);
                 }
 
+                
+
+                
             });
             if (LOG_STATUS) {
                 console.log("Sending test message...");
             }
-            let recipient_id = group_id + '_2';
+            let recipient_id = group_id +'_2';
             // let recipient_fullname = group_name;
-            triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
+            triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, (err) => {
                 if (err) {
                     console.error("An error occurred while triggering echo bot conversation:", err);
                 }
-
-                request = await tdClientTest.request.getRequestById(recipient_id).catch((err) => { 
-                    console.error("(it) REQUEST API -> An error occurred during getRequestById:", err);
-                    reject(err)
-                    assert.ok(false);
-                });
-                
             });
         })
     })
 
-    it('Add tag to lead as variable attributes (~1s)', () => {
+    it('Type gallery: expect to receive intent "gallery" (~1s)', () => {
         return new Promise((resolve, reject)=> {
-            let buttonTextIsPressed = false;
-            const tdClientTest = new TiledeskClientTest({
-                APIURL: API_ENDPOINT,
-                PROJECT_ID: TILEDESK_PROJECT_ID,
-                TOKEN: USER_ADMIN_TOKEN
-            });
-            
-            chatClient1.onMessageAdded(async (message, topic) => {
-                const message_text = 'lead_var'
+            let buttonGalleryIsPressed = false;
+            chatClient1.onMessageAdded((message, topic) => {
+                const message_text = 'gallery'
                 if(message.recipient !== recipient_id){
                     reject();
                     return;
                 }
-                
                 if (LOG_STATUS) {
                     console.log(">(1) Incoming message [sender:" + message.sender_fullname + "]: ", message);
                 }
                 if (
                     message &&
                     message.attributes.intentName ===  "welcome" &&
-                    message.sender_fullname === "Add tags Chatbot"
+                    message.sender_fullname === "Reply types Chatbot"
                 ) {
                     if (LOG_STATUS) {
                         console.log("> Incoming message from 'welcome' intent ok.");
@@ -601,7 +539,7 @@ describe('CHATBOT: Add tags action', async () => {
                     assert(command.message, "Expect command.message exist")
                     let msg = command.message
                     assert(msg.text, "Expect msg.text exist")
-                    assert.equal(msg.text, 'Add tag', `Expect msg.text to be 'Add tag' but got: ${msg.text} `)
+                    assert.equal(msg.text, 'Test reply type', `Expect msg.text to be 'Test reply type' but got: ${msg.text} `)
 
                     //check buttons 
                     assert(msg.attributes, "Expect msg.attribues exist")
@@ -610,9 +548,9 @@ describe('CHATBOT: Add tags action', async () => {
                     assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
                     
                     let button4 = msg.attributes.attachment.buttons[3]
-                    assert.strictEqual(button4.value, message_text, 'Expect button4 to have "lead_var" as text')
+                    assert.strictEqual(button4.value, message_text, 'Expect button4 to have "gallery" as text')
                     assert(button4.action)
-
+                    
                     chatClient1.sendMessage(
                         message_text,
                         'text',
@@ -630,16 +568,20 @@ describe('CHATBOT: Add tags action', async () => {
                                 console.log("Message Sent ok:", msg);
                             }
                             assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
-                            buttonTextIsPressed = true
+                            buttonGalleryIsPressed = true
                         }
                     );
-                      
-                    // resolve()                 
-                } else if( buttonTextIsPressed &&
-                    message &&  message.sender_fullname === "Add tags Chatbot"
-                ){
 
-                    
+                                  
+                }
+                else if(buttonGalleryIsPressed && 
+                    message.sender_fullname === "Reply types Chatbot"
+                ){  
+                    assert(message.attributes)
+                    assert(message.attributes.intentName)
+                    assert.equal(message.attributes.intentName, 'gallery')
+
+                    //check command of type text
                     assert(message.attributes, "Expect message.attributes exist")
                     assert(message.attributes.commands, "Expect message.attributes.commands")
                     assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
@@ -648,60 +590,58 @@ describe('CHATBOT: Add tags action', async () => {
                     assert.equal(command.type, 'message')
                     assert(command.message, "Expect command.message exist")
                     let msg = command.message
-                    assert(msg.text, "Expect msg.text exist")
-                    assert.equal(msg.text, 'tag_ok', `Expect msg.text to be 'tag_ok' but got: ${msg.text} `)
+                    assert.equal(msg.type, 'gallery')
+                    assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
+                    assert(msg.attributes.attachment.type, "Expect msg.attributes.attachment.type exist")
+                    assert(msg.attributes.attachment.gallery, "Expect msg.attributes.attachment.gallery exist")
+                    assert(msg.attributes.attachment.gallery.length > 0, "Expect msg.attributes.attachment.gallery.length > 0 exist")
 
-                    
-                    let requestAfter = await tdClientTest.request.getRequestById(recipient_id).catch((err) => { 
-                        console.error("(it) REQUEST API -> An error occurred during getRequestById:", err);
-                        reject(err)
-                        assert.ok(false);
-                    });
-                    assert(requestAfter.lead.tags)
-                    assert.notEqual(request.lead.tags.length,requestAfter.lead.tags.length, `Expect request.lead.tags to be different after tags is added but got equals`)
-                    const found_tagLead1 = requestAfter.lead.tags.includes('tagLead1');
-                    assert.strictEqual(found_tagLead1, true, `Expect request.lead.tags to to have "found_tagLead1" tag obj, but no one is found into array`);
-                    const found_tagLeadVar = (requestAfter.lead.tags.includes('tagLeadVar1') && requestAfter.lead.tags.includes('tagLeadVar2'));
-                    assert.strictEqual(found_tagLeadVar, true, `Expect request.lead.tags to to have "tagLeadVar1" && "tagLeadVar2" tag obj, but no one is found into array`);
-                    resolve();
-                    
+                    let galleryElem = msg.attributes.attachment.gallery
+                    galleryElem.forEach((el) => {
+                        assert(el.title, "Expect el.title exist")
+                        assert(el.description, "Expect el.description exist")
+                        assert(el.buttons, "Expect el.buttons exist")
+                        assert(el.preview, "Expect el.preview exist")
+                        assert(el.preview.name, "Expect el.preview.name exist")
+                        assert(el.preview.src, "Expect el.preview.src exist")
+                        assert(el.preview.downloadURL, "Expect el.preview.downloadURL exist")
+                        assert(el.preview.name, "Expect el.preview.name exist")
+
+                        let buttons = el.buttons
+                        buttons.forEach((button) => {
+                            assert(button.value)
+                            assert(button.type)
+                            assert.equal(button.type, 'action')
+                            assert(button.action)
+                            assert.ok(button.action.startsWith('#'))
+                        })
+                    })
+                
+                    //intent 'text
+                    resolve()   
                 }
                 else {
                     // console.log("Message not computed:", message.text);
-                }
-
+                }                
             });
             if (LOG_STATUS) {
                 console.log("Sending test message...");
             }
-            let recipient_id = group_id + '_3';
+            let recipient_id = group_id +'_3';
             // let recipient_fullname = group_name;
-            triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
+            triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, (err) => {
                 if (err) {
                     console.error("An error occurred while triggering echo bot conversation:", err);
                 }
-
-                request = await tdClientTest.request.getRequestById(recipient_id).catch((err) => { 
-                    console.error("(it) REQUEST API -> An error occurred during getRequestById:", err);
-                    reject(err)
-                    assert.ok(false);
-                });
-                
             });
         })
     })
 
-    it('Add tag to conversation and push to list (~1s)', () => {
+    it('Type redirect: expect to receive intent "redirect" (~1s)', () => {
         return new Promise((resolve, reject)=> {
-            let buttonTextIsPressed = false;
-            const tdClientTest = new TiledeskClientTest({
-                APIURL: API_ENDPOINT,
-                PROJECT_ID: TILEDESK_PROJECT_ID,
-                TOKEN: USER_ADMIN_TOKEN
-            });
-            
-            chatClient1.onMessageAdded(async (message, topic) => {
-                const message_text = 'conversation_and_push'
+            let buttonRedirectIsPressed = false;
+            chatClient1.onMessageAdded((message, topic) => {
+                const message_text = 'redirect'
                 if(message.recipient !== recipient_id){
                     reject();
                     return;
@@ -712,7 +652,7 @@ describe('CHATBOT: Add tags action', async () => {
                 if (
                     message &&
                     message.attributes.intentName ===  "welcome" &&
-                    message.sender_fullname === "Add tags Chatbot"
+                    message.sender_fullname === "Reply types Chatbot"
                 ) {
                     if (LOG_STATUS) {
                         console.log("> Incoming message from 'welcome' intent ok.");
@@ -727,7 +667,7 @@ describe('CHATBOT: Add tags action', async () => {
                     assert(command.message, "Expect command.message exist")
                     let msg = command.message
                     assert(msg.text, "Expect msg.text exist")
-                    assert.equal(msg.text, 'Add tag', `Expect msg.text to be 'Add tag' but got: ${msg.text} `)
+                    assert.equal(msg.text, 'Test reply type', `Expect msg.text to be 'Test reply type' but got: ${msg.text} `)
 
                     //check buttons 
                     assert(msg.attributes, "Expect msg.attribues exist")
@@ -736,9 +676,9 @@ describe('CHATBOT: Add tags action', async () => {
                     assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
                     
                     let button5 = msg.attributes.attachment.buttons[4]
-                    assert.strictEqual(button5.value, message_text, 'Expect button4 to have "conversation_and_push" as text')
+                    assert.strictEqual(button5.value, message_text, 'Expect button5 to have "redirect" as text')
                     assert(button5.action)
-
+                    
                     chatClient1.sendMessage(
                         message_text,
                         'text',
@@ -756,17 +696,76 @@ describe('CHATBOT: Add tags action', async () => {
                                 console.log("Message Sent ok:", msg);
                             }
                             assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
-                            buttonTextIsPressed = true
-
+                            buttonRedirectIsPressed = true
                         }
                     );
-                      
-                    // resolve()                 
-                } else if( buttonTextIsPressed &&
-                    message &&  message.sender_fullname === "Add tags Chatbot"
-                ){
 
-                    
+                                  
+                }
+                else if(buttonRedirectIsPressed && 
+                    message.sender_fullname === "Reply types Chatbot"
+                ){  
+                    assert(message.attributes)
+                    assert(message.attributes.intentName)
+                    assert.equal(message.attributes.intentName, 'redirect')
+
+
+                    //check command of type text
+                    assert(message.attributes, "Expect message.attributes exist")
+                    assert(message.attributes.commands, "Expect message.attributes.commands")
+                    assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                    let commands = message.attributes.commands
+                    let command = commands[1]
+                    assert.equal(command.type, 'message')
+                    assert(command.message, "Expect command.message exist")
+                    let msg = command.message
+                    assert.equal(msg.type, 'redirect')
+                    assert(msg.metadata, "Expect msg.metadata exist")
+                    assert(msg.metadata.src, "Expect msg.metadata.src exist")
+                    assert(msg.metadata.target, "Expect msg.metadata.target exist")
+                    assert.equal(msg.metadata.target, 'blank', "Expect msg.metadata.target to be 'blank'")
+
+                    resolve()   
+                }
+                else {
+                    // console.log("Message not computed:", message.text);
+                }                
+            });
+            if (LOG_STATUS) {
+                console.log("Sending test message...");
+            }
+            let recipient_id = group_id +'_4';
+            // let recipient_fullname = group_name;
+            triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, (err) => {
+                if (err) {
+                    console.error("An error occurred while triggering echo bot conversation:", err);
+                }
+            });
+        })
+    })
+
+    it('Type text with buttons: expect to receive intent "text_buttons" (~1s)', () => {
+        return new Promise((resolve, reject)=> {
+            let buttonTextButtonsIsPressed = false;
+            let buttonActionIsPressed = false;
+            chatClient1.onMessageAdded((message, topic) => {
+                const message_text = 'text with buttons'
+                if(message.recipient !== recipient_id){
+                    reject();
+                    return;
+                }
+                if (LOG_STATUS) {
+                    console.log(">(1) Incoming message [sender:" + message.sender_fullname + "]: ", message);
+                }
+                if (
+                    message &&
+                    message.attributes.intentName ===  "welcome" &&
+                    message.sender_fullname === "Reply types Chatbot"
+                ) {
+                    if (LOG_STATUS) {
+                        console.log("> Incoming message from 'welcome' intent ok.");
+                    }
+
                     assert(message.attributes, "Expect message.attributes exist")
                     assert(message.attributes.commands, "Expect message.attributes.commands")
                     assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
@@ -776,61 +775,170 @@ describe('CHATBOT: Add tags action', async () => {
                     assert(command.message, "Expect command.message exist")
                     let msg = command.message
                     assert(msg.text, "Expect msg.text exist")
-                    assert.equal(msg.text, 'tag_ok', `Expect msg.text to be 'tag_ok' but got: ${msg.text} `)
+                    assert.equal(msg.text, 'Test reply type', `Expect msg.text to be 'Test reply type' but got: ${msg.text} `)
 
+                    //check buttons 
+                    assert(msg.attributes, "Expect msg.attribues exist")
+                    assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
+                    assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
+                    assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
                     
-                    let requestAfter = await tdClientTest.request.getRequestById(recipient_id).catch((err) => { 
-                        console.error("(it) REQUEST API -> An error occurred during getRequestById:", err);
-                        reject(err)
-                        assert.ok(false);
-                    });
-                    assert(requestAfter.lead.tags)
-                    assert.notEqual(request.tags.length,requestAfter.tags.length, `Expect request.tags to be different after tags is added but got equals`)
-                    const found_tagConvPush1 = requestAfter.tags.some(obj => obj.tag === 'tagConvPush1');
-                    assert.strictEqual(found_tagConvPush1, true, `Expect request.tags to to have "tagConvPush1" tag obj, but no one is found into array`);
-                    const found_tagConvPush2 = requestAfter.tags.some(obj => obj.tag === 'tagConvPush2');
-                    assert.strictEqual(found_tagConvPush2, true, `Expect request.tags to to have "tagConvPush2" tag obj, but no one is found into array`);
+                    let button6 = msg.attributes.attachment.buttons[5]
+                    assert.strictEqual(button6.value, message_text, 'Expect button6 to have "text with buttons" as text')
+                    assert(button6.action)
                     
-                    let tagsList = await tdClientTest.tag.getAllTag().catch((err) => { 
-                        console.error("(it) REQUEST API -> An error occurred during getRequestById:", err);
-                        reject(err)
-                        assert.ok(false);
-                    });
-                    assert(tagsList)
-                    const tags = tagsList.map(obj => obj.tag);
-                    const expectedTags = ['tagConvPush1', 'tagConvPush2'];
-                    const allTagsExist = expectedTags.every(tag => tags.includes(tag));
-                    assert.strictEqual(allTagsExist, true, 'Not all required tags are present in the array');
+                    chatClient1.sendMessage(
+                        message_text,
+                        'text',
+                        recipient_id,
+                        "Test support group",
+                        user1.fullname,
+                        {projectId: config.TILEDESK_PROJECT_ID, action: button6.action },
+                        null, // no metadata
+                        'group',
+                        (err, msg) => {
+                            if (err) {
+                                console.error("Error send:", err);
+                            }
+                            if (LOG_STATUS) {
+                                console.log("Message Sent ok:", msg);
+                            }
+                            assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
+                            buttonTextButtonsIsPressed = true
+                        }
+                    );
 
-                    tagsArray = tagsList.filter(item => ['tagConvPush1', 'tagConvPush2'].includes(item.tag));
-                    pushTagsToList = true
-                    resolve();
+                                  
+                }
+                else if(buttonTextButtonsIsPressed && 
+                    message.sender_fullname === "Reply types Chatbot"
+                ){  
+
+                    buttonTextButtonsIsPressed = false
+                    assert(message.attributes)
+                    assert(message.attributes.intentName)
+                    assert.equal(message.attributes.intentName, 'text_with_buttons')
+
+                    //check command of type text
+                    assert(message.attributes, "Expect message.attributes exist")
+                    assert(message.attributes.commands, "Expect message.attributes.commands")
+                    assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                    let commands = message.attributes.commands
+                    let command = commands[1]
+                    assert.equal(command.type, 'message')
+                    assert(command.message, "Expect command.message exist")
+                    let msg = command.message
+                    assert.equal(msg.text, "text with buttons")
+                    assert.equal(msg.type, 'text')
+                    assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
+                    assert(msg.attributes.attachment.type, "Expect msg.attributes.attachment.type exist")
+                    assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
+                    assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
+                    assert(msg.attributes.attachment.buttons.length === 3, "Expect msg.attributes.attachment.buttons.length = 3 ")
+
+                    let button_text = msg.attributes.attachment.buttons[0]
+                    let button_action = msg.attributes.attachment.buttons[1]
+                    let button_url = msg.attributes.attachment.buttons[2]
                     
+                    //check button_text
+                    assert(button_text.value)
+                    assert.equal(button_text.value, 'button_text')
+                    assert(button_text.type)
+                    assert.equal(button_text.type, 'text')
+                    assert.strictEqual(button_text.action, '', "Expect button_text.action === ''");
+
+                    //check button_url
+                    assert(button_url.value)
+                    assert.equal(button_url.value, 'button_url')
+                    assert(button_url.link)
+                    assert.equal(button_url.link, 'www.tiledesk.com')
+                    assert(button_url.target)
+                    assert.equal(button_url.target, 'blank')
+                    assert(button_text.type)
+                    assert.equal(button_url.type, 'url')
+                    assert.strictEqual(button_url.action, '', "Expect button_text.action === ''");
+
+                    //check button_action
+                    assert(button_action.value)
+                    assert.equal(button_action.value, 'button_action')
+                    assert(button_action.type)
+                    assert.equal(button_action.type, 'action')
+                    assert(button_action.action)
+                    assert.ok(button_action.action.startsWith('#'))
+                    assert.ok(button_action.action.includes('{') && button_action.action.includes('}'))
+                    let button_attributes = button_action.action.substring(button_action.action.indexOf('{'))
+                    try {
+
+                        let attributes = JSON.parse(button_attributes);
+                        assert(attributes)
+                        assert(attributes.user_city)
+                        assert.equal(attributes.user_city, 'italy')
+
+                        chatClient1.sendMessage(
+                            button_action.value,
+                            'text',
+                            recipient_id,
+                            "Test support group",
+                            user1.fullname,
+                            {projectId: config.TILEDESK_PROJECT_ID, action: button_action.action },
+                            null, // no metadata
+                            'group',
+                            (err, msg) => {
+                                if (err) {
+                                    console.error("Error send:", err);
+                                }
+                                if (LOG_STATUS) {
+                                    console.log("Message Sent ok:", msg);
+                                }
+                                assert.equal(msg.text, button_action.value, `Message sent from user expected to be "${button_action.value}"`)
+                                buttonActionIsPressed = true
+                            }
+                        );
+
+                    } catch (error) {
+                        reject(error)
+                    }
+
+  
+                }else if(   buttonActionIsPressed &&
+                    message.sender_fullname === "Reply types Chatbot"
+                ){
+                    assert(message.attributes)
+                    assert(message.attributes.intentName)
+                    assert.equal(message.attributes.intentName, 'buttons')
+                    
+                    //check command of type text
+                    assert(message.attributes, "Expect message.attributes exist")
+                    assert(message.attributes.commands, "Expect message.attributes.commands")
+                    assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                    let commands = message.attributes.commands
+                    let command = commands[1]
+                    assert.equal(command.type, 'message')
+                    assert(command.message, "Expect command.message exist")
+                    let msg = command.message
+                    assert.equal(msg.text, "button: italy")
+                    assert.equal(msg.type, 'text')
+
+                    resolve() 
                 }
                 else {
                     // console.log("Message not computed:", message.text);
-                }
-
+                }                
             });
             if (LOG_STATUS) {
                 console.log("Sending test message...");
             }
-            let recipient_id = group_id + '_4';
+            let recipient_id = group_id +'_5';
             // let recipient_fullname = group_name;
-            triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
+            triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, (err) => {
                 if (err) {
                     console.error("An error occurred while triggering echo bot conversation:", err);
                 }
-
-                request = await tdClientTest.request.getRequestById(recipient_id).catch((err) => { 
-                    console.error("(it) REQUEST API -> An error occurred during getRequestById:", err);
-                    reject(err)
-                    assert.ok(false);
-                });
-                
             });
         })
     })
+
+    
 
 });
 

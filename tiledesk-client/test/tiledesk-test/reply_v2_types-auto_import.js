@@ -99,7 +99,7 @@ let user1 = {
 let group_id;
 let group_name;
 
-describe('CHATBOT: Reply types', async () => {
+describe('CHATBOT: Reply v2 types', async () => {
     before(() => {
         return new Promise(async (resolve, reject) => {
             if (LOG_STATUS) {
@@ -137,8 +137,8 @@ describe('CHATBOT: Reply types', async () => {
             assert(result.user.email !== null);
             USER_ADMIN_TOKEN = result.token;
 
-            const bot = require('./chatbots/CHATBOT_reply_types_bot.js').bot;
-            
+            const bot = require('./chatbots/reply_v2_types_bot.js').bot;
+
             const tdClientTest = new TiledeskClientTest({
                 APIURL: API_ENDPOINT,
                 PROJECT_ID: TILEDESK_PROJECT_ID,
@@ -193,7 +193,7 @@ describe('CHATBOT: Reply types', async () => {
                 if (
                     message &&
                     message.attributes.intentName ===  "welcome" &&
-                    message.sender_fullname === "Reply types Chatbot"
+                    message.sender_fullname === "Reply V2 types Chatbot"
                 ) {
                     if (LOG_STATUS) {
                         console.log("> Incoming message from 'welcome' intent ok.");
@@ -245,7 +245,7 @@ describe('CHATBOT: Reply types', async () => {
                                   
                 }
                 else if(buttonTextIsPressed && 
-                    message.sender_fullname === "Reply types Chatbot"
+                    message.sender_fullname === "Reply V2 types Chatbot"
                 ){  
                     assert(message.attributes)
                     assert(message.attributes.intentName)
@@ -301,7 +301,7 @@ describe('CHATBOT: Reply types', async () => {
                 if (
                     message &&
                     message.attributes.intentName ===  "welcome" &&
-                    message.sender_fullname === "Reply types Chatbot"
+                    message.sender_fullname === "Reply V2 types Chatbot"
                 ) {
                     if (LOG_STATUS) {
                         console.log("> Incoming message from 'welcome' intent ok.");
@@ -353,7 +353,7 @@ describe('CHATBOT: Reply types', async () => {
                                   
                 }
                 else if(buttonImageIsPressed && 
-                    message.sender_fullname === "Reply types Chatbot"
+                    message.sender_fullname === "Reply V2 types Chatbot"
                 ){  
                     assert(message.attributes)
                     assert(message.attributes.intentName)
@@ -412,7 +412,7 @@ describe('CHATBOT: Reply types', async () => {
                 if (
                     message &&
                     message.attributes.intentName ===  "welcome" &&
-                    message.sender_fullname === "Reply types Chatbot"
+                    message.sender_fullname === "Reply V2 types Chatbot"
                 ) {
                     if (LOG_STATUS) {
                         console.log("> Incoming message from 'welcome' intent ok.");
@@ -464,7 +464,7 @@ describe('CHATBOT: Reply types', async () => {
                                   
                 }
                 else if(buttonFrameIsPressed && 
-                    message.sender_fullname === "Reply types Chatbot"
+                    message.sender_fullname === "Reply V2 types Chatbot"
                 ){  
                     assert(message.attributes)
                     assert(message.attributes.intentName)
@@ -524,7 +524,7 @@ describe('CHATBOT: Reply types', async () => {
                 if (
                     message &&
                     message.attributes.intentName ===  "welcome" &&
-                    message.sender_fullname === "Reply types Chatbot"
+                    message.sender_fullname === "Reply V2 types Chatbot"
                 ) {
                     if (LOG_STATUS) {
                         console.log("> Incoming message from 'welcome' intent ok.");
@@ -575,7 +575,7 @@ describe('CHATBOT: Reply types', async () => {
                                   
                 }
                 else if(buttonGalleryIsPressed && 
-                    message.sender_fullname === "Reply types Chatbot"
+                    message.sender_fullname === "Reply V2 types Chatbot"
                 ){  
                     assert(message.attributes)
                     assert(message.attributes.intentName)
@@ -652,7 +652,7 @@ describe('CHATBOT: Reply types', async () => {
                 if (
                     message &&
                     message.attributes.intentName ===  "welcome" &&
-                    message.sender_fullname === "Reply types Chatbot"
+                    message.sender_fullname === "Reply V2 types Chatbot"
                 ) {
                     if (LOG_STATUS) {
                         console.log("> Incoming message from 'welcome' intent ok.");
@@ -703,7 +703,7 @@ describe('CHATBOT: Reply types', async () => {
                                   
                 }
                 else if(buttonRedirectIsPressed && 
-                    message.sender_fullname === "Reply types Chatbot"
+                    message.sender_fullname === "Reply V2 types Chatbot"
                 ){  
                     assert(message.attributes)
                     assert(message.attributes.intentName)
@@ -760,7 +760,7 @@ describe('CHATBOT: Reply types', async () => {
                 if (
                     message &&
                     message.attributes.intentName ===  "welcome" &&
-                    message.sender_fullname === "Reply types Chatbot"
+                    message.sender_fullname === "Reply V2 types Chatbot"
                 ) {
                     if (LOG_STATUS) {
                         console.log("> Incoming message from 'welcome' intent ok.");
@@ -811,7 +811,7 @@ describe('CHATBOT: Reply types', async () => {
                                   
                 }
                 else if(buttonTextButtonsIsPressed && 
-                    message.sender_fullname === "Reply types Chatbot"
+                    message.sender_fullname === "Reply V2 types Chatbot"
                 ){  
 
                     buttonTextButtonsIsPressed = false
@@ -901,7 +901,7 @@ describe('CHATBOT: Reply types', async () => {
 
   
                 }else if(   buttonActionIsPressed &&
-                    message.sender_fullname === "Reply types Chatbot"
+                    message.sender_fullname === "Reply V2 types Chatbot"
                 ){
                     assert(message.attributes)
                     assert(message.attributes.intentName)

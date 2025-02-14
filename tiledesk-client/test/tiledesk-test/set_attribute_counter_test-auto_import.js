@@ -80,8 +80,8 @@ let user1 = {
 
 let group_id;
 
-describe('CHATBOT: Set Attribute', async () => {
-  
+describe('CHATBOT: Set Attribute (counter test)', async () => {
+    // this.timeout(20000);
     before(() => {
         return new Promise(async (resolve, reject) => {
             let userdata;
@@ -118,7 +118,7 @@ describe('CHATBOT: Set Attribute', async () => {
                     assert(result.user._id !== null);
                     assert(result.user.email !== null);
                     USER_ADMIN_TOKEN = result.token;
-                    const bot1 = require('./chatbots/CHATBOT_set_attribute_bot.js').bot;
+                    const bot1 = require('./chatbots/set_attribute_counter_test_bot.js').bot;
                     try {
                         const bot1_data = await importChatbot(bot1, TILEDESK_PROJECT_ID, USER_ADMIN_TOKEN);
                         BOT_ID = bot1_data._id;
@@ -160,7 +160,7 @@ describe('CHATBOT: Set Attribute', async () => {
         });
     });
 
-    it('set attribute reply (~1s)', (done) => {
+    it('set attribute (counter) reply (~2s)', (done) => {
         const message_text = uuidv4().replace(/-+/g, "");
         let time_sent = Date.now();
         let handler = chatClient1.onMessageAdded((message, topic) => {
@@ -171,12 +171,13 @@ describe('CHATBOT: Set Attribute', async () => {
             }
             if (
                 message &&
-                message.sender_fullname === "Set Attribute bot" &&
+                message.sender_fullname === "Set Attribute (counter test)" &&
                 message.attributes.commands &&
-                message.attributes.commands.length === 20
+                message.attributes.commands.length === 2 &&
+                message.text === "final counter: 30"
             ) {
                 if (LOG_STATUS) {
-                    console.log("> Incoming message (Welcome) from 'Set Attribute bot' is ok.");
+                    console.log("> Incoming message (Welcome) from 'Set Attribute (counter test)' is ok.");
                     let i = 0;
                     message.attributes.commands.forEach(c => {
                         // if (c.type === "message"
@@ -185,39 +186,8 @@ describe('CHATBOT: Set Attribute', async () => {
                         i++;
                     });
                 }
-                
                 assert(message.attributes?.commands[1]?.type === "message");
-                assert(message.attributes?.commands[1]?.message?.text === 'Andrea');
-
-                assert(message.attributes?.commands[3]?.type === "message");
-                assert(message.attributes?.commands[3]?.message?.text === 'Sponziello');
-
-                assert(message.attributes?.commands[5]?.type === "message");
-                assert(message.attributes?.commands[5]?.message?.text === '51');
-
-                assert(message.attributes?.commands[7]?.type === "message");
-                assert(message.attributes?.commands[7]?.message?.text === '1.76');
-
-                assert(message.attributes?.commands[9]?.type === "message");
-                assert(message.attributes?.commands[9]?.message?.text === 'Rome');
-
-                assert(message.attributes?.commands[11]?.type === "message");
-                assert(message.attributes?.commands[11]?.message?.text === '2');
-
-                assert(message.attributes?.commands[13]?.type === "message");
-                assert(message.attributes?.commands[13]?.message?.text === '7');
-
-                assert(message.attributes?.commands[15]?.type === "message");
-                assert(message.attributes?.commands[15]?.message?.text === 'Eldorado');
-
-                assert(message.attributes?.commands[15]?.type === "message");
-                assert(message.attributes?.commands[15]?.message?.text === 'Eldorado');
-
-                assert(message.attributes?.commands[17]?.type === "message");
-                assert(message.attributes?.commands[17]?.message?.text === 'My name is Andrea and I live in Eldorado');
-
-                assert(message.attributes?.commands[19]?.type === "message");
-                assert(message.attributes?.commands[19]?.message?.text === '{"city":"Eldorado"}');
+                assert(message.attributes?.commands[1]?.message?.text === 'final counter: 30');
                 done();
             }
         });

@@ -33,6 +33,7 @@ else {
 let MQTT_ENDPOINT = "";
 if (process.env && process.env.AUTOMATION_TEST_MQTT_ENDPOINT) {
 	MQTT_ENDPOINT = process.env.AUTOMATION_TEST_MQTT_ENDPOINT
+    // console.log("MQTT_ENDPOINT:", MQTT_ENDPOINT);
 }
 else {
     throw new Error(".env.AUTOMATION_TEST_MQTT_ENDPOINT is mandatory");
@@ -41,6 +42,7 @@ else {
 let API_ENDPOINT = "";
 if (process.env && process.env.AUTOMATION_TEST_API_ENDPOINT) {
 	API_ENDPOINT = process.env.AUTOMATION_TEST_API_ENDPOINT
+    // console.log("API_ENDPOINT:", API_ENDPOINT);
 }
 else {
     throw new Error(".env.AUTOMATION_TEST_API_ENDPOINT is mandatory");
@@ -49,12 +51,14 @@ else {
 let CHAT_API_ENDPOINT = "";
 if (process.env && process.env.AUTOMATION_TEST_CHAT_API_ENDPOINT) {
 	CHAT_API_ENDPOINT = process.env.AUTOMATION_TEST_CHAT_API_ENDPOINT
+    // console.log("CHAT_API_ENDPOINT:", CHAT_API_ENDPOINT);
 }
 else {
     throw new Error(".env.AUTOMATION_TEST_CHAT_API_ENDPOINT is mandatory");
 }
 
 let BOT_ID = null;
+let BOT_ID_2 = null;
 let USER_ADMIN_TOKEN = null;
 
 let config = {
@@ -80,13 +84,14 @@ let user1 = {
 
 let group_id;
 
-describe('CHATBOT: Close Conversation', async () => {
+describe('CHATBOT: JSON Attribute bug regression', async () => {
   
     before(() => {
         return new Promise(async (resolve, reject) => {
             let userdata;
             try {
                 userdata = await createAnonymousUser(TILEDESK_PROJECT_ID);
+                // console.log("Anonymous login ok:", userdata);
             }
             catch(error) {
                 console.error("An error occurred during anonym auth:", error);
@@ -95,7 +100,7 @@ describe('CHATBOT: Close Conversation', async () => {
             user1.userid = userdata.userid;
             user1.token = userdata.token;
             user1.tiledesk_token = userdata.tiledesk_token;
-            
+            // console.log("Message delay check.");
             if (LOG_STATUS) {
                 console.log("MQTT endpoint:", config.MQTT_ENDPOINT);
                 console.log("API endpoint:", config.CHAT_API_ENDPOINT);
@@ -118,10 +123,15 @@ describe('CHATBOT: Close Conversation', async () => {
                     assert(result.user._id !== null);
                     assert(result.user.email !== null);
                     USER_ADMIN_TOKEN = result.token;
-                    const bot1 = require('./chatbots/CHATBOT_close_conversation_bot.js').bot;
+                    // console.log("USER_ADMIN_TOKEN:", USER_ADMIN_TOKEN);
+                    // USER_ID = result.user._id;
+                    const bot1 = require('./chatbots/json_attribute_regression_bug_bot.js').bot;
+                    // console.log("bot:", bot1);
                     try {
                         const bot1_data = await importChatbot(bot1, TILEDESK_PROJECT_ID, USER_ADMIN_TOKEN);
+                        // console.log("chatbot_id:", data._id);
                         BOT_ID = bot1_data._id;
+                        // process.exit(0);
                         chatClient1.connect(user1.userid, user1.token, () => {
                             if (LOG_STATUS) {
                                 console.log("chatClient1 connected and subscribed.");
@@ -160,25 +170,21 @@ describe('CHATBOT: Close Conversation', async () => {
         });
     });
 
-    it('close conversation (~2s)', (done) => {
+    it('must get a message back from the bot (~2s)', (done) => {
         const message_text = uuidv4().replace(/-+/g, "");
-        let time_sent = Date.now();
         let handler = chatClient1.onMessageAdded((message, topic) => {
-
             if (LOG_STATUS) {
                 console.log("> Incoming message [sender:" + message.sender_fullname + "]: ", message);
-                console.log("commands:", message?.attributes?.commands);
-                console.log("commands.length:", message?.attributes?.commands?.length);
             }
-
             if (
                 message &&
-                message.sender_fullname === "CloseTestBot" &&
-                message.attributes.commands &&
-                message.attributes.commands.length === 2 &&
-                message.attributes.commands[1].message.text === "Result: 1000"
+                message.sender_fullname === "JSON Attribute bug" &&
+                message.text === "message shown"
             ) {
-                done();            
+                if (LOG_STATUS) {
+                    console.log("> Incoming message is ok.");
+                }
+                done();
             }
         });
         if (LOG_STATUS) {
@@ -281,7 +287,7 @@ async function triggerConversation(request_id, chatbot_id, token, callback) {
                 attributes: {
                     "request_id": request_id, 
                     "department": default_dep.id,
-                    "participants": ["bot_" + chatbot_id],
+                    "participants": ["bot_" + chatbot_id], 
                     "language": "en", 
                     "subtype": "info", 
                     "fullname": "me", 

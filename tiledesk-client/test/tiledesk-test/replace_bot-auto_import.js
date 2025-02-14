@@ -126,8 +126,8 @@ describe('CHATBOT: Replace bot', async () => {
                     USER_ADMIN_TOKEN = result.token;
                     // console.log("USER_ADMIN_TOKEN:", USER_ADMIN_TOKEN);
                     // USER_ID = result.user._id;
-                    const bot1 = require('./chatbots/CHATBOT_replace_bot.js').bot;
-                    const bot2 = require('./chatbots/CHATBOT_replaced_bot_1.js').bot;
+                    const bot1 = require('./chatbots/replace_bot.js').bot;
+                    const bot2 = require('./chatbots/replaced_bot_1.js').bot;
                     // console.log("bot:", bot);
                     try {
                         const bot1_data = await importChatbot(bot1, TILEDESK_PROJECT_ID, USER_ADMIN_TOKEN);
