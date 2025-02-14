@@ -1,9 +1,9 @@
 var assert = require('assert');
 const { v4: uuidv4 } = require('uuid');
-const { Chat21Client } = require('../chat21client.js');
+const { Chat21Client } = require('../../chat21client.js');
 require('dotenv').config();
 const axios = require('axios');
-const { TiledeskClient } = require('../index.js');
+const { TiledeskClient } = require('../../index.js');
 
 const LOG_STATUS = (process.env.LOG_STATUS && process.env.LOG_STATUS) === 'true' ? true : false;
 
@@ -23,9 +23,8 @@ else {
     throw new Error(".env.PASSWORD is mandatory");
 }
 
-// let BOT_ID = "";
-// if (process.env && process.env.BASIC_CAPTURE_REPLY_ID) {
-// 	BOT_ID = process.env.BASIC_CAPTURE_REPLY_ID
+// if (process.env && process.env.DELETE_ATTRIBUTE_WITH_FORM_ID) {
+// 	BOT_ID = process.env.DELETE_ATTRIBUTE_WITH_FORM_ID
 // }
 // else {
 //     throw new Error(".env.BASIC_CAPTURE_REPLY_ID is mandatory");
@@ -96,8 +95,8 @@ let user1 = {
 let group_id;
 let group_name;
 
-describe('CHATBOT: Capture User Reply', async () => {
-  
+describe('CHATBOT: Delete attribute with form', async () => {
+    // this.timeout(20000);
     before(() => {
         return new Promise(async (resolve, reject) => {
             let userdata;
@@ -113,12 +112,12 @@ describe('CHATBOT: Capture User Reply', async () => {
             user1.token = userdata.token;
             user1.tiledesk_token = userdata.tiledesk_token;
             
-            // console.log("user1:", user1);
+            // console.log("Message delay check.");
             if (LOG_STATUS) {
                 console.log("MQTT endpoint:", config.MQTT_ENDPOINT);
                 console.log("API endpoint:", config.CHAT_API_ENDPOINT);
                 console.log("Tiledesk Project Id:", config.TILEDESK_PROJECT_ID);
-                console.log("Connecting......");    
+                console.log("Connecting...");    
             }
             TiledeskClient.authEmailPassword(
                 process.env.APIKEY,
@@ -136,9 +135,8 @@ describe('CHATBOT: Capture User Reply', async () => {
                     assert(result.user._id !== null);
                     assert(result.user.email !== null);
                     USER_ADMIN_TOKEN = result.token;
-                    // console.log("USER_ADMIN_TOKEN:", USER_ADMIN_TOKEN);
                     // USER_ID = result.user._id;
-                    const bot = require('./chatbots/CHATBOT_basic_capture_reply_bot.js').bot;
+                    const bot = require('./chatbots/CHATBOT_delete_attribute_with_form_bot.js').bot;
                     // console.log("bot:", bot);
                     try {
                         const data = await importChatbot(bot, TILEDESK_PROJECT_ID, USER_ADMIN_TOKEN);
@@ -184,26 +182,60 @@ describe('CHATBOT: Capture User Reply', async () => {
         });
     });
 
-    it('capture reply  (~3s)', (done) => {
+    it('ask data and restart with deleted attribute  (~11s)', (done) => {
+        let start_sent = false;
         let handler = chatClient1.onMessageAdded((message, topic) => {
+            
             if (LOG_STATUS) {
-                console.log("> Incoming message [sender:" + message.sender_fullname + "]: ", message);
+                console.log("> Incoming message [sender:" + message.sender_fullname + "]: ", message.text);
             }
+
+
             if (
                 message &&
                 message.text === "What is your name?" &&
-                message.attributes.intentName ===  "welcome" &&
-                message.sender_fullname === "Basic Capture Reply"
+                // message.attributes.intentName ===  "welcome2" && // unsupported by forms?
+                message.sender_fullname === "delete attribute with form"
             ) {
-                if (LOG_STATUS) {
-                    console.log("> Incoming message from 'welcome' intent ok.");
-                }
+                if (LOG_STATUS) {console.log("> Bot replied:", message.text);}
                 setTimeout( () => {
+                    if (LOG_STATUS) {console.log("- Replying 'Andrea'");}
                     chatClient1.sendMessage(
                         "Andrea",
                         'text',
                         recipient_id,
-                        "Test support group",
+                        "me",
+                        user1.fullname,
+                        {projectId: config.TILEDESK_PROJECT_ID},
+                        null, // no metadata
+                        'group',
+                        (err, msg) => {
+                            if (err) {
+                                console.error("Error send:", err);
+                            }
+                            if (LOG_STATUS) {
+                                console.log("Message Sent:", msg);
+                            }
+                        }
+                    );
+                }, 2000);
+            }
+
+
+            else if (
+                message &&
+                message.text ===  "Hi Andrea\n\nJust one last question\n\nYour email" &&
+                start_sent === false &&
+                message.sender_fullname === "delete attribute with form"
+            ) {
+                if (LOG_STATUS) {console.log("> Bot replied:", message.text);}
+                setTimeout( () => {
+                    if (LOG_STATUS) {console.log("- Replying 'andrea@email.com'");}
+                    chatClient1.sendMessage(
+                        "andrea@email.com",
+                        'text',
+                        recipient_id,
+                        "me",
                         user1.fullname,
                         {projectId: config.TILEDESK_PROJECT_ID},
                         null, // no metadata
@@ -219,23 +251,87 @@ describe('CHATBOT: Capture User Reply', async () => {
                     );
                 }, 2000);
             }
+
+
             else if (
                 message &&
-                message.text ===  "Hi Andrea" &&
-                message.sender_fullname === "Basic Capture Reply"
+                message.text ===  "I got your data:\nuserFullname: Andrea\nuserEmail: andrea@email.com" &&
+                message.sender_fullname === "delete attribute with form"
             ) {
-                if (LOG_STATUS) {
-                    console.log("> Got:" , message.text);
-                }
+                if (LOG_STATUS) {console.log("> Bot replied:", message.text);}
+                setTimeout( () => {
+                    if (LOG_STATUS) {console.log("- Replying '/start' (restarting the conversation to check the userEmail attribute correct deletion");}
+                    start_sent = true;
+                    chatClient1.sendMessage(
+                        "/start",
+                        'text',
+                        recipient_id,
+                        "me",
+                        user1.fullname,
+                        {projectId: config.TILEDESK_PROJECT_ID},
+                        null, // no metadata
+                        'group',
+                        (err, msg) => {
+                            if (err) {
+                                console.error("Error send:", err);
+                            }
+                            if (LOG_STATUS) {
+                                console.log("Message Sent ok:", msg);
+                            }
+                        }
+                    );
+                }, 2000);
+            }
+
+
+            else if (
+                message &&
+                message.text ===  "Hi Andrea\n\nJust one last question\n\nYour email" &&
+                start_sent === true &&
+                message.sender_fullname === "delete attribute with form"
+            ) {
+                if (LOG_STATUS) {console.log("> Bot replied:", message.text);}
+                setTimeout( () => {
+                    if (LOG_STATUS) {console.log("- Replying 'luis@email.com'");}
+                    chatClient1.sendMessage(
+                        "luis@email.com",
+                        'text',
+                        recipient_id,
+                        "me",
+                        user1.fullname,
+                        {projectId: config.TILEDESK_PROJECT_ID},
+                        null, // no metadata
+                        'group',
+                        (err, msg) => {
+                            if (err) {
+                                console.error("Error send:", err);
+                            }
+                            if (LOG_STATUS) {
+                                console.log("Message Sent ok:", msg);
+                            }
+                        }
+                    );
+                }, 2000);
+            }
+            
+
+            else if (
+                message &&
+                message.text ===  "I got your data:\nuserFullname: Andrea\nuserEmail: luis@email.com" &&
+                start_sent === true &&
+                message.sender_fullname === "delete attribute with form"
+            ) {
+                if (LOG_STATUS) {console.log("> Bot replied:", message.text);}
+                if (LOG_STATUS) {console.log("End.");}
+                
                 done();
             }
             else {
-                // console.log("Message not computed:", message.text);
+                if (LOG_STATUS) {
+                    console.log("Message not computed:", message.text);
+                }
             }
         });
-        if (LOG_STATUS) {
-            console.log("Sending test message...");
-        }
         let recipient_id = group_id;
         // let recipient_fullname = group_name;
         triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, (err) => {
@@ -243,7 +339,7 @@ describe('CHATBOT: Capture User Reply', async () => {
                 console.error("An error occurred while triggering echo bot conversation:", err);
             }
         });
-    });
+    }).timeout(25000);
 });
 
 async function createAnonymousUser(tiledeskProjectId) {
@@ -337,8 +433,8 @@ async function triggerConversation(request_id, chatbot_id, token, callback) {
                     "participants": ["bot_" + chatbot_id], 
                     "language": "en", 
                     "subtype": "info", 
-                    "fullname": "me", 
-                    "email": "me@email.com", 
+                    // "fullname": "Andrea", 
+                    // "email": "andrea@email.com", 
                     "attributes": {}
                 }
             };
@@ -357,8 +453,8 @@ async function triggerConversation(request_id, chatbot_id, token, callback) {
             callback(err);
         }
     });
+    
 }
-
 
 async function importChatbot(bot_data, tiledeskProjectId, token) {
     IMPORT_URL = API_ENDPOINT + `/${tiledeskProjectId}/faq_kb/importjson/null/?create=true`;

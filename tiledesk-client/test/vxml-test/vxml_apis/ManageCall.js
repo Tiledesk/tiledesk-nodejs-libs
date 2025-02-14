@@ -1,8 +1,7 @@
-
-const { v4: uuidv4 } = require('uuid');
 const Utils = require('./utils')
 
-class Department {
+class ManageCall {
+
     constructor(APIURL, PROJECT_ID, JWT_TOKEN, LOG){
         this.APIURL = APIURL;
         this.PROJECT_ID = PROJECT_ID;
@@ -10,48 +9,54 @@ class Department {
         this.LOG = LOG
     }
 
-
-    async getDepartments() {
+    
+    async startCall(ani, dnis, callId, numberTransferParameters, uriTransferParameters, customParam){
         return new Promise((resolve, reject) => {
-            const URL = `${this.APIURL}/${this.PROJECT_ID}/departments/allstatus`
+            let queryParams = '?ani='+ani + '&dnis='+dnis + '&callId='+callId
+            if(numberTransferParameters){
+                queryParams += '&numberTransferParameters='+numberTransferParameters
+            }
+            if(uriTransferParameters){
+                queryParams += '&uriTransferParameters='+uriTransferParameters
+            }
+            if(customParam){
+                queryParams += '&customParam='+customParam
+            }
+
+            const URL = `${this.APIURL}/${this.PROJECT_ID}/start${queryParams}`
             const HTTPREQUEST = {
                 url: URL,
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': this.JWT_TOKEN
+                    'Content-Type': 'application/json'
                 },
                 method: 'GET',
                 httpsOptions: this.httpsOptions
             };
             Utils.myrequest(
                 HTTPREQUEST,
-                function(err, resbody) {
-                  if (err) {
-                    reject(err)
-                  }
-                  else {
-                    resolve(resbody)
-                  }
+                function (err, resbody) {
+                    if (err) {
+                        reject(err)
+                    }
+                    else {
+                        resolve(resbody);
+                    }
                 }, this.LOG
-              );
+            );
         });
-        
     }
 
-    async createDepartment(depName, bot_id) {
+
+    async nextBlock(callId, text){
         return new Promise((resolve, reject) => {
-            const URL = `${this.APIURL}/${this.PROJECT_ID}/departments`
+            const URL = `${this.APIURL}/nextblock/${callId}`
             const HTTPREQUEST = {
                 url: URL,
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': this.JWT_TOKEN
                 },
                 json: {
-                    id_bot :  bot_id,
-                    id_project :  this.PROJECT_ID,
-                    name :  depName,
-                    routing :  "assigned", 
+                    usertext: text
                 },
                 method: 'POST',
                 httpsOptions: this.httpsOptions
@@ -61,50 +66,44 @@ class Department {
                 function (err, resbody) {
                     if (err) {
                         reject(err)
-                        
                     }
                     else {
-                        resolve(resbody)
-                        
+                        resolve(resbody);
                     }
                 }, this.LOG
             );
         });
-        
     }
 
-    async deleteDepartment(depId, callback) {
+
+    async event(callId, type, intentName, previousIntentTimestamp){
         return new Promise((resolve, reject) => {
-            const URL = `${this.APIURL}/${this.PROJECT_ID}/departments/${depId}`
+            const URL = `${this.APIURL}/event/${callId}/${type}`
             const HTTPREQUEST = {
                 url: URL,
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': this.JWT_TOKEN
                 },
-                method: 'DELETE',
+                json: {
+                    intentName: intentName,
+                    previousIntentTimestamp: previousIntentTimestamp
+                },
+                method: 'POST',
                 httpsOptions: this.httpsOptions
             };
             Utils.myrequest(
                 HTTPREQUEST,
                 function (err, resbody) {
                     if (err) {
-                        if (callback) {
-                            callback(err);
-                        }
                         reject(err)
                     }
                     else {
-                        if (callback) {
-                            callback(null, resbody); 
-                        }
-                        resolve(resbody)
+                        resolve({success: true});
                     }
-                }, this.log
+                }, this.LOG
             );
-
         });
     }
 }
 
-module.exports = Department
+module.exports = ManageCall

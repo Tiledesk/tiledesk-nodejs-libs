@@ -1,9 +1,9 @@
 var assert = require('assert');
 const { v4: uuidv4 } = require('uuid');
-const { Chat21Client } = require('../chat21client.js');
+const { Chat21Client } = require('../../chat21client.js');
 require('dotenv').config();
 const axios = require('axios');
-const { TiledeskClient } = require('../index.js');
+const { TiledeskClient } = require('../../index.js');
 
 const LOG_STATUS = (process.env.LOG_STATUS && process.env.LOG_STATUS) === 'true' ? true : false;
 let EMAIL = "";
@@ -33,7 +33,6 @@ else {
 let MQTT_ENDPOINT = "";
 if (process.env && process.env.AUTOMATION_TEST_MQTT_ENDPOINT) {
 	MQTT_ENDPOINT = process.env.AUTOMATION_TEST_MQTT_ENDPOINT
-    // console.log("MQTT_ENDPOINT:", MQTT_ENDPOINT);
 }
 else {
     throw new Error(".env.AUTOMATION_TEST_MQTT_ENDPOINT is mandatory");
@@ -42,7 +41,6 @@ else {
 let API_ENDPOINT = "";
 if (process.env && process.env.AUTOMATION_TEST_API_ENDPOINT) {
 	API_ENDPOINT = process.env.AUTOMATION_TEST_API_ENDPOINT
-    // console.log("API_ENDPOINT:", API_ENDPOINT);
 }
 else {
     throw new Error(".env.AUTOMATION_TEST_API_ENDPOINT is mandatory");
@@ -51,14 +49,12 @@ else {
 let CHAT_API_ENDPOINT = "";
 if (process.env && process.env.AUTOMATION_TEST_CHAT_API_ENDPOINT) {
 	CHAT_API_ENDPOINT = process.env.AUTOMATION_TEST_CHAT_API_ENDPOINT
-    // console.log("CHAT_API_ENDPOINT:", CHAT_API_ENDPOINT);
 }
 else {
     throw new Error(".env.AUTOMATION_TEST_CHAT_API_ENDPOINT is mandatory");
 }
 
 let BOT_ID = null;
-let BOT_ID_2 = null;
 let USER_ADMIN_TOKEN = null;
 
 let config = {
@@ -84,14 +80,13 @@ let user1 = {
 
 let group_id;
 
-describe('CHATBOT: Replace bot', async () => {
+describe('CHATBOT: Close Conversation', async () => {
   
     before(() => {
         return new Promise(async (resolve, reject) => {
             let userdata;
             try {
                 userdata = await createAnonymousUser(TILEDESK_PROJECT_ID);
-                // console.log("Anonymous login ok:", userdata);
             }
             catch(error) {
                 console.error("An error occurred during anonym auth:", error);
@@ -101,7 +96,6 @@ describe('CHATBOT: Replace bot', async () => {
             user1.token = userdata.token;
             user1.tiledesk_token = userdata.tiledesk_token;
             
-            // console.log("Message delay check.");
             if (LOG_STATUS) {
                 console.log("MQTT endpoint:", config.MQTT_ENDPOINT);
                 console.log("API endpoint:", config.CHAT_API_ENDPOINT);
@@ -124,19 +118,10 @@ describe('CHATBOT: Replace bot', async () => {
                     assert(result.user._id !== null);
                     assert(result.user.email !== null);
                     USER_ADMIN_TOKEN = result.token;
-                    // console.log("USER_ADMIN_TOKEN:", USER_ADMIN_TOKEN);
-                    // USER_ID = result.user._id;
-                    const bot1 = require('./chatbots/CHATBOT_replace_bot.js').bot;
-                    const bot2 = require('./chatbots/CHATBOT_replaced_bot_1.js').bot;
-                    // console.log("bot:", bot);
+                    const bot1 = require('./chatbots/CHATBOT_close_conversation_bot.js').bot;
                     try {
                         const bot1_data = await importChatbot(bot1, TILEDESK_PROJECT_ID, USER_ADMIN_TOKEN);
-                        const bot2_data = await importChatbot(bot2, TILEDESK_PROJECT_ID, USER_ADMIN_TOKEN);
-                        // UNUSED: bot2_data
-                        // console.log("chatbot_id:", data._id);
                         BOT_ID = bot1_data._id;
-                        BOT_ID_2 = bot2_data._id;
-                        // process.exit(0);
                         chatClient1.connect(user1.userid, user1.token, () => {
                             if (LOG_STATUS) {
                                 console.log("chatClient1 connected and subscribed.");
@@ -170,63 +155,31 @@ describe('CHATBOT: Replace bot', async () => {
             tdclient.deleteBot(BOT_ID, (err, result) => {
                 assert(!err);
                 assert(result);
-                tdclient.deleteBot(BOT_ID_2, (err, result) => {
-                    assert(!err);
-                    assert(result);
-                    done();
-                });
+                done();
             });
         });
     });
 
-    it('get replace bot 1 reply  (~2s)', (done) => {
+    it('close conversation (~2s)', (done) => {
         const message_text = uuidv4().replace(/-+/g, "");
         let time_sent = Date.now();
         let handler = chatClient1.onMessageAdded((message, topic) => {
+
             if (LOG_STATUS) {
                 console.log("> Incoming message [sender:" + message.sender_fullname + "]: ", message);
+                console.log("commands:", message?.attributes?.commands);
+                console.log("commands.length:", message?.attributes?.commands?.length);
             }
+
             if (
                 message &&
-                message.sender_fullname === "Replaced bot 1" &&
-                message.text === "I'm replace bot 1"
+                message.sender_fullname === "CloseTestBot" &&
+                message.attributes.commands &&
+                message.attributes.commands.length === 2 &&
+                message.attributes.commands[1].message.text === "Result: 1000"
             ) {
-                if (LOG_STATUS) {
-                    console.log("> Incoming message from 'Replaced bot 1' is ok.");
-                }
-                done();
-                // chatClient1.sendMessage(
-                //     message_text,
-                //     'text',
-                //     recipient_id,
-                //     "Test support group",
-                //     user1.fullname,
-                //     {projectId: config.TILEDESK_PROJECT_ID},
-                //     null, // no metadata
-                //     'group',
-                //     (err, msg) => {
-                //         if (err) {
-                //             console.error("Error send:", err);
-                //         }
-                //         if (LOG_STATUS) {
-                //             console.log("Message Sent ok:", msg);
-                //         }
-                //     }
-                // );
+                done();            
             }
-            // else if (
-            //     message &&
-            //     message.text ===  message_text &&
-            //     message.sender_fullname === "Echo bot"
-            // ) {
-            //     if (LOG_STATUS) {
-            //         console.log("> Got echo.");
-            //     }
-            //     done();
-            // }
-            // else {
-            //     // console.log("Message not computed:", message.text);
-            // }
         });
         if (LOG_STATUS) {
             console.log("Triggering Conversation...");
@@ -328,7 +281,7 @@ async function triggerConversation(request_id, chatbot_id, token, callback) {
                 attributes: {
                     "request_id": request_id, 
                     "department": default_dep.id,
-                    "participants": ["bot_" + chatbot_id], 
+                    "participants": ["bot_" + chatbot_id],
                     "language": "en", 
                     "subtype": "info", 
                     "fullname": "me", 

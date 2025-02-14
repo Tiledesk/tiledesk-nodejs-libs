@@ -1,13 +1,14 @@
 var assert = require('assert');
 const { v4: uuidv4 } = require('uuid');
-const { Chat21Client } = require('../chat21client.js');
+const { Chat21Client } = require('../../chat21client.js');
 require('dotenv').config();
 const axios = require('axios');
-const { TiledeskClient } = require('../index.js');
+const { TiledeskClient } = require('../../index.js');
 
-const Auth = require('./tiledesk_apis/TdAuthApi.js');
-const TiledeskClientTest = require('./tiledesk_apis/index.js');
-const Chat21Auth = require('./tiledesk_apis/Chat21Auth.js')
+const Auth = require('../tiledesk_apis/TdAuthApi.js');
+const TiledeskClientTest = require('../tiledesk_apis/index.js');
+const Chat21Auth = require('../tiledesk_apis/Chat21Auth.js')
+
 
 const LOG_STATUS = (process.env.LOG_STATUS && process.env.LOG_STATUS) === 'true' ? true : false;
 let EMAIL = "";
@@ -96,10 +97,13 @@ let user1 = {
     lastname: '1',
 };
 
+let user_agent = {};
+let agent_project_user = {};
+
 let group_id;
 let group_name;
 
-describe('CHATBOT: Random Reply action', async () => {
+describe('CHATBOT: Agent Handoff action', async () => {
     before(() => {
         return new Promise(async (resolve, reject) => {
             if (LOG_STATUS) {
@@ -123,7 +127,7 @@ describe('CHATBOT: Random Reply action', async () => {
             user1.userid = chat21data.userid;
             user1.token = chat21data.token;
             user1.tiledesk_token = userdata.token;
-
+            
             /**AUTH WITH CREDENTIALS TILEDESK */
             let result = await auth.authEmailPassword(EMAIL, PASSWORD).catch((err) => { 
                 console.error("(before) ADMIN Auth -> An error occurred during emailPassword auth:", err);
@@ -136,15 +140,53 @@ describe('CHATBOT: Random Reply action', async () => {
             assert(result.user._id !== null);
             assert(result.user.email !== null);
             USER_ADMIN_TOKEN = result.token;
-
-            const bot = require('./chatbots/CHATBOT_random_reply_bot.js').bot;
-            
             const tdClientTest = new TiledeskClientTest({
                 APIURL: API_ENDPOINT,
                 PROJECT_ID: TILEDESK_PROJECT_ID,
                 TOKEN: USER_ADMIN_TOKEN
             })
+            
+            /** SIGNUP AGENT */
+            const result_agent = await auth.signUpEmailPassword('agent@tiledesk.com', 'agentTEST@').catch((err) => { 
+                console.error("(before) ADMIN Auth -> An error occurred during emailPassword auth:", err);
+                reject(err)
+                assert.ok(false);
+            });
+            assert(result_agent.success == true);
+            assert(result_agent.user)
+            assert(result_agent.user._id !== null);
+            assert(result_agent.user.email !== null);
+            user_agent = result_agent.user
+            
 
+            /** SIGNIN AGENT */
+            let result_signIn = await auth.authEmailPassword('agent@tiledesk.com', 'agentTEST@').catch((err) => { 
+                console.error("(before) SIGNIN Auth -> An error occurred during emailPassword auth:", err);
+                reject(err)
+                assert.ok(false);
+            });
+            assert(result_signIn.success == true);
+            assert(result_signIn.token != null, "Expect result_signIn.token exist");
+            assert(result_signIn.user, "Expect result_signIn.user exist")
+            assert(result_signIn.user._id !== null, "Expect result_signIn.user._id exist");
+            assert(result_signIn.user.email !== null, "Expect result_signIn.user.email exist");
+            user_agent['token'] = result_signIn.token;
+
+            /** ADD AGENT TO PROJECT */
+            const response_addToProject = await tdClientTest.user.addUserToProject(user_agent.email, 'admin', true).catch((err) => {
+                console.error(err); 
+                reject(err);
+                assert.ok(false);
+            });
+            
+            assert(response_addToProject, "Expect response_addToProject exist")
+            assert(response_addToProject._id, "Expect response_addToProject._id exist")
+            assert.equal(response_addToProject.id_user, user_agent._id, `Expect user_agent._id to be ${user_agent._id} but got: ${response_addToProject.id_user}`)
+            agent_project_user = response_addToProject;
+            /** SET AGENT AS AVAILABLE */
+            /** skip if 3rd parameter of addUserToProject( .., .., true) is set to true */
+
+            const bot = require('./chatbots/CHATBOT_agent_handoff_bot.js').bot;
             const data = await tdClientTest.chatbot.importChatbot(bot).catch((err) => { 
                 console.error(err); 
                 reject(err);
@@ -174,71 +216,80 @@ describe('CHATBOT: Random Reply action', async () => {
                 assert.ok(false);
             });
             assert(result.success === true);
+            const result_remove_user_from_project = await tdClientTest.user.removeUserToProject(agent_project_user._id).catch((err) => { 
+                assert.ok(false);
+            });
+            assert(result_remove_user_from_project);
+            const result_remove_user = await tdClientTest.user.removeUser(user_agent['token']).catch((err) => { 
+                assert.ok(false);
+            });
+            assert(result_remove_user.success === true)
             done();
         });
     });
 
-    it('random reply: expect to receive one of the configured reply (~1s)', () => {
+    it('agent handoff: expect participants to not be a bot after action is triggered (~1s)', () => {
         return new Promise((resolve, reject)=> {
-            chatClient1.onMessageAdded((message, topic) => {
-                const expected_msg = [ 'Reply_1', 'Reply_2_with_image', 'Reply_3_with_buttons', 'Reply_4_with_iframe']
+            let touchingOperatorInfo = false;
+            const tdClientTest = new TiledeskClientTest({
+                APIURL: API_ENDPOINT,
+                PROJECT_ID: TILEDESK_PROJECT_ID,
+                TOKEN: USER_ADMIN_TOKEN
+            });
+            chatClient1.onMessageAdded(async (message, topic) => {
                 if(message.recipient !== recipient_id){
                     reject();
                     return;
                 }
+                
                 if (LOG_STATUS) {
                     console.log(">(1) Incoming message [sender:" + message.sender_fullname + "]: ", message);
                 }
                 if (
                     message &&
-                    message.sender_fullname === "Random Reply Chatbot"
+                    message.sender_fullname === "Bot"
                 ) {
                     if (LOG_STATUS) {
                         console.log("> Incoming message from 'welcome' intent ok.");
                     }
 
                     assert(message.attributes)
-                    assert(message.attributes.commands)
-                    assert(message.attributes.commands.length >= 2)
-                    let commands = message.attributes.commands
-                    let command = commands[1]
-                    assert.equal(command.type, 'message')
-                    assert(command.message)
-                    let msg = command.message
-                    assert(msg.text)
-                    if(msg.type === 'text'){
-                        assert.ok(msg.text === expected_msg[0] || msg.text === expected_msg[2], `Expect msg.text === "${expected_msg[0]}" || "${expected_msg[2]}"`)
-                        if(msg.text === expected_msg[2]){
-                            assert(msg.attributes, "Expect msg.attribues exist")
-                            assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
-                            assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
-                            assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
-                            let button1 = msg.attributes.attachment.buttons[0]
-                            assert.equal(button1.value, 'btn1', "Expect msg.attribues button1.value === 'btn1'")
-                        }
-                    }
-                    if(msg.type === 'image'){
-                        assert.equal(msg.text, expected_msg[1], `Expect text to be "${expected_msg[1]}", but got: ${msg.text}` )
-                        assert(msg.metadata, "Expect msg.metadata exist")
-                        assert(msg.metadata.src, "Expect msg.metadata.src exist")
-                        assert(msg.metadata.downloadURL, "Expect msg.metadata.downloadURL exist")
-                        assert.equal(msg.metadata.type, 'image/png', "Expect msg.metadata.type === 'image/png'")
-                    }
-                    if(msg.type === 'frame'){
-                        assert.equal(msg.text, expected_msg[3], `Expect text to be "${expected_msg[3]}", but got: ${msg.text}` )
-                        assert(msg.metadata)
-                        assert(msg.metadata.src)
-                        assert.equal(msg.metadata.type, 'frame', "Expect msg.metadata.type === 'frame'")
-                    }   
-                    resolve()                 
+                    assert(message.attributes.messagelabel)
+                    assert(message.attributes.messagelabel.key)
+                    assert.equal(message.attributes.messagelabel.key, 'TOUCHING_OPERATOR')
+                    touchingOperatorInfo = true
+                      
+                    // resolve()                 
+                } else if( touchingOperatorInfo &&
+                    message && message.sender === "system"
+                ){
+
+                    assert(message.attributes)
+                    assert(message.attributes.messagelabel)
+                    assert(message.attributes.messagelabel.key)
+                    assert.equal(message.attributes.messagelabel.key, 'MEMBER_JOINED_GROUP')
+                    assert(message.attributes.messagelabel.parameters)
+                    assert(message.attributes.messagelabel.parameters.member_id)
+                    let member_id = message.attributes.messagelabel.parameters.member_id;
+                    assert.strictEqual(member_id, user_agent._id, `Expect member_id to be ${member_id} but got: ${user_agent._id}`)
+                    
+                    let request = await tdClientTest.request.getRequestById(recipient_id).catch((err) => { 
+                        console.error("(it) REQUEST API -> An error occurred during getRequestById:", err);
+                        reject(err)
+                        assert.ok(false);
+                    });
+                    assert.strictEqual(request.participantsBots.length, 0, `Expect request.participantsBots.length = 0 but got: ${request.participantsBots.length}`)
+                    assert(request.participants)
+                    assert(request.participantsAgents)
+                    assert.equal(request.participants[0],user_agent._id, `Expect request.participants to be ${user_agent._id} but got: ${request.participants[0]}`)
+                    assert.equal(request.participantsAgents[0],user_agent._id, `Expect request.participantsAgents to be ${user_agent._id} but got: ${request.participantsAgents[0]}`)
+                    assert.strictEqual(request.participantsAgents[0], request.participants[0], `Expect request.participantsAgents and request.participants to be equal`)
+                    resolve()
                 }
                 else {
                     // console.log("Message not computed:", message.text);
                 }
 
-                
-
-                
             });
             if (LOG_STATUS) {
                 console.log("Sending test message...");

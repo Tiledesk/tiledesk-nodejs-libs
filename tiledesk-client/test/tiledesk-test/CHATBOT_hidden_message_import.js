@@ -1,13 +1,13 @@
 var assert = require('assert');
 const { v4: uuidv4 } = require('uuid');
-const { Chat21Client } = require('../chat21client.js');
+const { Chat21Client } = require('../../chat21client.js');
 require('dotenv').config();
 const axios = require('axios');
-const { TiledeskClient } = require('../index.js');
+const { TiledeskClient } = require('../../index.js');
 
-const Auth = require('./tiledesk_apis/TdAuthApi.js');
-const TiledeskClientTest = require('./tiledesk_apis/index.js');
-const Chat21Auth = require('./tiledesk_apis/Chat21Auth.js')
+const Auth = require('../tiledesk_apis/TdAuthApi.js');
+const TiledeskClientTest = require('../tiledesk_apis/index.js');
+const Chat21Auth = require('../tiledesk_apis/Chat21Auth.js')
 
 
 const LOG_STATUS = (process.env.LOG_STATUS && process.env.LOG_STATUS) === 'true' ? true : false;
@@ -465,7 +465,7 @@ async function triggerConversation(request_id, chatbot_id, token, callback) {
             if (LOG_STATUS) {
                 console.log("Firing trigger conversation event:", event);
             }
-            tdclient.fireEvent(event, function(err, result) {
+            tdclient.fireEvent(event,function(err, result) {
                 if (err) {
                     console.error("An error occurred invoking an event:", err);
                     process.exit(1);

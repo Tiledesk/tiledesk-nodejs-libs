@@ -4,7 +4,9 @@
   "description": "Javascript (nodeJS) SDK for Tiledesk REST APIs",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --timeout 20000 --exit"
+    "test": "mocha ./test/tiledesk-test --timeout 20000 --exit",
+    "tiledesk-test": "mocha ./test/tiledesk-test --timeout 20000 --exit",
+    "voice-test": "mocha ./test/vxml-test --timeout 20000 --exit"
   },
   "repository": {
     "type": "git",
@@ -35,11 +37,12 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
+    "body-parser": "^1.19.0",
     "dotenv": "^10.0.0",
-    "uuid": "^8.3.2",
     "express": "^4.17.1",
-    "request": "^2.88.2",
+    "fast-xml-parser": "^4.5.1",
     "mqtt": "^4.3.7",
-    "body-parser": "^1.19.0"
+    "request": "^2.88.2",
+    "uuid": "^8.3.2"
   }
 }

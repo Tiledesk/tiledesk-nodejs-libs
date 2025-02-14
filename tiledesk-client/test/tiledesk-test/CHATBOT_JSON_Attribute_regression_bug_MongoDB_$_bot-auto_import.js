@@ -1,9 +1,9 @@
 var assert = require('assert');
 const { v4: uuidv4 } = require('uuid');
-const { Chat21Client } = require('../chat21client.js');
+const { Chat21Client } = require('../../chat21client.js');
 require('dotenv').config();
 const axios = require('axios');
-const { TiledeskClient } = require('../index.js');
+const { TiledeskClient } = require('../../index.js');
 
 const LOG_STATUS = (process.env.LOG_STATUS && process.env.LOG_STATUS) === 'true' ? true : false;
 let EMAIL = "";
@@ -22,25 +22,14 @@ else {
     throw new Error(".env.PASSWORD is mandatory");
 }
 
-// let ECHO_BOT_ID = "";
-// if (process.env && process.env.ECHO_BOT_ID) {
-// 	ECHO_BOT_ID = process.env.ECHO_BOT_ID
-// }
-// else {
-//     throw new Error(".env.ECHO_BOT_ID is mandatory");
-// }
-
-// console.log("process.env.AUTOMATION_TEST_TILEDESK_PROJECT_ID:", process.env.AUTOMATION_TEST_TILEDESK_PROJECT_ID);
 let TILEDESK_PROJECT_ID = "";
 if (process.env && process.env.AUTOMATION_TEST_TILEDESK_PROJECT_ID) {
 	TILEDESK_PROJECT_ID = process.env.AUTOMATION_TEST_TILEDESK_PROJECT_ID
-    // console.log("TILEDESK_PROJECT_ID:", TILEDESK_PROJECT_ID);
 }
 else {
     throw new Error(".env.AUTOMATION_TEST_TILEDESK_PROJECT_ID is mandatory");
 }
 
-// console.log("process.env.AUTOMATION_TEST_MQTT_ENDPOINT:", process.env.AUTOMATION_TEST_MQTT_ENDPOINT);
 let MQTT_ENDPOINT = "";
 if (process.env && process.env.AUTOMATION_TEST_MQTT_ENDPOINT) {
 	MQTT_ENDPOINT = process.env.AUTOMATION_TEST_MQTT_ENDPOINT
@@ -69,6 +58,7 @@ else {
 }
 
 let BOT_ID = null;
+let BOT_ID_2 = null;
 let USER_ADMIN_TOKEN = null;
 
 let config = {
@@ -93,9 +83,8 @@ let user1 = {
 };
 
 let group_id;
-let group_name;
 
-describe('CHATBOT: Echo bot', async () => {
+describe('CHATBOT: JSON Attribute bug regression', async () => {
   
     before(() => {
         return new Promise(async (resolve, reject) => {
@@ -111,7 +100,6 @@ describe('CHATBOT: Echo bot', async () => {
             user1.userid = userdata.userid;
             user1.token = userdata.token;
             user1.tiledesk_token = userdata.tiledesk_token;
-            
             // console.log("Message delay check.");
             if (LOG_STATUS) {
                 console.log("MQTT endpoint:", config.MQTT_ENDPOINT);
@@ -137,19 +125,18 @@ describe('CHATBOT: Echo bot', async () => {
                     USER_ADMIN_TOKEN = result.token;
                     // console.log("USER_ADMIN_TOKEN:", USER_ADMIN_TOKEN);
                     // USER_ID = result.user._id;
-                    const bot = require('./chatbots/CHATBOT_echo_bot.js').bot;
-                    // console.log("bot:", bot);
+                    const bot1 = require('./chatbots/CHATBOT_JSON_Attribute_regression_bug_bot.js').bot;
+                    // console.log("bot:", bot1);
                     try {
-                        const data = await importChatbot(bot, TILEDESK_PROJECT_ID, USER_ADMIN_TOKEN);
+                        const bot1_data = await importChatbot(bot1, TILEDESK_PROJECT_ID, USER_ADMIN_TOKEN);
                         // console.log("chatbot_id:", data._id);
-                        BOT_ID = data._id;
+                        BOT_ID = bot1_data._id;
                         // process.exit(0);
                         chatClient1.connect(user1.userid, user1.token, () => {
                             if (LOG_STATUS) {
                                 console.log("chatClient1 connected and subscribed.");
                             }
                             group_id = "support-group-" + TILEDESK_PROJECT_ID + "-" + uuidv4().replace(/-+/g, "");
-                            group_name = "Echo bot test group => " + group_id;
                             resolve();
                         });
                     }
@@ -183,64 +170,27 @@ describe('CHATBOT: Echo bot', async () => {
         });
     });
 
-    it('echo bot greetings (~1s)', (done) => {
+    it('must get a message back from the bot (~2s)', (done) => {
         const message_text = uuidv4().replace(/-+/g, "");
-        let time_sent = Date.now();
         let handler = chatClient1.onMessageAdded((message, topic) => {
             if (LOG_STATUS) {
                 console.log("> Incoming message [sender:" + message.sender_fullname + "]: ", message);
             }
             if (
                 message &&
-                message.attributes.intentName ===  "welcome" &&
-                message.sender_fullname === "Echo bot"
+                message.sender_fullname === "JSON Attribute bug" &&
+                message.text === "message shown"
             ) {
                 if (LOG_STATUS) {
-                    console.log("> Incoming message from 'welcome' intent ok.");
-                }
-                // let text = message.text.trim();
-                // let time_received = Date.now();
-                // let delay = time_received - time_sent;
-                // console.log("Echo bot delay:" + delay + "ms");
-                // done();
-                chatClient1.sendMessage(
-                    message_text,
-                    'text',
-                    recipient_id,
-                    "Test support group",
-                    user1.fullname,
-                    {projectId: config.TILEDESK_PROJECT_ID},
-                    null, // no metadata
-                    'group',
-                    (err, msg) => {
-                        if (err) {
-                            console.error("Error send:", err);
-                        }
-                        if (LOG_STATUS) {
-                            console.log("Message Sent ok:", msg);
-                        }
-                    }
-                );
-            }
-            else if (
-                message &&
-                message.text ===  message_text &&
-                message.sender_fullname === "Echo bot"
-            ) {
-                if (LOG_STATUS) {
-                    console.log("> Got echo.");
+                    console.log("> Incoming message is ok.");
                 }
                 done();
             }
-            else {
-                // console.log("Message not computed:", message.text);
-            }
         });
         if (LOG_STATUS) {
-            console.log("Sending test message...");
+            console.log("Triggering Conversation...");
         }
         let recipient_id = group_id;
-        // let recipient_fullname = group_name;
         triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, (err) => {
             if (err) {
                 console.error("An error occurred while triggering echo bot conversation:", err);

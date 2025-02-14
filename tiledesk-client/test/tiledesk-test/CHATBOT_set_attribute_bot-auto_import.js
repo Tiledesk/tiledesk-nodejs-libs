@@ -1,17 +1,11 @@
 var assert = require('assert');
 const { v4: uuidv4 } = require('uuid');
-const { Chat21Client } = require('../chat21client.js');
+const { Chat21Client } = require('../../chat21client.js');
 require('dotenv').config();
 const axios = require('axios');
-const { TiledeskClient } = require('../index.js');
+const { TiledeskClient } = require('../../index.js');
 
 const LOG_STATUS = (process.env.LOG_STATUS && process.env.LOG_STATUS) === 'true' ? true : false;
-
-
-const Auth = require('./tiledesk_apis/TdAuthApi.js');
-const TiledeskClientTest = require('./tiledesk_apis/index.js');
-const Chat21Auth = require('./tiledesk_apis/Chat21Auth.js')
-
 let EMAIL = "";
 if (process.env && process.env.EMAIL) {
 	EMAIL = process.env.EMAIL
@@ -28,29 +22,17 @@ else {
     throw new Error(".env.PASSWORD is mandatory");
 }
 
-// let BOT_ID = "";
-// if (process.env && process.env.BASIC_CAPTURE_REPLY_ID) {
-// 	BOT_ID = process.env.BASIC_CAPTURE_REPLY_ID
-// }
-// else {
-//     throw new Error(".env.BASIC_CAPTURE_REPLY_ID is mandatory");
-// }
-
-// console.log("process.env.AUTOMATION_TEST_TILEDESK_PROJECT_ID:", process.env.AUTOMATION_TEST_TILEDESK_PROJECT_ID);
 let TILEDESK_PROJECT_ID = "";
 if (process.env && process.env.AUTOMATION_TEST_TILEDESK_PROJECT_ID) {
 	TILEDESK_PROJECT_ID = process.env.AUTOMATION_TEST_TILEDESK_PROJECT_ID
-    // console.log("TILEDESK_PROJECT_ID:", TILEDESK_PROJECT_ID);
 }
 else {
     throw new Error(".env.AUTOMATION_TEST_TILEDESK_PROJECT_ID is mandatory");
 }
 
-// console.log("process.env.AUTOMATION_TEST_MQTT_ENDPOINT:", process.env.AUTOMATION_TEST_MQTT_ENDPOINT);
 let MQTT_ENDPOINT = "";
 if (process.env && process.env.AUTOMATION_TEST_MQTT_ENDPOINT) {
 	MQTT_ENDPOINT = process.env.AUTOMATION_TEST_MQTT_ENDPOINT
-    // console.log("MQTT_ENDPOINT:", MQTT_ENDPOINT);
 }
 else {
     throw new Error(".env.AUTOMATION_TEST_MQTT_ENDPOINT is mandatory");
@@ -59,7 +41,6 @@ else {
 let API_ENDPOINT = "";
 if (process.env && process.env.AUTOMATION_TEST_API_ENDPOINT) {
 	API_ENDPOINT = process.env.AUTOMATION_TEST_API_ENDPOINT
-    // console.log("API_ENDPOINT:", API_ENDPOINT);
 }
 else {
     throw new Error(".env.AUTOMATION_TEST_API_ENDPOINT is mandatory");
@@ -68,16 +49,13 @@ else {
 let CHAT_API_ENDPOINT = "";
 if (process.env && process.env.AUTOMATION_TEST_CHAT_API_ENDPOINT) {
 	CHAT_API_ENDPOINT = process.env.AUTOMATION_TEST_CHAT_API_ENDPOINT
-    // console.log("CHAT_API_ENDPOINT:", CHAT_API_ENDPOINT);
 }
 else {
     throw new Error(".env.AUTOMATION_TEST_CHAT_API_ENDPOINT is mandatory");
 }
 
 let BOT_ID = null;
-let BOT_ID2 = null;
 let USER_ADMIN_TOKEN = null;
-let DEP_ID = null
 
 let config = {
     MQTT_ENDPOINT: MQTT_ENDPOINT,
@@ -85,7 +63,6 @@ let config = {
     APPID: 'tilechat',
     TILEDESK_PROJECT_ID: TILEDESK_PROJECT_ID
 }
-
 
 let chatClient1 = new Chat21Client(
 {
@@ -102,34 +79,29 @@ let user1 = {
 };
 
 let group_id;
-let group_name;
 
-describe('CHATBOT: Change department', async () => {
+describe('CHATBOT: Set Attribute', async () => {
   
     before(() => {
         return new Promise(async (resolve, reject) => {
+            let userdata;
+            try {
+                userdata = await createAnonymousUser(TILEDESK_PROJECT_ID);
+            }
+            catch(error) {
+                console.error("An error occurred during anonym auth:", error);
+                process.exit(0);
+            }
+            user1.userid = userdata.userid;
+            user1.token = userdata.token;
+            user1.tiledesk_token = userdata.tiledesk_token;
+            
             if (LOG_STATUS) {
                 console.log("MQTT endpoint:", config.MQTT_ENDPOINT);
                 console.log("API endpoint:", config.CHAT_API_ENDPOINT);
                 console.log("Tiledesk Project Id:", config.TILEDESK_PROJECT_ID);
-                console.log("Connecting......");    
+                console.log("Connecting...");    
             }
-
-            const auth = new Auth(API_ENDPOINT);
-            const chat21Auth = new Chat21Auth(API_ENDPOINT);
-            let userdata = await auth.createAnonymousUser(TILEDESK_PROJECT_ID).catch((err) => { 
-                console.error("(before) Auth -> An error occurred during anonym auth:", err);
-                process.exit(0)
-            });
-            let chat21data = await chat21Auth.signInWithCustomToken(userdata.token).catch((err) => { 
-                console.error("(before) Chat21Auth -> An error occurred during anonym auth:", err);
-                process.exit(0)
-            });
-            user1.userid = chat21data.userid;
-            user1.token = chat21data.token;
-            user1.tiledesk_token = userdata.token;
-            
-
             TiledeskClient.authEmailPassword(
                 process.env.APIKEY,
                 EMAIL,
@@ -146,53 +118,20 @@ describe('CHATBOT: Change department', async () => {
                     assert(result.user._id !== null);
                     assert(result.user.email !== null);
                     USER_ADMIN_TOKEN = result.token;
-                    // console.log("USER_ADMIN_TOKEN:", USER_ADMIN_TOKEN);
-                    // USER_ID = result.user._id;
-                    const bot = require('./chatbots/CHATBOT_change_department_bot.js').bot;
-                    const bot_dep2 = require('./chatbots/CHATBOT_change_department_bot2.js').bot;
-
-                    const tdClientTest = new TiledeskClientTest({
-                        APIURL: API_ENDPOINT,
-                        PROJECT_ID: TILEDESK_PROJECT_ID,
-                        TOKEN: USER_ADMIN_TOKEN
-                    })
-
+                    const bot1 = require('./chatbots/CHATBOT_set_attribute_bot.js').bot;
                     try {
-
-                        const data = await tdClientTest.chatbot.importChatbot(bot).catch((err) => { 
-                            console.error(err);  
-                            reject(err);
-                        })
-
-                        const data2 = await tdClientTest.chatbot.importChatbot(bot_dep2).catch((err) => {
-                            console.error(err); 
-                            reject(err);
-                        })
-                        const dep_test1 = await tdClientTest.department.createDepartment('dep test1', data2._id).catch((err) => {
-                            console.error(err); 
-                            reject(err);
-                        });
-
-                        if( !dep_test1 || !data || !data2){
-                            reject({ err: 'DEP, BOT1 or BOT2 data is undefined'})
-                        }
-
-                        DEP_ID = dep_test1.id
-                        BOT_ID = data._id;
-                        BOT_ID2 = data2._id
-
-                        // process.exit(0);
+                        const bot1_data = await importChatbot(bot1, TILEDESK_PROJECT_ID, USER_ADMIN_TOKEN);
+                        BOT_ID = bot1_data._id;
                         chatClient1.connect(user1.userid, user1.token, () => {
                             if (LOG_STATUS) {
                                 console.log("chatClient1 connected and subscribed.");
                             }
                             group_id = "support-group-" + TILEDESK_PROJECT_ID + "-" + uuidv4().replace(/-+/g, "");
-                            group_name = "Echo bot test group => " + group_id;
                             resolve();
                         });
                     }
                     catch(error) {
-                        console.error("(before): Error importing DATA for test:", err);
+                        console.error("Error importing chatbot:", err);
                         reject(err);
                     }
                 }
@@ -203,57 +142,95 @@ describe('CHATBOT: Change department', async () => {
         });
     });
 
-    after(function  (done) {
-        chatClient1.close(async () => {
-            const tdClientTest = new TiledeskClientTest({
+    after(function (done) {
+        chatClient1.close(() => {
+            const tdclient = new TiledeskClient(
+                {
+                    APIKEY: process.env.APIKEY,
                     APIURL: API_ENDPOINT,
-                    PROJECT_ID: TILEDESK_PROJECT_ID,
-                    TOKEN: USER_ADMIN_TOKEN
+                    projectId: TILEDESK_PROJECT_ID,
+                    token: USER_ADMIN_TOKEN,
+                    log: LOG_STATUS
+                })
+            tdclient.deleteBot(BOT_ID, (err, result) => {
+                assert(!err);
+                assert(result);
+                done();
             });
-            const result = await tdClientTest.chatbot.deleteChatbot(BOT_ID).catch((err) => { 
-                assert.ok(false);
-            });
-            const result2 = await tdClientTest.chatbot.deleteChatbot(BOT_ID2).catch((err) => { 
-                assert.ok(false);
-            });
-            const result3 = await tdClientTest.department.deleteDepartment(DEP_ID).catch((err) => { 
-                assert.ok(false);
-            });
-            assert(result.success === true);
-            assert(result2.success === true);
-            assert(result3._id === DEP_ID);
-            done();
         });
     });
 
-    it('change department from DEFAULT to "dep test1" (~2s)', (done) => {
-        let handler = chatClient1.onMessageAdded((message, topic) => {            
+    it('set attribute reply (~1s)', (done) => {
+        const message_text = uuidv4().replace(/-+/g, "");
+        let time_sent = Date.now();
+        let handler = chatClient1.onMessageAdded((message, topic) => {
             if (LOG_STATUS) {
                 console.log("> Incoming message [sender:" + message.sender_fullname + "]: ", message);
+                console.log("commands:", message?.attributes?.commands);
+                console.log("commands.length:", message?.attributes?.commands?.length);
             }
-            if ( message && message.sender_fullname === "Echo bot" ) {
+            if (
+                message &&
+                message.sender_fullname === "Set Attribute bot" &&
+                message.attributes.commands &&
+                message.attributes.commands.length === 20
+            ) {
                 if (LOG_STATUS) {
-                    console.log("> Got:" , message.text);
+                    console.log("> Incoming message (Welcome) from 'Set Attribute bot' is ok.");
+                    let i = 0;
+                    message.attributes.commands.forEach(c => {
+                        // if (c.type === "message"
+                        console.log("command [" + i + "]:", c);
+                        console.log("command [" + i + "].message.attributes.attachment:", c.message?.attributes?.attachment);
+                        i++;
+                    });
                 }
-                assert(message.text ==="Hi, I'm an echo bot. You write and I echo your text");
-                assert(message.sender === BOT_ID2);
+                
+                assert(message.attributes?.commands[1]?.type === "message");
+                assert(message.attributes?.commands[1]?.message?.text === 'Andrea');
+
+                assert(message.attributes?.commands[3]?.type === "message");
+                assert(message.attributes?.commands[3]?.message?.text === 'Sponziello');
+
+                assert(message.attributes?.commands[5]?.type === "message");
+                assert(message.attributes?.commands[5]?.message?.text === '51');
+
+                assert(message.attributes?.commands[7]?.type === "message");
+                assert(message.attributes?.commands[7]?.message?.text === '1.76');
+
+                assert(message.attributes?.commands[9]?.type === "message");
+                assert(message.attributes?.commands[9]?.message?.text === 'Rome');
+
+                assert(message.attributes?.commands[11]?.type === "message");
+                assert(message.attributes?.commands[11]?.message?.text === '2');
+
+                assert(message.attributes?.commands[13]?.type === "message");
+                assert(message.attributes?.commands[13]?.message?.text === '7');
+
+                assert(message.attributes?.commands[15]?.type === "message");
+                assert(message.attributes?.commands[15]?.message?.text === 'Eldorado');
+
+                assert(message.attributes?.commands[15]?.type === "message");
+                assert(message.attributes?.commands[15]?.message?.text === 'Eldorado');
+
+                assert(message.attributes?.commands[17]?.type === "message");
+                assert(message.attributes?.commands[17]?.message?.text === 'My name is Andrea and I live in Eldorado');
+
+                assert(message.attributes?.commands[19]?.type === "message");
+                assert(message.attributes?.commands[19]?.message?.text === '{"city":"Eldorado"}');
                 done();
-            }
-            else {
-                // console.log("Message not computed:", message.text);
             }
         });
         if (LOG_STATUS) {
-            console.log("Sending test message...");
+            console.log("Triggering Conversation...");
         }
         let recipient_id = group_id;
-        // let recipient_fullname = group_name;
         triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, (err) => {
             if (err) {
                 console.error("An error occurred while triggering echo bot conversation:", err);
             }
         });
-    }).timeout(10000);
+    });
 });
 
 async function createAnonymousUser(tiledeskProjectId) {
@@ -279,8 +256,8 @@ async function createAnonymousUser(tiledeskProjectId) {
         }
         axios.request(axios_config)
         .then((response) => {
-            console.log("Got Anonymous Tiledesk Token:", JSON.stringify(response.data.token));
             if (LOG_STATUS) {
+                console.log("Got Anonymous Tiledesk Token:", JSON.stringify(response.data.token));
             }
             const tiledesk_token = response.data.token
             CHAT21_TOKEN_URL = API_ENDPOINT + '/chat21/native/auth/createCustomToken';
@@ -366,5 +343,38 @@ async function triggerConversation(request_id, chatbot_id, token, callback) {
         else {
             callback(err);
         }
+    });
+    
+}
+
+async function importChatbot(bot_data, tiledeskProjectId, token) {
+    IMPORT_URL = API_ENDPOINT + `/${tiledeskProjectId}/faq_kb/importjson/null/?create=true`;
+    if (LOG_STATUS) {
+        console.log("IMPORT_URL:", IMPORT_URL);
+    }
+    return new Promise((resolve, reject) => {
+        let axios_config = {
+            method: 'post',
+            url: IMPORT_URL,
+            headers: { 
+                'Authorization': token,
+                'Content-Type': 'application/json'
+            },
+            data : bot_data
+        };
+        if (LOG_STATUS) {
+            console.log("HTTP Params chatbot API URL:", axios_config);
+        }
+        axios.request(axios_config)
+        .then((response) => {
+            if (LOG_STATUS) {
+                console.log("Import response:", JSON.stringify(response.data));
+            }
+            resolve(response.data);
+        })
+        .catch((error) => {
+            console.error(error);
+            reject(error)
+        });
     });
 }
