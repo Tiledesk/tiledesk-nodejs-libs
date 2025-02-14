@@ -1,0 +1,469 @@
+{
+    "webhook_enabled": false,
+    "language": "en",
+    "name": "Set Attribute bot",
+    "type": "tilebot",
+    "attributes": {
+        "variables": {
+            "json_attr": "json_attr",
+            "string_attr": "string_attr",
+            "number_attr": "number_attr",
+            "sum": "sum",
+            "json_attr2": "json_attr2",
+            "json_as_string": "json_as_string",
+            "concat": "concat",
+            "json_to_string": "json_to_string"
+        }
+    },
+    "intents": [
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionType": "reply",
+                    "attributes": {
+                        "disableInputMessage": false,
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "Hi, how can I help you?",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": []
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "text": "Hi, how can I help you?\r\n",
+                    "_tdActionId": "a740926d1ddb4113a2322be9f5ad8181"
+                },
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "95887df9-969b-4ece-b325-2a5c5225e725",
+                    "_tdActionType": "setattribute-v2",
+                    "operation": {
+                        "operands": [
+                            {
+                                "value": "{\n    \"name\": \"Andrea\",\n    \"lastname\": \"Sponziello\",\n    \"attributes\": {\n        \"age\": 51,\n        \"height\": 1.76\n    }\n}",
+                                "isVariable": false,
+                                "function": "JSONparse"
+                            }
+                        ],
+                        "operators": []
+                    },
+                    "destination": "json_attr"
+                },
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "f0a6c6d6-f527-468c-b88b-2b8f4c60f6a0",
+                    "_tdActionType": "setattribute-v2",
+                    "operation": {
+                        "operands": [
+                            {
+                                "value": "Rome",
+                                "isVariable": false
+                            }
+                        ],
+                        "operators": []
+                    },
+                    "destination": "string_attr"
+                },
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "90ea2f3e-988d-4196-af6b-74c19822f7ef",
+                    "_tdActionType": "setattribute-v2",
+                    "operation": {
+                        "operands": [
+                            {
+                                "value": "2",
+                                "isVariable": false,
+                                "function": "convertToNumber"
+                            }
+                        ],
+                        "operators": []
+                    },
+                    "destination": "number_attr"
+                },
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "77a2a4c6-45b0-4e47-864a-c1641a1ebdfd",
+                    "_tdActionType": "setattribute-v2",
+                    "operation": {
+                        "operands": [
+                            {
+                                "value": "5",
+                                "isVariable": false
+                            },
+                            {
+                                "value": "number_attr",
+                                "isVariable": true
+                            }
+                        ],
+                        "operators": [
+                            "addAsNumber"
+                        ]
+                    },
+                    "destination": "sum"
+                },
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "ddd1741e-64d2-4e88-aa36-954d13de6cbe",
+                    "_tdActionType": "setattribute-v2",
+                    "operation": {
+                        "operands": [
+                            {
+                                "value": "{\n\"city\": \"Eldorado\"\n}",
+                                "isVariable": false
+                            }
+                        ],
+                        "operators": []
+                    },
+                    "destination": "json_as_string"
+                },
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "e0131742-a3a1-409b-a7cd-965c7b4fee5e",
+                    "_tdActionType": "setattribute-v2",
+                    "operation": {
+                        "operands": [
+                            {
+                                "value": "{{json_as_string}}",
+                                "isVariable": false,
+                                "function": "JSONparse"
+                            }
+                        ],
+                        "operators": []
+                    },
+                    "destination": "json_attr2"
+                },
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "1637bbe4-d6bc-4a91-b2d0-bd95ceb7e86a",
+                    "_tdActionType": "setattribute-v2",
+                    "operation": {
+                        "operands": [
+                            {
+                                "value": "My name is {{json_attr.name}} and I live in {{json_attr2.city}}",
+                                "isVariable": false
+                            }
+                        ],
+                        "operators": []
+                    },
+                    "destination": "concat"
+                },
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "fc0371a6-750e-48c4-99bc-083eba3842e6",
+                    "_tdActionType": "setattribute-v2",
+                    "operation": {
+                        "operands": [
+                            {
+                                "value": "{{json_attr2 | json}}",
+                                "isVariable": false
+                            }
+                        ],
+                        "operators": []
+                    },
+                    "destination": "json_to_string"
+                }
+            ],
+            "intent_id": "c7a991bd-ba6b-49d9-a29f-4d6d6238ed48",
+            "intent_display_name": "welcome",
+            "language": "en",
+            "attributes": {
+                "position": {
+                    "x": 714,
+                    "y": 113
+                },
+                "nextBlockAction": {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "a925d9af-4f41-46a0-a02b-5bb4adc264a8",
+                    "_tdActionType": "intent",
+                    "intentName": "#c6d52408-41f8-48fb-8a40-1321a48aec4e"
+                }
+            }
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionType": "intent",
+                    "intentName": "#c7a991bd-ba6b-49d9-a29f-4d6d6238ed48",
+                    "_tdActionId": "1f1cefd7578c4dacaa368f13b6c32bd2"
+                }
+            ],
+            "intent_id": "70c83da3-aa05-4a01-9d30-eba954a46d8c",
+            "question": "\\start",
+            "intent_display_name": "start",
+            "language": "en",
+            "attributes": {
+                "position": {
+                    "x": 172,
+                    "y": 384
+                },
+                "nextBlockAction": {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "ea71912e-913a-49ff-8911-dbe6c438ac76",
+                    "_tdActionType": "intent"
+                }
+            }
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionType": "reply",
+                    "text": "I didn't understand. Can you rephrase your question?",
+                    "attributes": {
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "I didn't understand. Can you rephrase your question?",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": []
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "_tdActionId": "70f10dda54094990abe9c3083f382806"
+                }
+            ],
+            "intent_id": "f20651cd-f473-418f-8472-9b1a4a767cdb",
+            "intent_display_name": "defaultFallback",
+            "language": "en",
+            "attributes": {
+                "position": {
+                    "x": 235,
+                    "y": 717
+                },
+                "nextBlockAction": {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "9c366cc3-2dc3-480d-b8c8-ab03a4369f8b",
+                    "_tdActionType": "intent"
+                }
+            }
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "63045d03-34fc-4c21-b9f6-bd30eeb7378b",
+                    "_tdActionType": "reply",
+                    "attributes": {
+                        "disableInputMessage": false,
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "{{json_attr.name}}",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": []
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "{{json_attr.lastname}}",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": []
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "{{json_attr.attributes.age}}",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": []
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "{{json_attr.attributes.height}}",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": []
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "{{string_attr}}",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": []
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "{{number_attr}}",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": []
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "{{sum}}",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": []
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "{{json_attr2.city}}",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": []
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "{{concat}}",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": []
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "{{json_to_string}}",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": []
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            ],
+            "language": "en",
+            "intent_display_name": "print json_attr",
+            "intent_id": "c6d52408-41f8-48fb-8a40-1321a48aec4e",
+            "attributes": {
+                "position": {
+                    "x": 1183,
+                    "y": 293.5
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "8d99a375-9100-4ebb-8c4b-ac985d380f08",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                }
+            }
+        }
+    ]
+}

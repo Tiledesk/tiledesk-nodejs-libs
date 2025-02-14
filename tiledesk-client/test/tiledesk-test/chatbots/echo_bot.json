@@ -1,0 +1,130 @@
+{
+    "webhook_enabled": false,
+    "language": "en",
+    "name": "Echo bot",
+    "type": "tilebot",
+    "attributes": null,
+    "intents": [
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionType": "intent",
+                    "intentName": "#c9b260c3-bd04-429d-b71e-de8d055ecee5",
+                    "_tdActionId": "bb666d7367e04ef78c0fd99ab7e74181"
+                }
+            ],
+            "intent_display_name": "start",
+            "intent_id": "61992773-0c33-4bda-a505-a1a2471ff940",
+            "question": "\\start",
+            "language": "en",
+            "attributes": {
+                "position": {
+                    "x": 172,
+                    "y": 384
+                },
+                "nextBlockAction": {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "3ae77166-e2eb-4c3b-b546-beafd9d632db",
+                    "_tdActionType": "intent"
+                }
+            }
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionType": "reply",
+                    "text": "I didn't understand. Can you rephrase your question?",
+                    "attributes": {
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "{{last_user_text}}",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": []
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "_tdActionId": "5e0bfd11ce2a46f687cddf4c7e93dbe0"
+                }
+            ],
+            "intent_display_name": "defaultFallback",
+            "intent_id": "f1e2958c-ed3c-43ca-b22d-c57183ca9ff9",
+            "language": "en",
+            "attributes": {
+                "position": {
+                    "x": 714,
+                    "y": 528
+                },
+                "nextBlockAction": {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "53a39d22-7e9e-47c5-8fcb-c9f8ea177810",
+                    "_tdActionType": "intent"
+                }
+            }
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionType": "reply",
+                    "attributes": {
+                        "disableInputMessage": false,
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "Hi, I'm an echo bot. You write and I echo your text",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": []
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "text": "Hi, how can I help you?\r\n",
+                    "_tdActionId": "a2c3c903c6c24ecd8619963335d643fe"
+                }
+            ],
+            "intent_display_name": "welcome",
+            "intent_id": "c9b260c3-bd04-429d-b71e-de8d055ecee5",
+            "question": "",
+            "answer": "",
+            "language": "en",
+            "attributes": {
+                "position": {
+                    "x": 714,
+                    "y": 113
+                },
+                "nextBlockAction": {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "faf5533f-4256-441a-bfb8-3a8147901239",
+                    "_tdActionType": "intent"
+                }
+            }
+        }
+    ]
+}
