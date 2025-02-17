@@ -128,78 +128,62 @@ describe('CHATBOT: Change department', async () => {
             user1.userid = chat21data.userid;
             user1.token = chat21data.token;
             user1.tiledesk_token = userdata.token;
-            
 
-            TiledeskClient.authEmailPassword(
-                process.env.APIKEY,
-                EMAIL,
-                PASSWORD,
-                {
-                APIURL: API_ENDPOINT,
-                log: LOG_STATUS
-                },
-            async (err, result) => {
-                if (!err && result) {
-                    assert(result.success == true);
-                    assert(result.token != null);
-                    assert(result.user)
-                    assert(result.user._id !== null);
-                    assert(result.user.email !== null);
-                    USER_ADMIN_TOKEN = result.token;
-                    // console.log("USER_ADMIN_TOKEN:", USER_ADMIN_TOKEN);
-                    // USER_ID = result.user._id;
-                    const bot = require('./chatbots/change_department_bot.json');
-                    const bot_dep2 = require('./chatbots/change_department_bot2.json');
-
-                    const tdClientTest = new TiledeskClientTest({
-                        APIURL: API_ENDPOINT,
-                        PROJECT_ID: TILEDESK_PROJECT_ID,
-                        TOKEN: USER_ADMIN_TOKEN
-                    })
-
-                    try {
-
-                        const data = await tdClientTest.chatbot.importChatbot(bot).catch((err) => { 
-                            console.error(err);  
-                            reject(err);
-                        })
-
-                        const data2 = await tdClientTest.chatbot.importChatbot(bot_dep2).catch((err) => {
-                            console.error(err); 
-                            reject(err);
-                        })
-                        const dep_test1 = await tdClientTest.department.createDepartment('dep test1', data2._id).catch((err) => {
-                            console.error(err); 
-                            reject(err);
-                        });
-
-                        if( !dep_test1 || !data || !data2){
-                            reject({ err: 'DEP, BOT1 or BOT2 data is undefined'})
-                        }
-
-                        DEP_ID = dep_test1.id
-                        BOT_ID = data._id;
-                        BOT_ID2 = data2._id
-
-                        // process.exit(0);
-                        chatClient1.connect(user1.userid, user1.token, () => {
-                            if (LOG_STATUS) {
-                                console.log("chatClient1 connected and subscribed.");
-                            }
-                            group_id = "support-group-" + TILEDESK_PROJECT_ID + "-" + uuidv4().replace(/-+/g, "");
-                            group_name = "Echo bot test group => " + group_id;
-                            resolve();
-                        });
-                    }
-                    catch(error) {
-                        console.error("(before): Error importing DATA for test:", err);
-                        reject(err);
-                    }
-                }
-                else {
-                    assert.ok(false);
-                }
+            /**AUTH WITH CREDENTIALS TILEDESK */
+            let result = await auth.authEmailPassword(EMAIL, PASSWORD).catch((err) => { 
+                console.error("(before) ADMIN Auth -> An error occurred during emailPassword auth:", err);
+                reject(err)
+                assert.ok(false);
             });
+            assert(result.success == true);
+            assert(result.token != null);
+            assert(result.user)
+            assert(result.user._id !== null);
+            assert(result.user.email !== null);
+            USER_ADMIN_TOKEN = result.token;
+
+
+            const bot = require('./chatbots/change_department_bot.json');
+            const bot_dep2 = require('./chatbots/change_department_bot2.json');
+
+            const tdClientTest = new TiledeskClientTest({
+                APIURL: API_ENDPOINT,
+                PROJECT_ID: TILEDESK_PROJECT_ID,
+                TOKEN: USER_ADMIN_TOKEN
+            })
+
+            const data = await tdClientTest.chatbot.importChatbot(bot).catch((err) => { 
+                console.error(err);  
+                reject(err);
+            })
+
+            const data2 = await tdClientTest.chatbot.importChatbot(bot_dep2).catch((err) => {
+                console.error(err); 
+                reject(err);
+            })
+            const dep_test1 = await tdClientTest.department.createDepartment('dep test1', data2._id).catch((err) => {
+                console.error(err); 
+                reject(err);
+            });
+
+            if( !dep_test1 || !data || !data2){
+                reject({ err: 'DEP, BOT1 or BOT2 data is undefined'})
+            }
+
+            DEP_ID = dep_test1.id
+            BOT_ID = data._id;
+            BOT_ID2 = data2._id
+
+            // process.exit(0);
+            chatClient1.connect(user1.userid, user1.token, () => {
+                if (LOG_STATUS) {
+                    console.log("chatClient1 connected and subscribed.");
+                }
+                group_id = "support-group-" + TILEDESK_PROJECT_ID + "-" + uuidv4().replace(/-+/g, "");
+                group_name = "Echo bot test group => " + group_id;
+                resolve();
+            });
+
         });
     });
 

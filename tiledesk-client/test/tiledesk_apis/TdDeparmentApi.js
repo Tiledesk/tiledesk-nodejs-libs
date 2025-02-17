@@ -73,7 +73,7 @@ class Department {
         
     }
 
-    async deleteDepartment(depId, callback) {
+    async deleteDepartment(depId) {
         return new Promise((resolve, reject) => {
             const URL = `${this.APIURL}/${this.PROJECT_ID}/departments/${depId}`
             const HTTPREQUEST = {
@@ -89,18 +89,12 @@ class Department {
                 HTTPREQUEST,
                 function (err, resbody) {
                     if (err) {
-                        if (callback) {
-                            callback(err);
-                        }
                         reject(err)
                     }
                     else {
-                        if (callback) {
-                            callback(null, resbody); 
-                        }
                         resolve(resbody)
                     }
-                }, this.log
+                }, this.LOG
             );
 
         });
