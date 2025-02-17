@@ -795,6 +795,222 @@ describe('CHATBOT: Operating hours action (~1s)', async () => {
         })
     })
 
+    it('Operating hours - No connector (~1s)', () => {
+        return new Promise((resolve, reject)=> {
+            let buttonNoIfElseIsPressed = false;
+            chatClient1.onMessageAdded(async (message, topic) => {
+                const message_text = 'no if/else'
+                if(message.recipient !== recipient_id){
+                    reject();
+                    return;
+                }
+                if (LOG_STATUS) {
+                    console.log(">(1) Incoming message [sender:" + message.sender_fullname + "]: ", message);
+                }
+                if (
+                    message &&
+                    message.attributes.intentName ===  "welcome" &&
+                    message.sender_fullname === "Operating Hours Chatbot"
+                ) {
+                    if (LOG_STATUS) {
+                        console.log("> Incoming message from 'welcome' intent ok.");
+                    }
+                    
+                    assert(message.attributes, "Expect message.attributes exist")
+                    assert(message.attributes.commands, "Expect message.attributes.commands")
+                    assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                    let commands = message.attributes.commands
+                    let command = commands[1]
+                    assert.equal(command.type, 'message')
+                    assert(command.message, "Expect command.message exist")
+                    let msg = command.message
+                    assert(msg.text, "Expect msg.text exist")
+                    assert.equal(msg.text, 'Operating hours test', `Expect msg.text to be 'Operating hours test' but got: ${msg.text} `)
+
+                    //check buttons 
+                    assert(msg.attributes, "Expect msg.attribues exist")
+                    assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
+                    assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
+                    assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
+                    
+                    let button1 = msg.attributes.attachment.buttons[2]
+                    assert.strictEqual(button1.value, message_text, 'Expect button1 to have "no if/else" as text')
+                    assert(button1.action)
+
+                    chatClient1.sendMessage(
+                        message_text,
+                        'text',
+                        recipient_id,
+                        "Test support group",
+                        user1.fullname,
+                        {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
+                        null, // no metadata
+                        'group',
+                        (err, msg) => {
+                            if (err) {
+                                console.error("Error send:", err);
+                            }
+                            if (LOG_STATUS) {
+                                console.log("Message Sent ok:", msg);
+                            }
+                            assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
+                            buttonNoIfElseIsPressed = true
+                        }
+                    );
+                      
+                    // resolve()                 
+                } else if( buttonNoIfElseIsPressed &&
+                    message &&  message.sender_fullname === "Operating Hours Chatbot"
+                ){
+                    assert(message.attributes, "Expect message.attributes exist")
+                    assert(message.attributes.commands, "Expect message.attributes.commands")
+                    assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                    let commands = message.attributes.commands
+                    let command = commands[1]
+                    assert.equal(command.type, 'message')
+                    assert(command.message, "Expect command.message exist")
+                    let msg = command.message
+                    assert(msg.text, "Expect msg.text exist")
+                    assert.equal(msg.text, 'reply after op', `Expect msg.text to be 'reply after op' but got: ${msg.text} `)
+
+                    resolve();
+                    
+                }
+                else {
+                    // console.log("Message not computed:", message.text);
+                }
+
+            });
+            if (LOG_STATUS) {
+                console.log("Sending test message...");
+            }
+            let recipient_id = group_id + '_3';
+            // let recipient_fullname = group_name;
+            triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
+                if (err) {
+                    console.error("An error occurred while triggering echo bot conversation:", err);
+                }
+            });
+        })
+    })
+
+    it('Operating hours - General with no timeslot active (should be always OPEN) (~1s)', () => {
+        return new Promise(async (resolve, reject)=> {
+            let buttonGeneralIsPressed = false;
+            const tdClientTest = new TiledeskClientTest({
+                APIURL: API_ENDPOINT,
+                PROJECT_ID: TILEDESK_PROJECT_ID,
+                TOKEN: USER_ADMIN_TOKEN
+            });
+
+            let updatedProject_GlobalOP = { 
+                activeOperatingHours : false, 
+                operatingHours: null
+            }
+            project = await tdClientTest.project.updateProject(updatedProject_GlobalOP).catch((err) => { 
+                console.error("(before) PROJECY updateProject -> An error occurred during updateProject:", err);
+                reject(err)
+                assert.ok(false);
+            });
+            assert(project)
+            assert.equal(project.activeOperatingHours, false)
+
+            chatClient1.onMessageAdded(async (message, topic) => {
+                const message_text = 'general'
+                if(message.recipient !== recipient_id){
+                    reject();
+                    return;
+                }
+                if (LOG_STATUS) {
+                    console.log(">(1) Incoming message [sender:" + message.sender_fullname + "]: ", message);
+                }
+                if (
+                    message &&
+                    message.attributes.intentName ===  "welcome" &&
+                    message.sender_fullname === "Operating Hours Chatbot"
+                ) {
+                    if (LOG_STATUS) {
+                        console.log("> Incoming message from 'welcome' intent ok.");
+                    }
+                    
+                    assert(message.attributes, "Expect message.attributes exist")
+                    assert(message.attributes.commands, "Expect message.attributes.commands")
+                    assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                    let commands = message.attributes.commands
+                    let command = commands[1]
+                    assert.equal(command.type, 'message')
+                    assert(command.message, "Expect command.message exist")
+                    let msg = command.message
+                    assert(msg.text, "Expect msg.text exist")
+                    assert.equal(msg.text, 'Operating hours test', `Expect msg.text to be 'Operating hours test' but got: ${msg.text} `)
+
+                    //check buttons 
+                    assert(msg.attributes, "Expect msg.attribues exist")
+                    assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
+                    assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
+                    assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
+                    
+                    let button1 = msg.attributes.attachment.buttons[0]
+                    assert.strictEqual(button1.value, message_text, 'Expect button1 to have "general" as text')
+                    assert(button1.action)
+
+                    chatClient1.sendMessage(
+                        message_text,
+                        'text',
+                        recipient_id,
+                        "Test support group",
+                        user1.fullname,
+                        {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
+                        null, // no metadata
+                        'group',
+                        (err, msg) => {
+                            if (err) {
+                                console.error("Error send:", err);
+                            }
+                            if (LOG_STATUS) {
+                                console.log("Message Sent ok:", msg);
+                            }
+                            assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
+                            buttonGeneralIsPressed = true
+                        }
+                    );
+                      
+                    // resolve()                 
+                } else if( buttonGeneralIsPressed &&
+                    message &&  message.sender_fullname === "Operating Hours Chatbot"
+                ){
+                    assert(message.attributes, "Expect message.attributes exist")
+                    assert(message.attributes.commands, "Expect message.attributes.commands")
+                    assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                    let commands = message.attributes.commands
+                    let command = commands[1]
+                    assert.equal(command.type, 'message')
+                    assert(command.message, "Expect command.message exist")
+                    let msg = command.message
+                    assert(msg.text, "Expect msg.text exist")
+                    assert.equal(msg.text, 'open', `Expect msg.text to be 'open' but got: ${msg.text} `)
+
+                    resolve();
+                    
+                }
+                else {
+                    // console.log("Message not computed:", message.text);
+                }
+
+            });
+            if (LOG_STATUS) {
+                console.log("Sending test message...");
+            }
+            let recipient_id = group_id + '_4';
+            // let recipient_fullname = group_name;
+            triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
+                if (err) {
+                    console.error("An error occurred while triggering echo bot conversation:", err);
+                }
+            });
+        })
+    })
+
 });
 
 
