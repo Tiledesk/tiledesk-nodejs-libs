@@ -7,6 +7,7 @@ const Tag = require('./TdTagApi')
 const Chatbot = require('./TdChatbotApi')
 const {TiledeskClient} = require('../../index.js')
 const Subscription = require('./TdSubscriptionApi.js')
+const Group = require('./TdGroupsApi.js')
 
 class TiledeskClientTest {
 
@@ -50,6 +51,7 @@ class TiledeskClientTest {
         this.user = new User(this.APIURL, this.PROJECT_ID, this.JWT_TOKEN,);
         this.lead = new Lead(this.APIURL, this.PROJECT_ID, this.JWT_TOKEN);
         this.tag = new Tag(this.APIURL, this.PROJECT_ID, this.JWT_TOKEN);
+        this.group = new Group(this.APIURL, this.PROJECT_ID, this.JWT_TOKEN);
         this.subscription = new Subscription(this.APIURL, this.PROJECT_ID, this.JWT_TOKEN);
     }
 

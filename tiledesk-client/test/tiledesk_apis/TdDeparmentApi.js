@@ -38,7 +38,7 @@ class Department {
         
     }
 
-    async createDepartment(depName, bot_id) {
+    async createDepartment(depName, bot_id, group_id) {
         return new Promise((resolve, reject) => {
             const URL = `${this.APIURL}/${this.PROJECT_ID}/departments`
             const HTTPREQUEST = {
@@ -49,6 +49,7 @@ class Department {
                 },
                 json: {
                     id_bot :  bot_id,
+                    id_group: group_id,
                     id_project :  this.PROJECT_ID,
                     name :  depName,
                     routing :  "assigned", 
@@ -60,12 +61,10 @@ class Department {
                 HTTPREQUEST,
                 function (err, resbody) {
                     if (err) {
-                        reject(err)
-                        
+                        reject(err)    
                     }
                     else {
-                        resolve(resbody)
-                        
+                        resolve(resbody) 
                     }
                 }, this.LOG
             );
