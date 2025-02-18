@@ -166,6 +166,7 @@ describe('CHATBOT: Change department', async () => {
                 reject(err);
             });
 
+
             if( !dep_test1 || !data || !data2){
                 reject({ err: 'DEP, BOT1 or BOT2 data is undefined'})
             }
@@ -210,34 +211,42 @@ describe('CHATBOT: Change department', async () => {
         });
     });
 
-    it('change department from DEFAULT to "dep test1" (~2s)', (done) => {
-        let handler = chatClient1.onMessageAdded((message, topic) => {            
-            if (LOG_STATUS) {
-                console.log("> Incoming message [sender:" + message.sender_fullname + "]: ", message);
-            }
-            if ( message && message.sender_fullname === "Echo bot" ) {
+    it('change department from DEFAULT to "dep test1" (~2s)', () => {
+        return new Promise(async (resolve, reject)=> {
+            chatClient1.onMessageAdded((message, topic) => { 
+                if(message.recipient !== recipient_id){
+                    reject();
+                    return;
+                }           
                 if (LOG_STATUS) {
-                    console.log("> Got:" , message.text);
+                    console.log("> Incoming message [sender:" + message.sender_fullname + "]: ", message);
                 }
-                assert(message.text ==="Hi, I'm an echo bot. You write and I echo your text");
-                assert(message.sender === BOT_ID2);
-                done();
+                if ( message && message.sender_fullname === "Echo bot" ) {
+                    if (LOG_STATUS) {
+                        console.log("> Got:" , message.text);
+                    }
+                    
+                    assert(message.text ==="Hi, I'm an echo bot. You write and I echo your text");
+                    assert(message.sender === BOT_ID2);
+                    resolve();
+                }
+                else {
+                    // console.log("Message not computed:", message.text);
+                }
+            });
+            if (LOG_STATUS) {
+                console.log("Sending test message...");
             }
-            else {
-                // console.log("Message not computed:", message.text);
-            }
+            let recipient_id = group_id;
+            // let recipient_fullname = group_name;
+            triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, (err) => {
+                if (err) {
+                    console.error("An error occurred while triggering echo bot conversation:", err);
+                }
+            });
         });
-        if (LOG_STATUS) {
-            console.log("Sending test message...");
-        }
-        let recipient_id = group_id;
-        // let recipient_fullname = group_name;
-        triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, (err) => {
-            if (err) {
-                console.error("An error occurred while triggering echo bot conversation:", err);
-            }
-        });
-    }).timeout(10000);
+
+    })
 });
 
 async function createAnonymousUser(tiledeskProjectId) {
