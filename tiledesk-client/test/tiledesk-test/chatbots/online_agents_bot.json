@@ -1,0 +1,567 @@
+{
+    "webhook_enabled": false,
+    "language": "en",
+    "name": "Online agents Chatbot",
+    "type": "tilebot",
+    "attributes": {
+        "variables": {
+            "type": "type"
+        }
+    },
+    "intents": [
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionType": "reply",
+                    "text": "I didn't understand. Can you rephrase your question?",
+                    "attributes": {
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "I didn't understand. Can you rephrase your question?",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": []
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "_tdActionId": "f81ebe0071474731aef0694b3b8de747"
+                }
+            ],
+            "intent_id": "aad3fece-3f6c-41ca-8561-022da7dae12a",
+            "intent_display_name": "defaultFallback",
+            "language": "en",
+            "attributes": {
+                "position": {
+                    "x": 420,
+                    "y": 691
+                },
+                "readonly": true,
+                "nextBlockAction": {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "54bc84c6-a55e-41f5-a7b9-81e9cc1e810a",
+                    "_tdActionType": "intent"
+                }
+            },
+            "agents_available": false
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionType": "intent",
+                    "intentName": "#aef41248-270d-4ab7-8c80-ea5e0b772570",
+                    "_tdActionId": "dd458bd029a84524ad5bf4f80de694e3"
+                }
+            ],
+            "intent_id": "b4daf606-6276-46b4-b2cf-40c5b64d9a0c",
+            "question": "\\start",
+            "intent_display_name": "start",
+            "language": "en",
+            "attributes": {
+                "position": {
+                    "x": 172,
+                    "y": 384
+                },
+                "readonly": true,
+                "nextBlockAction": {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "e17cd73d-2e55-4d97-8f1c-83b13ba787f7",
+                    "_tdActionType": "intent"
+                }
+            },
+            "agents_available": false
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "d04559d6-a83f-49b8-beae-0709a562669a",
+                    "_tdActionType": "setattribute-v2",
+                    "operation": {
+                        "operands": [
+                            {
+                                "value": "",
+                                "isVariable": false
+                            }
+                        ],
+                        "operators": []
+                    },
+                    "destination": "type"
+                },
+                {
+                    "_tdActionType": "reply",
+                    "attributes": {
+                        "disableInputMessage": false,
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "online agents tests",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": [
+                                                {
+                                                    "uid": "9c64120245e342969928282ac90f3a23",
+                                                    "type": "action",
+                                                    "value": "project",
+                                                    "link": "",
+                                                    "target": "blank",
+                                                    "action": "#35e20148-ac20-4c79-bebd-5fd6a10a2e8d",
+                                                    "attributes": "",
+                                                    "show_echo": true,
+                                                    "alias": ""
+                                                },
+                                                {
+                                                    "uid": "f74d3b30d16e42f99d990b6240e7720b",
+                                                    "type": "action",
+                                                    "value": "current dep",
+                                                    "link": "",
+                                                    "target": "blank",
+                                                    "action": "#20568629-8971-469f-89bd-204c2b56c598",
+                                                    "attributes": "",
+                                                    "show_echo": true,
+                                                    "alias": ""
+                                                },
+                                                {
+                                                    "uid": "8c3eb4c679634c9f8ce515ded0f71b75",
+                                                    "type": "action",
+                                                    "value": "selected dep",
+                                                    "link": "",
+                                                    "target": "blank",
+                                                    "action": "#a563894d-0f39-4f0a-9f3b-d4dc33fe8b09",
+                                                    "attributes": "",
+                                                    "show_echo": true,
+                                                    "alias": ""
+                                                },
+                                                {
+                                                    "uid": "5f5481bd72974e13a06ff2949746bb57",
+                                                    "type": "action",
+                                                    "value": "project ignore op",
+                                                    "link": "",
+                                                    "target": "blank",
+                                                    "action": "#4570951f-f223-408c-8f32-5c9d8106d7e7",
+                                                    "attributes": "",
+                                                    "show_echo": true,
+                                                    "alias": ""
+                                                },
+                                                {
+                                                    "uid": "09f0e56f2c9b481ba975d6e2203bdac4",
+                                                    "type": "action",
+                                                    "value": "current dep no connectors",
+                                                    "link": "",
+                                                    "target": "blank",
+                                                    "action": "#dee72ca6-f6a1-44d7-8e5b-6624f9c97e22",
+                                                    "attributes": "",
+                                                    "show_echo": true,
+                                                    "alias": ""
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "text": "Hi, how can I help you?\r\n",
+                    "_tdActionId": "45c9101b65e1430fad840e80f523e140"
+                }
+            ],
+            "intent_id": "aef41248-270d-4ab7-8c80-ea5e0b772570",
+            "intent_display_name": "welcome",
+            "language": "en",
+            "attributes": {
+                "position": {
+                    "x": 662,
+                    "y": 93
+                },
+                "nextBlockAction": {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "69eb6c3a-9f15-4832-9c1c-bf3b4ddf200a",
+                    "_tdActionType": "intent"
+                }
+            },
+            "agents_available": false
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "0af69e6f-44a8-4516-bb7c-64743c5d505c",
+                    "_tdActionType": "setattribute-v2",
+                    "operation": {
+                        "operands": [
+                            {
+                                "value": "project",
+                                "isVariable": false
+                            }
+                        ],
+                        "operators": []
+                    },
+                    "destination": "type"
+                },
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "e7661ae9-a665-4247-91e6-7c5552d2184a",
+                    "stopOnConditionMet": true,
+                    "_tdActionType": "ifonlineagentsv2",
+                    "selectedOption": "all",
+                    "ignoreOperatingHours": false,
+                    "trueIntent": "#fe0bc10a-8814-4105-89cd-cc98ee9853b6",
+                    "falseIntent": "#6466a744-91fa-473b-8e7b-b1f3421945a0"
+                }
+            ],
+            "language": "en",
+            "intent_display_name": "project test",
+            "intent_id": "35e20148-ac20-4c79-bebd-5fd6a10a2e8d",
+            "agents_available": false,
+            "attributes": {
+                "position": {
+                    "x": 1159,
+                    "y": -298
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "139fa57c-58c3-4011-887d-50d351474222",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                },
+                "connectors": {},
+                "color": "80,100,147",
+                "readonly": false
+            }
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "2c398f90-65f9-4921-a6ea-da42d5d3306a",
+                    "_tdActionType": "setattribute-v2",
+                    "operation": {
+                        "operands": [
+                            {
+                                "value": "current dep",
+                                "isVariable": false
+                            }
+                        ],
+                        "operators": []
+                    },
+                    "destination": "type"
+                },
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "c367da81-4f91-4a66-8a02-4b8ac833c3b1",
+                    "stopOnConditionMet": true,
+                    "_tdActionType": "ifonlineagentsv2",
+                    "selectedOption": "currentDep",
+                    "ignoreOperatingHours": false,
+                    "trueIntent": "#fe0bc10a-8814-4105-89cd-cc98ee9853b6",
+                    "falseIntent": "#6466a744-91fa-473b-8e7b-b1f3421945a0"
+                }
+            ],
+            "language": "en",
+            "intent_display_name": "current dep test",
+            "intent_id": "20568629-8971-469f-89bd-204c2b56c598",
+            "agents_available": false,
+            "attributes": {
+                "position": {
+                    "x": 1163,
+                    "y": 54
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "2a83dca0-223d-472e-853d-04a2ab64b99d",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                },
+                "connectors": {},
+                "color": "80,100,147",
+                "readonly": false
+            }
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "e72333f1-98d2-4181-b5fe-132b051d777a",
+                    "_tdActionType": "setattribute-v2",
+                    "operation": {
+                        "operands": [
+                            {
+                                "value": "selected dep",
+                                "isVariable": false
+                            }
+                        ],
+                        "operators": []
+                    },
+                    "destination": "type"
+                },
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "8f5cf11a-1dfa-4617-ba33-e31401c19787",
+                    "stopOnConditionMet": true,
+                    "_tdActionType": "ifonlineagentsv2",
+                    "selectedOption": "selectedDep",
+                    "ignoreOperatingHours": false,
+                    "selectedDepartmentId": "",
+                    "trueIntent": "#fe0bc10a-8814-4105-89cd-cc98ee9853b6",
+                    "falseIntent": "#6466a744-91fa-473b-8e7b-b1f3421945a0"
+                }
+            ],
+            "language": "en",
+            "intent_display_name": "selected dep test",
+            "intent_id": "a563894d-0f39-4f0a-9f3b-d4dc33fe8b09",
+            "agents_available": false,
+            "attributes": {
+                "position": {
+                    "x": 1168,
+                    "y": 405
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "bab0b918-eceb-4303-a2e6-1a68deb20281",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                },
+                "connectors": {},
+                "color": "80,100,147",
+                "readonly": false
+            }
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "b1471234-4cc8-4ea7-8717-abb69da9bf80",
+                    "_tdActionType": "setattribute-v2",
+                    "operation": {
+                        "operands": [
+                            {
+                                "value": "project ignore op",
+                                "isVariable": false
+                            }
+                        ],
+                        "operators": []
+                    },
+                    "destination": "type"
+                },
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "7094864f-8ae2-49f7-8576-8a1338761209",
+                    "stopOnConditionMet": true,
+                    "_tdActionType": "ifonlineagentsv2",
+                    "selectedOption": "all",
+                    "ignoreOperatingHours": true,
+                    "trueIntent": "#fe0bc10a-8814-4105-89cd-cc98ee9853b6",
+                    "falseIntent": "#6466a744-91fa-473b-8e7b-b1f3421945a0"
+                }
+            ],
+            "language": "en",
+            "intent_display_name": "project ignore op test",
+            "intent_id": "4570951f-f223-408c-8f32-5c9d8106d7e7",
+            "agents_available": false,
+            "attributes": {
+                "position": {
+                    "x": 1172,
+                    "y": 760
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "f2b6c2e8-bc01-4103-bf28-c8b9cdbd4158",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                },
+                "connectors": {},
+                "color": "80,100,147",
+                "readonly": false
+            }
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "ea0fe6ef-bef4-4486-8100-2f24a9169627",
+                    "stopOnConditionMet": true,
+                    "_tdActionType": "ifonlineagentsv2",
+                    "selectedOption": "currentDep",
+                    "ignoreOperatingHours": false,
+                    "trueIntent": null
+                },
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "514e5ea2-329e-4b85-9652-6de911bb4cb4",
+                    "_tdActionType": "reply",
+                    "attributes": {
+                        "disableInputMessage": false,
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "reply after online agents",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": []
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            ],
+            "language": "en",
+            "intent_display_name": "no connector",
+            "intent_id": "dee72ca6-f6a1-44d7-8e5b-6624f9c97e22",
+            "agents_available": false,
+            "attributes": {
+                "position": {
+                    "x": 1174,
+                    "y": 1106
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "f46aafef-5e48-42a0-bc8c-32603c79682c",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                },
+                "connectors": {},
+                "color": "80,100,147",
+                "readonly": false
+            }
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "ef8c58d3-6c7c-4458-be5f-53aa7b683925",
+                    "_tdActionType": "reply",
+                    "attributes": {
+                        "disableInputMessage": false,
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "agent online from: {{type}}",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": []
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            ],
+            "language": "en",
+            "intent_display_name": "online",
+            "intent_id": "fe0bc10a-8814-4105-89cd-cc98ee9853b6",
+            "agents_available": false,
+            "attributes": {
+                "position": {
+                    "x": 1657,
+                    "y": -77
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "1e14b026-f8fe-4dba-a524-3b91e466e8da",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                },
+                "connectors": {},
+                "color": "86,179,101",
+                "readonly": false
+            }
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "19b3ab96-50bf-4a4e-abf6-4b5eaacb47b0",
+                    "_tdActionType": "reply",
+                    "attributes": {
+                        "disableInputMessage": false,
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "agent offline from: {{type}}",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": []
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            ],
+            "language": "en",
+            "intent_display_name": "offline",
+            "intent_id": "6466a744-91fa-473b-8e7b-b1f3421945a0",
+            "agents_available": false,
+            "attributes": {
+                "position": {
+                    "x": 1658,
+                    "y": 274
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "0ed76e57-fae3-4809-8e9d-8a0e1bfd85bb",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                },
+                "connectors": {},
+                "color": "204,68,75",
+                "readonly": false
+            }
+        }
+    ]
+}

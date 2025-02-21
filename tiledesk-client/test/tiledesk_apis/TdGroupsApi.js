@@ -2,28 +2,25 @@
 const { v4: uuidv4 } = require('uuid');
 const Utils = require('./utils')
 
-class User {
+class Group {
 
   constructor(APIURL, PROJECT_ID, JWT_TOKEN, LOG){
     this.APIURL = APIURL;
     this.PROJECT_ID = PROJECT_ID;
     this.JWT_TOKEN = JWT_TOKEN;
-    this.LOG = LOG;
+    this.LOG = LOG
   }
 
-
-  async addUserToProject(email, role, available){
+  async add(name){
     return new Promise((resolve, reject)=> {
       const HTTPREQUEST = {
-          url: `${this.APIURL}/${this.PROJECT_ID}/project_users/invite`,
+          url: `${this.APIURL}/${this.PROJECT_ID}/groups`,
           headers: {
             'Content-Type' : 'application/json',
             'Authorization': this.JWT_TOKEN
           },
           json: {
-            email: email,
-            role: role,
-            user_available: available
+            name: name
           },
           method: 'POST',
           httpsOptions: this.httpsOptions
@@ -42,69 +39,18 @@ class User {
     }); 
   }
 
-  async removeUserToProject(user_id){
+  async addMembers(id, members){
     return new Promise((resolve, reject)=> {
       const HTTPREQUEST = {
-        url: `${this.APIURL}/${this.PROJECT_ID}/project_users/${user_id}`,
-        headers: {
-          'Content-Type' : 'application/json',
-          'Authorization': this.JWT_TOKEN
-        },
-        method: 'DELETE',
-        httpsOptions: this.httpsOptions
-      };
-      Utils.myrequest(
-        HTTPREQUEST,
-        function(err, resbody) {
-          if (err) {
-            reject(err)
-          }
-          else {
-            resolve(resbody)
-          }
-        }, this.LOG
-      );
-    }); 
-  }
-
-  async setAvailability(user_id, available, status){
-    return new Promise((resolve, reject)=> {
-      const HTTPREQUEST = {
-          url: `${this.APIURL}/${this.PROJECT_ID}/project_users/${user_id}`,
+          url: `${this.APIURL}/${this.PROJECT_ID}/groups/${id}`,
           headers: {
             'Content-Type' : 'application/json',
             'Authorization': this.JWT_TOKEN
           },
           json: {
-            user_available: available,
-            profileStatus: status
+            members: members
           },
           method: 'PUT',
-          httpsOptions: this.httpsOptions
-      };
-      Utils.myrequest(
-        HTTPREQUEST,
-        function(err, resbody) {
-          if (err) {
-            reject(err)
-          }
-          else {
-            resolve(resbody)
-          }
-        }, this.LOG
-      );
-    }); 
-  }
-
-  async removeUser(token){
-    return new Promise((resolve, reject)=> {
-      const HTTPREQUEST = {
-          url: `${this.APIURL}/users`,
-          headers: {
-            'Content-Type' : 'application/json',
-            'Authorization': token
-          },
-          method: 'DELETE',
           httpsOptions: this.httpsOptions
       };
       Utils.myrequest(
@@ -121,7 +67,34 @@ class User {
     }); 
   }
 
-   
+  async delete(id){
+    return new Promise((resolve, reject)=> {
+      const HTTPREQUEST = {
+          url: `${this.APIURL}/${this.PROJECT_ID}/groups/${id}`,
+          headers: {
+            'Content-Type' : 'application/json',
+            'Authorization': this.JWT_TOKEN
+          },
+          json: {
+            trashed: true
+          },
+          method: 'PUT',
+          httpsOptions: this.httpsOptions
+      };
+      Utils.myrequest(
+        HTTPREQUEST,
+        function(err, resbody) {
+            if (err) {
+              reject(err)
+            }
+            else {
+              resolve(resbody)
+            }
+        }, this.LOG
+      );
+    }); 
+  }
+
 }
 
-module.exports = User
+module.exports = Group

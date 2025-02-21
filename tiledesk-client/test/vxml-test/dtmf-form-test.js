@@ -150,7 +150,7 @@ describe('CHATBOT: Play a DTMF Form', async () => {
             })
             BOT_ID = data._id;
             
-            const department = await tdClientTest.department.createDepartment('dep test vxml', data._id).catch((err) => {
+            const department = await tdClientTest.department.createDepartment('dep test vxml', data._id, null).catch((err) => {
                 console.error(err); 
                 reject(err);
             });

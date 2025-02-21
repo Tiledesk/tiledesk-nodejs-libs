@@ -37,6 +37,32 @@ class Request {
             );
         });
     }
+
+    async getChatbotParameters(request_id){
+        return new Promise((resolve, reject) => {
+            const URL = `${this.APIURL}/${this.PROJECT_ID}/requests/${request_id}/chatbot/parameters`
+            const HTTPREQUEST = {
+                url: URL,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': this.JWT_TOKEN
+                },
+                method: 'GET',
+                httpsOptions: this.httpsOptions
+            };
+            Utils.myrequest(
+                HTTPREQUEST,
+                function (err, resbody) {
+                    if (err) {
+                        reject(error)
+                    }
+                    else {
+                        resolve(resbody)
+                    }
+                }, this.LOG
+            );
+        });
+    }
 }
 
 module.exports = Request
