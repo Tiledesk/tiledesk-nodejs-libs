@@ -1,4 +1,4 @@
-const bot = {
+{
     "webhook_enabled": false,
     "language": "en",
     "name": "delete attribute with form",
@@ -188,5 +188,3 @@ const bot = {
         }
     ]
 }
-
-module.exports = { bot: bot };

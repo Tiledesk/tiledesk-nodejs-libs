@@ -136,7 +136,7 @@ describe('CHATBOT: Delete attribute with form', async () => {
                     assert(result.user.email !== null);
                     USER_ADMIN_TOKEN = result.token;
                     // USER_ID = result.user._id;
-                    const bot = require('./chatbots/delete_attribute_with_form_bot.js').bot;
+                    const bot = require('./chatbots/delete_attribute_with_form_bot.json');
                     // console.log("bot:", bot);
                     try {
                         const data = await importChatbot(bot, TILEDESK_PROJECT_ID, USER_ADMIN_TOKEN);

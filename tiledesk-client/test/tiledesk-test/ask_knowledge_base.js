@@ -141,7 +141,7 @@ describe('Knwoledge Base (Long Test)', async () => {
                 TOKEN: USER_ADMIN_TOKEN
             })
             
-            const bot = require('./chatbots/ask_knowledge_base_bot.js').bot;
+            const bot = require('./chatbots/ask_knowledge_base_bot.json');
             const data = await tdClientTest.chatbot.importChatbot(bot).catch((err) => { 
                 console.error(err); 
                 reject(err);

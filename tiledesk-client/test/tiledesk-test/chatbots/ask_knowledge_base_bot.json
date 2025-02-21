@@ -1,4 +1,4 @@
-const bot = {
+{
     "webhook_enabled": false,
     "language": "en",
     "name": "Ask KB Chatbot",
@@ -549,5 +549,3 @@ const bot = {
         }
     ]
 }
-
-module.exports = { bot: bot }
