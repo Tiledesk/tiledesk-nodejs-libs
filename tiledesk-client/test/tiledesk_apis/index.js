@@ -7,6 +7,7 @@ const Tag = require('./TdTagApi')
 const Chatbot = require('./TdChatbotApi')
 const {TiledeskClient} = require('../../index.js')
 const Subscription = require('./TdSubscriptionApi.js')
+const KnowledgeBase = require('./TdKnowledgeBaseApi')
 
 class TiledeskClientTest {
 
@@ -51,6 +52,8 @@ class TiledeskClientTest {
         this.lead = new Lead(this.APIURL, this.PROJECT_ID, this.JWT_TOKEN);
         this.tag = new Tag(this.APIURL, this.PROJECT_ID, this.JWT_TOKEN);
         this.subscription = new Subscription(this.APIURL, this.PROJECT_ID, this.JWT_TOKEN);
+        this.knowledgeBase = new KnowledgeBase(this.APIURL, this.PROJECT_ID, this.JWT_TOKEN);
+        
     }
 
     static fixToken(token) {

@@ -67,7 +67,6 @@ class Utils {
           }
         })
         .catch(function (error) {
-          console.error(error); 
           if (callback) {
             callback(error, null, null);
           }
