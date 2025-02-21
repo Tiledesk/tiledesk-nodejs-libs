@@ -7,6 +7,7 @@ const Tag = require('./TdTagApi')
 const Chatbot = require('./TdChatbotApi')
 const {TiledeskClient} = require('../../index.js')
 const Subscription = require('./TdSubscriptionApi.js')
+const KnowledgeBase = require('./TdKnowledgeBaseApi')
 const Group = require('./TdGroupsApi.js')
 const Ai = require('./TdAiApi.js')
 const Integration = require('./TdIntegrationApi.js')
@@ -62,6 +63,8 @@ class TiledeskClientTest {
         this.ai = new Ai(this.APIURL, this.PROJECT_ID, this.JWT_TOKEN,this.GPT_KEY );
         this.integration = new Integration(this.APIURL, this.PROJECT_ID, this.JWT_TOKEN);
         this.subscription = new Subscription(this.APIURL, this.PROJECT_ID, this.JWT_TOKEN);
+        this.knowledgeBase = new KnowledgeBase(this.APIURL, this.PROJECT_ID, this.JWT_TOKEN);
+
     }
 
     static fixToken(token) {
