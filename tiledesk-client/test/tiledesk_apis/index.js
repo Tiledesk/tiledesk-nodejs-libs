@@ -8,6 +8,8 @@ const Chatbot = require('./TdChatbotApi')
 const {TiledeskClient} = require('../../index.js')
 const Subscription = require('./TdSubscriptionApi.js')
 const Group = require('./TdGroupsApi.js')
+const Ai = require('./TdAiApi.js')
+const Integration = require('./TdIntegrationApi.js')
 
 class TiledeskClientTest {
 
@@ -44,6 +46,11 @@ class TiledeskClientTest {
             this.log = options.log;
         }
 
+        this.GPT_KEY = null;
+        if(options.GPT_KEY){
+            this.GPT_KEY = options.GPT_KEY;
+        }
+
         this.project = new Project(this.APIURL, this.PROJECT_ID, this.JWT_TOKEN)
         this.department = new Department(this.APIURL, this.PROJECT_ID, this.JWT_TOKEN);
         this.chatbot = new Chatbot(this.APIURL, this.PROJECT_ID, this.JWT_TOKEN)
@@ -52,6 +59,8 @@ class TiledeskClientTest {
         this.lead = new Lead(this.APIURL, this.PROJECT_ID, this.JWT_TOKEN);
         this.tag = new Tag(this.APIURL, this.PROJECT_ID, this.JWT_TOKEN);
         this.group = new Group(this.APIURL, this.PROJECT_ID, this.JWT_TOKEN);
+        this.ai = new Ai(this.APIURL, this.PROJECT_ID, this.JWT_TOKEN,this.GPT_KEY );
+        this.integration = new Integration(this.APIURL, this.PROJECT_ID, this.JWT_TOKEN);
         this.subscription = new Subscription(this.APIURL, this.PROJECT_ID, this.JWT_TOKEN);
     }
 
