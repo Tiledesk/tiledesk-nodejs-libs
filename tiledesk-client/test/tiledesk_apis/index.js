@@ -60,7 +60,7 @@ class TiledeskClientTest {
         this.lead = new Lead(this.APIURL, this.PROJECT_ID, this.JWT_TOKEN);
         this.tag = new Tag(this.APIURL, this.PROJECT_ID, this.JWT_TOKEN);
         this.group = new Group(this.APIURL, this.PROJECT_ID, this.JWT_TOKEN);
-        this.ai = new Ai(this.APIURL, this.PROJECT_ID, this.JWT_TOKEN,this.GPT_KEY );
+        this.ai = new Ai(this.APIURL, this.PROJECT_ID, this.JWT_TOKEN,this.log, this.GPT_KEY );
         this.integration = new Integration(this.APIURL, this.PROJECT_ID, this.JWT_TOKEN);
         this.subscription = new Subscription(this.APIURL, this.PROJECT_ID, this.JWT_TOKEN);
         this.knowledgeBase = new KnowledgeBase(this.APIURL, this.PROJECT_ID, this.JWT_TOKEN);

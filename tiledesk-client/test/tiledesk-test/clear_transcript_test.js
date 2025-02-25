@@ -178,6 +178,7 @@ describe('CHATBOT: Clear transcript action', async () => {
                 assert.ok(false);
             });
             assert(result)
+            done()
         });
     });
 

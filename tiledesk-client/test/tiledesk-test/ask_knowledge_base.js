@@ -354,7 +354,7 @@ describe('Knwoledge Base (Long Test)', async () => {
                     assert(message.text === "OK");
                     resolve()
                 } else {
-                    console.log("message: ", message)
+                    // console.log("message: ", message)
                 }
             })
 

@@ -273,7 +273,7 @@ describe('CHATBOT: Audio message is sent from client', async () => {
     })
 
     it('Send Audio url (project has a valid GPT key) (~1s)', () => {
-        return new Promise((resolve, reject)=> {
+        return new Promise(async (resolve, reject)=> {
             let hasSentAudioRecord = false;    
             const tdClientTest = new TiledeskClientTest({
                 APIURL: API_ENDPOINT,
@@ -281,6 +281,12 @@ describe('CHATBOT: Audio message is sent from client', async () => {
                 TOKEN: USER_ADMIN_TOKEN,
                 GPT_KEY: process.env.GPT_KEY
             });
+
+            const validate = await tdClientTest.ai.validateOpenAiKey().catch((err) => { 
+                console.error(err); 
+                reject(err);
+            })
+            console.log('valllll', validate)
 
 
             chatClient1.onMessageAdded(async (message, topic) => { 
