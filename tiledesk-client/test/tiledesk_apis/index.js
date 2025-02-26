@@ -11,6 +11,7 @@ const KnowledgeBase = require('./TdKnowledgeBaseApi')
 const Group = require('./TdGroupsApi.js')
 const Ai = require('./TdAiApi.js')
 const Integration = require('./TdIntegrationApi.js')
+const Upload = require('./TdUpoloadApi.js')
 
 class TiledeskClientTest {
 
@@ -64,6 +65,7 @@ class TiledeskClientTest {
         this.integration = new Integration(this.APIURL, this.PROJECT_ID, this.JWT_TOKEN);
         this.subscription = new Subscription(this.APIURL, this.PROJECT_ID, this.JWT_TOKEN);
         this.knowledgeBase = new KnowledgeBase(this.APIURL, this.PROJECT_ID, this.JWT_TOKEN);
+        this.upload = new Upload(this.APIURL, this.PROJECT_ID, this.JWT_TOKEN);
 
     }
 
