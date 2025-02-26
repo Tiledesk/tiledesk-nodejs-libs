@@ -41,7 +41,10 @@
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "fast-xml-parser": "^4.5.1",
+    "form-data": "^4.0.2",
+    "fs": "^0.0.1-security",
     "mqtt": "^4.3.7",
+    "path": "^0.12.7",
     "request": "^2.88.2",
     "uuid": "^8.3.2"
   }

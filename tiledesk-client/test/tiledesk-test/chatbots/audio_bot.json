@@ -74,7 +74,7 @@
                                 "type": "message",
                                 "message": {
                                     "type": "text",
-                                    "text": "{{lastUserText}}",
+                                    "text": "default: {{lastUserText}}",
                                     "attributes": {
                                         "attachment": {
                                             "type": "template",
