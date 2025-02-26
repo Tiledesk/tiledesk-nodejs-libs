@@ -92,6 +92,7 @@ let example_content = {
     namespace: null
 }
 let content_id = null;
+let integration_id;
 let elapsed;
 
 describe('Knwoledge Base (Long Test)', async () => {
@@ -138,16 +139,10 @@ describe('Knwoledge Base (Long Test)', async () => {
             const tdClientTest = new TiledeskClientTest({
                 APIURL: API_ENDPOINT,
                 PROJECT_ID: TILEDESK_PROJECT_ID,
-                TOKEN: USER_ADMIN_TOKEN
+                TOKEN: USER_ADMIN_TOKEN,
+                GPT_KEY: process.env.GPT_KEY
             })
             
-            const bot = require('./chatbots/ask_knowledge_base_bot.json');
-            const data = await tdClientTest.chatbot.importChatbot(bot).catch((err) => { 
-                console.error(err); 
-                reject(err);
-            })
-            BOT_ID = data._id;
-
             /** ADD CONTENT TO KNOWLEDGE BASE */
             let namespaces = await tdClientTest.knowledgeBase.getAllNamespaces().catch((err) => {
                 console.error("Error getting all namespaces ", err.response.status, err.response.statusText);
@@ -216,6 +211,37 @@ describe('Knwoledge Base (Long Test)', async () => {
                 return;
             }
 
+            /** ADD GPT KEY AND OPENAI INTEGRATION */
+            const validate = await tdClientTest.ai.validateOpenAiKey().catch((err) => { 
+                console.error(err); 
+                reject(err);
+            })
+            assert(validate)
+            assert(validate.object)
+            assert(validate.data)
+            const integration = await tdClientTest.integration.addIntegration("openai", { apikey: tdClientTest.ai.getKEY(), organization: 'test-lib' }).catch((err) => { 
+                console.error(err); 
+                reject(err);
+            })
+            assert(integration)
+            assert(integration._id)
+            assert(integration.name)
+            assert.equal(integration.name, 'openai')
+            assert(integration.value)
+            assert(integration.value.apikey)
+            assert(integration.value.organization)
+            assert.equal(integration.value.apikey, tdClientTest.ai.getKEY())
+            assert.equal(integration.value.organization, 'test-lib')
+            integration_id = integration._id
+
+
+            const bot = require('./chatbots/ask_knowledge_base_bot.json');
+            const data = await tdClientTest.chatbot.importChatbot(bot).catch((err) => { 
+                console.error(err); 
+                reject(err);
+            })
+            BOT_ID = data._id;
+
             chatClient1.connect(user1.userid, user1.token, () => {
                 if (LOG_STATUS) {
                     console.log("chatClient1 connected and subscribed.");
@@ -243,6 +269,13 @@ describe('Knwoledge Base (Long Test)', async () => {
                 assert.ok(false);
             })
             assert(deleteContent._id === content_id)
+
+            const integration_result = await tdClientTest.integration.deleteIntegration(integration_id).catch((err) => { 
+                console.error(err); 
+                reject(err);
+            })
+            assert(integration_result)
+            assert(integration_result.success===true)
             done();
         });
     });
