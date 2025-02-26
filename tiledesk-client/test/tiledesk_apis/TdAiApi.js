@@ -37,6 +37,9 @@ class Ai {
     }); 
   }
 
+  getKEY(){
+    return this.GPT_KEY;
+  }
 }
 
 module.exports = Ai

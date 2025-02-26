@@ -40,6 +40,31 @@ class Integration {
     }); 
   }
 
+  async deleteIntegration(ID){
+    return new Promise((resolve, reject)=> {
+      const HTTPREQUEST = {
+          url: `${this.APIURL}/${this.PROJECT_ID}/integration/${ID}`,
+          headers: {
+            'Content-Type' : 'application/json',
+            'Authorization': this.JWT_TOKEN
+          },
+          method: 'DELETE',
+          httpsOptions: this.httpsOptions
+      };
+      Utils.myrequest(
+        HTTPREQUEST,
+        function(err, resbody) {
+            if (err) {
+              reject(err)
+            }
+            else {
+              resolve(resbody)
+            }
+        }, this.LOG
+      );
+    }); 
+  }
+
 }
 
 module.exports = Integration
