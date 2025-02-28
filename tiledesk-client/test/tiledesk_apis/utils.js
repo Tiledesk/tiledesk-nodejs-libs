@@ -51,10 +51,10 @@ class Utils {
           if (log) {
             console.log("Response for url:", options.url);
             console.log("Response headers:\n", JSON.stringify(res.headers));
-            // console.log("******** Response for url:", res);
+            console.log("******** Response for url:", res);
           }
           
-          if (res && res.status == 200 && res.data) {
+          if (res && (res.status >= 200 && res.status <= 299 ) &&res.data) {
             if (callback) {
               callback(null, res.data);
             }
