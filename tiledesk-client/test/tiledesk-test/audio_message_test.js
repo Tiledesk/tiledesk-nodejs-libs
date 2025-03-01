@@ -203,19 +203,18 @@ describe('CHATBOT: Audio message is sent from client', async () => {
             });
             assert(result)
 
-            // const integration_result = await tdClientTest.integration.deleteIntegration(integration_id).catch((err) => { 
-            //     console.error(err); 
-            //     reject(err);
-            // })
-            // assert(integration_result)
-            // assert(integration_result.success===true)
+            const integration_result = await tdClientTest.integration.deleteIntegration(integration_id).catch((err) => { 
+                console.error(err); 
+                reject(err);
+            })
+            assert(integration_result)
+            assert(integration_result.success===true)
             done();
         });
     });
 
     it('Send Audio url (project has not a valid GPT key) (~1s)', () => {
-        return new Promise((resolve, reject)=> {
-            let hasSentAudioRecord = false;    
+        return new Promise((resolve, reject)=> { 
             chatClient1.onMessageAdded(async (message, topic) => { 
                 const message_text = ''     
                 if(message.recipient !== recipient_id){
@@ -279,7 +278,6 @@ describe('CHATBOT: Audio message is sent from client', async () => {
                             assert(msg.metadata.uid)
                             assert.equal(msg.metadata.type, "audio/mpeg")
                             assert.equal(msg.metadata.name, "audio-file")
-                            hasSentAudioRecord = true
                             resolve();                 
                         }
                     );
@@ -303,143 +301,140 @@ describe('CHATBOT: Audio message is sent from client', async () => {
         })
     })
 
-    // it('Send Audio url (project has a valid GPT key) (~1s)', () => {
-    //     return new Promise(async (resolve, reject)=> {
-    //         let hasSentAudioRecord = false;    
-    //         const tdClientTest = new TiledeskClientTest({
-    //             APIURL: API_ENDPOINT,
-    //             PROJECT_ID: TILEDESK_PROJECT_ID,
-    //             TOKEN: USER_ADMIN_TOKEN,
-    //             GPT_KEY: process.env.GPT_KEY
-    //         });
+    it('Send Audio url (project has a valid GPT key) (~4s)', () => {
+        return new Promise(async (resolve, reject)=> {
+            let hasSentAudioRecord = false;  
+            const tdClientTest = new TiledeskClientTest({
+                APIURL: API_ENDPOINT,
+                PROJECT_ID: TILEDESK_PROJECT_ID,
+                TOKEN: USER_ADMIN_TOKEN,
+                GPT_KEY: process.env.GPT_KEY
+            });
 
-    //         const validate = await tdClientTest.ai.validateOpenAiKey().catch((err) => { 
-    //             console.error(err); 
-    //             reject(err);
-    //         })
-    //         assert(validate)
-    //         assert(validate.object)
-    //         assert(validate.data)
+            const validate = await tdClientTest.ai.validateOpenAiKey().catch((err) => { 
+                console.error(err); 
+                reject(err);
+            })
+            assert(validate)
+            assert(validate.object)
+            assert(validate.data)
 
-    //         const integration = await tdClientTest.integration.addIntegration("openai", { apikey: tdClientTest.ai.getKEY(), organization: 'test-lib' }).catch((err) => { 
-    //             console.error(err); 
-    //             reject(err);
-    //         })
-    //         assert(integration)
-    //         assert(integration._id)
-    //         assert(integration.name)
-    //         assert.equal(integration.name, 'openai')
-    //         assert(integration.value)
-    //         assert(integration.value.apikey)
-    //         assert(integration.value.organization)
-    //         assert.equal(integration.value.apikey, tdClientTest.ai.getKEY())
-    //         assert.equal(integration.value.organization, 'test-lib')
-    //         integration_id = integration._id
+            const integration = await tdClientTest.integration.addIntegration("openai", { apikey: tdClientTest.ai.getKEY(), organization: 'test-lib' }).catch((err) => { 
+                console.error(err); 
+                reject(err);
+            })
+            assert(integration)
+            assert(integration._id)
+            assert(integration.name)
+            assert.equal(integration.name, 'openai')
+            assert(integration.value)
+            assert(integration.value.apikey)
+            assert(integration.value.organization)
+            assert.equal(integration.value.apikey, tdClientTest.ai.getKEY())
+            assert.equal(integration.value.organization, 'test-lib')
+            integration_id = integration._id
 
-    //         chatClient1.onMessageAdded(async (message, topic) => { 
-    //             const message_text = ''
-    //             console.log('messssss', message)  
-    //             if(message.recipient !== recipient_id){
-    //                 reject();
-    //                 return;
-    //             }
+            chatClient1.onMessageAdded(async (message, topic) => { 
+                const message_text = ''
+                if(message.recipient !== recipient_id){
+                    reject();
+                    return;
+                }
+                if (LOG_STATUS) {
+                    console.log(">(1) Incoming message [sender:" + message.sender_fullname + "]: ", message);
+                } 
+                if (
+                    message &&
+                    message.attributes.intentName ===  "welcome" &&
+                    message.sender_fullname === "Audio Chatbot"
+                ) {
+                    if (LOG_STATUS) {
+                        console.log("> Incoming message from 'welcome' intent ok.");
+                    }
 
-    //             if (LOG_STATUS) {
-    //                 console.log(">(1) Incoming message [sender:" + message.sender_fullname + "]: ", message);
-    //             }
-    //             if (
-    //                 message &&
-    //                 message.attributes.intentName ===  "welcome" &&
-    //                 message.sender_fullname === "Audio Chatbot"
-    //             ) {
-    //                 if (LOG_STATUS) {
-    //                     console.log("> Incoming message from 'welcome' intent ok.");
-    //                 }
-
-    //                 assert(message.attributes, "Expect message.attributes exist")
-    //                 assert(message.attributes.commands, "Expect message.attributes.commands")
-    //                 assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
-    //                 let commands = message.attributes.commands
-    //                 let command = commands[1]
-    //                 assert.equal(command.type, 'message')
-    //                 assert(command.message, "Expect command.message exist")
-    //                 let msg = command.message
-    //                 assert(msg.text, "Expect msg.text exist")
-    //                 assert.equal(msg.text, 'send audio file to translate in text', `Expect msg.text to be 'send audio file to translate in text' but got: ${msg.text} `)
-    //                 console.log('messsssss', msg)
-
-    //                 // chatClient1.sendMessage(
-    //                 //     '',
-    //                 //     'file',
-    //                 //     recipient_id,
-    //                 //     "Test support group",
-    //                 //     user1.fullname,
-    //                 //     {projectId: config.TILEDESK_PROJECT_ID},
-    //                 //     {   src: uploadRes.src,
-    //                 //         downloadURL: uploadRes.downloadURL,
-    //                 //         type:"audio/mpeg", 
-    //                 //         name: "audio-file",  
-    //                 //         size:"37168",
-    //                 //         uid: "qwe32dsa"
-    //                 //     },
-    //                 //     'group',
-    //                 //     (err, msg) => {
-    //                 //         if (err) {
-    //                 //             console.error("Error send:", err);
-    //                 //         }
-    //                 //         if (LOG_STATUS) {
-    //                 //             console.log("Message Sent ok:", msg);
-    //                 //         }
-    //                 //         assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
-    //                 //         assert(msg.type)
-    //                 //         assert.equal(msg.type, 'file')
-    //                 //         assert(msg.metadata)
-    //                 //         assert(msg.metadata.src)
-    //                 //         assert(msg.metadata.downloadURL)
-    //                 //         assert(msg.metadata.type)
-    //                 //         assert(msg.metadata.name)
-    //                 //         assert(msg.metadata.size)
-    //                 //         assert(msg.metadata.uid)
-    //                 //         assert.equal(msg.metadata.type, "audio/mpeg")
-    //                 //         assert.equal(msg.metadata.name, "audio-file")
-    //                 //         hasSentAudioRecord = true
-    //                 //     }
-    //                 // );
+                    assert(message.attributes, "Expect message.attributes exist")
+                    assert(message.attributes.commands, "Expect message.attributes.commands")
+                    assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                    let commands = message.attributes.commands
+                    let command = commands[1]
+                    assert.equal(command.type, 'message')
+                    assert(command.message, "Expect command.message exist")
+                    let msg = command.message
+                    assert(msg.text, "Expect msg.text exist")
+                    assert.equal(msg.text, 'send audio file to translate in text', `Expect msg.text to be 'send audio file to translate in text' but got: ${msg.text} `)
+  
+                    chatClient1.sendMessage(
+                        '',
+                        'file',
+                        recipient_id,
+                        "Test support group",
+                        user1.fullname,
+                        { projectId: config.TILEDESK_PROJECT_ID },
+                        {   src: uploadRes.src,
+                            downloadURL: uploadRes.downloadURL,
+                            type:"audio/mpeg", 
+                            name: "audio-file",  
+                            size:"37168",
+                            uid: "qwe32dsa"
+                        },
+                        'group',
+                        (err, msg) => {
+                            if (err) {
+                                console.error("Error send:", err);
+                            }
+                            if (LOG_STATUS) {
+                                console.log("Message Sent ok:", msg);
+                            }
+                            assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
+                            assert(msg.type)
+                            assert.equal(msg.type, 'file')
+                            assert(msg.metadata)
+                            assert(msg.metadata.src)
+                            assert(msg.metadata.downloadURL)
+                            assert(msg.metadata.type)
+                            assert(msg.metadata.name)
+                            assert(msg.metadata.size)
+                            assert(msg.metadata.uid)
+                            assert.equal(msg.metadata.type, "audio/mpeg")
+                            assert.equal(msg.metadata.name, "audio-file")
+                            hasSentAudioRecord = true
+                            // resolve();
+                        }
+                    );
                       
-    //             }
-    //             else if(hasSentAudioRecord &&
-    //                 message &&  message.sender_fullname === "Audio Chatbot"
-    //             ){
-    //                 console.log('herrrrr', message)
-    //                 assert(message.attributes, "Expect message.attributes exist")
-    //                 assert(message.attributes.commands, "Expect message.attributes.commands")
-    //                 assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
-    //                 let commands = message.attributes.commands
-    //                 let command = commands[1]
-    //                 assert.equal(command.type, 'message')
-    //                 assert(command.message, "Expect command.message exist")
-    //                 let msg = command.message
-    //                 assert(msg.text, "Expect msg.text exist")
-    //                 assert.equal(msg.text, 'messaggio di test', `Expect msg.text to be 'messaggio di test' but got: ${msg.text} `)
-    //                 resolve();  
-    //             }
-    //             else {
-    //                 // console.log("Message not computed:", message.text);
-    //             }
+                }
+                else if(hasSentAudioRecord &&
+                    message &&  message.sender_fullname === "Audio Chatbot"
+                ){
+                    assert(message.attributes, "Expect message.attributes exist")
+                    assert(message.attributes.commands, "Expect message.attributes.commands")
+                    assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                    let commands = message.attributes.commands
+                    let command = commands[1]
+                    assert.equal(command.type, 'message')
+                    assert(command.message, "Expect command.message exist")
+                    let msg = command.message
+                    assert(msg.text, "Expect msg.text exist")
+                    assert.equal(msg.text, 'Hey, how are you?', `Expect msg.text to be 'messaggio di test' but got: ${msg.text} `)
+                    resolve();  
+                }
+                else {
+                    // console.log("Message not computed:", message.text);
+                }
 
-    //         });
-    //         if (LOG_STATUS) {
-    //             console.log("Sending test message...");
-    //         }
-    //         let recipient_id = group_id+ '_1';
-    //         // let recipient_fullname = group_name;
-    //         triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
-    //             if (err) {
-    //                 console.error("An error occurred while triggering echo bot conversation:", err);
-    //             }
-    //         });
-    //     })
-    // })
+            });
+            if (LOG_STATUS) {
+                console.log("Sending test message...");
+            }
+            let recipient_id = group_id+ '_1';
+            // let recipient_fullname = group_name;
+            triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
+                if (err) {
+                    console.error("An error occurred while triggering echo bot conversation:", err);
+                }
+            });
+        })
+    }).timeout(6000)
 
 });
 
@@ -489,6 +484,7 @@ async function triggerConversation(request_id, chatbot_id, token, callback) {
                     console.error("An error occurred invoking an event:", err);
                     process.exit(1);
                 }
+                // console.log('ressssss', result)
                 callback(null);
             });
         }
