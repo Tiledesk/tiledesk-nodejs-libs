@@ -183,7 +183,7 @@ describe('CHATBOT: Web request v2 Action', async () => {
         });
     });
 
-    it('GET request - API_URL/ (~1s)', () => {
+    it('GET request - API_URL/ ✅ (~1s)', () => {
         return new Promise((resolve, reject)=> {
             let buttonGetIsPressed = false;
             chatClient1.onMessageAdded(async (message, topic) => {
@@ -297,7 +297,7 @@ describe('CHATBOT: Web request v2 Action', async () => {
         })
     })
 
-    it('GET request with auth - API_URL/projects/PROJECT_ID (~1s)', () => {
+    it('GET request with auth - ✅ API_URL/projects/PROJECT_ID (~1s)', () => {
         return new Promise((resolve, reject)=> {
             let buttonGetIsPressed = false;
             chatClient1.onMessageAdded(async (message, topic) => {
@@ -418,7 +418,7 @@ describe('CHATBOT: Web request v2 Action', async () => {
         })
     })
 
-    it('POST request with auth - API_BASE_URL/PROJECT_ID/requests/REQUEST_ID/notes (~1s)', () => {
+    it('POST request with auth - ✅ API_BASE_URL/PROJECT_ID/requests/REQUEST_ID/notes (~1s)', () => {
         return new Promise((resolve, reject)=> {
             let buttonGetIsPressed = false;
             chatClient1.onMessageAdded(async (message, topic) => {
@@ -542,7 +542,7 @@ describe('CHATBOT: Web request v2 Action', async () => {
         })
     })
 
-    it('POST request with auth - ERROR: API_BASE_URL/PROJECT_ID/requests/REQUEST_ID/notes (~1s)', () => {
+    it('POST request with auth - ❌ ERROR: API_BASE_URL/PROJECT_ID/requests/REQUEST_ID/notes (~1s)', () => {
         return new Promise((resolve, reject)=> {
             let buttonGetIsPressed = false;
             chatClient1.onMessageAdded(async (message, topic) => {
@@ -665,7 +665,7 @@ describe('CHATBOT: Web request v2 Action', async () => {
         })
     })
 
-    it('PUT request with auth - API_BASE_URL/PROJECT_ID/requests/REQUEST_ID/participants (~1s)', () => {
+    it('PUT request with auth - ✅ API_BASE_URL/PROJECT_ID/requests/REQUEST_ID/participants (~1s)', () => {
         return new Promise((resolve, reject)=> {
             let buttonGetIsPressed = false;
             chatClient1.onMessageAdded(async (message, topic) => {
@@ -787,7 +787,7 @@ describe('CHATBOT: Web request v2 Action', async () => {
         })
     })
 
-    it('PUT request with auth - ERROR: API_BASE_URL/PROJECT_ID/requests/REQUEST_ID/participants (~1s)', () => {
+    it('PUT request with auth - ❌ ERROR: API_BASE_URL/PROJECT_ID/requests/REQUEST_ID/participants (~1s)', () => {
         return new Promise((resolve, reject)=> {
             let buttonGetIsPressed = false;
             chatClient1.onMessageAdded(async (message, topic) => {
@@ -908,7 +908,7 @@ describe('CHATBOT: Web request v2 Action', async () => {
         })
     })
 
-    it('PATCH request with auth - API_BASE_URL/PROJECT_ID/requests/REQUEST_ID/attributes (~1s)', () => {
+    it('PATCH request with auth - ✅ API_BASE_URL/PROJECT_ID/requests/REQUEST_ID/attributes (~1s)', () => {
         return new Promise((resolve, reject)=> {
             let buttonGetIsPressed = false;
             chatClient1.onMessageAdded(async (message, topic) => {
@@ -1032,7 +1032,7 @@ describe('CHATBOT: Web request v2 Action', async () => {
         })
     })
     
-    it('PATCH request with auth - ERROR: API_BASE_URL/PROJECT_ID/requests/REQUEST_ID/attributes (~1s)', () => {
+    it('PATCH request with auth - ❌ ERROR: API_BASE_URL/PROJECT_ID/requests/REQUEST_ID/attributes (~1s)', () => {
         return new Promise((resolve, reject)=> {
             let buttonGetIsPressed = false;
             chatClient1.onMessageAdded(async (message, topic) => {
