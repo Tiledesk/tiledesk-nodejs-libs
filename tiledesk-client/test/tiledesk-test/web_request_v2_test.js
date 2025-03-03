@@ -75,6 +75,7 @@ else {
 
 let BOT_ID = null;
 let USER_ADMIN_TOKEN = null;
+let USER_ADMIN_ID = null;
 
 let config = {
     MQTT_ENDPOINT: MQTT_ENDPOINT,
@@ -98,10 +99,6 @@ let user1 = {
 };
 
 let group_id;
-let group_name;
-let request;
-let tagsArray = [];
-let pushTagsToList = false;
 
 describe('CHATBOT: Web request v2 Action', async () => {
     before(() => {
@@ -140,8 +137,8 @@ describe('CHATBOT: Web request v2 Action', async () => {
             assert(result.user._id !== null);
             assert(result.user.email !== null);
             USER_ADMIN_TOKEN = result.token;
-
-
+            USER_ADMIN_ID = result.user._id
+            
             const bot = require('./chatbots/web_request_v2_bot.json');
             let intent = bot.intents.find(intent => intent.intent_display_name === 'set variables')
             intent.actions.filter(action => action._tdActionType === 'setattribute-v2')[0].operation.operands[0].value = API_ENDPOINT
@@ -421,7 +418,7 @@ describe('CHATBOT: Web request v2 Action', async () => {
         })
     })
 
-    it('POST request with auth - API_BASE_URL/PROJECT_ID/requests/REQUEST_ID/messages (~1s)', () => {
+    it('POST request with auth - API_BASE_URL/PROJECT_ID/requests/REQUEST_ID/notes (~1s)', () => {
         return new Promise((resolve, reject)=> {
             let buttonGetIsPressed = false;
             chatClient1.onMessageAdded(async (message, topic) => {
@@ -508,13 +505,13 @@ describe('CHATBOT: Web request v2 Action', async () => {
                     assert(msg2.text.includes("Result:"), `Expect msg.text to be 'tag_ok' but got: ${msg.text} `)
                     const match = msg2.text.match(/Result:\n([\s\S]*)/);
                     if(match){
-                        const message = JSON.parse(match[1])
-                        assert(message)
-                        assert(message.text)
-                        assert(message.channel_type)
-                        assert.equal(message.text, "hello")
-                        assert.equal(message.channel_type, "group")
-                        assert.equal(message.type, "text")
+                        const project = JSON.parse(match[1])
+                        assert(project)
+                        assert(project.notes)
+                        assert(project.notes[0].text)
+                        assert(project.notes[0].createdBy)
+                        assert.equal(project.notes[0].text, "hello")
+                        assert.equal(project.notes[0].createdBy, USER_ADMIN_ID)
                     }else{
                         reject();
                     }
@@ -545,7 +542,7 @@ describe('CHATBOT: Web request v2 Action', async () => {
         })
     })
 
-    it('POST request with auth - ERROR: API_BASE_URL/PROJECT_ID/requests/REQUEST_ID/messages (~1s)', () => {
+    it('POST request with auth - ERROR: API_BASE_URL/PROJECT_ID/requests/REQUEST_ID/notes (~1s)', () => {
         return new Promise((resolve, reject)=> {
             let buttonGetIsPressed = false;
             chatClient1.onMessageAdded(async (message, topic) => {
@@ -557,6 +554,7 @@ describe('CHATBOT: Web request v2 Action', async () => {
                 if (LOG_STATUS) {
                     console.log(">(1) Incoming message [sender:" + message.sender_fullname + "]: ", message);
                 }
+                
                 if (
                     message &&
                     message.attributes.intentName ===  "welcome" &&
@@ -618,6 +616,7 @@ describe('CHATBOT: Web request v2 Action', async () => {
                     let commands = message.attributes.commands
                     
                     let command1 = commands[1]
+                    
                     assert.equal(command1.type, 'message')
                     assert(command1.message, "Expect command.message exist")
                     let msg = command1.message
@@ -664,7 +663,495 @@ describe('CHATBOT: Web request v2 Action', async () => {
                 }
             });
         })
-    }).timeout(3000)
+    })
+
+    it('PUT request with auth - API_BASE_URL/PROJECT_ID/requests/REQUEST_ID/participants (~1s)', () => {
+        return new Promise((resolve, reject)=> {
+            let buttonGetIsPressed = false;
+            chatClient1.onMessageAdded(async (message, topic) => {
+                const message_text = 'Put'
+                if(message.recipient !== recipient_id){
+                    reject();
+                    return;
+                }
+                if (LOG_STATUS) {
+                    console.log(">(1) Incoming message [sender:" + message.sender_fullname + "]: ", message);
+                }
+                if (
+                    message &&
+                    message.attributes.intentName ===  "welcome" &&
+                    message.sender_fullname === "Web Request v2 Chatbot"
+                ) {
+                    if (LOG_STATUS) {
+                        console.log("> Incoming message from 'welcome' intent ok.");
+                    }
+                    
+                    assert(message.attributes, "Expect message.attributes exist")
+                    assert(message.attributes.commands, "Expect message.attributes.commands")
+                    assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                    let commands = message.attributes.commands
+                    let command = commands[1]
+                    assert.equal(command.type, 'message')
+                    assert(command.message, "Expect command.message exist")
+                    let msg = command.message
+                    assert(msg.text, "Expect msg.text exist")
+                    assert.equal(msg.text, 'Make a Web Request', `Expect msg.text to be 'Make a Web Request' but got: ${msg.text} `)
+
+                    //check buttons 
+                    assert(msg.attributes, "Expect msg.attribues exist")
+                    assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
+                    assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
+                    assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
+                    
+                    let button1 = msg.attributes.attachment.buttons[4]
+                    assert.strictEqual(button1.value, message_text, 'Expect button1 to have "conversation" as text')
+                    assert(button1.action)
+
+                    chatClient1.sendMessage(
+                        message_text,
+                        'text',
+                        recipient_id,
+                        "Test support group",
+                        user1.fullname,
+                        {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
+                        null, // no metadata
+                        'group',
+                        (err, msg) => {
+                            if (err) {
+                                console.error("Error send:", err);
+                            }
+                            if (LOG_STATUS) {
+                                console.log("Message Sent ok:", msg);
+                            }
+                            assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
+                            buttonGetIsPressed = true
+                        }
+                    );
+                                     
+                } else if( buttonGetIsPressed &&
+                    message &&  message.sender_fullname === "Web Request v2 Chatbot"
+                ){
+                    
+                    assert(message.attributes, "Expect message.attributes exist")
+                    assert(message.attributes.commands, "Expect message.attributes.commands")
+                    assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                    let commands = message.attributes.commands
+                    
+                    let command1 = commands[1]
+                    assert.equal(command1.type, 'message')
+                    assert(command1.message, "Expect command.message exist")
+                    let msg = command1.message
+                    assert(msg.text, "Expect msg.text exist")
+                    assert.equal(msg.text, 'SUCCESS', `Expect msg.text to be 'tag_ok' but got: ${msg.text} `)
+
+                    let command2 = commands[3]
+                    assert.equal(command2.type, 'message')
+                    assert(command2.message, "Expect command.message exist")
+                    let msg2 = command2.message
+                    assert(msg2.text, "Expect msg.text exist")
+                    assert(msg2.text.includes("Result:"), `Expect msg.text to be 'tag_ok' but got: ${msg.text} `)
+                    const match = msg2.text.match(/Result:\n([\s\S]*)/);
+                    if(match){
+                        const request = JSON.parse(match[1])
+                        assert(request)
+                        assert(request.id)
+                        assert(request.participants)
+                        assert.equal(request.participants, "bot_"+BOT_ID)
+                    }else{
+                        reject();
+                    }
+                    let command3 = commands[5]
+                    assert.equal(command3.type, 'message')
+                    assert(command3.message, "Expect command.message exist")
+                    let msg3 = command3.message
+                    assert(msg3.text, "Expect msg.text exist")
+                    assert(msg3.text.includes("Status:\n200"), `Expect msg.text to be 'tag_ok' but got: ${msg.text} `)
+                    resolve();
+                    
+                }
+                else {
+                    // console.log("Message not computed:", message.text);
+                }
+
+            });
+            if (LOG_STATUS) {
+                console.log("Sending test message...");
+            }
+            let recipient_id = group_id + '_4';
+            // let recipient_fullname = group_name;
+            triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
+                if (err) {
+                    console.error("An error occurred while triggering echo bot conversation:", err);
+                }
+            });
+        })
+    })
+
+    it('PUT request with auth - ERROR: API_BASE_URL/PROJECT_ID/requests/REQUEST_ID/participants (~1s)', () => {
+        return new Promise((resolve, reject)=> {
+            let buttonGetIsPressed = false;
+            chatClient1.onMessageAdded(async (message, topic) => {
+                const message_text = 'Put with error'
+                if(message.recipient !== recipient_id){
+                    reject();
+                    return;
+                }
+                if (LOG_STATUS) {
+                    console.log(">(1) Incoming message [sender:" + message.sender_fullname + "]: ", message);
+                }
+                if (
+                    message &&
+                    message.attributes.intentName ===  "welcome" &&
+                    message.sender_fullname === "Web Request v2 Chatbot"
+                ) {
+                    if (LOG_STATUS) {
+                        console.log("> Incoming message from 'welcome' intent ok.");
+                    }
+                    
+                    assert(message.attributes, "Expect message.attributes exist")
+                    assert(message.attributes.commands, "Expect message.attributes.commands")
+                    assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                    let commands = message.attributes.commands
+                    let command = commands[1]
+                    assert.equal(command.type, 'message')
+                    assert(command.message, "Expect command.message exist")
+                    let msg = command.message
+                    assert(msg.text, "Expect msg.text exist")
+                    assert.equal(msg.text, 'Make a Web Request', `Expect msg.text to be 'Make a Web Request' but got: ${msg.text} `)
+
+                    //check buttons 
+                    assert(msg.attributes, "Expect msg.attribues exist")
+                    assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
+                    assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
+                    assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
+                    
+                    let button1 = msg.attributes.attachment.buttons[5]
+                    assert.strictEqual(button1.value, message_text, 'Expect button1 to have "conversation" as text')
+                    assert(button1.action)
+
+                    chatClient1.sendMessage(
+                        message_text,
+                        'text',
+                        recipient_id,
+                        "Test support group",
+                        user1.fullname,
+                        {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
+                        null, // no metadata
+                        'group',
+                        (err, msg) => {
+                            if (err) {
+                                console.error("Error send:", err);
+                            }
+                            if (LOG_STATUS) {
+                                console.log("Message Sent ok:", msg);
+                            }
+                            assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
+                            buttonGetIsPressed = true
+                        }
+                    );
+                                     
+                } else if( buttonGetIsPressed &&
+                    message &&  message.sender_fullname === "Web Request v2 Chatbot"
+                ){
+
+                    assert(message.attributes, "Expect message.attributes exist")
+                    assert(message.attributes.commands, "Expect message.attributes.commands")
+                    assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                    let commands = message.attributes.commands
+                    
+                    let command1 = commands[1]
+                    assert.equal(command1.type, 'message')
+                    assert(command1.message, "Expect command.message exist")
+                    let msg = command1.message
+                    assert(msg.text, "Expect msg.text exist")
+                    assert.equal(msg.text, 'FAIL', `Expect msg.text to be 'tag_ok' but got: ${msg.text} `)
+
+                    let command2 = commands[3]
+                    assert.equal(command2.type, 'message')
+                    assert(command2.message, "Expect command.message exist")
+                    let msg2 = command2.message
+                    assert(msg2.text, "Expect msg.text exist")
+                    assert(msg2.text.includes('Result:\n"Unauthorized"'), `Expect msg.text to be 'tag_ok' but got: ${msg.text} `)
+                    
+                    let command3 = commands[5]
+                    assert.equal(command3.type, 'message')
+                    assert(command3.message, "Expect command.message exist")
+                    let msg3 = command3.message
+                    assert(msg3.text, "Expect msg.text exist")
+                    assert(msg3.text.includes("Error:\nRequest failed with status code 401"), `Expect msg.text to be 'tag_ok' but got: ${msg.text} `)
+                    
+                    let command4 = commands[7]
+                    assert.equal(command4.type, 'message')
+                    assert(command4.message, "Expect command.message exist")
+                    let msg4 = command4.message
+                    assert(msg4.text, "Expect msg.text exist")
+                    assert.equal(msg4.text, "FlowError:\n", `Expect msg.text to be 'tag_ok' but got: ${msg.text} `)
+                    
+                    resolve();
+                    
+                }
+                else {
+                    // console.log("Message not computed:", message.text);
+                }
+
+            });
+            if (LOG_STATUS) {
+                console.log("Sending test message...");
+            }
+            let recipient_id = group_id + '_5';
+            // let recipient_fullname = group_name;
+            triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
+                if (err) {
+                    console.error("An error occurred while triggering echo bot conversation:", err);
+                }
+            });
+        })
+    })
+
+    it('PATCH request with auth - API_BASE_URL/PROJECT_ID/requests/REQUEST_ID/attributes (~1s)', () => {
+        return new Promise((resolve, reject)=> {
+            let buttonGetIsPressed = false;
+            chatClient1.onMessageAdded(async (message, topic) => {
+                const message_text = 'Patch'
+                if(message.recipient !== recipient_id){
+                    reject();
+                    return;
+                }
+                if (LOG_STATUS) {
+                    console.log(">(1) Incoming message [sender:" + message.sender_fullname + "]: ", message);
+                }
+                if (
+                    message &&
+                    message.attributes.intentName ===  "welcome" &&
+                    message.sender_fullname === "Web Request v2 Chatbot"
+                ) {
+                    if (LOG_STATUS) {
+                        console.log("> Incoming message from 'welcome' intent ok.");
+                    }
+                    
+                    assert(message.attributes, "Expect message.attributes exist")
+                    assert(message.attributes.commands, "Expect message.attributes.commands")
+                    assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                    let commands = message.attributes.commands
+                    let command = commands[1]
+                    assert.equal(command.type, 'message')
+                    assert(command.message, "Expect command.message exist")
+                    let msg = command.message
+                    assert(msg.text, "Expect msg.text exist")
+                    assert.equal(msg.text, 'Make a Web Request', `Expect msg.text to be 'Make a Web Request' but got: ${msg.text} `)
+
+                    //check buttons 
+                    assert(msg.attributes, "Expect msg.attribues exist")
+                    assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
+                    assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
+                    assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
+                    
+                    let button1 = msg.attributes.attachment.buttons[6]
+                    assert.strictEqual(button1.value, message_text, 'Expect button1 to have "conversation" as text')
+                    assert(button1.action)
+
+                    chatClient1.sendMessage(
+                        message_text,
+                        'text',
+                        recipient_id,
+                        "Test support group",
+                        user1.fullname,
+                        {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
+                        null, // no metadata
+                        'group',
+                        (err, msg) => {
+                            if (err) {
+                                console.error("Error send:", err);
+                            }
+                            if (LOG_STATUS) {
+                                console.log("Message Sent ok:", msg);
+                            }
+                            assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
+                            buttonGetIsPressed = true
+                        }
+                    );
+                                     
+                } else if( buttonGetIsPressed &&
+                    message &&  message.sender_fullname === "Web Request v2 Chatbot"
+                ){
+                    
+                    assert(message.attributes, "Expect message.attributes exist")
+                    assert(message.attributes.commands, "Expect message.attributes.commands")
+                    assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                    let commands = message.attributes.commands
+                    
+                    let command1 = commands[1]
+                    assert.equal(command1.type, 'message')
+                    assert(command1.message, "Expect command.message exist")
+                    let msg = command1.message
+                    assert(msg.text, "Expect msg.text exist")
+                    assert.equal(msg.text, 'SUCCESS', `Expect msg.text to be 'tag_ok' but got: ${msg.text} `)
+
+                    let command2 = commands[3]
+                    
+                    assert.equal(command2.type, 'message')
+                    assert(command2.message, "Expect command.message exist")
+                    let msg2 = command2.message
+                    assert(msg2.text, "Expect msg.text exist")
+                    assert(msg2.text.includes("Result:"), `Expect msg.text to be 'tag_ok' but got: ${msg.text} `)
+                    const match = msg2.text.match(/Result:\n([\s\S]*)/);
+                    if(match){
+                        const request = JSON.parse(match[1])
+                        assert(request)
+                        assert(request.id)
+                        assert(request.attributes)
+                        assert(request.attributes.test)
+                        assert.equal(request.attributes.test, "true")
+                    }else{
+                        reject();
+                    }
+                    let command3 = commands[5]
+                    assert.equal(command3.type, 'message')
+                    assert(command3.message, "Expect command.message exist")
+                    let msg3 = command3.message
+                    assert(msg3.text, "Expect msg.text exist")
+                    assert(msg3.text.includes("Status:\n200"), `Expect msg.text to be 'tag_ok' but got: ${msg.text} `)
+                    resolve();
+                    
+                }
+                else {
+                    // console.log("Message not computed:", message.text);
+                }
+
+            });
+            if (LOG_STATUS) {
+                console.log("Sending test message...");
+            }
+            let recipient_id = group_id + '_6';
+            // let recipient_fullname = group_name;
+            triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
+                if (err) {
+                    console.error("An error occurred while triggering echo bot conversation:", err);
+                }
+            });
+        })
+    })
+    
+    it('PATCH request with auth - ERROR: API_BASE_URL/PROJECT_ID/requests/REQUEST_ID/attributes (~1s)', () => {
+        return new Promise((resolve, reject)=> {
+            let buttonGetIsPressed = false;
+            chatClient1.onMessageAdded(async (message, topic) => {
+                const message_text = 'Patch with no auth'
+                if(message.recipient !== recipient_id){
+                    reject();
+                    return;
+                }
+                if (LOG_STATUS) {
+                    console.log(">(1) Incoming message [sender:" + message.sender_fullname + "]: ", message);
+                }
+                if (
+                    message &&
+                    message.attributes.intentName ===  "welcome" &&
+                    message.sender_fullname === "Web Request v2 Chatbot"
+                ) {
+                    if (LOG_STATUS) {
+                        console.log("> Incoming message from 'welcome' intent ok.");
+                    }
+                    
+                    assert(message.attributes, "Expect message.attributes exist")
+                    assert(message.attributes.commands, "Expect message.attributes.commands")
+                    assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                    let commands = message.attributes.commands
+                    let command = commands[1]
+                    assert.equal(command.type, 'message')
+                    assert(command.message, "Expect command.message exist")
+                    let msg = command.message
+                    assert(msg.text, "Expect msg.text exist")
+                    assert.equal(msg.text, 'Make a Web Request', `Expect msg.text to be 'Make a Web Request' but got: ${msg.text} `)
+
+                    //check buttons 
+                    assert(msg.attributes, "Expect msg.attribues exist")
+                    assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
+                    assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
+                    assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
+                    
+                    let button1 = msg.attributes.attachment.buttons[7]
+                    assert.strictEqual(button1.value, message_text, 'Expect button1 to have "conversation" as text')
+                    assert(button1.action)
+
+                    chatClient1.sendMessage(
+                        message_text,
+                        'text',
+                        recipient_id,
+                        "Test support group",
+                        user1.fullname,
+                        {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
+                        null, // no metadata
+                        'group',
+                        (err, msg) => {
+                            if (err) {
+                                console.error("Error send:", err);
+                            }
+                            if (LOG_STATUS) {
+                                console.log("Message Sent ok:", msg);
+                            }
+                            assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
+                            buttonGetIsPressed = true
+                        }
+                    );
+                                     
+                } else if( buttonGetIsPressed &&
+                    message &&  message.sender_fullname === "Web Request v2 Chatbot"
+                ){
+
+                    assert(message.attributes, "Expect message.attributes exist")
+                    assert(message.attributes.commands, "Expect message.attributes.commands")
+                    assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                    let commands = message.attributes.commands
+                    
+                    let command1 = commands[1]
+                    assert.equal(command1.type, 'message')
+                    assert(command1.message, "Expect command.message exist")
+                    let msg = command1.message
+                    assert(msg.text, "Expect msg.text exist")
+                    assert.equal(msg.text, 'FAIL', `Expect msg.text to be 'tag_ok' but got: ${msg.text} `)
+
+                    let command2 = commands[3]
+                    assert.equal(command2.type, 'message')
+                    assert(command2.message, "Expect command.message exist")
+                    let msg2 = command2.message
+                    assert(msg2.text, "Expect msg.text exist")
+                    assert(msg2.text.includes('Result:\n"Unauthorized"'), `Expect msg.text to be 'tag_ok' but got: ${msg.text} `)
+                    
+                    let command3 = commands[5]
+                    assert.equal(command3.type, 'message')
+                    assert(command3.message, "Expect command.message exist")
+                    let msg3 = command3.message
+                    assert(msg3.text, "Expect msg.text exist")
+                    assert(msg3.text.includes("Error:\nRequest failed with status code 401"), `Expect msg.text to be 'tag_ok' but got: ${msg.text} `)
+                    
+                    let command4 = commands[7]
+                    assert.equal(command4.type, 'message')
+                    assert(command4.message, "Expect command.message exist")
+                    let msg4 = command4.message
+                    assert(msg4.text, "Expect msg.text exist")
+                    assert.equal(msg4.text, "FlowError:\n", `Expect msg.text to be 'tag_ok' but got: ${msg.text} `)
+                    
+                    resolve();
+                    
+                }
+                else {
+                    // console.log("Message not computed:", message.text);
+                }
+
+            });
+            if (LOG_STATUS) {
+                console.log("Sending test message...");
+            }
+            let recipient_id = group_id + '_7';
+            // let recipient_fullname = group_name;
+            triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
+                if (err) {
+                    console.error("An error occurred while triggering echo bot conversation:", err);
+                }
+            });
+        })
+    })
 });
 
 

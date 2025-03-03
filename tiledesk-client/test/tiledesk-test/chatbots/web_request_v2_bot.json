@@ -32,8 +32,8 @@
             "language": "en",
             "attributes": {
                 "position": {
-                    "x": 214,
-                    "y": -183
+                    "x": 235,
+                    "y": 102
                 },
                 "nextBlockAction": {
                     "_tdActionTitle": "",
@@ -81,8 +81,8 @@
             "language": "en",
             "attributes": {
                 "position": {
-                    "x": 582,
-                    "y": 317
+                    "x": 541,
+                    "y": 480
                 },
                 "nextBlockAction": {
                     "_tdActionTitle": "",
@@ -100,7 +100,7 @@
                 {
                     "_tdActionTitle": "",
                     "_tdActionId": "8716d65e-c76a-4b9c-8b31-b1c62eb2cbe2",
-                    "url": "{{API_BASE_URL}}/{{project_id}}/requests/{{conversation_id}}/messages",
+                    "url": "{{API_BASE_URL}}/{{project_id}}/requests/{{conversation_id}}/notes",
                     "headersString": {
                         "Content-Type": "application/json",
                         "Cache-Control": "no-cache",
@@ -111,7 +111,7 @@
                     "settings": {
                         "timeout": 20000
                     },
-                    "jsonBody": "{\n\t\"text\":\"hello\",\n\t\"type\": \"text\"\n, \n\t\"channel_type\": \"group\"\n}",
+                    "jsonBody": "{\n\t\"text\": \"hello\"\n}",
                     "bodyType": "json",
                     "formData": [],
                     "assignStatusTo": "status",
@@ -128,8 +128,8 @@
             "language": "en",
             "attributes": {
                 "position": {
-                    "x": 1023,
-                    "y": -305
+                    "x": 1044,
+                    "y": -325
                 },
                 "nextBlockAction": {
                     "_tdActionId": "c9971dcb-2f37-4cc1-9484-5f8afe1fe728",
@@ -229,8 +229,8 @@
             "language": "en",
             "attributes": {
                 "position": {
-                    "x": 1555,
-                    "y": -21
+                    "x": 1638,
+                    "y": 83
                 },
                 "nextBlockAction": {
                     "_tdActionId": "6a35b7f3-ae6e-4165-b992-db1bad02606e",
@@ -276,8 +276,8 @@
             "language": "en",
             "attributes": {
                 "position": {
-                    "x": 972,
-                    "y": -829
+                    "x": 1026,
+                    "y": -835
                 },
                 "nextBlockAction": {
                     "_tdActionId": "dd7f6621-ac26-4933-aad6-ad5f05e629ec",
@@ -370,13 +370,36 @@
                                                 },
                                                 {
                                                     "uid": "71934ba90de44570973967cce1ea58b2",
-                                                    "type": "text",
-                                                    "value": "Button",
+                                                    "type": "action",
+                                                    "value": "Put with error",
                                                     "link": "",
                                                     "target": "blank",
-                                                    "action": "",
+                                                    "action": "#68c59bcb-5285-4430-86cc-db10735fa868",
                                                     "attributes": "",
-                                                    "show_echo": true
+                                                    "show_echo": true,
+                                                    "alias": ""
+                                                },
+                                                {
+                                                    "uid": "8a85f13750e8493992b192fa9a3e856f",
+                                                    "type": "action",
+                                                    "value": "Patch",
+                                                    "link": "",
+                                                    "target": "blank",
+                                                    "action": "#3a5423bc-2801-47bc-9167-c34111290bb5",
+                                                    "attributes": "",
+                                                    "show_echo": true,
+                                                    "alias": ""
+                                                },
+                                                {
+                                                    "uid": "8c47207505a14f80bd76a49d5bb812ee",
+                                                    "type": "action",
+                                                    "value": "Patch with no auth",
+                                                    "link": "",
+                                                    "target": "blank",
+                                                    "action": "#dfa3e3d0-2231-424b-80db-cdb76c4dbafd",
+                                                    "attributes": "",
+                                                    "show_echo": true,
+                                                    "alias": ""
                                                 }
                                             ]
                                         }
@@ -394,7 +417,7 @@
             "attributes": {
                 "position": {
                     "x": 539,
-                    "y": -370
+                    "y": -62
                 },
                 "nextBlockAction": {
                     "_tdActionId": "4b4e5dc3-8fef-4d2c-a4de-2fa0e4eaa427",
@@ -492,8 +515,8 @@
             "language": "en",
             "attributes": {
                 "position": {
-                    "x": 1573,
-                    "y": -548
+                    "x": 1631,
+                    "y": -501
                 },
                 "nextBlockAction": {
                     "_tdActionId": "a635652a-754f-4b97-bd52-6a3c5556c7b4",
@@ -512,18 +535,19 @@
                 {
                     "_tdActionTitle": "",
                     "_tdActionId": "feb62285-badb-40fb-b39c-388a378f7d75",
-                    "url": "",
+                    "url": "{{API_BASE_URL}}/{{project_id}}/requests/{{conversation_id}}/participants",
                     "headersString": {
-                        "Content-Type": "*/*",
                         "Cache-Control": "no-cache",
                         "User-Agent": "TiledeskBotRuntime",
-                        "Accept": "*/*"
+                        "Accept": "*/*",
+                        "Authorization": "{{JWT_TOKEN}}",
+                        "Content-Type": "application/json"
                     },
                     "settings": {
                         "timeout": 20000
                     },
-                    "jsonBody": null,
-                    "bodyType": "none",
+                    "jsonBody": "[ \"bot_{{chatbot_id}}\"]",
+                    "bodyType": "json",
                     "formData": [],
                     "assignStatusTo": "status",
                     "assignErrorTo": "error",
@@ -541,8 +565,8 @@
             "agents_available": false,
             "attributes": {
                 "position": {
-                    "x": 1034,
-                    "y": 239
+                    "x": 1049,
+                    "y": 150
                 },
                 "nextBlockAction": {
                     "_tdActionId": "acf490ca-cc06-457d-bd8b-bae6faccc83e",
@@ -561,7 +585,7 @@
                 {
                     "_tdActionTitle": "",
                     "_tdActionId": "18c3f85a-c90f-4402-8588-487c7366251b",
-                    "url": "{{API_BASE_URL}}/{{project_id}}/requests/{{conversation_id}}/messages",
+                    "url": "{{API_BASE_URL}}/{{project_id}}/requests/{{conversation_id}}/notes",
                     "headersString": {
                         "Content-Type": "application/json",
                         "Cache-Control": "no-cache",
@@ -572,7 +596,7 @@
                     "settings": {
                         "timeout": 20000
                     },
-                    "jsonBody": "{\n\t\"text\";\"hello\",\n\t\"type\": \"text\"\n, \n\t\"channel_type\": \"group\"\n}",
+                    "jsonBody": "{\n\t\"text\";\"hello\"\n}",
                     "bodyType": "json",
                     "formData": [],
                     "assignStatusTo": "status",
@@ -590,8 +614,8 @@
             "agents_available": false,
             "attributes": {
                 "position": {
-                    "x": 1025,
-                    "y": -28
+                    "x": 1046,
+                    "y": -85
                 },
                 "nextBlockAction": {
                     "_tdActionId": "e2826973-5624-475f-974e-33f9192c03c6",
@@ -639,8 +663,8 @@
             "agents_available": false,
             "attributes": {
                 "position": {
-                    "x": 989,
-                    "y": -564
+                    "x": 1039,
+                    "y": -560
                 },
                 "nextBlockAction": {
                     "_tdActionId": "59826526-2aa8-4cf7-86f4-335dbaff71b2",
@@ -693,13 +717,160 @@
             "agents_available": false,
             "attributes": {
                 "position": {
-                    "x": 473,
-                    "y": -773
+                    "x": 509,
+                    "y": -537
                 },
                 "nextBlockAction": {
                     "_tdActionId": "9a4205dd-7299-4ba0-a604-729ca42ab2b2",
                     "_tdActionType": "intent",
                     "intentName": "#61628338-6bce-44d9-9c10-84597290968c"
+                },
+                "connectors": {},
+                "color": "80,100,147",
+                "readonly": false
+            }
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "8d1a57a2-c898-408f-a16e-7b383f9834ea",
+                    "url": "{{API_BASE_URL}}/{{project_id}}/requests/{{conversation_id}}/participants",
+                    "headersString": {
+                        "Cache-Control": "no-cache",
+                        "User-Agent": "TiledeskBotRuntime",
+                        "Accept": "*/*"
+                    },
+                    "settings": {
+                        "timeout": 20000
+                    },
+                    "jsonBody": "",
+                    "bodyType": "none",
+                    "formData": [],
+                    "assignStatusTo": "status",
+                    "assignErrorTo": "error",
+                    "assignments": {},
+                    "method": "PUT",
+                    "_tdActionType": "webrequestv2",
+                    "assignResultTo": "result",
+                    "trueIntent": "#a77ab614-97d7-4f45-90b8-d501761ebfd2",
+                    "falseIntent": "#27829d85-faa3-4485-ad3e-3fb2daccc725"
+                }
+            ],
+            "language": "en",
+            "intent_display_name": "put with error",
+            "intent_id": "68c59bcb-5285-4430-86cc-db10735fa868",
+            "agents_available": false,
+            "attributes": {
+                "position": {
+                    "x": 1052,
+                    "y": 388
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "cb949fad-190f-4ce1-a3e3-ab5d39bc13f3",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                },
+                "connectors": {},
+                "color": "80,100,147",
+                "readonly": false
+            }
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "dffaa743-498e-4ffa-aa38-9d7fb22383cb",
+                    "url": "{{API_BASE_URL}}/{{project_id}}/requests/{{conversation_id}}/attributes",
+                    "headersString": {
+                        "Cache-Control": "no-cache",
+                        "User-Agent": "TiledeskBotRuntime",
+                        "Accept": "*/*",
+                        "Authorization": "{{JWT_TOKEN}}",
+                        "Content-Type": "application/json"
+                    },
+                    "settings": {
+                        "timeout": 20000
+                    },
+                    "jsonBody": "{\n\t\"test\": \"true\"\n}",
+                    "bodyType": "json",
+                    "formData": [],
+                    "assignStatusTo": "status",
+                    "assignErrorTo": "error",
+                    "assignments": {},
+                    "method": "PATCH",
+                    "_tdActionType": "webrequestv2",
+                    "assignResultTo": "result",
+                    "trueIntent": "#a77ab614-97d7-4f45-90b8-d501761ebfd2",
+                    "falseIntent": "#27829d85-faa3-4485-ad3e-3fb2daccc725"
+                }
+            ],
+            "language": "en",
+            "intent_display_name": "patch",
+            "intent_id": "3a5423bc-2801-47bc-9167-c34111290bb5",
+            "agents_available": false,
+            "attributes": {
+                "position": {
+                    "x": 1054,
+                    "y": 633
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "8f9e360e-a043-4c5a-9490-20c73ccb7cf3",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                },
+                "connectors": {},
+                "color": "80,100,147",
+                "readonly": false
+            }
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "eb1a38a7-b053-48f7-b8b8-73e26e90b852",
+                    "url": "{{API_BASE_URL}}/{{project_id}}/requests/{{conversation_id}}/attributes",
+                    "headersString": {
+                        "Cache-Control": "no-cache",
+                        "User-Agent": "TiledeskBotRuntime",
+                        "Accept": "*/*",
+                        "Content-Type": "application/json"
+                    },
+                    "settings": {
+                        "timeout": 20000
+                    },
+                    "jsonBody": "{\n\t\"test\": \"true\"\n}",
+                    "bodyType": "json",
+                    "formData": [],
+                    "assignStatusTo": "status",
+                    "assignErrorTo": "error",
+                    "assignments": {},
+                    "method": "PATCH",
+                    "_tdActionType": "webrequestv2",
+                    "assignResultTo": "result",
+                    "trueIntent": "#a77ab614-97d7-4f45-90b8-d501761ebfd2",
+                    "falseIntent": "#27829d85-faa3-4485-ad3e-3fb2daccc725"
+                }
+            ],
+            "language": "en",
+            "intent_display_name": "patch with no auth",
+            "intent_id": "dfa3e3d0-2231-424b-80db-cdb76c4dbafd",
+            "agents_available": false,
+            "attributes": {
+                "position": {
+                    "x": 1057,
+                    "y": 901
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "7ccfa345-fa81-4423-97a7-6ed1f9d7f264",
+                    "_tdActionType": "intent",
+                    "intentName": ""
                 },
                 "connectors": {},
                 "color": "80,100,147",
