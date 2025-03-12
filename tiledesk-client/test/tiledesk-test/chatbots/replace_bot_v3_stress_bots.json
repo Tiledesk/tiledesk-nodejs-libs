@@ -1,0 +1,562 @@
+{
+  "bot": {
+    "webhook_enabled": false,
+    "language": "en",
+    "name": "MAIN BOT",
+    "slug": "",
+    "type": "tilebot",
+    "subtype": "chatbot",
+    "attributes": {
+      "variables": {
+        "start_at": "start_at",
+        "sent_at": "sent_at",
+        "pippo": "pippo"
+      }
+    },
+    "intents": [
+      {
+        "webhook_enabled": false,
+        "enabled": true,
+        "actions": [
+          {
+            "_tdActionType": "reply",
+            "attributes": {
+              "disableInputMessage": false,
+              "commands": [
+                {
+                  "type": "wait",
+                  "time": 0
+                },
+                {
+                  "type": "message",
+                  "message": {
+                    "type": "text",
+                    "text": "My name is Main",
+                    "attributes": {
+                      "attachment": {
+                        "type": "template",
+                        "buttons": [
+                          {
+                            "uid": "20e32903e2654b43928eee4002e75eb2",
+                            "type": "action",
+                            "value": "REPLACE",
+                            "link": "",
+                            "target": "blank",
+                            "action": "#5d54e850-9689-422c-b88d-ef975dfd97b0",
+                            "attributes": "",
+                            "show_echo": true,
+                            "alias": ""
+                          },
+                          {
+                            "uid": "a285ade2358143b99ea1d7b08cfc2e51",
+                            "type": "action",
+                            "value": "replace2",
+                            "link": "",
+                            "target": "blank",
+                            "action": "#19a8470c-3362-40a9-8e88-67c57753c377",
+                            "attributes": "",
+                            "show_echo": true,
+                            "alias": ""
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            "text": "Hi, how can I help you?\r\n",
+            "_tdActionId": "7f3e7d3a5b1c498aaab874adea3b5d01"
+          }
+        ],
+        "intent_display_name": "welcome",
+        "intent_id": "3f424ba0-7ba7-4aae-84af-a2288ec3508c",
+        "language": "en",
+        "attributes": {
+          "position": {
+            "x": 458,
+            "y": 42
+          },
+          "nextBlockAction": {
+            "_tdActionTitle": "",
+            "_tdActionId": "93cfa86a-d70a-499f-8a4c-8f633459c039",
+            "_tdActionType": "intent"
+          }
+        }
+      },
+      {
+        "webhook_enabled": false,
+        "enabled": true,
+        "actions": [
+          {
+            "_tdActionType": "reply",
+            "text": "I didn't understand. Can you rephrase your question?",
+            "attributes": {
+              "commands": [
+                {
+                  "type": "wait",
+                  "time": 500
+                },
+                {
+                  "type": "message",
+                  "message": {
+                    "type": "text",
+                    "text": "I didn't understand. Can you rephrase your question?",
+                    "attributes": {
+                      "attachment": {
+                        "type": "template",
+                        "buttons": []
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            "_tdActionId": "780cf2f31d224b74bf1ac69a7e1ab052"
+          }
+        ],
+        "intent_display_name": "defaultFallback",
+        "intent_id": "9f7c7086-b467-44b0-ac88-6b57b0a321aa",
+        "language": "en",
+        "attributes": {
+          "position": {
+            "x": 394,
+            "y": 658
+          },
+          "nextBlockAction": {
+            "_tdActionTitle": "",
+            "_tdActionId": "58873e6e-303f-4217-adf9-98f849234d83",
+            "_tdActionType": "intent"
+          }
+        }
+      },
+      {
+        "webhook_enabled": false,
+        "enabled": true,
+        "actions": [
+          {
+            "_tdActionType": "intent",
+            "intentName": "#3f424ba0-7ba7-4aae-84af-a2288ec3508c",
+            "_tdActionId": "2c7e58e5ac00492fadc28952242b3954"
+          }
+        ],
+        "intent_display_name": "start",
+        "intent_id": "29ca9b32-edee-4b65-b127-b82cb7f67dbe",
+        "question": "\\start",
+        "language": "en",
+        "attributes": {
+          "position": {
+            "x": 172,
+            "y": 384
+          },
+          "nextBlockAction": {
+            "_tdActionTitle": "",
+            "_tdActionId": "861bbfc1-675c-468d-8c98-b10529d8735f",
+            "_tdActionType": "intent"
+          }
+        }
+      },
+      {
+        "webhook_enabled": false,
+        "enabled": true,
+        "actions": [
+          {
+            "_tdActionTitle": "",
+            "_tdActionId": "f99884e9-b1fc-4622-87a9-f54fce0b3704",
+            "_tdActionType": "setattribute-v2",
+            "operation": {
+              "operands": [
+                {
+                  "value": "{{timestamp}}",
+                  "isVariable": false,
+                  "function": "convertToNumber"
+                }
+              ],
+              "operators": []
+            },
+            "destination": "sent_at"
+          },
+          {
+            "_tdActionTitle": "",
+            "_tdActionId": "03767980-ec34-4961-aeaf-66122fd5aeba",
+            "_tdActionType": "replacebotv3",
+            "useSlug": false,
+            "blockName": "start",
+            "botId": "67728a665a553700132a2e24"
+          }
+        ],
+        "language": "en",
+        "intent_display_name": "replace",
+        "intent_id": "5d54e850-9689-422c-b88d-ef975dfd97b0",
+        "attributes": {
+          "position": {
+            "x": 1099,
+            "y": 35
+          },
+          "nextBlockAction": {
+            "_tdActionId": "e56ed48d-b5f5-487c-85b5-3e5f31f0c661",
+            "_tdActionType": "intent",
+            "intentName": ""
+          }
+        }
+      },
+      {
+        "webhook_enabled": false,
+        "enabled": true,
+        "actions": [
+          {
+            "_tdActionTitle": "",
+            "_tdActionId": "e7cb6d86-cfb3-4949-aace-3ce69303092a",
+            "_tdActionType": "setattribute-v2",
+            "operation": {
+              "operands": [
+                {
+                  "value": "{{timestamp}}",
+                  "isVariable": false,
+                  "function": "convertToNumber"
+                }
+              ],
+              "operators": []
+            },
+            "destination": "sent_at"
+          },
+          {
+            "_tdActionTitle": "",
+            "_tdActionId": "7bcb02c0-3825-4e7c-9969-1b9c6275064b",
+            "_tdActionType": "replacebotv3",
+            "useSlug": true,
+            "blockName": "start",
+            "botSlug": "replaced",
+            "botId": "67728a665a553700132a2e24"
+          }
+        ],
+        "language": "en",
+        "intent_display_name": "untitled_block_1",
+        "intent_id": "19a8470c-3362-40a9-8e88-67c57753c377",
+        "attributes": {
+          "position": {
+            "x": 942,
+            "y": 572.5
+          },
+          "nextBlockAction": {
+            "_tdActionId": "d716fbf0-20f4-4aff-aef1-6fd84a1ec281",
+            "_tdActionType": "intent",
+            "intentName": ""
+          },
+          "connectors": {}
+        }
+      }
+    ]
+  },
+  "replacedBot": {
+    "webhook_enabled": false,
+    "language": "en",
+    "name": "REPLACED",
+    "slug": "replaced",
+    "type": "tilebot",
+    "subtype": "chatbot",
+    "attributes": {
+      "variables": {
+        "sent_at": "sent_at",
+        "received_at": "received_at",
+        "delay": "delay"
+      }
+    },
+    "intents": [
+      {
+        "webhook_enabled": false,
+        "enabled": true,
+        "actions": [
+          {
+            "_tdActionType": "reply",
+            "text": "I didn't understand. Can you rephrase your question?",
+            "attributes": {
+              "commands": [
+                {
+                  "type": "wait",
+                  "time": 500
+                },
+                {
+                  "type": "message",
+                  "message": {
+                    "type": "text",
+                    "text": "I didn't understand. Can you rephrase your question?",
+                    "attributes": {
+                      "attachment": {
+                        "type": "template",
+                        "buttons": []
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            "_tdActionId": "5fac240dc2f54e62986aea83e369418d"
+          }
+        ],
+        "intent_display_name": "defaultFallback",
+        "intent_id": "bed82a87-a2da-4a56-a266-2bc1b63e6ca7",
+        "language": "en",
+        "attributes": {
+          "position": {
+            "x": 232,
+            "y": 616
+          },
+          "nextBlockAction": {
+            "_tdActionTitle": "",
+            "_tdActionId": "2677c3a4-67f2-42ed-adc6-121de4e76ecd",
+            "_tdActionType": "intent"
+          }
+        }
+      },
+      {
+        "webhook_enabled": false,
+        "enabled": true,
+        "actions": [
+          {
+            "_tdActionTitle": "",
+            "_tdActionId": "91a93f4b-5dc7-48c5-808d-0909a8385ed8",
+            "_tdActionType": "setattribute-v2",
+            "operation": {
+              "operands": [
+                {
+                  "value": "{{received_at}}",
+                  "isVariable": false,
+                  "function": "convertToNumber"
+                },
+                {
+                  "value": "{{sent_at}}",
+                  "isVariable": false,
+                  "function": "convertToNumber"
+                }
+              ],
+              "operators": [
+                "subtractAsNumber"
+              ]
+            },
+            "destination": "delay"
+          }
+        ],
+        "intent_display_name": "untitled_block_2",
+        "intent_id": "8b9518f2-1f30-4f80-97dc-a045e40525e2",
+        "language": "en",
+        "attributes": {
+          "position": {
+            "x": 1313,
+            "y": 132
+          },
+          "nextBlockAction": {
+            "_tdActionId": "d5446e3b-2cc3-4ea1-a35f-1acfe8383047",
+            "_tdActionType": "intent",
+            "intentName": "#b42ce06b-c698-4b48-81ee-6c59e2358757"
+          }
+        }
+      },
+      {
+        "webhook_enabled": false,
+        "enabled": true,
+        "actions": [
+          {
+            "_tdActionType": "reply",
+            "attributes": {
+              "disableInputMessage": false,
+              "commands": [
+                {
+                  "type": "wait",
+                  "time": 0
+                },
+                {
+                  "type": "message",
+                  "message": {
+                    "type": "text",
+                    "text": "My name is Replaced at (delay = {{timestamp}} - {{sent_at}}): {{ timestamp | minus: sent_at }}",
+                    "attributes": {
+                      "attachment": {
+                        "type": "template",
+                        "buttons": [
+                          {
+                            "uid": "f2008d2c7c0e4568994b364e760de5ee",
+                            "type": "action",
+                            "value": "BACK",
+                            "link": "",
+                            "target": "blank",
+                            "action": "#2ca65ddb-5233-44a4-aebe-532113e8700d",
+                            "attributes": "",
+                            "show_echo": true,
+                            "alias": ""
+                          },
+                          {
+                            "uid": "7f99982ebc6b48e4a889f24b1fe6ceaa",
+                            "type": "action",
+                            "value": "Delayed",
+                            "link": "",
+                            "target": "blank",
+                            "action": "#8b9518f2-1f30-4f80-97dc-a045e40525e2",
+                            "attributes": "",
+                            "show_echo": true,
+                            "alias": ""
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            "text": "Hi, how can I help you?\r\n",
+            "_tdActionId": "f19f3fa7f3884dba9a98be740c868446"
+          }
+        ],
+        "intent_display_name": "welcome",
+        "intent_id": "972a7132-33c7-4771-9367-b9e6fd188117",
+        "language": "en",
+        "attributes": {
+          "position": {
+            "x": 861,
+            "y": 312
+          },
+          "nextBlockAction": {
+            "_tdActionTitle": "",
+            "_tdActionId": "f3ec17b5-f2da-4f8d-b64c-833e74ac96ed",
+            "_tdActionType": "intent"
+          }
+        }
+      },
+      {
+        "webhook_enabled": false,
+        "enabled": true,
+        "actions": [
+          {
+            "_tdActionTitle": "",
+            "_tdActionId": "05a8f0d1-3f8f-4c6c-b723-2ba4d897c5d5",
+            "_tdActionType": "replacebotv2",
+            "botName": "MAIN BOT",
+            "blockName": "start"
+          }
+        ],
+        "intent_display_name": "back",
+        "intent_id": "2ca65ddb-5233-44a4-aebe-532113e8700d",
+        "language": "en",
+        "attributes": {
+          "position": {
+            "x": 1344,
+            "y": -150
+          },
+          "nextBlockAction": {
+            "_tdActionId": "837fb82e-022f-4f42-b29c-4ea0691a2e02",
+            "_tdActionType": "intent",
+            "intentName": ""
+          }
+        }
+      },
+      {
+        "webhook_enabled": false,
+        "enabled": true,
+        "actions": [
+          {
+            "_tdActionType": "intent",
+            "intentName": "#972a7132-33c7-4771-9367-b9e6fd188117",
+            "_tdActionId": "705de0bb711b4a37acccd87d68761e99"
+          }
+        ],
+        "intent_display_name": "start",
+        "intent_id": "5a2bb1dc-8d98-48ee-b5f9-46fd34798f3d",
+        "question": "\\start",
+        "language": "en",
+        "attributes": {
+          "position": {
+            "x": 362,
+            "y": 310
+          },
+          "nextBlockAction": {
+            "_tdActionTitle": "",
+            "_tdActionId": "1da84078-cae1-44fe-be12-1784a1ebc6b6",
+            "_tdActionType": "intent"
+          }
+        }
+      },
+      {
+        "webhook_enabled": false,
+        "enabled": true,
+        "actions": [
+          {
+            "_tdActionTitle": "",
+            "_tdActionId": "01ba72db-9f28-4de9-aa46-889241e869e6",
+            "_tdActionType": "reply",
+            "attributes": {
+              "disableInputMessage": false,
+              "commands": [
+                {
+                  "type": "wait",
+                  "time": 0
+                },
+                {
+                  "type": "message",
+                  "message": {
+                    "type": "text",
+                    "text": "delayed: {{delay}}",
+                    "attributes": {
+                      "attachment": {
+                        "type": "template",
+                        "buttons": []
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "intent_display_name": "untitled_block_3",
+        "intent_id": "b42ce06b-c698-4b48-81ee-6c59e2358757",
+        "language": "en",
+        "attributes": {
+          "position": {
+            "x": 1799,
+            "y": 344
+          },
+          "nextBlockAction": {
+            "_tdActionId": "415d283a-3585-4344-aec8-f409778b6a38",
+            "_tdActionType": "intent",
+            "intentName": ""
+          }
+        }
+      },
+      {
+        "webhook_enabled": false,
+        "enabled": true,
+        "actions": [
+          {
+            "_tdActionTitle": "",
+            "_tdActionId": "a1501e11-92b6-4bb6-b638-21b1e5921e69",
+            "_tdActionType": "setattribute-v2",
+            "operation": {
+              "operands": [
+                {
+                  "value": "{{timestamp}}",
+                  "isVariable": false
+                }
+              ],
+              "operators": []
+            },
+            "destination": "sent_at"
+          }
+        ],
+        "language": "en",
+        "intent_display_name": "untitled_block_4",
+        "intent_id": "1aa57ab1-1c36-4f55-a51e-5ab37ceefd6e",
+        "attributes": {
+          "position": {
+            "x": 386,
+            "y": 28
+          },
+          "nextBlockAction": {
+            "_tdActionId": "caf66058-7596-4f7c-a702-3c4e7b6e008f",
+            "_tdActionType": "intent",
+            "intentName": "#972a7132-33c7-4771-9367-b9e6fd188117"
+          }
+        }
+      }
+    ]
+  }
+}
