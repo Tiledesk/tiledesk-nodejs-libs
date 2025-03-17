@@ -58,7 +58,7 @@
                 "type": "message",
                 "message": {
                   "type": "text",
-                  "text": "This is aDTMF Form",
+                  "text": "This is a DTMF Form",
                   "attributes": {
                     "attachment": {
                       "type": "template",
@@ -204,7 +204,7 @@
         }
       ],
       "language": "en",
-      "intent_display_name": "untitled_block_2",
+      "intent_display_name": "close",
       "intent_id": "23dc2219-ab0a-4b09-b47f-1a19c91c7b71",
       "agents_available": false,
       "attributes": {

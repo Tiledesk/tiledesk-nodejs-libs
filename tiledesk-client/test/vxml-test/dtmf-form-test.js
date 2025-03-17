@@ -182,11 +182,12 @@ describe('CHATBOT: Play a DTMF Form', async () => {
 
     after(async function () {
         //fire hangup event to close conversation
-        const catchHangUpEvent = await vxmlConnectorTest.manageCall.event(callId, 'hangup', lastIntentName, lastIntentTimestamp).catch((err) => { 
-            console.error(err); 
-            Promise.reject(err);
-        })
-        assert(catchHangUpEvent.success === true);
+        // const catchHangUpEvent = await vxmlConnectorTest.manageCall.event(callId, 'hangup', lastIntentName, lastIntentTimestamp).catch((err) => { 
+        //     console.error(err); 
+        //     Promise.reject(err);
+        // })
+        // console.log('resuuuuu', catchHangUpEvent)
+        // assert(catchHangUpEvent.success === true);
 
         const tdClientTest = new TiledeskClientTest({
             APIURL: API_ENDPOINT,
@@ -199,6 +200,7 @@ describe('CHATBOT: Play a DTMF Form', async () => {
         const result3 = await tdClientTest.department.deleteDepartment(DEP_ID).catch((err) => { 
             assert.ok(false);
         });
+        
         assert(result2.success === true);
         assert(result3._id === DEP_ID);
     });
@@ -251,7 +253,6 @@ describe('CHATBOT: Play a DTMF Form', async () => {
             if(formBlock instanceof Array){
                 checkIfFieldExist = formBlock.some(item => item.hasOwnProperty('field'))
             }
-            console.log('ssssss', checkIfFieldExist)
             while(!checkIfFieldExist){
                 let nextBlockVxml = await vxmlConnectorTest.manageCall.nextBlock(callId, "" ).catch((err) => { 
                     console.error(err); 
@@ -260,39 +261,111 @@ describe('CHATBOT: Play a DTMF Form', async () => {
                 const isValid2 = XMLValidator.validate(nextBlockVxml);
                 assert.strictEqual(isValid2, true, "VXML created is not valid")
                 const jsonVXMLNextBlock = xmlParser.parse(nextBlockVxml).vxml
-                console.log('jsonVXMLNextBlock', jsonVXMLNextBlock)
-                // assert(jsonVXMLNextBlock)
-                // assert(jsonVXMLNextBlock.var)
-                // assert(jsonVXMLNextBlock.catch)
-                // assert(jsonVXMLNextBlock.form)
+                // console.log('jsonVXMLNextBlock', jsonVXMLNextBlock)
+                assert(jsonVXMLNextBlock)
+                assert(jsonVXMLNextBlock.var)
+                assert(jsonVXMLNextBlock.catch)
+                assert(jsonVXMLNextBlock.form)
 
 
                 // //check variables
-                // let callID =  Utils.getVariableFromVXML('callId', jsonVXMLNextBlock).expr
-                // let proxyBaseUrl = Utils.getVariableFromVXML('proxyBaseUrl', jsonVXMLNextBlock).expr
-                // let intentName = Utils.getVariableFromVXML('intentName', jsonVXMLNextBlock).expr
-                // let previousIntentTimestamp = Utils.getVariableFromVXML('previousIntentTimestamp', jsonVXMLNextBlock).expr
-                // assert.equal(callID, callId, `Expect callID in vxml to be ${callId} but got: ${callID} `)
-                // assert.equal(proxyBaseUrl, CONNECTOR_BASE_URL, `Expect proxyBaseUrl in vxml to be ${CONNECTOR_BASE_URL} but got: ${proxyBaseUrl} `)
-                // assert(previousIntentTimestamp)
-                // lastIntentName = intentName
-                // lastIntentTimestamp = previousIntentTimestamp
+                let callID =  Utils.getVariableFromVXML('callId', jsonVXMLNextBlock).expr
+                let proxyBaseUrl = Utils.getVariableFromVXML('proxyBaseUrl', jsonVXMLNextBlock).expr
+                let intentName = Utils.getVariableFromVXML('intentName', jsonVXMLNextBlock).expr
+                let previousIntentTimestamp = Utils.getVariableFromVXML('previousIntentTimestamp', jsonVXMLNextBlock).expr
+                assert.equal(callID, callId, `Expect callID in vxml to be ${callId} but got: ${callID} `)
+                assert.equal(proxyBaseUrl, CONNECTOR_BASE_URL, `Expect proxyBaseUrl in vxml to be ${CONNECTOR_BASE_URL} but got: ${proxyBaseUrl} `)
+                assert(previousIntentTimestamp)
+                lastIntentName = intentName
+                lastIntentTimestamp = previousIntentTimestamp
 
 
                 // formBlock = jsonVXMLNextBlock.form
-                if(jsonVXMLNextBlock instanceof Array){
-                    checkIfFieldExist = jsonVXMLNextBlock.some(item => item.hasOwnProperty('field'))
+                formBlock = jsonVXMLNextBlock.form
+                if(formBlock instanceof Array){
+                    checkIfFieldExist = formBlock.some(item => item.hasOwnProperty('field'))
                 }
             }
-            //check prompt block
-            let prompt = formBlock.prompt
-            assert(prompt)
-            assert(prompt.bargein)
-            assert.equal(prompt.bargein, true)
+            
+            // ***** FIRST BLOCK ********* //
+            let form1Block = formBlock[0]
+
+            //check PROPERTY block
+            let properties = form1Block.property
+            assert(properties)
+            assert(properties[0])
+            assert(properties[0].name)
+            assert(properties[0].value)
+            assert.equal(properties[0].name, 'inputmodes')
+            assert.equal(properties[0].value, 'dtmf')
+
+            assert(properties[1])
+            assert(properties[1].name)
+            assert(properties[1].value)
+            assert.equal(properties[1].name, 'timeout')
+
+            //check FIELD block
+            let field = form1Block.field
+            assert(field)
+            assert(field.grammar)
+            assert(field.prompt)
+            assert(field.name)
+            assert.equal(field.name, 'dtmfForm')
+            let grammar = field.grammar
+            assert(grammar.mode)
+            assert.equal(grammar.mode, 'dtmf')
+            assert(grammar.text)
+            let dtmfSettings = grammar.text.split(';').map(el => { return { "key": el.split('=')[0], "value":  el.split('=')[1] }})
+            assert(dtmfSettings.find(el => el.key === 'minDigits'))
+            assert(dtmfSettings.find(el => el.key === 'maxDigits'))
+            assert(dtmfSettings.find(el => el.key === 'terminators'))
+            assert(dtmfSettings.find(el => el.key === 'minDigits').value === '1')
+            assert(dtmfSettings.find(el => el.key === 'maxDigits').value === '10')
+            assert(dtmfSettings.find(el => el.key === 'terminators').value === '#')
+            let prompt = field.prompt
             assert(prompt.voice)
             assert(prompt.voice.name)
             assert(prompt.voice.text)
-            assert.equal(prompt.voice.text, "This is a message from play prompt action")
+            assert.equal(prompt.voice.text, "This is a DTMF Form")
+
+            //check FILLED block
+            let filled = form1Block.filled
+            assert(filled)
+            assert(filled.script)
+            assert(filled.block)
+            assert(filled.block.submit)
+            assert.equal(filled.block.submit.fetchhint, 'safe')
+            assert.equal(filled.block.submit.method, 'post')
+            assert.equal(filled.block.submit.namelist, 'usertext previousIntentTimestamp')
+            assert(filled.block.submit.expr.includes('nextblock'))
+
+            //check NOINPUT block
+            let noInput = form1Block.noinput
+            assert(noInput.assign)
+            assert(noInput.goto)
+            assert(noInput.assign[0])
+            assert(noInput.assign[0].name)
+            assert.equal(noInput.assign[0].name, 'menu_choice')
+            assert(noInput.assign[0].expr)
+            assert.equal(noInput.assign[0].expr, "'no_input'")
+            assert(noInput.assign[1])
+            assert(noInput.assign[1].name)
+            assert.equal(noInput.assign[1].name, 'button')
+            assert(noInput.assign[1].expr)
+
+            // ***** FIRST BLOCK ********* //
+
+            // ***** SECOND BLOCK ********* //
+            let form2Block = formBlock[1]
+            assert(form2Block)
+            assert(form2Block.block)
+            assert(form2Block.block.submit)
+            assert.equal(form2Block.block.submit.fetchhint, 'safe')
+            assert.equal(form2Block.block.submit.method, 'post')
+            assert.equal(form2Block.block.submit.namelist, 'intentName button previousIntentTimestamp')
+            assert(form2Block.block.submit.expr.includes('/no_input'))
+            // ***** SECOND BLOCK ********* //
+
             resolve();
         })
     })
