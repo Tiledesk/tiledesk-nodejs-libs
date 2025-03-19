@@ -1,0 +1,221 @@
+{
+  "webhook_enabled": false,
+  "language": "en",
+  "name": "VXML - DTMF Form stress test",
+  "type": "tilebot",
+  "intents": [
+    {
+      "webhook_enabled": false,
+      "enabled": true,
+      "actions": [
+        {
+          "_tdActionType": "reply",
+          "text": "I didn't understand. Can you rephrase your question?",
+          "attributes": {
+            "commands": [
+              {
+                "type": "wait",
+                "time": 500
+              },
+              {
+                "type": "message",
+                "message": {
+                  "type": "text",
+                  "text": "I didn't understand. Can you rephrase your question?"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "intent_id": "5f7c24b1-6e1d-4130-8c06-af51d58bc7ed",
+      "intent_display_name": "defaultFallback",
+      "language": "en",
+      "attributes": {
+        "position": {
+          "x": 714,
+          "y": 528
+        }
+      },
+      "agents_available": false
+    },
+    {
+      "webhook_enabled": false,
+      "enabled": true,
+      "actions": [
+        {
+          "_tdActionTitle": "",
+          "_tdActionId": "b9e6e482-9af2-4f52-b0e3-80e2c9bf602d",
+          "_tdActionType": "play_prompt",
+          "attributes": {
+            "disableInputMessage": false,
+            "commands": [
+              {
+                "type": "wait",
+                "time": 0
+              },
+              {
+                "type": "message",
+                "message": {
+                  "type": "text",
+                  "text": "This is a message from play prompt action sent ad: {{timestamp}}",
+                  "attributes": {
+                    "attachment": {
+                      "type": "template",
+                      "buttons": []
+                    }
+                  }
+                }
+              },
+              {
+                "type": "wait",
+                "time": 0
+              },
+              {
+                "type": "settings",
+                "settings": {
+                  "bargein": true
+                },
+                "subType": "play_prompt"
+              }
+            ]
+          }
+        }
+      ],
+      "intent_id": "14c164e6-e20a-4528-ab2c-a4ec522b67e3",
+      "intent_display_name": "welcome",
+      "language": "en",
+      "attributes": {
+        "position": {
+          "x": 714,
+          "y": 113
+        },
+        "nextBlockAction": {
+          "_tdActionTitle": "",
+          "_tdActionId": "774c90ec-1e63-4714-a236-682c458c4f6a",
+          "_tdActionType": "intent"
+        }
+      },
+      "agents_available": false
+    },
+    {
+      "webhook_enabled": false,
+      "enabled": true,
+      "actions": [
+        {
+          "_tdActionType": "intent",
+          "intentName": "#14c164e6-e20a-4528-ab2c-a4ec522b67e3",
+          "_tdActionId": "5905392338fe4e13abf1ac4f37992f14"
+        }
+      ],
+      "intent_id": "6864dd9e-af05-4d61-a035-d3e61d6e24ef",
+      "question": "\\start",
+      "intent_display_name": "start",
+      "language": "en",
+      "attributes": {
+        "position": {
+          "x": 172,
+          "y": 384
+        },
+        "readonly": true,
+        "nextBlockAction": {
+          "_tdActionTitle": "",
+          "_tdActionId": "949c9428-849b-40c2-abc5-41a440563754",
+          "_tdActionType": "intent"
+        }
+      },
+      "agents_available": false
+    },
+    {
+      "webhook_enabled": false,
+      "enabled": true,
+      "actions": [
+        {
+          "_tdActionTitle": "",
+          "_tdActionId": "8785868d-b533-4f1e-a84f-c565d93e72df",
+          "_tdActionType": "play_prompt",
+          "attributes": {
+            "disableInputMessage": false,
+            "commands": [
+              {
+                "type": "wait",
+                "time": 0
+              },
+              {
+                "type": "message",
+                "message": {
+                  "type": "text",
+                  "text": "No input handled in 5s",
+                  "attributes": {
+                    "attachment": {
+                      "type": "template",
+                      "buttons": []
+                    }
+                  }
+                }
+              },
+              {
+                "type": "wait",
+                "time": 0
+              },
+              {
+                "type": "settings",
+                "settings": {
+                  "bargein": true
+                },
+                "subType": "play_prompt"
+              }
+            ]
+          }
+        }
+      ],
+      "language": "en",
+      "intent_display_name": "no_input",
+      "intent_id": "1077ae72-2ece-4076-a9c2-e6bd26477fba",
+      "agents_available": false,
+      "attributes": {
+        "position": {
+          "x": 1109,
+          "y": -33
+        },
+        "nextBlockAction": {
+          "_tdActionId": "9d3b931d-2576-4fd2-b821-064edb5d129c",
+          "_tdActionType": "intent",
+          "intentName": ""
+        },
+        "connectors": {},
+        "color": "80,100,147",
+        "readonly": false
+      }
+    },
+    {
+      "webhook_enabled": false,
+      "enabled": true,
+      "actions": [
+        {
+          "_tdActionTitle": "",
+          "_tdActionId": "76b1784b-1085-4eb1-adf3-91e75408d4b4",
+          "_tdActionType": "close"
+        }
+      ],
+      "language": "en",
+      "intent_display_name": "close",
+      "intent_id": "23dc2219-ab0a-4b09-b47f-1a19c91c7b71",
+      "agents_available": false,
+      "attributes": {
+        "position": {
+          "x": 1121,
+          "y": 214
+        },
+        "nextBlockAction": {
+          "_tdActionId": "7d50bbc0-52ed-41a4-9c6a-9996a2ca156d",
+          "_tdActionType": "intent",
+          "intentName": ""
+        },
+        "connectors": {},
+        "color": "80,100,147",
+        "readonly": false
+      }
+    }
+  ]
+}

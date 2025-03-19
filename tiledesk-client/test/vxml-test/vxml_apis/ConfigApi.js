@@ -69,6 +69,38 @@ class Config {
         });
     }
 
+
+    async disconnect(subscription_id){
+        return new Promise((resolve, reject) => {
+            const URL = `${this.APIURL}/manage/disconnect`
+            const HTTPREQUEST = {
+                url: URL,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': this.JWT_TOKEN
+                },
+                json: {
+                    project_id :  this.PROJECT_ID,
+                    token :  this.JWT_TOKEN,
+                    subscription_id :  subscription_id,
+                },
+                method: 'POST',
+                httpsOptions: this.httpsOptions
+            };
+            Utils.myrequest(
+                HTTPREQUEST,
+                function (err, resbody) {
+                    if (err) {
+                        reject(err)
+                    }
+                    else {
+                        resolve(resbody);
+                    }
+                }, this.LOG
+            );
+        });
+    }
+
     
 }
 
