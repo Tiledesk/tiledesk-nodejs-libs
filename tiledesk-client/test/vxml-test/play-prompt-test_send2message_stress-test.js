@@ -115,9 +115,9 @@ let subscriptionId = null;
 
 let requests = new Map();
 let interval = 2000;
-let max_iterations = 10;
+let max_iterations = 5;
 
-describe('CHATBOT: Play a prompt (stress test)', async () => {
+describe('CHATBOT: Play a prompt (send 2 message stress test)', async () => {
     before(() => {
         return new Promise(async (resolve, reject) => {
             if (LOG_STATUS) {
@@ -142,7 +142,7 @@ describe('CHATBOT: Play a prompt (stress test)', async () => {
             assert(result.user.email !== null);
             USER_ADMIN_TOKEN = result.token;
 
-            const bot = require('./chatbots/VXML - Play prompt_stress-test.json');
+            const bot = require('./chatbots/VXML - Send 2 message.json');
             const tdClientTest = new TiledeskClientTest({
                 APIURL: API_ENDPOINT,
                 PROJECT_ID: TILEDESK_PROJECT_ID,
@@ -290,24 +290,45 @@ describe('CHATBOT: Play a prompt (stress test)', async () => {
             
 
                 let prompt = formBlock.prompt
-                const parts = prompt.voice.text.split(":");
-                const last = parts[parts.length - 1];
-                // console.log("last:", last);
-                const delay = new Date(parseInt(last)).getTime() - startTime
-                // console.log("delay:", delay);
-                requests.get(callId).delay = delay;
-                let sum = 0;
-                requests.forEach( (value, key, map) => {
-                    if (delay != 0) {
-                        sum += value.delay
-                    }
-                });
-                let keys_number = requests.size;
-                let avg = sum/keys_number
-                // getLast20ElementsByStartAt(requests).forEach(e => {
-                //     console.log("> ", e[0],e[1]);
-                // });
-                console.log(" >> Average delay:", Math.round(avg), "ms [", keys_number,"]");
+
+                let nextBlockVxml = await vxmlConnectorTest.manageCall.nextBlock(callId, "" ).catch((err) => { 
+                    console.error(err); 
+                    reject(err);
+                })
+                const isValidSecondNextBlock = XMLValidator.validate(nextBlockVxml);
+                assert.strictEqual(isValidSecondNextBlock, true, "VXML created is not valid")
+                const jsonNextVXML = xmlParser.parse(nextBlockVxml).vxml
+
+                let startTimeSecontMessage = new Date().getTime();
+
+                formBlock = jsonNextVXML.form
+                let checkIfPrompt2Exist = formBlock.hasOwnProperty('prompt')
+
+                while(!checkIfPrompt2Exist){
+                    let nextBlockVxml = await vxmlConnectorTest.manageCall.nextBlock(callId, "" ).catch((err) => { 
+                        console.error(err); 
+                        reject(err);
+                    })
+                    const isValid2 = XMLValidator.validate(nextBlockVxml);
+                    assert.strictEqual(isValid2, true, "VXML created is not valid")
+                    const jsonVXMLNextBlock = xmlParser.parse(nextBlockVxml).vxml
+    
+    
+                    //check variables
+                    let intentName = Utils.getVariableFromVXML('intentName', jsonVXMLNextBlock).expr
+                    let previousIntentTimestamp = Utils.getVariableFromVXML('previousIntentTimestamp', jsonVXMLNextBlock).expr
+                    lastIntentName = intentName
+                    lastIntentTimestamp = previousIntentTimestamp
+    
+    
+                    formBlock = jsonVXMLNextBlock.form
+                    checkIfPrompt2Exist = formBlock.hasOwnProperty('prompt')                
+                }
+                //check prompt block
+                let endTimeSecondMessage = new Date().getTime();
+                let diffTimeSecondMessage  = endTimeSecondMessage - startTimeSecontMessage
+                console.log("STEP 4: time second message is tail off from queue from wait time (/nextblock has a message in queue):", diffTimeSecondMessage, '[ms]')
+
                 if(requests.size === max_iterations){
                     resolve();
                 }

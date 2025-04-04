@@ -117,7 +117,7 @@ let requests = new Map();
 let interval = 2000;
 let max_iterations = 5;
 
-describe('CHATBOT: Speech Form', async () => {
+describe('CHATBOT: Speech Form (stress test)', async () => {
     before(() => {
         return new Promise(async (resolve, reject) => {
             if (LOG_STATUS) {

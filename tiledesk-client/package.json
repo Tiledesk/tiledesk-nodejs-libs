@@ -6,7 +6,7 @@
   "scripts": {
     "test": "mocha ./test/tiledesk-test --timeout 20000 --exit",
     "tiledesk-test": "mocha ./test/tiledesk-test --timeout 20000 --exit",
-    "voice-test": "mocha ./test/vxml-test --timeout 20000 --exit"
+    "voice-test": "mocha ./test/vxml-test --timeout 30000 --exit"
   },
   "repository": {
     "type": "git",
