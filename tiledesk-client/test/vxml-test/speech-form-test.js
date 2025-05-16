@@ -111,8 +111,9 @@ let vxmlConnectorTest = null;
 let lastIntentTimestamp = null;
 let lastIntentName = null;
 let callId = null;
+let subscriptionId = null;
 
-describe('CHATBOT: Play a DTMF Form', async () => {
+describe('CHATBOT: Speech Form', async () => {
     before(() => {
         return new Promise(async (resolve, reject) => {
             if (LOG_STATUS) {
@@ -137,7 +138,7 @@ describe('CHATBOT: Play a DTMF Form', async () => {
             assert(result.user.email !== null);
             USER_ADMIN_TOKEN = result.token;
 
-            const bot = require('./chatbots/VXML - DTMF Form.json');
+            const bot = require('./chatbots/VXML - Speech Form.json');
             const tdClientTest = new TiledeskClientTest({
                 APIURL: API_ENDPOINT,
                 PROJECT_ID: TILEDESK_PROJECT_ID,
@@ -150,7 +151,7 @@ describe('CHATBOT: Play a DTMF Form', async () => {
             })
             BOT_ID = data._id;
             
-            const department = await tdClientTest.department.createDepartment('dep test vxml', data._id, null).catch((err) => {
+            const department = await tdClientTest.department.createDepartment('dep test vxml', data._id).catch((err) => {
                 console.error(err); 
                 reject(err);
             });
@@ -170,11 +171,17 @@ describe('CHATBOT: Play a DTMF Form', async () => {
                 console.error(err); 
                 reject(err);
             })
-            const config = await vxmlConnectorTest.configConnector.connect(DEP_ID).catch((err) => { 
+            const configHtml = await vxmlConnectorTest.configConnector.connect(DEP_ID).catch((err) => { 
                 console.error(err); 
                 reject(err);
             })
-            assert(config);
+            assert(configHtml);
+            const match = configHtml.match(/name="subscription_id"\s+value="([^"]+)"/);
+            if (match) {
+                subscriptionId = match[1]
+            }
+      
+
             
             resolve();
         });
@@ -182,13 +189,18 @@ describe('CHATBOT: Play a DTMF Form', async () => {
 
     after(async function () {
         //fire hangup event to close conversation
-        // const catchHangUpEvent = await vxmlConnectorTest.manageCall.event(callId, 'hangup', lastIntentName, lastIntentTimestamp).catch((err) => { 
-        //     console.error(err); 
-        //     Promise.reject(err);
-        // })
-        // console.log('resuuuuu', catchHangUpEvent)
-        // assert(catchHangUpEvent.success === true);
+        const catchHangUpEvent = await vxmlConnectorTest.manageCall.event(callId, 'hangup', lastIntentName, lastIntentTimestamp).catch((err) => { 
+            console.error(err); 
+            Promise.reject(err);
+        })
+        assert(catchHangUpEvent.success === true);
 
+        const disconnectIntegration = await vxmlConnectorTest.configConnector.disconnect(subscriptionId).catch((err) => { 
+            console.error(err); 
+            Promise.reject(err);
+        })
+        assert(disconnectIntegration)
+        
         const tdClientTest = new TiledeskClientTest({
             APIURL: API_ENDPOINT,
             PROJECT_ID: TILEDESK_PROJECT_ID,
@@ -200,12 +212,11 @@ describe('CHATBOT: Play a DTMF Form', async () => {
         const result3 = await tdClientTest.department.deleteDepartment(DEP_ID).catch((err) => { 
             assert.ok(false);
         });
-        
         assert(result2.success === true);
         assert(result3._id === DEP_ID);
     });
 
-    it('Catch a DTMF Form (~1s)', () => {
+    it('Catch a SPEECH form (~1s)', () => {
         return new Promise(async(resolve, reject)=> {
 
             const ani = (Math.floor(Math.random() * 9000) + 1000).toString(); // Numero tra 1000 e 9999
@@ -261,14 +272,12 @@ describe('CHATBOT: Play a DTMF Form', async () => {
                 const isValid2 = XMLValidator.validate(nextBlockVxml);
                 assert.strictEqual(isValid2, true, "VXML created is not valid")
                 const jsonVXMLNextBlock = xmlParser.parse(nextBlockVxml).vxml
-                // console.log('jsonVXMLNextBlock', jsonVXMLNextBlock)
                 assert(jsonVXMLNextBlock)
                 assert(jsonVXMLNextBlock.var)
                 assert(jsonVXMLNextBlock.catch)
                 assert(jsonVXMLNextBlock.form)
 
-
-                // //check variables
+                //check variables
                 let callID =  Utils.getVariableFromVXML('callId', jsonVXMLNextBlock).expr
                 let proxyBaseUrl = Utils.getVariableFromVXML('proxyBaseUrl', jsonVXMLNextBlock).expr
                 let intentName = Utils.getVariableFromVXML('intentName', jsonVXMLNextBlock).expr
@@ -280,79 +289,86 @@ describe('CHATBOT: Play a DTMF Form', async () => {
                 lastIntentTimestamp = previousIntentTimestamp
 
 
-                // formBlock = jsonVXMLNextBlock.form
                 formBlock = jsonVXMLNextBlock.form
                 if(formBlock instanceof Array){
                     checkIfFieldExist = formBlock.some(item => item.hasOwnProperty('field'))
                 }
+                
+                if(checkIfFieldExist){
+
+                    let button = Utils.getVariableFromVXML('button', jsonVXMLNextBlock).expr
+                    assert.equal(button, '')
+
+                    //check incompleteSpeech timeout
+                    assert(jsonVXMLNextBlock.property)
+                    assert(jsonVXMLNextBlock.property.name)
+                    assert(jsonVXMLNextBlock.property.value)
+                    assert.equal(jsonVXMLNextBlock.property.name, 'incompletetimeout')
+                    assert.equal(jsonVXMLNextBlock.property.value, '0.7s')
+                }
             }
-            
             // ***** FIRST BLOCK ********* //
             let form1Block = formBlock[0]
 
             //check PROPERTY block
             let properties = form1Block.property
             assert(properties)
-            assert(properties[0])
-            assert(properties[0].name)
-            assert(properties[0].value)
-            assert.equal(properties[0].name, 'inputmodes')
-            assert.equal(properties[0].value, 'dtmf')
+            assert(properties.name)
+            assert(properties.value)
+            assert.equal(properties.name, 'timeout')
+            assert.equal(properties.value, '5s')
 
-            assert(properties[1])
-            assert(properties[1].name)
-            assert(properties[1].value)
-            assert.equal(properties[1].name, 'timeout')
 
             //check FIELD block
             let field = form1Block.field
             assert(field)
-            assert(field.grammar)
             assert(field.prompt)
             assert(field.name)
-            assert.equal(field.name, 'dtmfForm')
-            let grammar = field.grammar
-            assert(grammar.mode)
-            assert.equal(grammar.mode, 'dtmf')
-            assert(grammar.text)
-            let dtmfSettings = grammar.text.split(';').map(el => { return { "key": el.split('=')[0], "value":  el.split('=')[1] }})
-            assert(dtmfSettings.find(el => el.key === 'minDigits'))
-            assert(dtmfSettings.find(el => el.key === 'maxDigits'))
-            assert(dtmfSettings.find(el => el.key === 'terminators'))
-            assert(dtmfSettings.find(el => el.key === 'minDigits').value === '1')
-            assert(dtmfSettings.find(el => el.key === 'maxDigits').value === '10')
-            assert(dtmfSettings.find(el => el.key === 'terminators').value === '#')
+            assert.equal(field.name, 'usertext')
             let prompt = field.prompt
             assert(prompt.voice)
             assert(prompt.voice.name)
             assert(prompt.voice.text)
-            assert.equal(prompt.voice.text, "This is a DTMF Form")
+            assert.equal(prompt.voice.text, "Say something to reproduce")
 
             //check FILLED block
             let filled = form1Block.filled
+            
             assert(filled)
-            assert(filled.script)
             assert(filled.block)
             assert(filled.block.submit)
             assert.equal(filled.block.submit.fetchhint, 'safe')
             assert.equal(filled.block.submit.method, 'post')
-            assert.equal(filled.block.submit.namelist, 'usertext previousIntentTimestamp')
+            assert.equal(filled.block.submit.namelist, 'usertext session intentName previousIntentTimestamp')
             assert(filled.block.submit.expr.includes('nextblock'))
 
             //check NOINPUT block
             let noInput = form1Block.noinput
             assert(noInput.assign)
+            assert(noInput.assign.name)
+            assert.equal(noInput.assign.name, 'button')
+            assert(noInput.assign.expr)
+            let buttonNoInput = JSON.parse(noInput.assign.expr.replace(/^'|'$/g, ''));
+            assert(buttonNoInput)
+            assert(buttonNoInput.action)
+            assert(buttonNoInput.value)
+            assert.equal(buttonNoInput.value, 'no_input')
             assert(noInput.goto)
-            assert(noInput.assign[0])
-            assert(noInput.assign[0].name)
-            assert.equal(noInput.assign[0].name, 'menu_choice')
-            assert(noInput.assign[0].expr)
-            assert.equal(noInput.assign[0].expr, "'no_input'")
-            assert(noInput.assign[1])
-            assert(noInput.assign[1].name)
-            assert.equal(noInput.assign[1].name, 'button')
-            assert(noInput.assign[1].expr)
-
+            assert.equal(noInput.goto.next, "#noinput_form")
+            
+            //check NOMATCH block
+            let noMatch = form1Block.nomatch
+            assert(noMatch.assign)
+            assert(noMatch.assign.name)
+            assert.equal(noMatch.assign.name, 'button')
+            assert(noMatch.assign.expr)
+            let buttonNoMatch = JSON.parse(noMatch.assign.expr.replace(/^'|'$/g, ''));
+            assert(buttonNoMatch)
+            assert(buttonNoMatch.action)
+            assert(buttonNoMatch.value)
+            assert.equal(buttonNoMatch.value, 'no_input')
+            assert(noMatch.goto)
+            assert.equal(noMatch.goto.next, "#noinput_form")
             // ***** FIRST BLOCK ********* //
 
             // ***** SECOND BLOCK ********* //
@@ -364,8 +380,49 @@ describe('CHATBOT: Play a DTMF Form', async () => {
             assert.equal(form2Block.block.submit.method, 'post')
             assert.equal(form2Block.block.submit.namelist, 'intentName button previousIntentTimestamp')
             assert(form2Block.block.submit.expr.includes('/no_input'))
+            assert(form2Block.block.submit.expr.includes('/handle/'))
             // ***** SECOND BLOCK ********* //
 
+            let nextBlockVxml = await vxmlConnectorTest.manageCall.nextBlock(callId, "text to reproduce" ).catch((err) => { 
+                console.error(err); 
+                reject(err);
+            })
+            const isValid2 = XMLValidator.validate(nextBlockVxml);
+            assert.strictEqual(isValid2, true, "VXML created is not valid")
+            const jsonVXMLNextBlock = xmlParser.parse(nextBlockVxml).vxml
+            assert(jsonVXMLNextBlock)
+            assert(jsonVXMLNextBlock.var)
+            assert(jsonVXMLNextBlock.catch)
+            assert(jsonVXMLNextBlock.form)
+
+            let checkIfPromptExist = formBlock.hasOwnProperty('prompt')
+            
+            while(!checkIfPromptExist){
+                let nextBlockVxml = await vxmlConnectorTest.manageCall.nextBlock(callId, "" ).catch((err) => { 
+                    console.error(err); 
+                    reject(err);
+                })
+                const isValid2 = XMLValidator.validate(nextBlockVxml);
+                assert.strictEqual(isValid2, true, "VXML created is not valid")
+                const jsonVXMLNextBlock = xmlParser.parse(nextBlockVxml).vxml
+                assert(jsonVXMLNextBlock)
+                assert(jsonVXMLNextBlock.var)
+                assert(jsonVXMLNextBlock.catch)
+                assert(jsonVXMLNextBlock.form)
+
+                formBlock = jsonVXMLNextBlock.form
+                checkIfPromptExist = formBlock.hasOwnProperty('prompt')  
+
+            }
+            //check prompt block
+            let promptResponse = formBlock.prompt
+            assert(promptResponse)
+            assert(promptResponse.bargein)
+            assert.equal(promptResponse.bargein, true)
+            assert(promptResponse.voice)
+            assert(promptResponse.voice.name)
+            assert(promptResponse.voice.text)
+            assert.equal(promptResponse.voice.text, "text to reproduce")
             resolve();
         })
     })

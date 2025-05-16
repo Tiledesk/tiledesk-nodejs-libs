@@ -1,0 +1,311 @@
+{
+    "webhook_enabled": false,
+    "language": "en",
+    "name": "VXML - Speech Form",
+    "slug": "vxml-speech-form",
+    "type": "tilebot",
+    "subtype": "chatbot",
+    "intents": [
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionType": "reply",
+                    "text": "I didn't understand. Can you rephrase your question?",
+                    "attributes": {
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "I didn't understand. Can you rephrase your question?",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": [],
+                                            "json_buttons": ""
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "_tdActionId": "6816174b65bb4672b3891881934b981f"
+                }
+            ],
+            "intent_id": "bfb3bef7-c274-4279-ae7b-614a9e066c50",
+            "intent_display_name": "defaultFallback",
+            "language": "en",
+            "attributes": {
+                "position": {
+                    "x": 407,
+                    "y": 524
+                },
+                "readonly": true,
+                "nextBlockAction": {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "19f517c4-27e0-4362-bf53-b897f41ab6e4",
+                    "_tdActionType": "intent"
+                }
+            },
+            "agents_available": false
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionType": "intent",
+                    "intentName": "#f6f6bf73-d553-4902-a4ff-bc5b595cba8b",
+                    "_tdActionId": "6c046d02522047c9b0e348eee524a63e"
+                }
+            ],
+            "intent_id": "f0b48bac-ca7d-48d8-85ed-a51e84e5f20f",
+            "question": "\\start",
+            "intent_display_name": "start",
+            "language": "en",
+            "attributes": {
+                "position": {
+                    "x": 172,
+                    "y": 384
+                },
+                "readonly": true,
+                "nextBlockAction": {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "ca94c0dd-63b6-4498-bac5-aa7b35aa7e07",
+                    "_tdActionType": "intent"
+                }
+            },
+            "agents_available": false
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "52e648aa-dd9e-4d8b-a44e-613dee2d1edb",
+                    "_tdActionType": "speech_form",
+                    "attributes": {
+                        "disableInputMessage": false,
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 0
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "Say something to reproduce",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": [],
+                                            "json_buttons": ""
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "type": "wait",
+                                "time": 0
+                            },
+                            {
+                                "type": "settings",
+                                "settings": {
+                                    "bargein": true,
+                                    "noInputIntent": "#4083d14f-62a5-4635-a9be-b3f66c57e94b",
+                                    "noInputTimeout": 5000,
+                                    "incompleteSpeechTimeout": 700
+                                },
+                                "subType": "speech_form"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "d52253b0-f956-4b3d-b852-01fdf3cbd14c",
+                    "_tdActionType": "capture_user_reply"
+                }
+            ],
+            "intent_id": "f6f6bf73-d553-4902-a4ff-bc5b595cba8b",
+            "intent_display_name": "welcome",
+            "language": "en",
+            "attributes": {
+                "position": {
+                    "x": 518,
+                    "y": 96
+                },
+                "nextBlockAction": {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "842bd758-f8f6-4de7-baa8-3c2862762c4f",
+                    "_tdActionType": "intent",
+                    "intentName": "#9b0eaf67-c74b-48d2-9f64-b87f3d552c7c"
+                }
+            },
+            "agents_available": false
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "c7f4246c-0f91-485e-8120-30e049a37bb3",
+                    "_tdActionType": "play_prompt",
+                    "attributes": {
+                        "disableInputMessage": false,
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 0
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "{{lastUserText}}",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": [],
+                                            "json_buttons": ""
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "type": "wait",
+                                "time": 0
+                            },
+                            {
+                                "type": "settings",
+                                "settings": {
+                                    "bargein": true
+                                },
+                                "subType": "play_prompt"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "language": "en",
+            "intent_display_name": "text_to_speech",
+            "intent_id": "9b0eaf67-c74b-48d2-9f64-b87f3d552c7c",
+            "agents_available": false,
+            "attributes": {
+                "position": {
+                    "x": 931,
+                    "y": 34
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "3db08738-f41a-42b1-b2ab-99d044e5b6ba",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                },
+                "connectors": {},
+                "color": "156,163,205",
+                "readonly": false
+            }
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "834b0ef3-2dfa-48df-b848-3a3b5547c19b",
+                    "_tdActionType": "play_prompt",
+                    "attributes": {
+                        "disableInputMessage": false,
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 0
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "No input received",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": [],
+                                            "json_buttons": ""
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "type": "wait",
+                                "time": 0
+                            },
+                            {
+                                "type": "settings",
+                                "settings": {
+                                    "bargein": true
+                                },
+                                "subType": "play_prompt"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "language": "en",
+            "intent_display_name": "no_input",
+            "intent_id": "4083d14f-62a5-4635-a9be-b3f66c57e94b",
+            "agents_available": false,
+            "attributes": {
+                "position": {
+                    "x": 927,
+                    "y": 324
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "b102c39b-2b2a-477f-adfc-d322921ca46b",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                },
+                "connectors": {},
+                "color": "156,163,205",
+                "readonly": false
+            }
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "a810e681-dc51-4099-b27a-7f8b20dea3c5",
+                    "_tdActionType": "close"
+                }
+            ],
+            "language": "en",
+            "intent_display_name": "close",
+            "intent_id": "0c79b5cd-ac98-4f46-a57a-eb10e0d315c4",
+            "agents_available": false,
+            "attributes": {
+                "position": {
+                    "x": 765,
+                    "y": 633
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "5a916b3e-6cdf-47a8-92ed-7cbc5bbf8111",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                },
+                "connectors": {},
+                "color": "156,163,205",
+                "readonly": false
+            }
+        }
+    ]
+}

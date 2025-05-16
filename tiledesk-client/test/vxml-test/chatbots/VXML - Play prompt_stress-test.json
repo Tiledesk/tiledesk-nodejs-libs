@@ -1,7 +1,7 @@
 {
   "webhook_enabled": false,
   "language": "en",
-  "name": "VXML - DTMF Form",
+  "name": "VXML - DTMF Form stress test",
   "type": "tilebot",
   "intents": [
     {
@@ -45,8 +45,8 @@
       "actions": [
         {
           "_tdActionTitle": "",
-          "_tdActionId": "15819912-3751-476a-a2ac-9812882d453b",
-          "_tdActionType": "dtmf_form",
+          "_tdActionId": "b9e6e482-9af2-4f52-b0e3-80e2c9bf602d",
+          "_tdActionType": "play_prompt",
           "attributes": {
             "disableInputMessage": false,
             "commands": [
@@ -58,7 +58,7 @@
                 "type": "message",
                 "message": {
                   "type": "text",
-                  "text": "This is a DTMF Form",
+                  "text": "This is a message from play prompt action sent ad: {{timestamp}}",
                   "attributes": {
                     "attachment": {
                       "type": "template",
@@ -74,14 +74,9 @@
               {
                 "type": "settings",
                 "settings": {
-                  "minDigits": "1",
-                  "maxDigits": "10",
-                  "terminators": "#",
-                  "noInputIntent": "#1077ae72-2ece-4076-a9c2-e6bd26477fba",
-                  "noInputTimeout": 5000,
                   "bargein": true
                 },
-                "subType": "dtmf_form"
+                "subType": "play_prompt"
               }
             ]
           }
