@@ -157,7 +157,7 @@ describe('Knwoledge Base (Long Test)', async () => {
 
             let indexing_time = Date.now();
             let response = await tdClientTest.knowledgeBase.addContentToNamespace(example_content).catch((err) => {
-                console.error("Error getting all namespaces ", err.response.status, err.response.statusText);
+                console.error("Error adding content to namespace ", err.response.status, err.response.statusText);
                 console.error("Error detail ", JSON.stringify(err.response.data));
                 reject(err);
             })
@@ -183,7 +183,7 @@ describe('Knwoledge Base (Long Test)', async () => {
                     }
     
                     let status = await tdClientTest.knowledgeBase.checkContentStatus(payload).catch((err) => {
-                        console.error("Error getting all namespaces ", err.response.status, err.response.statusText);
+                        console.error("Error checking content status ", err.response.status, err.response.statusText);
                         console.error("Error detail ", JSON.stringify(err.response.data));
                         rejectIndexing(err);
                     })
