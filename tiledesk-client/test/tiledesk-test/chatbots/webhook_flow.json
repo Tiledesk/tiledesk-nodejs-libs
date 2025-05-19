@@ -1,0 +1,66 @@
+{
+    "webhook_enabled": false,
+    "language": "en",
+    "name": "Webhook Test",
+    "slug": "webhook-test",
+    "type": "tilebot",
+    "subtype": "webhook",
+    "intents": [
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionType": "intent",
+                    "intentName": "#4e8b1e8d-54d3-4156-a2a0-f11075386a79",
+                    "_tdActionId": "1ac87c5463ef4484bcd8c089efe5da43"
+                }
+            ],
+            "intent_id": "25d7f89c-40e8-4bba-82cd-6c7d7d6755c8",
+            "question": "",
+            "intent_display_name": "webhook",
+            "language": "en",
+            "attributes": {
+                "position": {
+                    "x": 172,
+                    "y": 384
+                },
+                "readonly": true,
+                "nextBlockAction": {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "8637cfed-560e-45d8-8ac7-f16da8a47b55",
+                    "_tdActionType": "intent"
+                }
+            },
+            "agents_available": false
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionType": "web_response",
+                    "status": "200",
+                    "bodyType": "json",
+                    "payload": "{\n\t\"success\": true,\n\t\"message\": \"Your webhook is online!\",\n\t\"value\": 1\n}",
+                    "_tdActionId": "3b9d67587a95421db9d96c79c8a187a5"
+                }
+            ],
+            "intent_id": "4e8b1e8d-54d3-4156-a2a0-f11075386a79",
+            "intent_display_name": "response",
+            "language": "en",
+            "attributes": {
+                "position": {
+                    "x": 714,
+                    "y": 113
+                },
+                "nextBlockAction": {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "e16c67bd-c5b8-4ee7-8ff1-ae8e76da14e2",
+                    "_tdActionType": "intent"
+                }
+            },
+            "agents_available": false
+        }
+    ]
+}

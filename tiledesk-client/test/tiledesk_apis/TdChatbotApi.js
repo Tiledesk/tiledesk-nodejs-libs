@@ -84,7 +84,7 @@ class Chatbot {
                 HTTPREQUEST,
                 function (err, resbody) {
                     if (err) {
-                        reject(error)
+                        reject(err)
                     }
                     else {
                         resolve(resbody)
@@ -111,7 +111,7 @@ class Chatbot {
                 HTTPREQUEST,
                 function (err, resbody) {
                     if (err) {
-                        reject(error)
+                        reject(err)
                     }
                     else {
                         resolve(resbody)
@@ -122,7 +122,7 @@ class Chatbot {
     }
 
 
-    async updateFaq(id, intent){
+    async updateFaq(chatbot_id, intent){
         return new Promise((resolve, reject) => {
             const URL = `${this.APIURL}/${this.PROJECT_ID}/faq/ops_update`
             const HTTPREQUEST = {
@@ -132,7 +132,7 @@ class Chatbot {
                     'Authorization': this.JWT_TOKEN
                 },
                 json: {
-                    id_faq_kb: id,
+                    id_faq_kb: chatbot_id,
                     operations: [
                         {type: 'put', intent: intent}
                     ]
@@ -144,7 +144,7 @@ class Chatbot {
                 HTTPREQUEST,
                 function (err, resbody) {
                     if (err) {
-                        reject(error)
+                        reject(err)
                     }
                     else {
                         resolve(resbody)
@@ -152,9 +152,61 @@ class Chatbot {
                 }, this.LOG
             );
         });
-        
     }
 
+    async publish(chatbot_id, release_note) {
+        return new Promise((resolve, reject) => {
+            const URL = `${this.APIURL}/${this.PROJECT_ID}/faq_kb/${chatbot_id}/publish`
+            const HTTPREQUEST = {
+                url: URL,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': this.JWT_TOKEN
+                },
+                json: { release_note: release_note },
+                method: 'PUT',
+                httpsOptions: this.httpsOptions
+            };
+            Utils.myrequest(
+                HTTPREQUEST,
+                function (err, resbody) {
+                    if (err) {
+                        reject(err)
+                    }
+                    else {
+                        resolve(resbody)
+                    }
+                }, this.LOG
+            );
+        });
+    }
+
+    async restore(chatbot_id, restore_from) {
+        return new Promise((resolve, reject) => {
+            const URL = `${this.APIURL}/${this.PROJECT_ID}/faq_kb/${chatbot_id}/publish`
+            const HTTPREQUEST = {
+                url: URL,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': this.JWT_TOKEN
+                },
+                json: { restore_from: restore_from },
+                method: 'PUT',
+                httpsOptions: this.httpsOptions
+            };
+            Utils.myrequest(
+                HTTPREQUEST,
+                function (err, resbody) {
+                    if (err) {
+                        reject(err)
+                    }
+                    else {
+                        resolve(resbody)
+                    }
+                }, this.LOG
+            );
+        });
+    }
 
 }
 
