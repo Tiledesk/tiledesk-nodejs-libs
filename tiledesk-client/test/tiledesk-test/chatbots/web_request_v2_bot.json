@@ -249,7 +249,7 @@
                 {
                     "_tdActionTitle": "",
                     "_tdActionId": "40c1c039-75d7-4f4c-81c6-3861f5f9ce1f",
-                    "url": "{{API_BASE_URL}}/",
+                    "url": "https://eu-frankfurt-prod-v3.eks.tiledesk.com/api/",
                     "headersString": {
                         "Content-Type": "*/*",
                         "Cache-Control": "no-cache",
