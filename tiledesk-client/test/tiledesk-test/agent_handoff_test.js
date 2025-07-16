@@ -104,7 +104,8 @@ let group_id;
 let group_name;
 
 describe('CHATBOT: Agent Handoff action', async () => {
-    before(() => {
+    before(function() {
+        this.timeout(5000);
         return new Promise(async (resolve, reject) => {
             if (LOG_STATUS) {
                 console.log("MQTT endpoint:", config.MQTT_ENDPOINT);
