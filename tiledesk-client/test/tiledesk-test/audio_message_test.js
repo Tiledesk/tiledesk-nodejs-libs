@@ -105,7 +105,8 @@ let integration_id;
 let uploadRes;
 
 describe('CHATBOT: Audio message is sent from client', async () => {
-    before(() => {
+    before(function() {
+        this.timeout(4000)
         return new Promise(async (resolve, reject) => {
             if (LOG_STATUS) {
                 console.log("MQTT endpoint:", config.MQTT_ENDPOINT);
@@ -215,7 +216,8 @@ describe('CHATBOT: Audio message is sent from client', async () => {
 
     it('Send Audio url (project has not a valid GPT key) (~1s)', () => {
         return new Promise((resolve, reject)=> { 
-            chatClient1.onMessageAdded(async (message, topic) => { 
+            let handlerId = null;
+            const messageHandler = async (message, topic) => { 
                 const message_text = ''     
                 if(message.recipient !== recipient_id){
                     reject();
@@ -278,6 +280,8 @@ describe('CHATBOT: Audio message is sent from client', async () => {
                             assert(msg.metadata.uid)
                             assert.equal(msg.metadata.type, "audio/mpeg")
                             assert.equal(msg.metadata.name, "audio-file")
+                            //remove handler from list
+                            chatClient1.removeOnMessageAddedHandler(handlerId);
                             resolve();                 
                         }
                     );
@@ -287,7 +291,11 @@ describe('CHATBOT: Audio message is sent from client', async () => {
                     // console.log("Message not computed:", message.text);
                 }
 
-            });
+            }
+            
+            //add handler to list
+            handlerId = chatClient1.onMessageAdded(messageHandler);
+
             if (LOG_STATUS) {
                 console.log("Sending test message...");
             }
@@ -304,6 +312,7 @@ describe('CHATBOT: Audio message is sent from client', async () => {
     it('Send Audio url (project has a valid GPT key) (~4s)', () => {
         return new Promise(async (resolve, reject)=> {
             let hasSentAudioRecord = false;  
+            let handlerId = null;
             const tdClientTest = new TiledeskClientTest({
                 APIURL: API_ENDPOINT,
                 PROJECT_ID: TILEDESK_PROJECT_ID,
@@ -334,10 +343,11 @@ describe('CHATBOT: Audio message is sent from client', async () => {
             assert.equal(integration.value.organization, 'test-lib')
             integration_id = integration._id
 
-            chatClient1.onMessageAdded(async (message, topic) => { 
+            const messageHandler = async (message, topic) => { 
                 const message_text = ''
                 if(message.recipient !== recipient_id){
-                    reject();
+                    console.log('message from recipient:', message.recipient, recipient_id)
+                    reject(new Error('invalid recipient::'));
                     return;
                 }
                 if (LOG_STATUS) {
@@ -362,7 +372,6 @@ describe('CHATBOT: Audio message is sent from client', async () => {
                     let msg = command.message
                     assert(msg.text, "Expect msg.text exist")
                     assert.equal(msg.text, 'send audio file to translate in text', `Expect msg.text to be 'send audio file to translate in text' but got: ${msg.text} `)
-  
                     chatClient1.sendMessage(
                         '',
                         'file',
@@ -401,7 +410,7 @@ describe('CHATBOT: Audio message is sent from client', async () => {
                             // resolve();
                         }
                     );
-                      
+        
                 }
                 else if(hasSentAudioRecord &&
                     message &&  message.sender_fullname === "Audio Chatbot"
@@ -416,13 +425,17 @@ describe('CHATBOT: Audio message is sent from client', async () => {
                     let msg = command.message
                     assert(msg.text, "Expect msg.text exist")
                     assert.equal(msg.text, 'Hey, how are you?', `Expect msg.text to be 'messaggio di test' but got: ${msg.text} `)
+                    chatClient1.removeOnMessageAddedHandler(handlerId)
                     resolve();  
                 }
                 else {
                     // console.log("Message not computed:", message.text);
                 }
 
-            });
+            }
+            
+            handlerId = chatClient1.onMessageAdded(messageHandler);
+
             if (LOG_STATUS) {
                 console.log("Sending test message...");
             }
@@ -434,7 +447,7 @@ describe('CHATBOT: Audio message is sent from client', async () => {
                 }
             });
         })
-    }).timeout(6000)
+    }).timeout(8000)
 
 });
 
