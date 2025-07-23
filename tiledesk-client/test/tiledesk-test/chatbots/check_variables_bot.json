@@ -1,0 +1,1134 @@
+{
+    "webhook_enabled": false,
+    "language": "en",
+    "name": "Check variables Chatbot",
+    "slug": "check-variables",
+    "type": "tilebot",
+    "subtype": "chatbot",
+    "intents": [
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionType": "reply",
+                    "text": "I didn't understand. Can you rephrase your question?",
+                    "attributes": {
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "I didn't understand. Can you rephrase your question?"
+                                }
+                            }
+                        ]
+                    }
+                }
+            ],
+            "intent_id": "08448387-3dec-4666-a7a1-7903b3e602ba",
+            "intent_display_name": "defaultFallback",
+            "language": "en",
+            "attributes": {
+                "position": {
+                    "x": 714,
+                    "y": 528
+                }
+            },
+            "agents_available": false
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionType": "intent",
+                    "intentName": "#69363e63-95bc-4855-a543-037fde9d5979",
+                    "_tdActionId": "4079df5d3c4a4acfac4f5df6c80c3ffc"
+                }
+            ],
+            "intent_id": "4daa4c8d-f62f-4d52-94af-a4bcdbac7799",
+            "question": "\\start",
+            "intent_display_name": "start",
+            "language": "en",
+            "attributes": {
+                "position": {
+                    "x": 172,
+                    "y": 384
+                },
+                "readonly": true,
+                "color": "156,163,205",
+                "nextBlockAction": {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "de2d7f35-e106-42ce-b041-457916763917",
+                    "_tdActionType": "intent"
+                }
+            },
+            "agents_available": false
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionType": "reply",
+                    "attributes": {
+                        "disableInputMessage": false,
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "Choose variable to check",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": [
+                                                {
+                                                    "uid": "1ed011e692284185b08d0151c142f879",
+                                                    "type": "action",
+                                                    "value": "payload",
+                                                    "link": "",
+                                                    "target": "blank",
+                                                    "action": "#5f4c1bf4-e30d-43c6-91af-2b6b948d2a1c",
+                                                    "attributes": "",
+                                                    "show_echo": true
+                                                },
+                                                {
+                                                    "uid": "aaaaec51b36049208bb17d865e96d4bc",
+                                                    "type": "action",
+                                                    "value": "department_id",
+                                                    "link": "",
+                                                    "target": "blank",
+                                                    "action": "#18bdb8ec-6531-4863-ae99-254da9a4dddf",
+                                                    "attributes": "",
+                                                    "show_echo": true
+                                                },
+                                                {
+                                                    "uid": "e0fb527bdcd04f36bae857e16636fa9b",
+                                                    "type": "action",
+                                                    "value": "department_name",
+                                                    "link": "",
+                                                    "target": "blank",
+                                                    "action": "#8ea1e54a-5746-4064-94ff-1f601363a2a7",
+                                                    "attributes": "",
+                                                    "show_echo": true
+                                                },
+                                                {
+                                                    "uid": "7df8b6510b3e404c91222371a927884e",
+                                                    "type": "action",
+                                                    "value": "project_id",
+                                                    "link": "",
+                                                    "target": "blank",
+                                                    "action": "#49a3ca97-10c3-4f63-a9a5-b6ed5428379f",
+                                                    "attributes": "",
+                                                    "show_echo": true
+                                                },
+                                                {
+                                                    "uid": "210d2f7b00f5469aa60aeb5da64ba549",
+                                                    "type": "action",
+                                                    "value": "last_message_id",
+                                                    "link": "",
+                                                    "target": "blank",
+                                                    "action": "#068c0a6b-50a2-4c19-9e54-5291276f9902",
+                                                    "attributes": "",
+                                                    "show_echo": true
+                                                },
+                                                {
+                                                    "uid": "9ee4a00fff3c49c28c9478595ca4102d",
+                                                    "type": "action",
+                                                    "value": "conversation_id",
+                                                    "link": "",
+                                                    "target": "blank",
+                                                    "action": "#b33c79ac-23ee-430f-a89f-2fbcdb265245",
+                                                    "attributes": "",
+                                                    "show_echo": true
+                                                },
+                                                {
+                                                    "uid": "166b19ecabca41c4bd4520a216b02307",
+                                                    "type": "action",
+                                                    "value": "chatbot_id",
+                                                    "link": "",
+                                                    "target": "blank",
+                                                    "action": "#41549805-ac0f-4999-abd8-88c64db22766",
+                                                    "attributes": "",
+                                                    "show_echo": true
+                                                },
+                                                {
+                                                    "uid": "cf86e4768993471ab7e803eecbf5b612",
+                                                    "type": "action",
+                                                    "value": "chatbot_name",
+                                                    "link": "",
+                                                    "target": "blank",
+                                                    "action": "#42997e35-b618-4c9d-99bc-3c63f2b80fd8",
+                                                    "attributes": "",
+                                                    "show_echo": true
+                                                },
+                                                {
+                                                    "uid": "c53086751cca49c083ce93b5fcc49731",
+                                                    "type": "action",
+                                                    "value": "chatbotToken",
+                                                    "link": "",
+                                                    "target": "blank",
+                                                    "action": "#4b710f67-d625-4a00-a028-92b020d9c1a3",
+                                                    "attributes": "",
+                                                    "show_echo": true
+                                                },
+                                                {
+                                                    "uid": "ffabfc03378f430fbb6dcde8dc7662bf",
+                                                    "type": "action",
+                                                    "value": "user_id",
+                                                    "link": "",
+                                                    "target": "blank",
+                                                    "action": "#fd91d048-86be-498d-b7f9-48007097eb88",
+                                                    "attributes": "",
+                                                    "show_echo": true
+                                                },
+                                                {
+                                                    "uid": "c1f46fd337a44607b97a3ae05e097c0d",
+                                                    "type": "action",
+                                                    "value": "user_agent",
+                                                    "link": "",
+                                                    "target": "blank",
+                                                    "action": "#1a2ec00d-30d1-4777-a1b0-2769ee54a526",
+                                                    "attributes": "",
+                                                    "show_echo": true
+                                                },
+                                                {
+                                                    "uid": "722f195f628f46cb9eab62c5c7e4955c",
+                                                    "type": "action",
+                                                    "value": "chatChannel",
+                                                    "link": "",
+                                                    "target": "blank",
+                                                    "action": "#dfff0baf-2b54-4b15-ba2b-16d5dc414094",
+                                                    "attributes": "",
+                                                    "show_echo": true
+                                                },
+                                                {
+                                                    "uid": "c61151bbbc7343f4bacbc77f9c44be09",
+                                                    "type": "action",
+                                                    "value": "user_source_page",
+                                                    "link": "",
+                                                    "target": "blank",
+                                                    "action": "#ea6581c2-db01-4da1-9d23-7fc842ba68c3",
+                                                    "attributes": "",
+                                                    "show_echo": true
+                                                },
+                                                {
+                                                    "uid": "182614e35cbf427cb567ee8adb6bf32a",
+                                                    "type": "action",
+                                                    "value": "chat_url",
+                                                    "link": "",
+                                                    "target": "blank",
+                                                    "action": "#1b2bd2d7-24f4-479a-8c86-f72279875ea0",
+                                                    "attributes": "",
+                                                    "show_echo": true
+                                                },
+                                                {
+                                                    "uid": "9af938d0b49b408998ae325e20d09c6f",
+                                                    "type": "action",
+                                                    "value": "user_ip_address",
+                                                    "link": "",
+                                                    "target": "blank",
+                                                    "action": "#55f1cf6d-3106-47c2-8aae-e86151f34f8e",
+                                                    "attributes": "",
+                                                    "show_echo": true
+                                                },
+                                                {
+                                                    "uid": "bf47762b40354abdb94dd90b3281be0f",
+                                                    "type": "action",
+                                                    "value": "ticketId",
+                                                    "link": "",
+                                                    "target": "blank",
+                                                    "action": "#f310347e-2308-4e94-9059-4aa1a0b99975",
+                                                    "attributes": "",
+                                                    "show_echo": true
+                                                }
+                                            ],
+                                            "json_buttons": "",
+                                            "json_gallery": ""
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "text": "Hi, how can I help you?\r\n",
+                    "_tdActionId": "ba405118e24b4dfe90511d6c1e953253"
+                }
+            ],
+            "intent_id": "69363e63-95bc-4855-a543-037fde9d5979",
+            "intent_display_name": "welcome",
+            "language": "en",
+            "attributes": {
+                "position": {
+                    "x": 680,
+                    "y": -311
+                },
+                "color": "156,163,205",
+                "nextBlockAction": {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "ba72b962-163d-499b-a674-588384f8848f",
+                    "_tdActionType": "intent"
+                }
+            },
+            "agents_available": false
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "ce98d4db-6691-4cec-971d-7d671af9cdeb",
+                    "_tdActionType": "reply",
+                    "attributes": {
+                        "disableInputMessage": false,
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "payload: {{payload | json}}",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": [],
+                                            "json_buttons": "",
+                                            "json_gallery": ""
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            ],
+            "language": "en",
+            "intent_display_name": "payload",
+            "intent_id": "5f4c1bf4-e30d-43c6-91af-2b6b948d2a1c",
+            "agents_available": false,
+            "attributes": {
+                "position": {
+                    "x": 1145,
+                    "y": -776
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "fe37c1cb-94ad-4e18-b27d-0ac1602a5d35",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                },
+                "connectors": {},
+                "color": "156,163,205",
+                "readonly": false
+            }
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "b77bb6fb-6106-4e30-97ce-3570ec4d2405",
+                    "_tdActionType": "reply",
+                    "attributes": {
+                        "disableInputMessage": false,
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "department_id: {{department_id}}",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": [],
+                                            "json_buttons": "",
+                                            "json_gallery": ""
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            ],
+            "language": "en",
+            "intent_display_name": "department_id",
+            "intent_id": "18bdb8ec-6531-4863-ae99-254da9a4dddf",
+            "agents_available": false,
+            "attributes": {
+                "position": {
+                    "x": 1150,
+                    "y": -556
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "35fd3efc-6b3f-40f9-9e23-0e1c42ee0f44",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                },
+                "connectors": {},
+                "color": "156,163,205",
+                "readonly": false
+            }
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "12870ff2-3df4-4c79-b219-def60e86fffb",
+                    "_tdActionType": "reply",
+                    "attributes": {
+                        "disableInputMessage": false,
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "department_name: {{department_name}}",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": [],
+                                            "json_buttons": "",
+                                            "json_gallery": ""
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            ],
+            "language": "en",
+            "intent_display_name": "department_name",
+            "intent_id": "8ea1e54a-5746-4064-94ff-1f601363a2a7",
+            "agents_available": false,
+            "attributes": {
+                "position": {
+                    "x": 1155,
+                    "y": -335
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "87e4845b-9336-4a4a-8945-202c38f6da36",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                },
+                "connectors": {},
+                "color": "156,163,205",
+                "readonly": false
+            }
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "434f00b0-8773-4cd9-ad13-0ad925e8b8e8",
+                    "_tdActionType": "reply",
+                    "attributes": {
+                        "disableInputMessage": false,
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "project_id: {{project_id}}",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": [],
+                                            "json_buttons": "",
+                                            "json_gallery": ""
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            ],
+            "language": "en",
+            "intent_display_name": "project_id",
+            "intent_id": "49a3ca97-10c3-4f63-a9a5-b6ed5428379f",
+            "agents_available": false,
+            "attributes": {
+                "position": {
+                    "x": 1461,
+                    "y": -779
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "d2fde8ef-e5a2-468b-bdac-cb4fbe634b5f",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                },
+                "connectors": {},
+                "color": "156,163,205",
+                "readonly": false
+            }
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "b6a23a04-75bf-4387-95a1-09665e7ebe12",
+                    "_tdActionType": "reply",
+                    "attributes": {
+                        "disableInputMessage": false,
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "last_message_id: {{last_message_id}}",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": [],
+                                            "json_buttons": "",
+                                            "json_gallery": ""
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            ],
+            "language": "en",
+            "intent_display_name": "last_message_id",
+            "intent_id": "068c0a6b-50a2-4c19-9e54-5291276f9902",
+            "agents_available": false,
+            "attributes": {
+                "position": {
+                    "x": 1464,
+                    "y": -559
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "4d4df0f3-a8a9-48cc-a9a9-d6d78156782d",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                },
+                "connectors": {},
+                "color": "156,163,205",
+                "readonly": false
+            }
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "0f246df7-5523-42e1-84b1-cba530ca981e",
+                    "_tdActionType": "reply",
+                    "attributes": {
+                        "disableInputMessage": false,
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "conversation_id: {{conversation_id}}",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": [],
+                                            "json_buttons": "",
+                                            "json_gallery": ""
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            ],
+            "language": "en",
+            "intent_display_name": "conversation_id",
+            "intent_id": "b33c79ac-23ee-430f-a89f-2fbcdb265245",
+            "agents_available": false,
+            "attributes": {
+                "position": {
+                    "x": 1467,
+                    "y": -330
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "d259a86e-161a-464e-bee2-274a51f8210f",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                },
+                "connectors": {},
+                "color": "156,163,205",
+                "readonly": false
+            }
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "09c265b4-f8d1-4063-be27-2d270b201c40",
+                    "_tdActionType": "reply",
+                    "attributes": {
+                        "disableInputMessage": false,
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "chatbot_id: {{chatbot_id}}",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": [],
+                                            "json_buttons": "",
+                                            "json_gallery": ""
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            ],
+            "language": "en",
+            "intent_display_name": "chatbot_id",
+            "intent_id": "41549805-ac0f-4999-abd8-88c64db22766",
+            "agents_available": false,
+            "attributes": {
+                "position": {
+                    "x": 1160,
+                    "y": -46
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "83329d07-437f-4d64-ab9a-454bd02d6e7d",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                },
+                "connectors": {},
+                "color": "156,163,205",
+                "readonly": false
+            }
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "e0d55ccb-2042-4bbf-885b-ddd5193ad637",
+                    "_tdActionType": "reply",
+                    "attributes": {
+                        "disableInputMessage": false,
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "chatbot_name: {{chatbot_name}}",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": [],
+                                            "json_buttons": "",
+                                            "json_gallery": ""
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            ],
+            "language": "en",
+            "intent_display_name": "chatbot_name",
+            "intent_id": "42997e35-b618-4c9d-99bc-3c63f2b80fd8",
+            "agents_available": false,
+            "attributes": {
+                "position": {
+                    "x": 1165,
+                    "y": 156
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "d0c78000-7267-477f-8706-9bb7e2166305",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                },
+                "connectors": {},
+                "color": "156,163,205",
+                "readonly": false
+            }
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "a181a00d-ce0e-4cd6-9fcc-d438c7bb8773",
+                    "_tdActionType": "reply",
+                    "attributes": {
+                        "disableInputMessage": false,
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "chatbotToken: {{chatbotToken}}",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": [],
+                                            "json_buttons": "",
+                                            "json_gallery": ""
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            ],
+            "language": "en",
+            "intent_display_name": "chatbotToken",
+            "intent_id": "4b710f67-d625-4a00-a028-92b020d9c1a3",
+            "agents_available": false,
+            "attributes": {
+                "position": {
+                    "x": 1166,
+                    "y": 354
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "1b16deab-d916-47ca-af73-9b85f2740c77",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                },
+                "connectors": {},
+                "color": "156,163,205",
+                "readonly": false
+            }
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "6c989615-8b6c-43db-a840-3c7444025ed0",
+                    "_tdActionType": "reply",
+                    "attributes": {
+                        "disableInputMessage": false,
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "user_id: {{user_id}}",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": [],
+                                            "json_buttons": "",
+                                            "json_gallery": ""
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            ],
+            "language": "en",
+            "intent_display_name": "user_id",
+            "intent_id": "fd91d048-86be-498d-b7f9-48007097eb88",
+            "agents_available": false,
+            "attributes": {
+                "position": {
+                    "x": 1482,
+                    "y": -46
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "e53174fe-c533-44e0-9b2f-fd9713f6fe49",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                },
+                "connectors": {},
+                "color": "156,163,205",
+                "readonly": false
+            }
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "c310e988-d3b7-42d2-a6c8-e9189730c86d",
+                    "_tdActionType": "reply",
+                    "attributes": {
+                        "disableInputMessage": false,
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "user_agent: {{user_agent}}",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": [],
+                                            "json_buttons": "",
+                                            "json_gallery": ""
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            ],
+            "language": "en",
+            "intent_display_name": "user_agent",
+            "intent_id": "1a2ec00d-30d1-4777-a1b0-2769ee54a526",
+            "agents_available": false,
+            "attributes": {
+                "position": {
+                    "x": 1486,
+                    "y": 156
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "aaede2dd-a3ff-4333-82ee-37395e5a2bf2",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                },
+                "connectors": {},
+                "color": "156,163,205",
+                "readonly": false
+            }
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "805cb49e-305f-4e08-8743-0393133c447b",
+                    "_tdActionType": "reply",
+                    "attributes": {
+                        "disableInputMessage": false,
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "chatChannel: {{chatChannel}}",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": [],
+                                            "json_buttons": "",
+                                            "json_gallery": ""
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            ],
+            "language": "en",
+            "intent_display_name": "chatChannel",
+            "intent_id": "dfff0baf-2b54-4b15-ba2b-16d5dc414094",
+            "agents_available": false,
+            "attributes": {
+                "position": {
+                    "x": 1484,
+                    "y": 357
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "4a07b2a3-660f-464b-b0aa-953e17376b1a",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                },
+                "connectors": {},
+                "color": "156,163,205",
+                "readonly": false
+            }
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "b7a23e69-522e-4803-b60a-1562ee53d950",
+                    "_tdActionType": "reply",
+                    "attributes": {
+                        "disableInputMessage": false,
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "user_source_page: {{user_source_page}}",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": [],
+                                            "json_buttons": "",
+                                            "json_gallery": ""
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            ],
+            "language": "en",
+            "intent_display_name": "user_source_page",
+            "intent_id": "ea6581c2-db01-4da1-9d23-7fc842ba68c3",
+            "agents_available": false,
+            "attributes": {
+                "position": {
+                    "x": 1179,
+                    "y": 630
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "7222609e-882b-4647-8976-5d9c48b44a55",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                },
+                "connectors": {},
+                "color": "156,163,205",
+                "readonly": false
+            }
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "f4f8f9cf-9799-4820-9853-34c8dd8f0a6a",
+                    "_tdActionType": "reply",
+                    "attributes": {
+                        "disableInputMessage": false,
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "chat_url: {{chat_url}}",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": [],
+                                            "json_buttons": "",
+                                            "json_gallery": ""
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            ],
+            "language": "en",
+            "intent_display_name": "chat_url",
+            "intent_id": "1b2bd2d7-24f4-479a-8c86-f72279875ea0",
+            "agents_available": false,
+            "attributes": {
+                "position": {
+                    "x": 1181,
+                    "y": 863
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "5e31f93a-5de8-439b-b474-89879697ade8",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                },
+                "connectors": {},
+                "color": "156,163,205",
+                "readonly": false
+            }
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "abc5e23d-11b7-40f6-8adf-15c5b8a83495",
+                    "_tdActionType": "reply",
+                    "attributes": {
+                        "disableInputMessage": false,
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "user_ip_address: {{user_ip_address}}",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": [],
+                                            "json_buttons": "",
+                                            "json_gallery": ""
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            ],
+            "language": "en",
+            "intent_display_name": "user_ip_address",
+            "intent_id": "55f1cf6d-3106-47c2-8aae-e86151f34f8e",
+            "agents_available": false,
+            "attributes": {
+                "position": {
+                    "x": 1185,
+                    "y": 1070
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "e5a30b6e-a62c-495e-9e27-5f8c49f8b190",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                },
+                "connectors": {},
+                "color": "156,163,205",
+                "readonly": false
+            }
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "a225a223-cde4-447d-a5bb-53b493d25b99",
+                    "_tdActionType": "reply",
+                    "attributes": {
+                        "disableInputMessage": false,
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "ticketId: {{ticketId}}",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": [],
+                                            "json_buttons": "",
+                                            "json_gallery": ""
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            ],
+            "language": "en",
+            "intent_display_name": "ticketId",
+            "intent_id": "f310347e-2308-4e94-9059-4aa1a0b99975",
+            "agents_available": false,
+            "attributes": {
+                "position": {
+                    "x": 1500,
+                    "y": 631
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "7dca2fee-3781-4fe7-97cf-b60ae72e4dd1",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                },
+                "connectors": {},
+                "color": "156,163,205",
+                "readonly": false
+            }
+        }
+    ]
+}
