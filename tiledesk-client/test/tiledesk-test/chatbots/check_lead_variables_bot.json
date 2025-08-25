@@ -1,0 +1,670 @@
+{
+    "webhook_enabled": false,
+    "language": "en",
+    "name": "Check lead variables",
+    "slug": "check-variables-1",
+    "type": "tilebot",
+    "subtype": "chatbot",
+    "intents": [
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionType": "reply",
+                    "attributes": {
+                        "disableInputMessage": false,
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "Choose variable to check",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": [
+                                                {
+                                                    "uid": "1ed011e692284185b08d0151c142f879",
+                                                    "type": "action",
+                                                    "value": "userEmail",
+                                                    "link": "",
+                                                    "target": "blank",
+                                                    "action": "#5f4c1bf4-e30d-43c6-91af-2b6b948d2a1c",
+                                                    "attributes": "",
+                                                    "show_echo": true
+                                                },
+                                                {
+                                                    "uid": "aaaaec51b36049208bb17d865e96d4bc",
+                                                    "type": "action",
+                                                    "value": "userFullname",
+                                                    "link": "",
+                                                    "target": "blank",
+                                                    "action": "#18bdb8ec-6531-4863-ae99-254da9a4dddf",
+                                                    "attributes": "",
+                                                    "show_echo": true
+                                                },
+                                                {
+                                                    "uid": "e0fb527bdcd04f36bae857e16636fa9b",
+                                                    "type": "action",
+                                                    "value": "userPhone",
+                                                    "link": "",
+                                                    "target": "blank",
+                                                    "action": "#8ea1e54a-5746-4064-94ff-1f601363a2a7",
+                                                    "attributes": "",
+                                                    "show_echo": true
+                                                },
+                                                {
+                                                    "uid": "7df8b6510b3e404c91222371a927884e",
+                                                    "type": "action",
+                                                    "value": "userLeadId",
+                                                    "link": "",
+                                                    "target": "blank",
+                                                    "action": "#49a3ca97-10c3-4f63-a9a5-b6ed5428379f",
+                                                    "attributes": "",
+                                                    "show_echo": true
+                                                },
+                                                {
+                                                    "uid": "210d2f7b00f5469aa60aeb5da64ba549",
+                                                    "type": "action",
+                                                    "value": "userCompany",
+                                                    "link": "",
+                                                    "target": "blank",
+                                                    "action": "#068c0a6b-50a2-4c19-9e54-5291276f9902",
+                                                    "attributes": "",
+                                                    "show_echo": true
+                                                },
+                                                {
+                                                    "uid": "9ee4a00fff3c49c28c9478595ca4102d",
+                                                    "type": "action",
+                                                    "value": "currentPhoneNumber",
+                                                    "link": "",
+                                                    "target": "blank",
+                                                    "action": "#b33c79ac-23ee-430f-a89f-2fbcdb265245",
+                                                    "attributes": "",
+                                                    "show_echo": true
+                                                },
+                                                {
+                                                    "uid": "166b19ecabca41c4bd4520a216b02307",
+                                                    "type": "action",
+                                                    "value": "decodedCustomJWT",
+                                                    "link": "",
+                                                    "target": "blank",
+                                                    "action": "#41549805-ac0f-4999-abd8-88c64db22766",
+                                                    "attributes": "",
+                                                    "show_echo": true
+                                                },
+                                                {
+                                                    "uid": "ffabfc03378f430fbb6dcde8dc7662bf",
+                                                    "type": "action",
+                                                    "value": "strongAuthenticated",
+                                                    "link": "",
+                                                    "target": "blank",
+                                                    "action": "#fd91d048-86be-498d-b7f9-48007097eb88",
+                                                    "attributes": "",
+                                                    "show_echo": true
+                                                }
+                                            ],
+                                            "json_buttons": "",
+                                            "json_gallery": ""
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "text": "Hi, how can I help you?\r\n",
+                    "_tdActionId": "ba405118e24b4dfe90511d6c1e953253"
+                }
+            ],
+            "intent_display_name": "welcome",
+            "intent_id": "69363e63-95bc-4855-a543-037fde9d5979",
+            "language": "en",
+            "attributes": {
+                "position": {
+                    "x": 488,
+                    "y": -764
+                },
+                "color": "156,163,205",
+                "nextBlockAction": {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "ba72b962-163d-499b-a674-588384f8848f",
+                    "_tdActionType": "intent"
+                }
+            },
+            "agents_available": false
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "32d45324-b6c0-4c0d-865b-02267e9c77d8",
+                    "_tdActionType": "leadupdate",
+                    "update": {
+                        "email": "test@email.com"
+                    }
+                },
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "ce98d4db-6691-4cec-971d-7d671af9cdeb",
+                    "_tdActionType": "reply",
+                    "attributes": {
+                        "disableInputMessage": false,
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "userEmail: {{userEmail}}",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": [],
+                                            "json_buttons": "",
+                                            "json_gallery": ""
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            ],
+            "intent_display_name": "userEmail",
+            "intent_id": "5f4c1bf4-e30d-43c6-91af-2b6b948d2a1c",
+            "language": "en",
+            "attributes": {
+                "position": {
+                    "x": 952,
+                    "y": -1165
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "fe37c1cb-94ad-4e18-b27d-0ac1602a5d35",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                },
+                "color": "156,163,205",
+                "readonly": false
+            },
+            "agents_available": false
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "50424a6f-2798-4715-abd7-7766df731dee",
+                    "_tdActionType": "leadupdate",
+                    "update": {
+                        "fullname": "Test User"
+                    }
+                },
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "b77bb6fb-6106-4e30-97ce-3570ec4d2405",
+                    "_tdActionType": "reply",
+                    "attributes": {
+                        "disableInputMessage": false,
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "userFullname: {{userFullname}}",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": [],
+                                            "json_buttons": "",
+                                            "json_gallery": ""
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            ],
+            "intent_display_name": "userFullname",
+            "intent_id": "18bdb8ec-6531-4863-ae99-254da9a4dddf",
+            "language": "en",
+            "attributes": {
+                "position": {
+                    "x": 960,
+                    "y": -841
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "35fd3efc-6b3f-40f9-9e23-0e1c42ee0f44",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                },
+                "color": "156,163,205",
+                "readonly": false
+            },
+            "agents_available": false
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionType": "intent",
+                    "intentName": "#69363e63-95bc-4855-a543-037fde9d5979",
+                    "_tdActionId": "4079df5d3c4a4acfac4f5df6c80c3ffc"
+                }
+            ],
+            "intent_display_name": "start",
+            "intent_id": "4daa4c8d-f62f-4d52-94af-a4bcdbac7799",
+            "question": "\\start",
+            "language": "en",
+            "attributes": {
+                "position": {
+                    "x": 142,
+                    "y": -542
+                },
+                "readonly": true,
+                "color": "156,163,205",
+                "nextBlockAction": {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "de2d7f35-e106-42ce-b041-457916763917",
+                    "_tdActionType": "intent"
+                }
+            },
+            "agents_available": false
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionType": "reply",
+                    "text": "I didn't understand. Can you rephrase your question?",
+                    "attributes": {
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "I didn't understand. Can you rephrase your question?",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": [],
+                                            "json_buttons": "",
+                                            "json_gallery": ""
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "_tdActionId": "7fe3c607223b49a2b2192d954d265fe8"
+                }
+            ],
+            "intent_display_name": "defaultFallback",
+            "intent_id": "08448387-3dec-4666-a7a1-7903b3e602ba",
+            "language": "en",
+            "attributes": {
+                "position": {
+                    "x": 676,
+                    "y": 168
+                },
+                "readonly": true,
+                "color": "156,163,205",
+                "nextBlockAction": {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "b6c375a5-80fb-4702-ae59-454d0b7c5a9f",
+                    "_tdActionType": "intent"
+                }
+            },
+            "agents_available": false
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "09c265b4-f8d1-4063-be27-2d270b201c40",
+                    "_tdActionType": "reply",
+                    "attributes": {
+                        "disableInputMessage": false,
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "decodedCustomJWT: {{decodedCustomJWT | json}}",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": [],
+                                            "json_buttons": "",
+                                            "json_gallery": ""
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            ],
+            "intent_display_name": "decodedCustomJWT",
+            "intent_id": "41549805-ac0f-4999-abd8-88c64db22766",
+            "language": "en",
+            "attributes": {
+                "position": {
+                    "x": 966,
+                    "y": -184
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "83329d07-437f-4d64-ab9a-454bd02d6e7d",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                },
+                "color": "156,163,205",
+                "readonly": false
+            },
+            "agents_available": false
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "7f0da722-92b7-4600-8e3b-97f7b1f30a5d",
+                    "_tdActionType": "leadupdate",
+                    "update": {
+                        "company": "MyCompany"
+                    }
+                },
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "b6a23a04-75bf-4387-95a1-09665e7ebe12",
+                    "_tdActionType": "reply",
+                    "attributes": {
+                        "disableInputMessage": false,
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "userCompany: {{userCompany}}",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": [],
+                                            "json_buttons": "",
+                                            "json_gallery": ""
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            ],
+            "intent_display_name": "userCompany",
+            "intent_id": "068c0a6b-50a2-4c19-9e54-5291276f9902",
+            "language": "en",
+            "attributes": {
+                "position": {
+                    "x": 1265,
+                    "y": -944
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "4d4df0f3-a8a9-48cc-a9a9-d6d78156782d",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                },
+                "color": "156,163,205",
+                "readonly": false
+            },
+            "agents_available": false
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "434f00b0-8773-4cd9-ad13-0ad925e8b8e8",
+                    "_tdActionType": "reply",
+                    "attributes": {
+                        "disableInputMessage": false,
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "userLeadId: {{userLeadId}}",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": [],
+                                            "json_buttons": "",
+                                            "json_gallery": ""
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            ],
+            "intent_display_name": "userLeadId",
+            "intent_id": "49a3ca97-10c3-4f63-a9a5-b6ed5428379f",
+            "language": "en",
+            "attributes": {
+                "position": {
+                    "x": 1259,
+                    "y": -1161
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "d2fde8ef-e5a2-468b-bdac-cb4fbe634b5f",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                },
+                "color": "156,163,205",
+                "readonly": false
+            },
+            "agents_available": false
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "1cf16829-66aa-4ea5-9e2e-817bc894cf39",
+                    "_tdActionType": "leadupdate",
+                    "update": {
+                        "phone": "+393332342123"
+                    }
+                },
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "12870ff2-3df4-4c79-b219-def60e86fffb",
+                    "_tdActionType": "reply",
+                    "attributes": {
+                        "disableInputMessage": false,
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "userPhone: {{userPhone}}",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": [],
+                                            "json_buttons": "",
+                                            "json_gallery": ""
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            ],
+            "intent_display_name": "userPhone",
+            "intent_id": "8ea1e54a-5746-4064-94ff-1f601363a2a7",
+            "language": "en",
+            "attributes": {
+                "position": {
+                    "x": 964,
+                    "y": -514
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "87e4845b-9336-4a4a-8945-202c38f6da36",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                },
+                "color": "156,163,205",
+                "readonly": false
+            },
+            "agents_available": false
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "6c989615-8b6c-43db-a840-3c7444025ed0",
+                    "_tdActionType": "reply",
+                    "attributes": {
+                        "disableInputMessage": false,
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "strongAuthenticated: {{strongAuthenticated}}",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": [],
+                                            "json_buttons": "",
+                                            "json_gallery": ""
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            ],
+            "intent_display_name": "strongAuthenticated",
+            "intent_id": "fd91d048-86be-498d-b7f9-48007097eb88",
+            "language": "en",
+            "attributes": {
+                "position": {
+                    "x": 1303,
+                    "y": -357
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "e53174fe-c533-44e0-9b2f-fd9713f6fe49",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                },
+                "color": "156,163,205",
+                "readonly": false
+            },
+            "agents_available": false
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "0f246df7-5523-42e1-84b1-cba530ca981e",
+                    "_tdActionType": "reply",
+                    "attributes": {
+                        "disableInputMessage": false,
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "currentPhoneNumber: {{currentPhoneNumber}}",
+                                    "attributes": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "buttons": [],
+                                            "json_buttons": "",
+                                            "json_gallery": ""
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            ],
+            "language": "en",
+            "intent_display_name": "currentPhoneNumber",
+            "intent_id": "b33c79ac-23ee-430f-a89f-2fbcdb265245",
+            "agents_available": false,
+            "attributes": {
+                "position": {
+                    "x": 1279,
+                    "y": -613
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "d259a86e-161a-464e-bee2-274a51f8210f",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                },
+                "color": "156,163,205",
+                "readonly": false
+            }
+        }
+    ]
+}
