@@ -11,6 +11,8 @@ class Integration {
     this.LOG = LOG
   }
 
+  integrations = []
+
   async addIntegration(type, values){
     return new Promise((resolve, reject)=> {
       const HTTPREQUEST = {
@@ -26,6 +28,7 @@ class Integration {
           method: 'POST',
           httpsOptions: this.httpsOptions
       };
+      const that = this;
       Utils.myrequest(
         HTTPREQUEST,
         function(err, resbody) {
@@ -33,6 +36,14 @@ class Integration {
               reject(err)
             }
             else {
+              const exists = that.integrations.some(item => item.key === resbody.name);
+              if (!exists) {
+                that.integrations.push({
+                  key: resbody.name,
+                  value: resbody.value.apikey
+                });
+              }
+
               resolve(resbody)
             }
         }, this.LOG
@@ -63,6 +74,11 @@ class Integration {
         }, this.LOG
       );
     }); 
+  }
+
+
+  getIntegrationByName(name){
+    return this.integrations.find(item => item.key === name);
   }
 
 }
