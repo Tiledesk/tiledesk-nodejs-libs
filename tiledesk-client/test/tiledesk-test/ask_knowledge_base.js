@@ -87,7 +87,7 @@ let user1 = {
 let example_content = {
     name: "Who is Joe",
     source:"Who is Joe",
-    content: "Joe is a wonderfull tester",
+    content: "Joe is a wonderful tester",
     type: "text",
     namespace: null
 }
@@ -98,7 +98,7 @@ let elapsed;
 describe('Knwoledge Base (Long Test)', async () => {
 
     before(function()  {
-        this.timeout(10000)
+        this.timeout(20000)
         return new Promise(async (resolve, reject) => {
             if (LOG_STATUS) {
                 console.log("MQTT endpoint:", config.MQTT_ENDPOINT);
@@ -121,7 +121,7 @@ describe('Knwoledge Base (Long Test)', async () => {
             user1.userid = chat21data.userid;
             user1.token = chat21data.token;
             user1.tiledesk_token = userdata.token;
-            
+
             /**AUTH WITH CREDENTIALS TILEDESK */
             let result = await auth.authEmailPassword(EMAIL, PASSWORD).catch((err) => { 
                 console.error("(before) ADMIN Auth -> An error occurred during emailPassword auth:", err);
@@ -253,7 +253,7 @@ describe('Knwoledge Base (Long Test)', async () => {
     })
 
     after(function (done) {
-        this.timeout(4000)
+        this.timeout(8000)
         chatClient1.close(async () => {
             const tdClientTest = new TiledeskClientTest({
                 APIURL: API_ENDPOINT,
@@ -279,6 +279,738 @@ describe('Knwoledge Base (Long Test)', async () => {
             done();
         });
     });
+
+    it('(Gpt 5) Check if the answer is contained in the Knowledge Base', () => {
+
+        return new Promise( async (resolve, reject) => {
+
+            chatClient1.onMessageAdded(async (message, topic) => {
+                const message_text = "Who is Joe?"
+                const button_text = "gpt-5"
+                if(message.recipient !== recipient_id){
+                    reject();
+                    return;
+                }
+                if (LOG_STATUS) {
+                    console.log(">(1) Incoming message [sender:" + message.sender_fullname + "]: ", message);
+                }
+                if (
+                    message && 
+                    message.attributes.intentName ===  "welcome" &&
+                    message.sender_fullname === "Ask KB Chatbot"
+                ) {
+                    if (LOG_STATUS) {
+                        console.log("> Incoming message from 'welcome' intent ok.");
+                    }
+
+                    elapsed = Date.now();
+
+                    chatClient1.sendMessage(
+                        message_text,
+                        'text',
+                        recipient_id,
+                        "Test support group",
+                        user1.fullname,
+                        { projectId: config.TILEDESK_PROJECT_ID },
+                        null,
+                        'group',
+                        (err, msg) => {
+                            if (err) {
+                                console.error("Error send:", err);
+                            }
+                            if (LOG_STATUS) {
+                                console.log("Message Sent ok:", msg);
+                            }
+                            assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
+                        }
+                    )
+                } else if (
+                    message && 
+                    message.attributes.intentName ===  "defaultFallback" &&
+                    message.sender_fullname === "Ask KB Chatbot"
+                ) {
+
+                    assert(message.text === "Choose model");
+                    assert(message.attributes, "Expect message.attributes exist")
+                    assert(message.attributes.commands, "Expect message.attributes.commands")
+                    assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                    let commands = message.attributes.commands
+                    let command = commands[1]
+                    assert.equal(command.type, 'message')
+                    assert(command.message, "Expect command.message exist")
+                    let msg = command.message
+                    assert(msg.text, "Expect msg.text exist")
+                    assert.equal(msg.text, 'Choose model', `Expect msg.text to be 'Choose model' but got: ${msg.text} `)
+
+                    //check buttons 
+                    assert(msg.attributes, "Expect msg.attribues exist")
+                    assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
+                    assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
+                    assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
+                    
+                    let button1 = msg.attributes.attachment.buttons[0]
+                    assert.strictEqual(button1.value, button_text, 'Expect button1 to have "gpt-5" as text')
+                    assert(button1.action)
+
+                    console.log("\tWaiting for gpt-5 response...")
+
+                    chatClient1.sendMessage(
+                        button_text,
+                        'text',
+                        recipient_id,
+                        "Test support group",
+                        user1.fullname,
+                        { projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
+                        null,
+                        'group',
+                        (err, msg) => {
+                            if (err) {
+                                console.error("Error send:", err);
+                            }
+                            if (LOG_STATUS) {
+                                console.log("Message Sent ok:", msg);
+                            }
+                            assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
+                        }
+                    )
+                } else if (
+                    message &&
+                    message.attributes.intentName === "kb_answer"
+                ) {
+
+                    elapsed = Date.now() - elapsed;
+                    console.log("\tKB answered in " + elapsed/1000 + " seconds");
+
+                } else if (
+                    message &&
+                    message.attributes.intentName === "answer"
+                ) {
+                    assert(message.text === "OK");
+                    resolve()
+                } else {
+                    // console.log("message: ", message)
+                }
+            })
+
+            let recipient_id = "support-group-" + TILEDESK_PROJECT_ID + "-" + uuidv4().replace(/-+/g, "");
+            triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
+                if (err) {
+                    console.error("An error occurred while triggering bot conversation:", err);
+                }
+            })
+
+        })
+    }).timeout(20000);
+
+    it('(Gpt 5-mini) Check if the answer is contained in the Knowledge Base', () => {
+
+        return new Promise( async (resolve, reject) => {
+
+            chatClient1.onMessageAdded(async (message, topic) => {
+                const message_text = "Who is Joe?"
+                const button_text = "gpt-5-mini"
+                if(message.recipient !== recipient_id){
+                    reject();
+                    return;
+                }
+                if (LOG_STATUS) {
+                    console.log(">(1) Incoming message [sender:" + message.sender_fullname + "]: ", message);
+                }
+                if (
+                    message && 
+                    message.attributes.intentName ===  "welcome" &&
+                    message.sender_fullname === "Ask KB Chatbot"
+                ) {
+                    if (LOG_STATUS) {
+                        console.log("> Incoming message from 'welcome' intent ok.");
+                    }
+
+                    elapsed = Date.now();
+
+                    chatClient1.sendMessage(
+                        message_text,
+                        'text',
+                        recipient_id,
+                        "Test support group",
+                        user1.fullname,
+                        { projectId: config.TILEDESK_PROJECT_ID },
+                        null,
+                        'group',
+                        (err, msg) => {
+                            if (err) {
+                                console.error("Error send:", err);
+                            }
+                            if (LOG_STATUS) {
+                                console.log("Message Sent ok:", msg);
+                            }
+                            assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
+                        }
+                    )
+                } else if (
+                    message && 
+                    message.attributes.intentName ===  "defaultFallback" &&
+                    message.sender_fullname === "Ask KB Chatbot"
+                ) {
+
+                    assert(message.text === "Choose model");
+                    assert(message.attributes, "Expect message.attributes exist")
+                    assert(message.attributes.commands, "Expect message.attributes.commands")
+                    assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                    let commands = message.attributes.commands
+                    let command = commands[1]
+                    assert.equal(command.type, 'message')
+                    assert(command.message, "Expect command.message exist")
+                    let msg = command.message
+                    assert(msg.text, "Expect msg.text exist")
+                    assert.equal(msg.text, 'Choose model', `Expect msg.text to be 'Choose model' but got: ${msg.text} `)
+
+                    //check buttons 
+                    assert(msg.attributes, "Expect msg.attribues exist")
+                    assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
+                    assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
+                    assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
+                    
+                    let button1 = msg.attributes.attachment.buttons[1]
+                    assert.strictEqual(button1.value, button_text, 'Expect button1 to have "gpt-5-mini" as text')
+                    assert(button1.action)
+
+                    console.log("\tWaiting for gpt-5-mini response...")
+
+                    chatClient1.sendMessage(
+                        button_text,
+                        'text',
+                        recipient_id,
+                        "Test support group",
+                        user1.fullname,
+                        { projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
+                        null,
+                        'group',
+                        (err, msg) => {
+                            if (err) {
+                                console.error("Error send:", err);
+                            }
+                            if (LOG_STATUS) {
+                                console.log("Message Sent ok:", msg);
+                            }
+                            assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
+                        }
+                    )
+                } else if (
+                    message &&
+                    message.attributes.intentName === "kb_answer"
+                ) {
+
+                    elapsed = Date.now() - elapsed;
+                    console.log("\tKB answered in " + elapsed/1000 + " seconds");
+
+                } else if (
+                    message &&
+                    message.attributes.intentName === "answer"
+                ) {
+                    assert(message.text === "OK");
+                    resolve()
+                } else {
+                    // console.log("message: ", message)
+                }
+            })
+
+            let recipient_id = "support-group-" + TILEDESK_PROJECT_ID + "-" + uuidv4().replace(/-+/g, "");
+            triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
+                if (err) {
+                    console.error("An error occurred while triggering bot conversation:", err);
+                }
+            })
+
+        })
+    }).timeout(20000);
+
+    it('(Gpt 5-nano) Check if the answer is contained in the Knowledge Base', () => {
+
+        return new Promise( async (resolve, reject) => {
+
+            chatClient1.onMessageAdded(async (message, topic) => {
+                const message_text = "Who is Joe?"
+                const button_text = "gpt-5-nano"
+                if(message.recipient !== recipient_id){
+                    reject();
+                    return;
+                }
+                if (LOG_STATUS) {
+                    console.log(">(1) Incoming message [sender:" + message.sender_fullname + "]: ", message);
+                }
+                if (
+                    message && 
+                    message.attributes.intentName ===  "welcome" &&
+                    message.sender_fullname === "Ask KB Chatbot"
+                ) {
+                    if (LOG_STATUS) {
+                        console.log("> Incoming message from 'welcome' intent ok.");
+                    }
+
+                    elapsed = Date.now();
+
+                    chatClient1.sendMessage(
+                        message_text,
+                        'text',
+                        recipient_id,
+                        "Test support group",
+                        user1.fullname,
+                        { projectId: config.TILEDESK_PROJECT_ID },
+                        null,
+                        'group',
+                        (err, msg) => {
+                            if (err) {
+                                console.error("Error send:", err);
+                            }
+                            if (LOG_STATUS) {
+                                console.log("Message Sent ok:", msg);
+                            }
+                            assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
+                        }
+                    )
+                } else if (
+                    message && 
+                    message.attributes.intentName ===  "defaultFallback" &&
+                    message.sender_fullname === "Ask KB Chatbot"
+                ) {
+
+                    assert(message.text === "Choose model");
+                    assert(message.attributes, "Expect message.attributes exist")
+                    assert(message.attributes.commands, "Expect message.attributes.commands")
+                    assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                    let commands = message.attributes.commands
+                    let command = commands[1]
+                    assert.equal(command.type, 'message')
+                    assert(command.message, "Expect command.message exist")
+                    let msg = command.message
+                    assert(msg.text, "Expect msg.text exist")
+                    assert.equal(msg.text, 'Choose model', `Expect msg.text to be 'Choose model' but got: ${msg.text} `)
+
+                    //check buttons 
+                    assert(msg.attributes, "Expect msg.attribues exist")
+                    assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
+                    assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
+                    assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
+                    
+                    let button1 = msg.attributes.attachment.buttons[2]
+                    assert.strictEqual(button1.value, button_text, 'Expect button1 to have "gpt-5-nano" as text')
+                    assert(button1.action)
+
+                    console.log("\tWaiting for gpt-5-nano response...")
+
+                    chatClient1.sendMessage(
+                        button_text,
+                        'text',
+                        recipient_id,
+                        "Test support group",
+                        user1.fullname,
+                        { projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
+                        null,
+                        'group',
+                        (err, msg) => {
+                            if (err) {
+                                console.error("Error send:", err);
+                            }
+                            if (LOG_STATUS) {
+                                console.log("Message Sent ok:", msg);
+                            }
+                            assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
+                        }
+                    )
+                } else if (
+                    message &&
+                    message.attributes.intentName === "kb_answer"
+                ) {
+
+                    elapsed = Date.now() - elapsed;
+                    console.log("\tKB answered in " + elapsed/1000 + " seconds");
+
+                } else if (
+                    message &&
+                    message.attributes.intentName === "answer"
+                ) {
+                    assert(message.text === "OK");
+                    resolve()
+                } else {
+                    // console.log("message: ", message)
+                }
+            })
+
+            let recipient_id = "support-group-" + TILEDESK_PROJECT_ID + "-" + uuidv4().replace(/-+/g, "");
+            triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
+                if (err) {
+                    console.error("An error occurred while triggering bot conversation:", err);
+                }
+            })
+
+        })
+    }).timeout(20000);
+
+    it('(Gpt 4.1) Check if the answer is contained in the Knowledge Base', () => {
+
+        return new Promise( async (resolve, reject) => {
+
+            chatClient1.onMessageAdded(async (message, topic) => {
+                const message_text = "Who is Joe?"
+                const button_text = "gpt-4.1"
+                if(message.recipient !== recipient_id){
+                    reject();
+                    return;
+                }
+                if (LOG_STATUS) {
+                    console.log(">(1) Incoming message [sender:" + message.sender_fullname + "]: ", message);
+                }
+                if (
+                    message && 
+                    message.attributes.intentName ===  "welcome" &&
+                    message.sender_fullname === "Ask KB Chatbot"
+                ) {
+                    if (LOG_STATUS) {
+                        console.log("> Incoming message from 'welcome' intent ok.");
+                    }
+
+                    elapsed = Date.now();
+
+                    chatClient1.sendMessage(
+                        message_text,
+                        'text',
+                        recipient_id,
+                        "Test support group",
+                        user1.fullname,
+                        { projectId: config.TILEDESK_PROJECT_ID },
+                        null,
+                        'group',
+                        (err, msg) => {
+                            if (err) {
+                                console.error("Error send:", err);
+                            }
+                            if (LOG_STATUS) {
+                                console.log("Message Sent ok:", msg);
+                            }
+                            assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
+                        }
+                    )
+                } else if (
+                    message && 
+                    message.attributes.intentName ===  "defaultFallback" &&
+                    message.sender_fullname === "Ask KB Chatbot"
+                ) {
+
+                    assert(message.text === "Choose model");
+                    assert(message.attributes, "Expect message.attributes exist")
+                    assert(message.attributes.commands, "Expect message.attributes.commands")
+                    assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                    let commands = message.attributes.commands
+                    let command = commands[1]
+                    assert.equal(command.type, 'message')
+                    assert(command.message, "Expect command.message exist")
+                    let msg = command.message
+                    assert(msg.text, "Expect msg.text exist")
+                    assert.equal(msg.text, 'Choose model', `Expect msg.text to be 'Choose model' but got: ${msg.text} `)
+
+                    //check buttons 
+                    assert(msg.attributes, "Expect msg.attribues exist")
+                    assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
+                    assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
+                    assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
+                    
+                    let button1 = msg.attributes.attachment.buttons[3]
+                    assert.strictEqual(button1.value, button_text, 'Expect button1 to have "gpt-4.1" as text')
+                    assert(button1.action)
+
+                    console.log("\tWaiting for gpt-4.1 response...")
+
+                    chatClient1.sendMessage(
+                        button_text,
+                        'text',
+                        recipient_id,
+                        "Test support group",
+                        user1.fullname,
+                        { projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
+                        null,
+                        'group',
+                        (err, msg) => {
+                            if (err) {
+                                console.error("Error send:", err);
+                            }
+                            if (LOG_STATUS) {
+                                console.log("Message Sent ok:", msg);
+                            }
+                            assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
+                        }
+                    )
+                } else if (
+                    message &&
+                    message.attributes.intentName === "kb_answer"
+                ) {
+
+                    elapsed = Date.now() - elapsed;
+                    console.log("\tKB answered in " + elapsed/1000 + " seconds");
+
+                } else if (
+                    message &&
+                    message.attributes.intentName === "answer"
+                ) {
+                    assert(message.text === "OK");
+                    resolve()
+                } else {
+                    // console.log("message: ", message)
+                }
+            })
+
+            let recipient_id = "support-group-" + TILEDESK_PROJECT_ID + "-" + uuidv4().replace(/-+/g, "");
+            triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
+                if (err) {
+                    console.error("An error occurred while triggering bot conversation:", err);
+                }
+            })
+
+        })
+    }).timeout(20000);
+
+    it('(Gpt 4.1-mini) Check if the answer is contained in the Knowledge Base', () => {
+
+        return new Promise( async (resolve, reject) => {
+
+            chatClient1.onMessageAdded(async (message, topic) => {
+                const message_text = "Who is Joe?"
+                const button_text = "gpt-4.1-mini"
+                if(message.recipient !== recipient_id){
+                    reject();
+                    return;
+                }
+                if (LOG_STATUS) {
+                    console.log(">(1) Incoming message [sender:" + message.sender_fullname + "]: ", message);
+                }
+                if (
+                    message && 
+                    message.attributes.intentName ===  "welcome" &&
+                    message.sender_fullname === "Ask KB Chatbot"
+                ) {
+                    if (LOG_STATUS) {
+                        console.log("> Incoming message from 'welcome' intent ok.");
+                    }
+
+                    elapsed = Date.now();
+
+                    chatClient1.sendMessage(
+                        message_text,
+                        'text',
+                        recipient_id,
+                        "Test support group",
+                        user1.fullname,
+                        { projectId: config.TILEDESK_PROJECT_ID },
+                        null,
+                        'group',
+                        (err, msg) => {
+                            if (err) {
+                                console.error("Error send:", err);
+                            }
+                            if (LOG_STATUS) {
+                                console.log("Message Sent ok:", msg);
+                            }
+                            assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
+                        }
+                    )
+                } else if (
+                    message && 
+                    message.attributes.intentName ===  "defaultFallback" &&
+                    message.sender_fullname === "Ask KB Chatbot"
+                ) {
+
+                    assert(message.text === "Choose model");
+                    assert(message.attributes, "Expect message.attributes exist")
+                    assert(message.attributes.commands, "Expect message.attributes.commands")
+                    assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                    let commands = message.attributes.commands
+                    let command = commands[1]
+                    assert.equal(command.type, 'message')
+                    assert(command.message, "Expect command.message exist")
+                    let msg = command.message
+                    assert(msg.text, "Expect msg.text exist")
+                    assert.equal(msg.text, 'Choose model', `Expect msg.text to be 'Choose model' but got: ${msg.text} `)
+
+                    //check buttons 
+                    assert(msg.attributes, "Expect msg.attribues exist")
+                    assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
+                    assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
+                    assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
+                    
+                    let button1 = msg.attributes.attachment.buttons[4]
+                    assert.strictEqual(button1.value, button_text, 'Expect button1 to have "gpt-4.1-mini" as text')
+                    assert(button1.action)
+
+                    console.log("\tWaiting for gpt-4.1-mini response...")
+
+                    chatClient1.sendMessage(
+                        button_text,
+                        'text',
+                        recipient_id,
+                        "Test support group",
+                        user1.fullname,
+                        { projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
+                        null,
+                        'group',
+                        (err, msg) => {
+                            if (err) {
+                                console.error("Error send:", err);
+                            }
+                            if (LOG_STATUS) {
+                                console.log("Message Sent ok:", msg);
+                            }
+                            assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
+                        }
+                    )
+                } else if (
+                    message &&
+                    message.attributes.intentName === "kb_answer"
+                ) {
+
+                    elapsed = Date.now() - elapsed;
+                    console.log("\tKB answered in " + elapsed/1000 + " seconds");
+
+                } else if (
+                    message &&
+                    message.attributes.intentName === "answer"
+                ) {
+                    assert(message.text === "OK");
+                    resolve()
+                } else {
+                    // console.log("message: ", message)
+                }
+            })
+
+            let recipient_id = "support-group-" + TILEDESK_PROJECT_ID + "-" + uuidv4().replace(/-+/g, "");
+            triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
+                if (err) {
+                    console.error("An error occurred while triggering bot conversation:", err);
+                }
+            })
+
+        })
+    }).timeout(20000);
+
+    it('(Gpt 4.1-nano) Check if the answer is contained in the Knowledge Base', () => {
+
+        return new Promise( async (resolve, reject) => {
+
+            chatClient1.onMessageAdded(async (message, topic) => {
+                const message_text = "Who is Joe?"
+                const button_text = "gpt-4.1-nano"
+                if(message.recipient !== recipient_id){
+                    reject();
+                    return;
+                }
+                if (LOG_STATUS) {
+                    console.log(">(1) Incoming message [sender:" + message.sender_fullname + "]: ", message);
+                }
+                if (
+                    message && 
+                    message.attributes.intentName ===  "welcome" &&
+                    message.sender_fullname === "Ask KB Chatbot"
+                ) {
+                    if (LOG_STATUS) {
+                        console.log("> Incoming message from 'welcome' intent ok.");
+                    }
+
+                    elapsed = Date.now();
+
+                    chatClient1.sendMessage(
+                        message_text,
+                        'text',
+                        recipient_id,
+                        "Test support group",
+                        user1.fullname,
+                        { projectId: config.TILEDESK_PROJECT_ID },
+                        null,
+                        'group',
+                        (err, msg) => {
+                            if (err) {
+                                console.error("Error send:", err);
+                            }
+                            if (LOG_STATUS) {
+                                console.log("Message Sent ok:", msg);
+                            }
+                            assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
+                        }
+                    )
+                } else if (
+                    message && 
+                    message.attributes.intentName ===  "defaultFallback" &&
+                    message.sender_fullname === "Ask KB Chatbot"
+                ) {
+
+                    assert(message.text === "Choose model");
+                    assert(message.attributes, "Expect message.attributes exist")
+                    assert(message.attributes.commands, "Expect message.attributes.commands")
+                    assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                    let commands = message.attributes.commands
+                    let command = commands[1]
+                    assert.equal(command.type, 'message')
+                    assert(command.message, "Expect command.message exist")
+                    let msg = command.message
+                    assert(msg.text, "Expect msg.text exist")
+                    assert.equal(msg.text, 'Choose model', `Expect msg.text to be 'Choose model' but got: ${msg.text} `)
+
+                    //check buttons 
+                    assert(msg.attributes, "Expect msg.attribues exist")
+                    assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
+                    assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
+                    assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
+                    
+                    let button1 = msg.attributes.attachment.buttons[5]
+                    assert.strictEqual(button1.value, button_text, 'Expect button1 to have "gpt-4.1-nano" as text')
+                    assert(button1.action)
+
+                    console.log("\tWaiting for gpt-4.1-nano response...")
+
+                    chatClient1.sendMessage(
+                        button_text,
+                        'text',
+                        recipient_id,
+                        "Test support group",
+                        user1.fullname,
+                        { projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
+                        null,
+                        'group',
+                        (err, msg) => {
+                            if (err) {
+                                console.error("Error send:", err);
+                            }
+                            if (LOG_STATUS) {
+                                console.log("Message Sent ok:", msg);
+                            }
+                            assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
+                        }
+                    )
+                } else if (
+                    message &&
+                    message.attributes.intentName === "kb_answer"
+                ) {
+
+                    elapsed = Date.now() - elapsed;
+                    console.log("\tKB answered in " + elapsed/1000 + " seconds");
+
+                } else if (
+                    message &&
+                    message.attributes.intentName === "answer"
+                ) {
+                    assert(message.text === "OK");
+                    resolve()
+                } else {
+                    //console.log("message not recognized: ", message)
+                }
+            })
+
+            let recipient_id = "support-group-" + TILEDESK_PROJECT_ID + "-" + uuidv4().replace(/-+/g, "");
+            triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
+                if (err) {
+                    console.error("An error occurred while triggering bot conversation:", err);
+                }
+            })
+
+        })
+    }).timeout(20000);
 
     it('(Gpt 4o) Check if the answer is contained in the Knowledge Base', () => {
 
@@ -348,9 +1080,11 @@ describe('Knwoledge Base (Long Test)', async () => {
                     assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
                     assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
                     
-                    let button1 = msg.attributes.attachment.buttons[0]
+                    let button1 = msg.attributes.attachment.buttons[6]
                     assert.strictEqual(button1.value, button_text, 'Expect button1 to have "gpt-4o" as text')
                     assert(button1.action)
+
+                    console.log("\tWaiting for gpt-4o response...")
 
                     chatClient1.sendMessage(
                         button_text,
@@ -399,7 +1133,7 @@ describe('Knwoledge Base (Long Test)', async () => {
             })
 
         })
-    }).timeout(10000);
+    }).timeout(20000);
 
     it('(Gpt 4o-mini) Check if the answer is contained in the Knowledge Base', () => {
 
@@ -469,9 +1203,11 @@ describe('Knwoledge Base (Long Test)', async () => {
                     assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
                     assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
                     
-                    let button1 = msg.attributes.attachment.buttons[1]
+                    let button1 = msg.attributes.attachment.buttons[7]
                     assert.strictEqual(button1.value, button_text, 'Expect button1 to have "gpt-4o-mini" as text')
                     assert(button1.action)
+
+                    console.log("\tWaiting for gpt-4o-mini response...")
 
                     chatClient1.sendMessage(
                         button_text,
@@ -523,7 +1259,7 @@ describe('Knwoledge Base (Long Test)', async () => {
             })
 
         })
-    }).timeout(10000);
+    }).timeout(20000);
 
     it('(Gpt 3.5-turbo) Check if the answer is contained in the Knowledge Base', () => {
 
@@ -593,9 +1329,11 @@ describe('Knwoledge Base (Long Test)', async () => {
                     assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
                     assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
                     
-                    let button1 = msg.attributes.attachment.buttons[2]
+                    let button1 = msg.attributes.attachment.buttons[8]
                     assert.strictEqual(button1.value, button_text, 'Expect button1 to have "gpt-3.5-turbo" as text')
                     assert(button1.action)
+
+                    console.log("\tWaiting for gpt-3.5-turbo response...")
 
                     chatClient1.sendMessage(
                         button_text,
@@ -646,7 +1384,7 @@ describe('Knwoledge Base (Long Test)', async () => {
             })
 
         })
-    }).timeout(10000);
+    }).timeout(20000);
 
     it('(Gpt 4o) Check if the answer is not contained in the Knowledge Base', () => {
 
@@ -716,9 +1454,11 @@ describe('Knwoledge Base (Long Test)', async () => {
                     assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
                     assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
                     
-                    let button1 = msg.attributes.attachment.buttons[0]
+                    let button1 = msg.attributes.attachment.buttons[6]
                     assert.strictEqual(button1.value, button_text, 'Expect button1 to have "gpt-4o" as text')
                     assert(button1.action)
+
+                    console.log("\tWaiting for gpt-4o response...")
 
                     chatClient1.sendMessage(
                         button_text,
@@ -770,7 +1510,7 @@ describe('Knwoledge Base (Long Test)', async () => {
             })
 
         })
-    }).timeout(10000);
+    }).timeout(20000);
 
     it('(Gpt 4o-mini) Check if the answer is not contained in the Knowledge Base', () => {
 
@@ -840,9 +1580,11 @@ describe('Knwoledge Base (Long Test)', async () => {
                     assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
                     assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
                     
-                    let button1 = msg.attributes.attachment.buttons[1]
+                    let button1 = msg.attributes.attachment.buttons[7]
                     assert.strictEqual(button1.value, button_text, 'Expect button1 to have "gpt-4o-mini" as text')
                     assert(button1.action)
+
+                    console.log("\tWaiting for gpt-4o-mini response...")
 
                     chatClient1.sendMessage(
                         button_text,
@@ -894,7 +1636,7 @@ describe('Knwoledge Base (Long Test)', async () => {
             })
 
         })
-    }).timeout(10000);
+    }).timeout(20000);
 
     it('(Gpt 3.5-turbo) Check if the answer is not contained in the Knowledge Base', () => {
 
@@ -964,9 +1706,11 @@ describe('Knwoledge Base (Long Test)', async () => {
                     assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
                     assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
                     
-                    let button1 = msg.attributes.attachment.buttons[2]
+                    let button1 = msg.attributes.attachment.buttons[8]
                     assert.strictEqual(button1.value, button_text, 'Expect button1 to have "gpt-3.5-turbo" as text')
                     assert(button1.action)
+
+                    console.log("\tWaiting for gpt-3.5-turbo response...")
 
                     chatClient1.sendMessage(
                         button_text,
@@ -1018,7 +1762,7 @@ describe('Knwoledge Base (Long Test)', async () => {
             })
 
         })
-    }).timeout(10000);
+    }).timeout(20000);
     
 })
 

@@ -2,7 +2,9 @@
     "webhook_enabled": false,
     "language": "en",
     "name": "Ask KB Chatbot",
+    "slug": "ask-kb-chatbot",
     "type": "tilebot",
+    "subtype": "chatbot",
     "attributes": {
         "variables": {
             "kb_reply": "kb_reply",
@@ -12,6 +14,63 @@
         }
     },
     "intents": [
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionType": "intent",
+                    "intentName": "#4a98b101-6394-4f15-b99f-d90ddb2e6277"
+                }
+            ],
+            "intent_id": "59eb8dfe-eb92-4d11-9131-1517de1368d4",
+            "question": "\\start",
+            "intent_display_name": "start",
+            "language": "en",
+            "attributes": {
+                "position": {
+                    "x": 172,
+                    "y": 384
+                }
+            },
+            "agents_available": false
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionType": "reply",
+                    "attributes": {
+                        "disableInputMessage": false,
+                        "commands": [
+                            {
+                                "type": "wait",
+                                "time": 500
+                            },
+                            {
+                                "type": "message",
+                                "message": {
+                                    "type": "text",
+                                    "text": "Hi, how can I help you?"
+                                }
+                            }
+                        ]
+                    },
+                    "text": "Hi, how can I help you?\r\n"
+                }
+            ],
+            "intent_id": "4a98b101-6394-4f15-b99f-d90ddb2e6277",
+            "intent_display_name": "welcome",
+            "language": "en",
+            "attributes": {
+                "position": {
+                    "x": 714,
+                    "y": 113
+                }
+            },
+            "agents_available": false
+        },
         {
             "webhook_enabled": false,
             "enabled": true,
@@ -49,6 +108,66 @@
                                         "attachment": {
                                             "type": "template",
                                             "buttons": [
+                                                {
+                                                    "uid": "52ccfb974f9048b9b606521625df0ff4",
+                                                    "type": "action",
+                                                    "value": "gpt-5",
+                                                    "link": "",
+                                                    "target": "blank",
+                                                    "action": "#72acb281-89b6-4b53-92fd-2768179aaf1e",
+                                                    "attributes": "",
+                                                    "show_echo": true
+                                                },
+                                                {
+                                                    "uid": "384bb2b7a7c6421ebbc37f8de99c205a",
+                                                    "type": "action",
+                                                    "value": "gpt-5-mini",
+                                                    "link": "",
+                                                    "target": "blank",
+                                                    "action": "#55402c02-03fb-4504-b48b-a1ea38981d96",
+                                                    "attributes": "",
+                                                    "show_echo": true
+                                                },
+                                                {
+                                                    "uid": "aeed6e82e5f541ab9536e9eec7c2407c",
+                                                    "type": "action",
+                                                    "value": "gpt-5-nano",
+                                                    "link": "",
+                                                    "target": "blank",
+                                                    "action": "#1437c12f-1104-4b3b-837a-cbc36a4364e5",
+                                                    "attributes": "",
+                                                    "show_echo": true
+                                                },
+                                                {
+                                                    "uid": "72805cda67074a3d81f3ff2884735614",
+                                                    "type": "action",
+                                                    "value": "gpt-4.1",
+                                                    "link": "",
+                                                    "target": "blank",
+                                                    "action": "#6738f5f7-81c3-4479-8f3e-54c4852eed30",
+                                                    "attributes": "",
+                                                    "show_echo": true
+                                                },
+                                                {
+                                                    "uid": "7bbfdb93278e4523aeb5bd971fb32700",
+                                                    "type": "action",
+                                                    "value": "gpt-4.1-mini",
+                                                    "link": "",
+                                                    "target": "blank",
+                                                    "action": "#0879d668-89fc-4547-981e-eca463c99f84",
+                                                    "attributes": "",
+                                                    "show_echo": true
+                                                },
+                                                {
+                                                    "uid": "07975ca0a05243c78e2ce37f6c8376b5",
+                                                    "type": "action",
+                                                    "value": "gpt-4.1-nano",
+                                                    "link": "",
+                                                    "target": "blank",
+                                                    "action": "#f6e86454-057d-4dc3-ab63-9b4ffa865614",
+                                                    "attributes": "",
+                                                    "show_echo": true
+                                                },
                                                 {
                                                     "uid": "b4c8d9b60a97427c8caebf1eb4b9a6bf",
                                                     "type": "action",
@@ -97,8 +216,8 @@
             "language": "en",
             "attributes": {
                 "position": {
-                    "x": 714,
-                    "y": 528
+                    "x": 67,
+                    "y": 840
                 },
                 "readonly": true,
                 "nextBlockAction": {
@@ -106,64 +225,8 @@
                     "_tdActionId": "9cf016ae-a108-49d4-afeb-9fb22160cfcc",
                     "_tdActionType": "intent",
                     "intentName": null
-                }
-            },
-            "agents_available": false
-        },
-        {
-            "webhook_enabled": false,
-            "enabled": true,
-            "actions": [
-                {
-                    "_tdActionType": "reply",
-                    "attributes": {
-                        "disableInputMessage": false,
-                        "commands": [
-                            {
-                                "type": "wait",
-                                "time": 500
-                            },
-                            {
-                                "type": "message",
-                                "message": {
-                                    "type": "text",
-                                    "text": "Hi, how can I help you?"
-                                }
-                            }
-                        ]
-                    },
-                    "text": "Hi, how can I help you?\r\n"
-                }
-            ],
-            "intent_id": "4a98b101-6394-4f15-b99f-d90ddb2e6277",
-            "intent_display_name": "welcome",
-            "language": "en",
-            "attributes": {
-                "position": {
-                    "x": 714,
-                    "y": 113
-                }
-            },
-            "agents_available": false
-        },
-        {
-            "webhook_enabled": false,
-            "enabled": true,
-            "actions": [
-                {
-                    "_tdActionType": "intent",
-                    "intentName": "#4a98b101-6394-4f15-b99f-d90ddb2e6277"
-                }
-            ],
-            "intent_id": "59eb8dfe-eb92-4d11-9131-1517de1368d4",
-            "question": "\\start",
-            "intent_display_name": "start",
-            "language": "en",
-            "attributes": {
-                "position": {
-                    "x": 172,
-                    "y": 384
-                }
+                },
+                "color": "156,163,205"
             },
             "agents_available": false
         },
@@ -198,8 +261,8 @@
             "agents_available": false,
             "attributes": {
                 "position": {
-                    "x": 1125,
-                    "y": 429
+                    "x": 1164,
+                    "y": 1798
                 },
                 "nextBlockAction": {
                     "_tdActionId": "0e2f5730-5077-4f94-9968-7fd4748a17e5",
@@ -249,8 +312,8 @@
             "agents_available": false,
             "attributes": {
                 "position": {
-                    "x": 1665,
-                    "y": 491
+                    "x": 2342,
+                    "y": 1088
                 },
                 "nextBlockAction": {
                     "_tdActionId": "89e06432-cd78-438a-bda4-04698b87f8e2",
@@ -300,8 +363,8 @@
             "agents_available": false,
             "attributes": {
                 "position": {
-                    "x": 1673,
-                    "y": 780
+                    "x": 2336,
+                    "y": 1760
                 },
                 "nextBlockAction": {
                     "_tdActionId": "519da77a-dc92-42b8-b114-bd9d7ded20df",
@@ -344,8 +407,8 @@
             "agents_available": false,
             "attributes": {
                 "position": {
-                    "x": 2085,
-                    "y": 522
+                    "x": 2939,
+                    "y": 1011
                 },
                 "nextBlockAction": {
                     "_tdActionId": "60a5f84b-96cd-4e50-850e-f1ffedb12b4a",
@@ -395,8 +458,8 @@
             "agents_available": false,
             "attributes": {
                 "position": {
-                    "x": 2524,
-                    "y": 502
+                    "x": 3406,
+                    "y": 1020
                 },
                 "nextBlockAction": {
                     "_tdActionId": "4a616e69-ea5e-46d6-a973-53f81cdb3fe7",
@@ -446,8 +509,8 @@
             "agents_available": false,
             "attributes": {
                 "position": {
-                    "x": 2525,
-                    "y": 844
+                    "x": 3419,
+                    "y": 1472
                 },
                 "nextBlockAction": {
                     "_tdActionId": "1a8a9def-d798-4adf-aa46-fefc4af3382d",
@@ -474,7 +537,12 @@
                     "temperature": 0.7,
                     "top_k": 5,
                     "model": "gpt-4o-mini",
-                    "preview": [],
+                    "preview": [
+                        {
+                            "name": "lastUserText",
+                            "value": "Who is Joe?"
+                        }
+                    ],
                     "history": false,
                     "citations": false,
                     "namespace": "Default",
@@ -490,8 +558,8 @@
             "agents_available": false,
             "attributes": {
                 "position": {
-                    "x": 1129,
-                    "y": 703
+                    "x": 1161,
+                    "y": 2043
                 },
                 "nextBlockAction": {
                     "_tdActionId": "0e2f5730-5077-4f94-9968-7fd4748a17e5",
@@ -523,9 +591,9 @@
                     "citations": false,
                     "namespace": "Default",
                     "context": "",
-                    "namespaceAsName": true,
                     "trueIntent": "#a71a0cfb-b307-461a-a1bb-c46c5417f2d5",
-                    "falseIntent": "#804cb15d-decd-4016-91f0-a512cc70bb02"
+                    "falseIntent": "#804cb15d-decd-4016-91f0-a512cc70bb02",
+                    "namespaceAsName": true
                 }
             ],
             "language": "en",
@@ -534,8 +602,8 @@
             "agents_available": false,
             "attributes": {
                 "position": {
-                    "x": 1124,
-                    "y": 995
+                    "x": 1164,
+                    "y": 2288
                 },
                 "nextBlockAction": {
                     "_tdActionId": "3186adf5-2c95-440c-8326-a4a99952eaeb",
@@ -544,6 +612,282 @@
                 },
                 "connectors": {},
                 "color": "80,100,147",
+                "readonly": false
+            }
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "e46ace4d-4634-4479-b8cd-32ed96ac40aa",
+                    "_tdActionType": "askgptv2",
+                    "question": "{{question}}",
+                    "assignReplyTo": "kb_reply",
+                    "assignSourceTo": "kb_source",
+                    "assignChunksTo": "kb_chunks",
+                    "max_tokens": 1024,
+                    "temperature": 1,
+                    "top_k": 5,
+                    "alpha": 0.5,
+                    "model": "gpt-5",
+                    "preview": [],
+                    "history": false,
+                    "citations": false,
+                    "namespace": "Default",
+                    "context": "",
+                    "namespaceAsName": true,
+                    "falseIntent": "#804cb15d-decd-4016-91f0-a512cc70bb02",
+                    "trueIntent": "#a71a0cfb-b307-461a-a1bb-c46c5417f2d5"
+                }
+            ],
+            "language": "en",
+            "intent_display_name": "askkb_5",
+            "intent_id": "72acb281-89b6-4b53-92fd-2768179aaf1e",
+            "agents_available": false,
+            "attributes": {
+                "position": {
+                    "x": 1144,
+                    "y": 288
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "96b3f984-1e0d-4d5b-a7b3-9a26ea9171e8",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                },
+                "connectors": {},
+                "color": "156,163,205",
+                "readonly": false
+            }
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "f3854460-ef01-4707-982d-a8f92906549a",
+                    "_tdActionType": "askgptv2",
+                    "question": "{{question}}",
+                    "assignReplyTo": "kb_reply",
+                    "assignSourceTo": "kb_source",
+                    "assignChunksTo": "kb_chunks",
+                    "max_tokens": 1024,
+                    "temperature": 1,
+                    "top_k": 5,
+                    "alpha": 0.5,
+                    "model": "gpt-5-mini",
+                    "preview": [],
+                    "history": false,
+                    "citations": false,
+                    "namespace": "Default",
+                    "context": "",
+                    "namespaceAsName": true,
+                    "falseIntent": "#804cb15d-decd-4016-91f0-a512cc70bb02",
+                    "trueIntent": "#a71a0cfb-b307-461a-a1bb-c46c5417f2d5"
+                }
+            ],
+            "language": "en",
+            "intent_display_name": "askkb_5_mini",
+            "intent_id": "55402c02-03fb-4504-b48b-a1ea38981d96",
+            "agents_available": false,
+            "attributes": {
+                "position": {
+                    "x": 1147,
+                    "y": 542
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "6c74566c-1fe6-401c-ac1f-4700a459c484",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                },
+                "connectors": {},
+                "color": "156,163,205",
+                "readonly": false
+            }
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "69b04a13-fb61-4ca5-9882-d55b4091e633",
+                    "_tdActionType": "askgptv2",
+                    "question": "{{question}}",
+                    "assignReplyTo": "kb_reply",
+                    "assignSourceTo": "kb_source",
+                    "assignChunksTo": "kb_chunks",
+                    "max_tokens": 1024,
+                    "temperature": 1,
+                    "top_k": 5,
+                    "alpha": 0.5,
+                    "model": "gpt-5-nano",
+                    "preview": [],
+                    "history": false,
+                    "citations": false,
+                    "namespace": "Default",
+                    "context": "",
+                    "namespaceAsName": true,
+                    "falseIntent": "#804cb15d-decd-4016-91f0-a512cc70bb02",
+                    "trueIntent": "#a71a0cfb-b307-461a-a1bb-c46c5417f2d5"
+                }
+            ],
+            "language": "en",
+            "intent_display_name": "askkb_5_nano",
+            "intent_id": "1437c12f-1104-4b3b-837a-cbc36a4364e5",
+            "agents_available": false,
+            "attributes": {
+                "position": {
+                    "x": 1150,
+                    "y": 796
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "162f5a13-eb76-4675-97b1-bac5a97b1367",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                },
+                "connectors": {},
+                "color": "156,163,205",
+                "readonly": false
+            }
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "ea17ed72-ad6e-46bb-8fff-09265aee4570",
+                    "_tdActionType": "askgptv2",
+                    "question": "{{question}}",
+                    "assignReplyTo": "kb_reply",
+                    "assignSourceTo": "kb_source",
+                    "assignChunksTo": "kb_chunks",
+                    "max_tokens": 1024,
+                    "temperature": 1,
+                    "top_k": 5,
+                    "alpha": 0.5,
+                    "model": "gpt-4.1",
+                    "preview": [],
+                    "history": false,
+                    "citations": false,
+                    "namespace": "Default",
+                    "context": "",
+                    "namespaceAsName": true,
+                    "falseIntent": "#804cb15d-decd-4016-91f0-a512cc70bb02",
+                    "trueIntent": "#a71a0cfb-b307-461a-a1bb-c46c5417f2d5"
+                }
+            ],
+            "language": "en",
+            "intent_display_name": "askkb_4_1",
+            "intent_id": "6738f5f7-81c3-4479-8f3e-54c4852eed30",
+            "agents_available": false,
+            "attributes": {
+                "position": {
+                    "x": 1153,
+                    "y": 1045
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "8d024211-e3d6-496d-ac2c-8e7e831f4d4e",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                },
+                "connectors": {},
+                "color": "156,163,205",
+                "readonly": false
+            }
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "0eddd8ab-cde5-4192-bc39-0b6ebff37855",
+                    "_tdActionType": "askgptv2",
+                    "question": "{{question}}",
+                    "assignReplyTo": "kb_reply",
+                    "assignSourceTo": "kb_source",
+                    "assignChunksTo": "kb_chunks",
+                    "max_tokens": 1024,
+                    "temperature": 1,
+                    "top_k": 5,
+                    "alpha": 0.5,
+                    "model": "gpt-4.1-mini",
+                    "preview": [],
+                    "history": false,
+                    "citations": false,
+                    "namespace": "Default",
+                    "context": "",
+                    "namespaceAsName": true,
+                    "falseIntent": "#804cb15d-decd-4016-91f0-a512cc70bb02",
+                    "trueIntent": "#a71a0cfb-b307-461a-a1bb-c46c5417f2d5"
+                }
+            ],
+            "language": "en",
+            "intent_display_name": "askkb_4_1_mini",
+            "intent_id": "0879d668-89fc-4547-981e-eca463c99f84",
+            "agents_available": false,
+            "attributes": {
+                "position": {
+                    "x": 1157,
+                    "y": 1303
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "3536b637-0b71-4024-8ca0-6d58119be79e",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                },
+                "connectors": {},
+                "color": "156,163,205",
+                "readonly": false
+            }
+        },
+        {
+            "webhook_enabled": false,
+            "enabled": true,
+            "actions": [
+                {
+                    "_tdActionTitle": "",
+                    "_tdActionId": "e6fd0924-2e59-4648-bc51-4bdf85a0c61a",
+                    "_tdActionType": "askgptv2",
+                    "question": "{{question}}",
+                    "assignReplyTo": "kb_reply",
+                    "assignSourceTo": "kb_source",
+                    "assignChunksTo": "kb_chunks",
+                    "max_tokens": 1024,
+                    "temperature": 1,
+                    "top_k": 5,
+                    "alpha": 0.5,
+                    "model": "gpt-4.1-nano",
+                    "preview": [],
+                    "history": false,
+                    "citations": false,
+                    "namespace": "Default",
+                    "context": "",
+                    "namespaceAsName": true,
+                    "falseIntent": "#804cb15d-decd-4016-91f0-a512cc70bb02",
+                    "trueIntent": "#a71a0cfb-b307-461a-a1bb-c46c5417f2d5"
+                }
+            ],
+            "language": "en",
+            "intent_display_name": "askkb_4_1_nano",
+            "intent_id": "f6e86454-057d-4dc3-ab63-9b4ffa865614",
+            "agents_available": false,
+            "attributes": {
+                "position": {
+                    "x": 1159,
+                    "y": 1549
+                },
+                "nextBlockAction": {
+                    "_tdActionId": "248e9b67-0ce3-40fb-9433-b43873e19abd",
+                    "_tdActionType": "intent",
+                    "intentName": ""
+                },
+                "connectors": {},
+                "color": "156,163,205",
                 "readonly": false
             }
         }

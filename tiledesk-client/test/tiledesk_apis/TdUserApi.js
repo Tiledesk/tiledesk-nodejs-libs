@@ -45,7 +45,7 @@ class User {
   async removeUserToProject(user_id){
     return new Promise((resolve, reject)=> {
       const HTTPREQUEST = {
-        url: `${this.APIURL}/${this.PROJECT_ID}/project_users/${user_id}`,
+        url: `${this.APIURL}/${this.PROJECT_ID}/project_users/${user_id}?hard=true`,
         headers: {
           'Content-Type' : 'application/json',
           'Authorization': this.JWT_TOKEN
@@ -65,7 +65,7 @@ class User {
         }, this.LOG
       );
     }); 
-  }
+  }  
 
   async setAvailability(user_id, available, status){
     return new Promise((resolve, reject)=> {
