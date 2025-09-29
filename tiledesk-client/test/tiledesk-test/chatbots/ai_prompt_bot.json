@@ -2,7 +2,7 @@
   "webhook_enabled": false,
   "language": "en",
   "name": "Ai Prompt Chatbot",
-  "slug": "llm-bot",
+  "slug": "llm-bot-1",
   "type": "tilebot",
   "subtype": "chatbot",
   "attributes": {
@@ -16,6 +16,170 @@
     }
   },
   "intents": [
+    {
+      "webhook_enabled": false,
+      "enabled": true,
+      "actions": [
+        {
+          "_tdActionTitle": "",
+          "_tdActionId": "56ae0cfd-e7fa-46b9-ae02-d48f03eb1989",
+          "_tdActionType": "ai_prompt",
+          "max_tokens": 256,
+          "temperature": 0.7,
+          "model": "{{ai_model}}",
+          "assignReplyTo": "ai_reply",
+          "preview": [],
+          "formatType": "none",
+          "question": "generate a greeting",
+          "context": "",
+          "llm": "google",
+          "trueIntent": "#66f188f7-87d8-425a-9e68-09a74d080ecc",
+          "falseIntent": "#e178eb05-e981-4395-a0f5-5976c90f2aa7",
+          "labelModel": ""
+        }
+      ],
+      "intent_display_name": "gemini",
+      "intent_id": "6c8d0ac3-ee49-4d78-837f-19a698f60d0b",
+      "language": "en",
+      "attributes": {
+        "position": {
+          "x": 2371,
+          "y": -196
+        },
+        "nextBlockAction": {
+          "_tdActionId": "78ee72f4-e959-4c6b-8157-02a591920550",
+          "_tdActionType": "intent",
+          "intentName": ""
+        },
+        "color": "80,100,147",
+        "readonly": false
+      },
+      "agents_available": false
+    },
+    {
+      "webhook_enabled": false,
+      "enabled": true,
+      "actions": [
+        {
+          "_tdActionType": "reply",
+          "attributes": {
+            "disableInputMessage": false,
+            "commands": [
+              {
+                "type": "wait",
+                "time": 500
+              },
+              {
+                "type": "message",
+                "message": {
+                  "type": "text",
+                  "text": "Hi, which LLM would you like to try?",
+                  "attributes": {
+                    "attachment": {
+                      "type": "template",
+                      "buttons": [
+                        {
+                          "uid": "6599ff04b5fb40bfa7180a03d5ab335e",
+                          "type": "action",
+                          "value": "Google Gemini",
+                          "link": "",
+                          "target": "blank",
+                          "action": "#b90125b4-dc9c-4cfb-a4bb-dcb376fef53e",
+                          "attributes": "",
+                          "show_echo": true,
+                          "alias": ""
+                        },
+                        {
+                          "uid": "6719484689514d5a853359cabcf68c7a",
+                          "type": "action",
+                          "value": "Anthropic",
+                          "link": "",
+                          "target": "blank",
+                          "action": "#b90125b4-dc9c-4cfb-a4bb-dcb376fef53e",
+                          "attributes": "",
+                          "show_echo": true,
+                          "alias": ""
+                        },
+                        {
+                          "uid": "b669ed3bbf45430ab2a72a40bd3d156e",
+                          "type": "action",
+                          "value": "Groq",
+                          "link": "",
+                          "target": "blank",
+                          "action": "#b90125b4-dc9c-4cfb-a4bb-dcb376fef53e",
+                          "attributes": "",
+                          "show_echo": true,
+                          "alias": ""
+                        },
+                        {
+                          "uid": "ffcc63cd0cd74f7195d3bc41e730150b",
+                          "type": "action",
+                          "value": "Cohere",
+                          "link": "",
+                          "target": "blank",
+                          "action": "#b90125b4-dc9c-4cfb-a4bb-dcb376fef53e",
+                          "attributes": "",
+                          "show_echo": true,
+                          "alias": ""
+                        },
+                        {
+                          "uid": "31b6db1fcc6a4df5b6c8e49bc55c777e",
+                          "type": "action",
+                          "value": "Ollama",
+                          "link": "",
+                          "target": "blank",
+                          "action": "#b90125b4-dc9c-4cfb-a4bb-dcb376fef53e",
+                          "attributes": "",
+                          "show_echo": true
+                        },
+                        {
+                          "uid": "d49de67803474bd392392cfb074a685b",
+                          "type": "action",
+                          "value": "Deepseek",
+                          "link": "",
+                          "target": "blank",
+                          "action": "#b90125b4-dc9c-4cfb-a4bb-dcb376fef53e",
+                          "attributes": "",
+                          "show_echo": true
+                        },
+                        {
+                          "uid": "3127de9fe68c4cf29f7476b383b79078",
+                          "type": "action",
+                          "value": "Openai",
+                          "link": "",
+                          "target": "blank",
+                          "action": "#b90125b4-dc9c-4cfb-a4bb-dcb376fef53e",
+                          "attributes": "",
+                          "show_echo": true
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "text": "Hi, how can I help you?\r\n",
+          "_tdActionId": "1802fa30147648e78e12585182bca4cf"
+        }
+      ],
+      "intent_display_name": "welcome",
+      "intent_id": "ec7f37a9-8067-4ef7-a547-acd755f5074d",
+      "language": "en",
+      "attributes": {
+        "position": {
+          "x": 711,
+          "y": 121
+        },
+        "nextBlockAction": {
+          "_tdActionTitle": "",
+          "_tdActionId": "09820fe8-37ae-4e25-aae4-9cb1591726d1",
+          "_tdActionType": "intent"
+        },
+        "color": "156,163,205"
+      },
+      "agents_available": false
+    },
     {
       "webhook_enabled": false,
       "enabled": true,
@@ -159,110 +323,6 @@
       "enabled": true,
       "actions": [
         {
-          "_tdActionType": "reply",
-          "attributes": {
-            "disableInputMessage": false,
-            "commands": [
-              {
-                "type": "wait",
-                "time": 500
-              },
-              {
-                "type": "message",
-                "message": {
-                  "type": "text",
-                  "text": "Hi, which LLM would you like to try?",
-                  "attributes": {
-                    "attachment": {
-                      "type": "template",
-                      "buttons": [
-                        {
-                          "uid": "6599ff04b5fb40bfa7180a03d5ab335e",
-                          "type": "action",
-                          "value": "Google Gemini",
-                          "link": "",
-                          "target": "blank",
-                          "action": "#b90125b4-dc9c-4cfb-a4bb-dcb376fef53e",
-                          "attributes": "",
-                          "show_echo": true,
-                          "alias": ""
-                        },
-                        {
-                          "uid": "6719484689514d5a853359cabcf68c7a",
-                          "type": "action",
-                          "value": "Anthropic",
-                          "link": "",
-                          "target": "blank",
-                          "action": "#b90125b4-dc9c-4cfb-a4bb-dcb376fef53e",
-                          "attributes": "",
-                          "show_echo": true,
-                          "alias": ""
-                        },
-                        {
-                          "uid": "b669ed3bbf45430ab2a72a40bd3d156e",
-                          "type": "action",
-                          "value": "Groq",
-                          "link": "",
-                          "target": "blank",
-                          "action": "#b90125b4-dc9c-4cfb-a4bb-dcb376fef53e",
-                          "attributes": "",
-                          "show_echo": true,
-                          "alias": ""
-                        },
-                        {
-                          "uid": "ffcc63cd0cd74f7195d3bc41e730150b",
-                          "type": "action",
-                          "value": "Cohere",
-                          "link": "",
-                          "target": "blank",
-                          "action": "#b90125b4-dc9c-4cfb-a4bb-dcb376fef53e",
-                          "attributes": "",
-                          "show_echo": true,
-                          "alias": ""
-                        },
-                        {
-                          "uid": "31b6db1fcc6a4df5b6c8e49bc55c777e",
-                          "type": "action",
-                          "value": "Ollama",
-                          "link": "",
-                          "target": "blank",
-                          "action": "#b90125b4-dc9c-4cfb-a4bb-dcb376fef53e",
-                          "attributes": "",
-                          "show_echo": true
-                        }
-                      ]
-                    }
-                  }
-                }
-              }
-            ]
-          },
-          "text": "Hi, how can I help you?\r\n",
-          "_tdActionId": "1802fa30147648e78e12585182bca4cf"
-        }
-      ],
-      "intent_display_name": "welcome",
-      "intent_id": "ec7f37a9-8067-4ef7-a547-acd755f5074d",
-      "language": "en",
-      "attributes": {
-        "position": {
-          "x": 711,
-          "y": 121
-        },
-        "nextBlockAction": {
-          "_tdActionTitle": "",
-          "_tdActionId": "09820fe8-37ae-4e25-aae4-9cb1591726d1",
-          "_tdActionType": "intent"
-        },
-        "color": "156,163,205"
-      },
-      "agents_available": false
-    },
-    {
-      "webhook_enabled": false,
-      "enabled": true,
-      "actions": [
-        {
           "_tdActionTitle": "",
           "_tdActionId": "1692e7a3-4410-4c2e-be8d-d5a6474a65b1",
           "_tdActionType": "reply",
@@ -301,15 +361,6 @@
                           "show_echo": true
                         },
                         {
-                          "uid": "6d6f3612b6764c04a1015d5d3891b0a1",
-                          "type": "action",
-                          "value": "llama3-70b-8192",
-                          "link": "",
-                          "target": "blank",
-                          "action": "#71c7d068-a8cb-4991-87f9-14a995ec9687{\"ai_model\":\"llama3-70b-8192\"}",
-                          "show_echo": true
-                        },
-                        {
                           "uid": "3716945e465a4086ad307c4a84739a35",
                           "type": "action",
                           "value": "deepseek-r1-distill-llama-70b",
@@ -327,7 +378,6 @@
                           "action": "#71c7d068-a8cb-4991-87f9-14a995ec9687{\"ai_model\":\"meta-llama/llama-guard-4-12b\"}",
                           "show_echo": true
                         },
-                        
                         {
                           "uid": "a37552354068440a938a6981a23beb95",
                           "type": "action",
@@ -402,39 +452,10 @@
         "nextBlockAction": {
           "_tdActionId": "75d7f05b-1a01-4726-83e8-d0899390a043",
           "_tdActionType": "intent",
-          "intentName": "#71c7d068-a8cb-4991-87f9-14a995ec9687"
+          "intentName": ""
         },
         "color": "80,100,147",
         "readonly": false
-      },
-      "agents_available": false
-    },
-    {
-      "webhook_enabled": false,
-      "enabled": true,
-      "actions": [
-        {
-          "_tdActionType": "intent",
-          "intentName": "#ec7f37a9-8067-4ef7-a547-acd755f5074d",
-          "_tdActionId": "8df921a184814bd3bfe35f1ee4d7e221"
-        }
-      ],
-      "intent_display_name": "start",
-      "intent_id": "38cfeb92-5135-4b77-afcc-1c55d320fa2d",
-      "question": "\\start",
-      "language": "en",
-      "attributes": {
-        "position": {
-          "x": 341,
-          "y": 386
-        },
-        "readonly": true,
-        "nextBlockAction": {
-          "_tdActionTitle": "",
-          "_tdActionId": "f2584cbc-6db4-44e2-9d11-519b32dd5b3b",
-          "_tdActionType": "intent"
-        },
-        "color": "156,163,205"
       },
       "agents_available": false
     },
@@ -499,38 +520,27 @@
       "enabled": true,
       "actions": [
         {
-          "_tdActionTitle": "",
-          "_tdActionId": "56ae0cfd-e7fa-46b9-ae02-d48f03eb1989",
-          "_tdActionType": "ai_prompt",
-          "max_tokens": 256,
-          "temperature": 0.7,
-          "model": "{{ai_model}}",
-          "assignReplyTo": "ai_reply",
-          "preview": [],
-          "formatType": "none",
-          "question": "generate a greeting",
-          "context": "",
-          "llm": "google",
-          "trueIntent": "#66f188f7-87d8-425a-9e68-09a74d080ecc",
-          "falseIntent": "#e178eb05-e981-4395-a0f5-5976c90f2aa7",
-          "labelModel": ""
+          "_tdActionType": "intent",
+          "intentName": "#ec7f37a9-8067-4ef7-a547-acd755f5074d",
+          "_tdActionId": "8df921a184814bd3bfe35f1ee4d7e221"
         }
       ],
-      "intent_display_name": "gemini",
-      "intent_id": "6c8d0ac3-ee49-4d78-837f-19a698f60d0b",
+      "intent_display_name": "start",
+      "intent_id": "38cfeb92-5135-4b77-afcc-1c55d320fa2d",
+      "question": "\\start",
       "language": "en",
       "attributes": {
         "position": {
-          "x": 2371,
-          "y": -196
+          "x": 341,
+          "y": 386
         },
+        "readonly": true,
         "nextBlockAction": {
-          "_tdActionId": "78ee72f4-e959-4c6b-8157-02a591920550",
-          "_tdActionType": "intent",
-          "intentName": ""
+          "_tdActionTitle": "",
+          "_tdActionId": "f2584cbc-6db4-44e2-9d11-519b32dd5b3b",
+          "_tdActionType": "intent"
         },
-        "color": "80,100,147",
-        "readonly": false
+        "color": "156,163,205"
       },
       "agents_available": false
     },
@@ -566,6 +576,56 @@
         },
         "nextBlockAction": {
           "_tdActionId": "78ee72f4-e959-4c6b-8157-02a591920550",
+          "_tdActionType": "intent",
+          "intentName": ""
+        },
+        "color": "80,100,147",
+        "readonly": false
+      },
+      "agents_available": false
+    },
+    {
+      "webhook_enabled": false,
+      "enabled": true,
+      "actions": [
+        {
+          "_tdActionTitle": "",
+          "_tdActionId": "93cb965f-2668-43da-8db2-d6f52000ffae",
+          "_tdActionType": "reply",
+          "attributes": {
+            "disableInputMessage": false,
+            "commands": [
+              {
+                "type": "wait",
+                "time": 500
+              },
+              {
+                "type": "message",
+                "message": {
+                  "type": "text",
+                  "text": "Non conosco questo modello",
+                  "attributes": {
+                    "attachment": {
+                      "type": "template",
+                      "buttons": []
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "intent_display_name": "untitled_block_17",
+      "intent_id": "e87749dd-8550-4e17-b8bd-8c2ab320cf80",
+      "language": "en",
+      "attributes": {
+        "position": {
+          "x": 1258,
+          "y": 1151
+        },
+        "nextBlockAction": {
+          "_tdActionId": "6827d6ff-632f-40e1-9d78-fc73a536b4f1",
           "_tdActionType": "intent",
           "intentName": ""
         },
@@ -676,32 +736,92 @@
       "actions": [
         {
           "_tdActionTitle": "",
-          "_tdActionId": "56ae0cfd-e7fa-46b9-ae02-d48f03eb1989",
-          "_tdActionType": "ai_prompt",
-          "max_tokens": 256,
-          "temperature": 0.7,
-          "model": "{{ai_model}}",
-          "assignReplyTo": "ai_reply",
-          "preview": [],
-          "formatType": "none",
-          "question": "generate a greeting",
-          "context": "",
-          "llm": "cohere",
-          "trueIntent": "#66f188f7-87d8-425a-9e68-09a74d080ecc",
-          "falseIntent": "#e178eb05-e981-4395-a0f5-5976c90f2aa7",
-          "labelModel": ""
+          "_tdActionId": "af3581bf-2441-4109-ad7b-ffcbd91798d4",
+          "_tdActionType": "reply",
+          "attributes": {
+            "disableInputMessage": false,
+            "commands": [
+              {
+                "type": "wait",
+                "time": 500
+              },
+              {
+                "type": "message",
+                "message": {
+                  "type": "text",
+                  "text": "{{ai_reply}}",
+                  "attributes": {
+                    "attachment": {
+                      "type": "template",
+                      "buttons": []
+                    }
+                  }
+                }
+              }
+            ]
+          }
         }
       ],
-      "intent_display_name": "cohere",
-      "intent_id": "e6189741-4e12-47b3-b520-f662c2065d57",
+      "intent_display_name": "ai_reply",
+      "intent_id": "66f188f7-87d8-425a-9e68-09a74d080ecc",
       "language": "en",
       "attributes": {
         "position": {
-          "x": 2397,
-          "y": 834
+          "x": 3579,
+          "y": 251
         },
         "nextBlockAction": {
-          "_tdActionId": "78ee72f4-e959-4c6b-8157-02a591920550",
+          "_tdActionId": "4f8eaed8-cfc8-4d2a-8845-bfb4d2847f02",
+          "_tdActionType": "intent",
+          "intentName": ""
+        },
+        "color": "80,100,147",
+        "readonly": false
+      },
+      "agents_available": false
+    },
+    {
+      "webhook_enabled": false,
+      "enabled": true,
+      "actions": [
+        {
+          "_tdActionTitle": "",
+          "_tdActionId": "47caff62-a28f-4168-8e41-9c5a1d932e52",
+          "_tdActionType": "reply",
+          "attributes": {
+            "disableInputMessage": false,
+            "commands": [
+              {
+                "type": "wait",
+                "time": 500
+              },
+              {
+                "type": "message",
+                "message": {
+                  "type": "text",
+                  "text": "Error\n{{flowError}}",
+                  "attributes": {
+                    "attachment": {
+                      "type": "template",
+                      "buttons": []
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "intent_display_name": "ai_error",
+      "intent_id": "e178eb05-e981-4395-a0f5-5976c90f2aa7",
+      "language": "en",
+      "attributes": {
+        "position": {
+          "x": 3579,
+          "y": 647
+        },
+        "nextBlockAction": {
+          "_tdActionId": "31fe39b9-68e1-461b-8606-c207df5a2d8b",
           "_tdActionType": "intent",
           "intentName": ""
         },
@@ -838,6 +958,56 @@
           "stopOnConditionMet": true,
           "noelse": true,
           "trueIntent": "#dbc27e5b-8191-4538-9eee-5112251fb8ed"
+        },
+        {
+          "_tdActionTitle": "",
+          "_tdActionId": "f5d88185-99a3-470c-a725-41c7d114548d",
+          "_tdActionType": "jsoncondition",
+          "groups": [
+            {
+              "type": "expression",
+              "conditions": [
+                {
+                  "type": "condition",
+                  "operand1": "lastUserText",
+                  "operator": "equalAsStrings",
+                  "operand2": {
+                    "type": "const",
+                    "value": "Deepseek",
+                    "name": ""
+                  }
+                }
+              ]
+            }
+          ],
+          "stopOnConditionMet": true,
+          "noelse": true,
+          "trueIntent": "#8df10fdd-b780-4921-9517-39714b21702b"
+        },
+        {
+          "_tdActionTitle": "",
+          "_tdActionId": "46f4678f-6f5a-4686-ad67-3a09bc3e145c",
+          "_tdActionType": "jsoncondition",
+          "groups": [
+            {
+              "type": "expression",
+              "conditions": [
+                {
+                  "type": "condition",
+                  "operand1": "lastUserText",
+                  "operator": "equalAsStrings",
+                  "operand2": {
+                    "type": "const",
+                    "value": "Openai",
+                    "name": ""
+                  }
+                }
+              ]
+            }
+          ],
+          "stopOnConditionMet": true,
+          "noelse": true,
+          "trueIntent": "#38f743ab-9e1e-4c1c-bf4c-50c8163f9df2"
         }
       ],
       "intent_display_name": "check",
@@ -912,28 +1082,10 @@
                         {
                           "uid": "69dc695d5c9145c0ab6025e524c12c51",
                           "type": "action",
-                          "value": "command-r-plus-04-2024",
+                          "value": "command-r-plus-08-2024",
                           "link": "",
                           "target": "blank",
-                          "action": "#e6189741-4e12-47b3-b520-f662c2065d57{\"ai_model\":\"command-r-plus-04-2024\"}",
-                          "show_echo": true
-                        },
-                        {
-                          "uid": "ba70abf500ab42a0b073bd9a01ae48dc",
-                          "type": "action",
-                          "value": "command-r-plus",
-                          "link": "",
-                          "target": "blank",
-                          "action": "#e6189741-4e12-47b3-b520-f662c2065d57{\"ai_model\":\"command-r-plus\"}",
-                          "show_echo": true
-                        },
-                        {
-                          "uid": "e745a4698cb649698d697be8b9b0a93a",
-                          "type": "action",
-                          "value": "command-r",
-                          "link": "",
-                          "target": "blank",
-                          "action": "#e6189741-4e12-47b3-b520-f662c2065d57{\"ai_model\":\"command-r\"}",
+                          "action": "#e6189741-4e12-47b3-b520-f662c2065d57{\"ai_model\":\"command-r-plus-08-2024\"}",
                           "show_echo": true
                         }
                       ]
@@ -959,8 +1111,7 @@
           "intentName": null
         },
         "color": "80,100,147",
-        "readonly": false,
-        "connectors": {}
+        "readonly": false
       },
       "agents_available": false
     },
@@ -970,7 +1121,7 @@
       "actions": [
         {
           "_tdActionTitle": "",
-          "_tdActionId": "af3581bf-2441-4109-ad7b-ffcbd91798d4",
+          "_tdActionId": "181b8e16-e9e4-49fe-a750-e3623907f6a2",
           "_tdActionType": "reply",
           "attributes": {
             "disableInputMessage": false,
@@ -983,11 +1134,21 @@
                 "type": "message",
                 "message": {
                   "type": "text",
-                  "text": "{{ai_reply}}",
+                  "text": "Ask a question to Deepseek",
                   "attributes": {
                     "attachment": {
                       "type": "template",
-                      "buttons": []
+                      "buttons": [
+                        {
+                          "uid": "bdf308fc6242465aa6eddd47941abd74",
+                          "type": "action",
+                          "value": "deepseek-chat",
+                          "link": "",
+                          "target": "blank",
+                          "action": "#acdb4ec2-837e-4ca9-8188-56fb2adaeb04{\"ai_model\":\"deepseek-chat\"}",
+                          "show_echo": true
+                        }
+                      ]
                     }
                   }
                 }
@@ -996,16 +1157,60 @@
           }
         }
       ],
-      "intent_display_name": "ai_reply",
-      "intent_id": "66f188f7-87d8-425a-9e68-09a74d080ecc",
+      "intent_display_name": "untitled_block_20",
+      "intent_id": "8df10fdd-b780-4921-9517-39714b21702b",
       "language": "en",
       "attributes": {
         "position": {
-          "x": 3579,
-          "y": 251
+          "x": 1831,
+          "y": 1969
         },
         "nextBlockAction": {
-          "_tdActionId": "4f8eaed8-cfc8-4d2a-8845-bfb4d2847f02",
+          "_tdActionId": "af887070-178d-46f4-a5fa-74647d94150c",
+          "_tdActionType": "intent",
+          "intentName": null
+        },
+        "color": "80,100,147",
+        "readonly": false
+      },
+      "agents_available": false
+    },
+    {
+      "webhook_enabled": false,
+      "enabled": true,
+      "actions": [
+        {
+          "_tdActionTitle": "",
+          "_tdActionId": "56ae0cfd-e7fa-46b9-ae02-d48f03eb1989",
+          "_tdActionType": "ai_prompt",
+          "max_tokens": 256,
+          "temperature": 0.7,
+          "model": "mistral",
+          "assignReplyTo": "ai_reply",
+          "preview": [
+            {
+              "name": "lastUserText",
+              "value": "Saluta in modo simpatico"
+            }
+          ],
+          "formatType": "none",
+          "question": "{{lastUserText}}",
+          "context": "",
+          "llm": "ollama",
+          "trueIntent": "#66f188f7-87d8-425a-9e68-09a74d080ecc",
+          "falseIntent": "#e178eb05-e981-4395-a0f5-5976c90f2aa7"
+        }
+      ],
+      "intent_display_name": "ollama",
+      "intent_id": "1fa21ff9-cd93-4b14-95ac-d3b2603022f9",
+      "language": "en",
+      "attributes": {
+        "position": {
+          "x": 2388,
+          "y": 1180
+        },
+        "nextBlockAction": {
+          "_tdActionId": "78ee72f4-e959-4c6b-8157-02a591920550",
           "_tdActionType": "intent",
           "intentName": ""
         },
@@ -1020,42 +1225,72 @@
       "actions": [
         {
           "_tdActionTitle": "",
-          "_tdActionId": "93cb965f-2668-43da-8db2-d6f52000ffae",
-          "_tdActionType": "reply",
-          "attributes": {
-            "disableInputMessage": false,
-            "commands": [
-              {
-                "type": "wait",
-                "time": 500
-              },
-              {
-                "type": "message",
-                "message": {
-                  "type": "text",
-                  "text": "Non conosco questo modello",
-                  "attributes": {
-                    "attachment": {
-                      "type": "template",
-                      "buttons": []
-                    }
-                  }
-                }
-              }
-            ]
-          }
+          "_tdActionId": "078cea4e-9654-4aeb-b5aa-6c7d80e6c5f6",
+          "_tdActionType": "ai_prompt",
+          "max_tokens": 256,
+          "temperature": 0.7,
+          "model": "{{ai_model}}",
+          "assignReplyTo": "ai_reply",
+          "preview": [],
+          "formatType": "none",
+          "question": "generate a greeting",
+          "context": "",
+          "llm": "deepseek",
+          "trueIntent": "#66f188f7-87d8-425a-9e68-09a74d080ecc",
+          "falseIntent": "#e178eb05-e981-4395-a0f5-5976c90f2aa7",
+          "labelModel": "Deepseek-chat"
         }
       ],
-      "intent_display_name": "untitled_block_17",
-      "intent_id": "e87749dd-8550-4e17-b8bd-8c2ab320cf80",
+      "intent_display_name": "deepseek",
+      "intent_id": "acdb4ec2-837e-4ca9-8188-56fb2adaeb04",
       "language": "en",
       "attributes": {
         "position": {
-          "x": 1258,
-          "y": 1151
+          "x": 2388,
+          "y": 1830
         },
         "nextBlockAction": {
-          "_tdActionId": "6827d6ff-632f-40e1-9d78-fc73a536b4f1",
+          "_tdActionId": "2ad8e6c0-8e1c-4b3b-bf01-5069ce6284bb",
+          "_tdActionType": "intent",
+          "intentName": ""
+        },
+        "color": "80,100,147",
+        "readonly": false
+      },
+      "agents_available": false
+    },
+    {
+      "webhook_enabled": false,
+      "enabled": true,
+      "actions": [
+        {
+          "_tdActionTitle": "",
+          "_tdActionId": "56ae0cfd-e7fa-46b9-ae02-d48f03eb1989",
+          "_tdActionType": "ai_prompt",
+          "max_tokens": 256,
+          "temperature": 0.7,
+          "model": "{{ai_model}}",
+          "assignReplyTo": "ai_reply",
+          "preview": [],
+          "formatType": "none",
+          "question": "generate a greeting",
+          "context": "",
+          "llm": "cohere",
+          "trueIntent": "#66f188f7-87d8-425a-9e68-09a74d080ecc",
+          "falseIntent": "#e178eb05-e981-4395-a0f5-5976c90f2aa7",
+          "labelModel": ""
+        }
+      ],
+      "intent_display_name": "cohere",
+      "intent_id": "e6189741-4e12-47b3-b520-f662c2065d57",
+      "language": "en",
+      "attributes": {
+        "position": {
+          "x": 2397,
+          "y": 834
+        },
+        "nextBlockAction": {
+          "_tdActionId": "78ee72f4-e959-4c6b-8157-02a591920550",
           "_tdActionType": "intent",
           "intentName": ""
         },
@@ -1110,7 +1345,47 @@
       "actions": [
         {
           "_tdActionTitle": "",
-          "_tdActionId": "47caff62-a28f-4168-8e41-9c5a1d932e52",
+          "_tdActionId": "62ed0bbf-3737-4a4a-9fda-4573fe91747e",
+          "_tdActionType": "ai_prompt",
+          "max_tokens": 1024,
+          "temperature": 0.7,
+          "model": "{{ai_model}}",
+          "assignReplyTo": "ai_reply",
+          "preview": [],
+          "formatType": "none",
+          "question": "generate a greeting",
+          "context": "",
+          "llm": "openai",
+          "trueIntent": "#66f188f7-87d8-425a-9e68-09a74d080ecc",
+          "falseIntent": "#e178eb05-e981-4395-a0f5-5976c90f2aa7",
+          "labelModel": ""
+        }
+      ],
+      "language": "en",
+      "intent_display_name": "openai",
+      "intent_id": "5134e273-466a-42a6-90e0-87e52c877bde",
+      "agents_available": false,
+      "attributes": {
+        "position": {
+          "x": 2398,
+          "y": 2247
+        },
+        "nextBlockAction": {
+          "_tdActionId": "2a2331b4-d7e7-4cfe-95fe-4d384c82cae9",
+          "_tdActionType": "intent",
+          "intentName": ""
+        },
+        "color": "80,100,147",
+        "readonly": false
+      }
+    },
+    {
+      "webhook_enabled": false,
+      "enabled": true,
+      "actions": [
+        {
+          "_tdActionTitle": "",
+          "_tdActionId": "91b339bb-d990-491d-b2cb-6d4364e1b218",
           "_tdActionType": "reply",
           "attributes": {
             "disableInputMessage": false,
@@ -1123,11 +1398,84 @@
                 "type": "message",
                 "message": {
                   "type": "text",
-                  "text": "Error\n{{flowError}}",
+                  "text": "Ask a question to Openai",
                   "attributes": {
                     "attachment": {
                       "type": "template",
-                      "buttons": []
+                      "buttons": [
+                        {
+                          "uid": "c00cccf724ec41e7be769865c7b7cb3e",
+                          "type": "action",
+                          "value": "gpt-3.5-turbo",
+                          "link": "",
+                          "target": "blank",
+                          "action": "#5134e273-466a-42a6-90e0-87e52c877bde{\"ai_model\":\"gpt-3.5-turbo\"}",
+                          "show_echo": true
+                        },
+                        {
+                          "uid": "9f92221eefd348ed9d3f5188a7e81b1f",
+                          "type": "action",
+                          "value": "gpt-4-turbo-preview",
+                          "link": "",
+                          "target": "blank",
+                          "action": "#5134e273-466a-42a6-90e0-87e52c877bde{\"ai_model\":\"gpt-4-turbo-preview\"}",
+                          "show_echo": true
+                        },
+                        {
+                          "uid": "6cc7948130244dd4b1910d8155fbedf4",
+                          "type": "action",
+                          "value": "gpt-4",
+                          "link": "",
+                          "target": "blank",
+                          "action": "#5134e273-466a-42a6-90e0-87e52c877bde{\"ai_model\":\"gpt-4\"}",
+                          "show_echo": true
+                        },
+                        {
+                          "uid": "b65f0c59f51e4cab9c9e2e91d367bcbf",
+                          "type": "action",
+                          "value": "gpt-4o-mini",
+                          "link": "",
+                          "target": "blank",
+                          "action": "#5134e273-466a-42a6-90e0-87e52c877bde{\"ai_model\":\"gpt-4o-mini\"}",
+                          "show_echo": true
+                        },
+                        {
+                          "uid": "c59ae868661d4039a48e572229ad26c0",
+                          "type": "action",
+                          "value": "gpt-4o",
+                          "link": "",
+                          "target": "blank",
+                          "action": "#5134e273-466a-42a6-90e0-87e52c877bde{\"ai_model\":\"gpt-4o\"}",
+                          "show_echo": true
+                        },
+                        {
+                          "uid": "3748d8b0801e497fae358812ff69efbd",
+                          "type": "action",
+                          "value": "gpt-5-nano",
+                          "link": "",
+                          "target": "blank",
+                          "action": "#5134e273-466a-42a6-90e0-87e52c877bde{\"ai_model\":\"gpt-5-nano\"}",
+                          "show_echo": true
+                        },
+                        {
+                          "uid": "4739429dd36d4cffbec285cdefe6fde2",
+                          "type": "action",
+                          "value": "gpt-5-mini",
+                          "link": "",
+                          "target": "blank",
+                          "action": "#5134e273-466a-42a6-90e0-87e52c877bde{\"ai_model\":\"gpt-5-mini\"}",
+                          "show_echo": true
+                        },
+                        {
+                          "uid": "69dc66749efd4e4887e8f851bc4f7532",
+                          "type": "action",
+                          "value": "gpt-5",
+                          "link": "",
+                          "target": "blank",
+                          "action": "#5134e273-466a-42a6-90e0-87e52c877bde{\"ai_model\":\"gpt-5\"}",
+                          "show_echo": true
+                        }
+                      ]
                     }
                   }
                 }
@@ -1136,67 +1484,23 @@
           }
         }
       ],
-      "intent_display_name": "ai_error",
-      "intent_id": "e178eb05-e981-4395-a0f5-5976c90f2aa7",
       "language": "en",
+      "intent_display_name": "untitled_block_22",
+      "intent_id": "38f743ab-9e1e-4c1c-bf4c-50c8163f9df2",
+      "agents_available": false,
       "attributes": {
         "position": {
-          "x": 3579,
-          "y": 647
+          "x": 1826,
+          "y": 2305
         },
         "nextBlockAction": {
-          "_tdActionId": "31fe39b9-68e1-461b-8606-c207df5a2d8b",
+          "_tdActionId": "4f7474a3-5a98-4f50-b69b-199d7f555eb9",
           "_tdActionType": "intent",
-          "intentName": ""
+          "intentName": null
         },
         "color": "80,100,147",
         "readonly": false
-      },
-      "agents_available": false
-    },
-    {
-      "webhook_enabled": false,
-      "enabled": true,
-      "actions": [
-        {
-          "_tdActionTitle": "",
-          "_tdActionId": "56ae0cfd-e7fa-46b9-ae02-d48f03eb1989",
-          "_tdActionType": "ai_prompt",
-          "max_tokens": 256,
-          "temperature": 0.7,
-          "model": "mistral",
-          "assignReplyTo": "ai_reply",
-          "preview": [
-            {
-              "name": "lastUserText",
-              "value": "Saluta in modo simpatico"
-            }
-          ],
-          "formatType": "none",
-          "question": "{{lastUserText}}",
-          "context": "",
-          "llm": "ollama",
-          "trueIntent": "#66f188f7-87d8-425a-9e68-09a74d080ecc",
-          "falseIntent": "#e178eb05-e981-4395-a0f5-5976c90f2aa7"
-        }
-      ],
-      "intent_display_name": "ollama",
-      "intent_id": "1fa21ff9-cd93-4b14-95ac-d3b2603022f9",
-      "language": "en",
-      "attributes": {
-        "position": {
-          "x": 2388,
-          "y": 1180
-        },
-        "nextBlockAction": {
-          "_tdActionId": "78ee72f4-e959-4c6b-8157-02a591920550",
-          "_tdActionType": "intent",
-          "intentName": ""
-        },
-        "color": "80,100,147",
-        "readonly": false
-      },
-      "agents_available": false
+      }
     }
   ]
 }

@@ -2182,14 +2182,14 @@ describe('CHATBOT: Ai prompt action', async () => {
             })
         }).timeout(6000);
 
-        it('command-r-plus-04-2024 (~1s)', () => {
+        it('command-r-plus-08-2024 (~1s)', () => {
             return new Promise(async (resolve, reject)=> {
                 let buttonGetIsPressed = false;
                 let generatePrompt = false;
 
                 const messageHandler = async (message, topic) => {
                     const message_text = 'Cohere'
-                    const model = 'command-r-plus-04-2024'
+                    const model = 'command-r-plus-08-2024'
                     if(message.recipient !== recipient_id){
                         // reject();
                         return;
@@ -2328,316 +2328,6 @@ describe('CHATBOT: Ai prompt action', async () => {
                     console.log("Sending test message...");
                 }
                 let recipient_id = group_id + '_12';
-                // let recipient_fullname = group_name;
-                triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
-                    if (err) {
-                        console.error("An error occurred while triggering echo bot conversation:", err);
-                    }
-                });
-            })
-        }).timeout(6000);
-
-        it('command-r-plus (~1s)', () => {
-            return new Promise(async (resolve, reject)=> {
-                let buttonGetIsPressed = false;
-                let generatePrompt = false;
-
-                const messageHandler = async (message, topic) => {
-                    const message_text = 'Cohere'
-                    const model = 'command-r-plus'
-                    if(message.recipient !== recipient_id){
-                        // reject();
-                        return;
-                    }
-                    if (LOG_STATUS) {
-                        console.log(">(1) Incoming message [sender:" + message.sender_fullname + "]: ", message);
-                    }
-                    if (
-                        message &&
-                        message.attributes.intentName ===  "welcome" &&
-                        message.sender_fullname === "Ai Prompt Chatbot"
-                    ) {
-                        if (LOG_STATUS) {
-                            console.log("> Incoming message from 'welcome' intent ok.");
-                        }
-                        
-                        assert(message.attributes, "Expect message.attributes exist")
-                        assert(message.attributes.commands, "Expect message.attributes.commands")
-                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
-                        let commands = message.attributes.commands
-                        let command = commands[1]
-                        assert.equal(command.type, 'message')
-                        assert(command.message, "Expect command.message exist")
-                        let msg = command.message
-                        assert(msg.text, "Expect msg.text exist")
-                        assert.equal(msg.text, 'Hi, which LLM would you like to try?', `Expect msg.text to be 'Hi, which LLM would you like to try?' but got: ${msg.text} `)
-
-                        //check buttons 
-                        assert(msg.attributes, "Expect msg.attribues exist")
-                        assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
-                        assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
-                        assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
-                        
-                        let button1 = msg.attributes.attachment.buttons[3]
-                        assert.strictEqual(button1.value, message_text, 'Expect button1 to have "Cohere" as text')
-                        assert(button1.action)
-                        
-                        chatClient1.sendMessage(
-                            message_text,
-                            'text',
-                            recipient_id,
-                            "Test support group",
-                            user1.fullname,
-                            {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
-                            null, // no metadata
-                            'group',
-                            (err, msg) => {
-                                if (err) {
-                                    console.error("Error send:", err);
-                                }
-                                if (LOG_STATUS) {
-                                    console.log("Message Sent ok:", msg);
-                                }
-                                assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
-                                buttonGetIsPressed = true
-                            }
-                        );
-                                        
-                    } else if( buttonGetIsPressed && !generatePrompt &&
-                        message &&  message.sender_fullname === "Ai Prompt Chatbot"
-                    ){
-                        
-                        assert(message.attributes, "Expect message.attributes exist")
-                        assert(message.attributes.commands, "Expect message.attributes.commands")
-                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
-                        let commands = message.attributes.commands
-                        
-                        let command1 = commands[1]
-                        assert.equal(command1.type, 'message')
-                        assert(command1.message, "Expect command.message exist")
-                        let msg = command1.message
-                        assert(msg.text, "Expect msg.text exist")
-                        assert.equal(msg.text, 'Ask a question to Cohere', `Expect msg.text to be 'Ask a question to Cohere' but got: ${msg.text} `)
-                        
-                        //check buttons 
-                        assert(msg.attributes, "Expect msg.attribues exist")
-                        assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
-                        assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
-                        assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
-                        
-                        let button1 = msg.attributes.attachment.buttons[4]
-                        assert.strictEqual(button1.value, model, `Expect button1 to have "${model}" as text`)
-                        assert(button1.action)
-
-                        chatClient1.sendMessage(
-                            model,
-                            'text',
-                            recipient_id,
-                            "Test support group",
-                            user1.fullname,
-                            {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
-                            null, // no metadata
-                            'group',
-                            (err, msg) => {
-                                if (err) {
-                                    console.error("Error send:", err);
-                                }
-                                if (LOG_STATUS) {
-                                    console.log("Message Sent ok:", msg);
-                                }
-
-                                assert.equal(msg.text, model, `Message sent from user expected to be "${message_text}"`)
-                                generatePrompt = true 
-                            }
-                        );
-
-                        // resolve();
-                        
-                    } else if( generatePrompt &&
-                        message &&  message.sender_fullname === "Ai Prompt Chatbot"
-                    ){
-                        assert(message.attributes, "Expect message.attributes exist")
-                        assert(message.attributes.intentName);
-                        assert.equal(message.attributes.intentName, 'ai_reply')
-                        assert(message.attributes.commands, "Expect message.attributes.commands")
-                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
-                        let commands = message.attributes.commands
-                        
-                        let command1 = commands[1]
-                        assert.equal(command1.type, 'message')
-                        assert(command1.message, "Expect command.message exist")
-                        let msg = command1.message
-                        assert(msg.text, "Expect msg.text exist")
-                        resolve();
-                    }
-                    else {
-                        // console.log("Message not computed:", message.text);
-                    }
-
-                };
-
-                //add handler to list
-                handlerId = chatClient1.onMessageAdded(messageHandler);
-
-                if (LOG_STATUS) {
-                    console.log("Sending test message...");
-                }
-                let recipient_id = group_id + '_13';
-                // let recipient_fullname = group_name;
-                triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
-                    if (err) {
-                        console.error("An error occurred while triggering echo bot conversation:", err);
-                    }
-                });
-            })
-        }).timeout(6000);
-
-        it('command-r (~1s)', () => {
-            return new Promise(async (resolve, reject)=> {
-                let buttonGetIsPressed = false;
-                let generatePrompt = false;
-
-                const messageHandler = async (message, topic) => {
-                    const message_text = 'Cohere'
-                    const model = 'command-r'
-                    if(message.recipient !== recipient_id){
-                        // reject();
-                        return;
-                    }
-                    if (LOG_STATUS) {
-                        console.log(">(1) Incoming message [sender:" + message.sender_fullname + "]: ", message);
-                    }
-                    if (
-                        message &&
-                        message.attributes.intentName ===  "welcome" &&
-                        message.sender_fullname === "Ai Prompt Chatbot"
-                    ) {
-                        if (LOG_STATUS) {
-                            console.log("> Incoming message from 'welcome' intent ok.");
-                        }
-                        
-                        assert(message.attributes, "Expect message.attributes exist")
-                        assert(message.attributes.commands, "Expect message.attributes.commands")
-                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
-                        let commands = message.attributes.commands
-                        let command = commands[1]
-                        assert.equal(command.type, 'message')
-                        assert(command.message, "Expect command.message exist")
-                        let msg = command.message
-                        assert(msg.text, "Expect msg.text exist")
-                        assert.equal(msg.text, 'Hi, which LLM would you like to try?', `Expect msg.text to be 'Hi, which LLM would you like to try?' but got: ${msg.text} `)
-
-                        //check buttons 
-                        assert(msg.attributes, "Expect msg.attribues exist")
-                        assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
-                        assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
-                        assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
-                        
-                        let button1 = msg.attributes.attachment.buttons[3]
-                        assert.strictEqual(button1.value, message_text, 'Expect button1 to have "Cohere" as text')
-                        assert(button1.action)
-                        
-                        chatClient1.sendMessage(
-                            message_text,
-                            'text',
-                            recipient_id,
-                            "Test support group",
-                            user1.fullname,
-                            {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
-                            null, // no metadata
-                            'group',
-                            (err, msg) => {
-                                if (err) {
-                                    console.error("Error send:", err);
-                                }
-                                if (LOG_STATUS) {
-                                    console.log("Message Sent ok:", msg);
-                                }
-                                assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
-                                buttonGetIsPressed = true
-                            }
-                        );
-                                        
-                    } else if( buttonGetIsPressed && !generatePrompt &&
-                        message &&  message.sender_fullname === "Ai Prompt Chatbot"
-                    ){
-                        
-                        assert(message.attributes, "Expect message.attributes exist")
-                        assert(message.attributes.commands, "Expect message.attributes.commands")
-                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
-                        let commands = message.attributes.commands
-                        
-                        let command1 = commands[1]
-                        assert.equal(command1.type, 'message')
-                        assert(command1.message, "Expect command.message exist")
-                        let msg = command1.message
-                        assert(msg.text, "Expect msg.text exist")
-                        assert.equal(msg.text, 'Ask a question to Cohere', `Expect msg.text to be 'Ask a question to Cohere' but got: ${msg.text} `)
-                        
-                        //check buttons 
-                        assert(msg.attributes, "Expect msg.attribues exist")
-                        assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
-                        assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
-                        assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
-                        
-                        let button1 = msg.attributes.attachment.buttons[5]
-                        assert.strictEqual(button1.value, model, `Expect button1 to have "${model}" as text`)
-                        assert(button1.action)
-
-                        chatClient1.sendMessage(
-                            model,
-                            'text',
-                            recipient_id,
-                            "Test support group",
-                            user1.fullname,
-                            {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
-                            null, // no metadata
-                            'group',
-                            (err, msg) => {
-                                if (err) {
-                                    console.error("Error send:", err);
-                                }
-                                if (LOG_STATUS) {
-                                    console.log("Message Sent ok:", msg);
-                                }
-
-                                assert.equal(msg.text, model, `Message sent from user expected to be "${message_text}"`)
-                                generatePrompt = true 
-                            }
-                        );
-
-                        // resolve();
-                        
-                    } else if( generatePrompt &&
-                        message &&  message.sender_fullname === "Ai Prompt Chatbot"
-                    ){
-                        assert(message.attributes, "Expect message.attributes exist")
-                        assert(message.attributes.intentName);
-                        assert.equal(message.attributes.intentName, 'ai_reply')
-                        assert(message.attributes.commands, "Expect message.attributes.commands")
-                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
-                        let commands = message.attributes.commands
-                        
-                        let command1 = commands[1]
-                        assert.equal(command1.type, 'message')
-                        assert(command1.message, "Expect command.message exist")
-                        let msg = command1.message
-                        assert(msg.text, "Expect msg.text exist")
-                        resolve();
-                    }
-                    else {
-                        // console.log("Message not computed:", message.text);
-                    }
-
-                };
-
-                //add handler to list
-                handlerId = chatClient1.onMessageAdded(messageHandler);
-
-                if (LOG_STATUS) {
-                    console.log("Sending test message...");
-                }
-                let recipient_id = group_id + '_14';
                 // let recipient_fullname = group_name;
                 triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
                     if (err) {
@@ -3002,161 +2692,6 @@ describe('CHATBOT: Ai prompt action', async () => {
             })
         }).timeout(6000);
 
-        it('llama3-70b-8192 (~1s)', () => {
-            return new Promise(async (resolve, reject)=> {
-                let buttonGetIsPressed = false;
-                let generatePrompt = false;
-
-                const messageHandler = async (message, topic) => {
-                    const message_text = 'Groq'
-                    const model = 'llama3-70b-8192'
-                    if(message.recipient !== recipient_id){
-                        // reject();
-                        return;
-                    }
-                    if (LOG_STATUS) {
-                        console.log(">(1) Incoming message [sender:" + message.sender_fullname + "]: ", message);
-                    }
-                    if (
-                        message &&
-                        message.attributes.intentName ===  "welcome" &&
-                        message.sender_fullname === "Ai Prompt Chatbot"
-                    ) {
-                        if (LOG_STATUS) {
-                            console.log("> Incoming message from 'welcome' intent ok.");
-                        }
-                        
-                        assert(message.attributes, "Expect message.attributes exist")
-                        assert(message.attributes.commands, "Expect message.attributes.commands")
-                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
-                        let commands = message.attributes.commands
-                        let command = commands[1]
-                        assert.equal(command.type, 'message')
-                        assert(command.message, "Expect command.message exist")
-                        let msg = command.message
-                        assert(msg.text, "Expect msg.text exist")
-                        assert.equal(msg.text, 'Hi, which LLM would you like to try?', `Expect msg.text to be 'Hi, which LLM would you like to try?' but got: ${msg.text} `)
-
-                        //check buttons 
-                        assert(msg.attributes, "Expect msg.attribues exist")
-                        assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
-                        assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
-                        assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
-                        
-                        let button1 = msg.attributes.attachment.buttons[2]
-                        assert.strictEqual(button1.value, message_text, 'Expect button1 to have "Groq" as text')
-                        assert(button1.action)
-                        
-                        chatClient1.sendMessage(
-                            message_text,
-                            'text',
-                            recipient_id,
-                            "Test support group",
-                            user1.fullname,
-                            {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
-                            null, // no metadata
-                            'group',
-                            (err, msg) => {
-                                if (err) {
-                                    console.error("Error send:", err);
-                                }
-                                if (LOG_STATUS) {
-                                    console.log("Message Sent ok:", msg);
-                                }
-                                assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
-                                buttonGetIsPressed = true
-                            }
-                        );
-                                        
-                    } else if( buttonGetIsPressed && !generatePrompt &&
-                        message &&  message.sender_fullname === "Ai Prompt Chatbot"
-                    ){
-                        
-                        assert(message.attributes, "Expect message.attributes exist")
-                        assert(message.attributes.commands, "Expect message.attributes.commands")
-                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
-                        let commands = message.attributes.commands
-                        
-                        let command1 = commands[1]
-                        assert.equal(command1.type, 'message')
-                        assert(command1.message, "Expect command.message exist")
-                        let msg = command1.message
-                        assert(msg.text, "Expect msg.text exist")
-                        assert.equal(msg.text, 'Ask a question to Groq', `Expect msg.text to be 'Ask a question to Groq' but got: ${msg.text} `)
-                        
-                        //check buttons 
-                        assert(msg.attributes, "Expect msg.attribues exist")
-                        assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
-                        assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
-                        assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
-                        
-                        let button1 = msg.attributes.attachment.buttons[2]
-                        assert.strictEqual(button1.value, model, `Expect button1 to have "${model}" as text`)
-                        assert(button1.action)
-
-                        chatClient1.sendMessage(
-                            model,
-                            'text',
-                            recipient_id,
-                            "Test support group",
-                            user1.fullname,
-                            {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
-                            null, // no metadata
-                            'group',
-                            (err, msg) => {
-                                if (err) {
-                                    console.error("Error send:", err);
-                                }
-                                if (LOG_STATUS) {
-                                    console.log("Message Sent ok:", msg);
-                                }
-
-                                assert.equal(msg.text, model, `Message sent from user expected to be "${message_text}"`)
-                                generatePrompt = true 
-                            }
-                        );
-
-                        // resolve();
-                        
-                    } else if( generatePrompt &&
-                        message &&  message.sender_fullname === "Ai Prompt Chatbot"
-                    ){
-                        assert(message.attributes, "Expect message.attributes exist")
-                        assert(message.attributes.intentName);
-                        assert.equal(message.attributes.intentName, 'ai_reply')
-                        assert(message.attributes.commands, "Expect message.attributes.commands")
-                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
-                        let commands = message.attributes.commands
-                        
-                        let command1 = commands[1]
-                        assert.equal(command1.type, 'message')
-                        assert(command1.message, "Expect command.message exist")
-                        let msg = command1.message
-                        assert(msg.text, "Expect msg.text exist")
-                        resolve();
-                    }
-                    else {
-                        // console.log("Message not computed:", message.text);
-                    }
-
-                };
-
-                //add handler to list
-                handlerId = chatClient1.onMessageAdded(messageHandler);
-
-                if (LOG_STATUS) {
-                    console.log("Sending test message...");
-                }
-                let recipient_id = group_id + '_17';
-                // let recipient_fullname = group_name;
-                triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
-                    if (err) {
-                        console.error("An error occurred while triggering echo bot conversation:", err);
-                    }
-                });
-            })
-        }).timeout(6000);
-
         it('deepseek-r1-distill-llama-70b (~1s)', () => {
             return new Promise(async (resolve, reject)=> {
                 let buttonGetIsPressed = false;
@@ -3245,7 +2780,7 @@ describe('CHATBOT: Ai prompt action', async () => {
                         assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
                         assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
                         
-                        let button1 = msg.attributes.attachment.buttons[3]
+                        let button1 = msg.attributes.attachment.buttons[2]
                         assert.strictEqual(button1.value, model, `Expect button1 to have "${model}" as text`)
                         assert(button1.action)
 
@@ -3267,7 +2802,7 @@ describe('CHATBOT: Ai prompt action', async () => {
                                 }
 
                                 assert.equal(msg.text, model, `Message sent from user expected to be "${message_text}"`)
-                                generatePrompt = true 
+                                generatePrompt = true
                             }
                         );
 
@@ -3400,7 +2935,7 @@ describe('CHATBOT: Ai prompt action', async () => {
                         assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
                         assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
                         
-                        let button1 = msg.attributes.attachment.buttons[4]
+                        let button1 = msg.attributes.attachment.buttons[3]
                         assert.strictEqual(button1.value, model, `Expect button1 to have "${model}" as text`)
                         assert(button1.action)
 
@@ -3555,7 +3090,7 @@ describe('CHATBOT: Ai prompt action', async () => {
                         assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
                         assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
                         
-                        let button1 = msg.attributes.attachment.buttons[5]
+                        let button1 = msg.attributes.attachment.buttons[4]
                         assert.strictEqual(button1.value, model, `Expect button1 to have "${model}" as text`)
                         assert(button1.action)
 
@@ -3710,7 +3245,7 @@ describe('CHATBOT: Ai prompt action', async () => {
                         assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
                         assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
                         
-                        let button1 = msg.attributes.attachment.buttons[6]
+                        let button1 = msg.attributes.attachment.buttons[5]
                         assert.strictEqual(button1.value, model, `Expect button1 to have "${model}" as text`)
                         assert(button1.action)
 
@@ -3865,7 +3400,7 @@ describe('CHATBOT: Ai prompt action', async () => {
                         assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
                         assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
                         
-                        let button1 = msg.attributes.attachment.buttons[7]
+                        let button1 = msg.attributes.attachment.buttons[6]
                         assert.strictEqual(button1.value, model, `Expect button1 to have "${model}" as text`)
                         assert(button1.action)
 
@@ -4020,7 +3555,7 @@ describe('CHATBOT: Ai prompt action', async () => {
                         assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
                         assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
                         
-                        let button1 = msg.attributes.attachment.buttons[8]
+                        let button1 = msg.attributes.attachment.buttons[7]
                         assert.strictEqual(button1.value, model, `Expect button1 to have "${model}" as text`)
                         assert(button1.action)
 
@@ -4175,7 +3710,7 @@ describe('CHATBOT: Ai prompt action', async () => {
                         assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
                         assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
                         
-                        let button1 = msg.attributes.attachment.buttons[9]
+                        let button1 = msg.attributes.attachment.buttons[8]
                         assert.strictEqual(button1.value, model, `Expect button1 to have "${model}" as text`)
                         assert(button1.action)
 
@@ -4330,7 +3865,7 @@ describe('CHATBOT: Ai prompt action', async () => {
                         assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
                         assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
                         
-                        let button1 = msg.attributes.attachment.buttons[10]
+                        let button1 = msg.attributes.attachment.buttons[9]
                         assert.strictEqual(button1.value, model, `Expect button1 to have "${model}" as text`)
                         assert(button1.action)
 
@@ -4397,6 +3932,1486 @@ describe('CHATBOT: Ai prompt action', async () => {
             })
         }).timeout(6000);
 
+    });
+
+    describe('Deepseek', function() {
+        integration_id = null;
+        before(() => {
+            return new Promise(async(resolve, reject)=> {
+                const tdClientTest = new TiledeskClientTest({
+                    APIURL: API_ENDPOINT,
+                    PROJECT_ID: TILEDESK_PROJECT_ID,
+                    TOKEN: USER_ADMIN_TOKEN
+                });
+                
+                const integration = await tdClientTest.integration.addIntegration("deepseek", { apikey: process.env.DEEPSEEK_KEY, organization: 'test-deepseek' }).catch((err) => { 
+                    console.error(err); 
+                    reject(err);
+                })
+                assert(integration)
+                assert(integration._id)
+                assert(integration.name)
+                assert.equal(integration.name, 'deepseek')
+                assert(integration.value)
+                assert(integration.value.apikey)
+                assert(integration.value.organization)
+                assert.equal(integration.value.apikey, process.env.DEEPSEEK_KEY)
+                assert.equal(integration.value.organization, 'test-deepseek')
+                integration_id = integration._id
+                
+                resolve();
+            })
+        });
+
+        after(async function () {
+            const tdClientTest = new TiledeskClientTest({
+                APIURL: API_ENDPOINT,
+                PROJECT_ID: TILEDESK_PROJECT_ID,
+                TOKEN: USER_ADMIN_TOKEN
+            });
+            const integration_result = await tdClientTest.integration.deleteIntegration(integration_id).catch((err) => { 
+                console.error(err); 
+                throw err;
+            })
+            assert(integration_result)
+            assert(integration_result.success===true)
+        });
+
+        it('deepseek-chat (~1s)', () => {
+            return new Promise(async (resolve, reject)=> {
+                let buttonGetIsPressed = false;
+                let generatePrompt = false;
+
+                const messageHandler = async (message, topic) => {
+                    const message_text = 'Deepseek'
+                    const model = 'deepseek-chat'
+                    if(message.recipient !== recipient_id){
+                        // reject();
+                        return;
+                    }
+                    if (LOG_STATUS) {
+                        console.log(">(1) Incoming message [sender:" + message.sender_fullname + "]: ", message);
+                    }
+                    if (
+                        message &&
+                        message.attributes.intentName ===  "welcome" &&
+                        message.sender_fullname === "Ai Prompt Chatbot"
+                    ) {
+                        if (LOG_STATUS) {
+                            console.log("> Incoming message from 'welcome' intent ok.");
+                        }
+                        
+                        assert(message.attributes, "Expect message.attributes exist")
+                        assert(message.attributes.commands, "Expect message.attributes.commands")
+                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                        let commands = message.attributes.commands
+                        let command = commands[1]
+                        assert.equal(command.type, 'message')
+                        assert(command.message, "Expect command.message exist")
+                        let msg = command.message
+                        assert(msg.text, "Expect msg.text exist")
+                        assert.equal(msg.text, 'Hi, which LLM would you like to try?', `Expect msg.text to be 'Hi, which LLM would you like to try?' but got: ${msg.text} `)
+
+                        //check buttons 
+                        assert(msg.attributes, "Expect msg.attribues exist")
+                        assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
+                        assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
+                        assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
+                        
+                        let button1 = msg.attributes.attachment.buttons[5]
+                        assert.strictEqual(button1.value, message_text, 'Expect button1 to have "Deepseek" as text')
+                        assert(button1.action)
+                        
+                        chatClient1.sendMessage(
+                            message_text,
+                            'text',
+                            recipient_id,
+                            "Test support group",
+                            user1.fullname,
+                            {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
+                            null, // no metadata
+                            'group',
+                            (err, msg) => {
+                                if (err) {
+                                    console.error("Error send:", err);
+                                }
+                                if (LOG_STATUS) {
+                                    console.log("Message Sent ok:", msg);
+                                }
+                                assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
+                                buttonGetIsPressed = true
+                            }
+                        );
+                                        
+                    } else if( buttonGetIsPressed && !generatePrompt &&
+                        message &&  message.sender_fullname === "Ai Prompt Chatbot"
+                    ){
+                        
+                        assert(message.attributes, "Expect message.attributes exist")
+                        assert(message.attributes.commands, "Expect message.attributes.commands")
+                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                        let commands = message.attributes.commands
+                        
+                        let command1 = commands[1]
+                        assert.equal(command1.type, 'message')
+                        assert(command1.message, "Expect command.message exist")
+                        let msg = command1.message
+                        assert(msg.text, "Expect msg.text exist")
+                        assert.equal(msg.text, `Ask a question to ${message_text}`, `Expect msg.text to be 'Ask a question to ${message_text}' but got: ${msg.text} `)
+                        
+                        //check buttons 
+                        assert(msg.attributes, "Expect msg.attribues exist")
+                        assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
+                        assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
+                        assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
+                        
+                        let button1 = msg.attributes.attachment.buttons[0]
+                        assert.strictEqual(button1.value, model, `Expect button1 to have "${model}" as text`)
+                        assert(button1.action)
+
+                        chatClient1.sendMessage(
+                            model,
+                            'text',
+                            recipient_id,
+                            "Test support group",
+                            user1.fullname,
+                            {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
+                            null, // no metadata
+                            'group',
+                            (err, msg) => {
+                                if (err) {
+                                    console.error("Error send:", err);
+                                }
+                                if (LOG_STATUS) {
+                                    console.log("Message Sent ok:", msg);
+                                }
+
+                                assert.equal(msg.text, model, `Message sent from user expected to be "${message_text}"`)
+                                generatePrompt = true 
+                            }
+                        );
+
+                        // resolve();
+                        
+                    } else if( generatePrompt &&
+                        message &&  message.sender_fullname === "Ai Prompt Chatbot"
+                    ){
+                        assert(message.attributes, "Expect message.attributes exist")
+                        assert(message.attributes.intentName);
+                        assert.equal(message.attributes.intentName, 'ai_reply')
+                        assert(message.attributes.commands, "Expect message.attributes.commands")
+                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                        let commands = message.attributes.commands
+                        
+                        let command1 = commands[1]
+                        assert.equal(command1.type, 'message')
+                        assert(command1.message, "Expect command.message exist")
+                        let msg = command1.message
+                        assert(msg.text, "Expect msg.text exist")
+                        resolve();
+                    }
+                    else {
+                        // console.log("Message not computed:", message.text);
+                    }
+
+                };
+
+                //add handler to list
+                handlerId = chatClient1.onMessageAdded(messageHandler);
+
+                if (LOG_STATUS) {
+                    console.log("Sending test message...");
+                }
+                let recipient_id = group_id + '_26';
+                // let recipient_fullname = group_name;
+                triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
+                    if (err) {
+                        console.error("An error occurred while triggering echo bot conversation:", err);
+                    }
+                });
+            })
+        }).timeout(6000);
+    });
+
+    describe('Openai', function() {
+        integration_id = null;
+        before(() => {
+            return new Promise(async(resolve, reject)=> {
+                const tdClientTest = new TiledeskClientTest({
+                    APIURL: API_ENDPOINT,
+                    PROJECT_ID: TILEDESK_PROJECT_ID,
+                    TOKEN: USER_ADMIN_TOKEN
+                });
+                
+                const integration = await tdClientTest.integration.addIntegration("openai", { apikey: process.env.GPT_KEY, organization: 'test-openai' }).catch((err) => { 
+                    console.error(err); 
+                    reject(err);
+                })
+                assert(integration)
+                assert(integration._id)
+                assert(integration.name)
+                assert.equal(integration.name, 'openai')
+                assert(integration.value)
+                assert(integration.value.apikey)
+                assert(integration.value.organization)
+                assert.equal(integration.value.apikey, process.env.GPT_KEY)
+                assert.equal(integration.value.organization, 'test-openai')
+                integration_id = integration._id
+                resolve();
+            })
+        });
+
+        after(async function () {
+            const tdClientTest = new TiledeskClientTest({
+                APIURL: API_ENDPOINT,
+                PROJECT_ID: TILEDESK_PROJECT_ID,
+                TOKEN: USER_ADMIN_TOKEN
+            });
+            const integration_result = await tdClientTest.integration.deleteIntegration(integration_id).catch((err) => { 
+                console.error(err); 
+                throw err;
+            })
+            assert(integration_result)
+            assert(integration_result.success===true)
+        });
+
+        it('gpt-3.5-turbo (~1s)', () => {
+            return new Promise(async (resolve, reject)=> {
+                let buttonGetIsPressed = false;
+                let generatePrompt = false;
+
+                const messageHandler = async (message, topic) => {
+                    const message_text = 'Openai'
+                    const model = 'gpt-3.5-turbo'
+                    if(message.recipient !== recipient_id){
+                        // reject();
+                        return;
+                    }
+                    if (LOG_STATUS) {
+                        console.log(">(1) Incoming message [sender:" + message.sender_fullname + "]: ", message);
+                    }
+                    if (
+                        message &&
+                        message.attributes.intentName ===  "welcome" &&
+                        message.sender_fullname === "Ai Prompt Chatbot"
+                    ) {
+                        if (LOG_STATUS) {
+                            console.log("> Incoming message from 'welcome' intent ok.");
+                        }
+                        
+                        assert(message.attributes, "Expect message.attributes exist")
+                        assert(message.attributes.commands, "Expect message.attributes.commands")
+                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                        let commands = message.attributes.commands
+                        let command = commands[1]
+                        assert.equal(command.type, 'message')
+                        assert(command.message, "Expect command.message exist")
+                        let msg = command.message
+                        assert(msg.text, "Expect msg.text exist")
+                        assert.equal(msg.text, 'Hi, which LLM would you like to try?', `Expect msg.text to be 'Hi, which LLM would you like to try?' but got: ${msg.text} `)
+
+                        //check buttons 
+                        assert(msg.attributes, "Expect msg.attribues exist")
+                        assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
+                        assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
+                        assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
+                        
+                        let button1 = msg.attributes.attachment.buttons[6]
+                        assert.strictEqual(button1.value, message_text, `Expect button1 to have "${message_text} as text`)
+                        assert(button1.action)
+                        
+                        chatClient1.sendMessage(
+                            message_text,
+                            'text',
+                            recipient_id,
+                            "Test support group",
+                            user1.fullname,
+                            {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
+                            null, // no metadata
+                            'group',
+                            (err, msg) => {
+                                if (err) {
+                                    console.error("Error send:", err);
+                                }
+                                if (LOG_STATUS) {
+                                    console.log("Message Sent ok:", msg);
+                                }
+                                assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
+                                buttonGetIsPressed = true
+                            }
+                        );
+                                        
+                    } else if( buttonGetIsPressed && !generatePrompt &&
+                        message &&  message.sender_fullname === "Ai Prompt Chatbot"
+                    ){
+                        
+                        assert(message.attributes, "Expect message.attributes exist")
+                        assert(message.attributes.commands, "Expect message.attributes.commands")
+                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                        let commands = message.attributes.commands
+                        
+                        let command1 = commands[1]
+                        assert.equal(command1.type, 'message')
+                        assert(command1.message, "Expect command.message exist")
+                        let msg = command1.message
+                        assert(msg.text, "Expect msg.text exist")
+                        assert.equal(msg.text, `Ask a question to ${message_text}`, `Expect msg.text to be 'Ask a question to ${message_text}' but got: ${msg.text} `)
+                        
+                        //check buttons 
+                        assert(msg.attributes, "Expect msg.attribues exist")
+                        assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
+                        assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
+                        assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
+                        
+                        let button1 = msg.attributes.attachment.buttons[0]
+                        assert.strictEqual(button1.value, model, `Expect button1 to have "${model}" as text`)
+                        assert(button1.action)
+
+                        chatClient1.sendMessage(
+                            model,
+                            'text',
+                            recipient_id,
+                            "Test support group",
+                            user1.fullname,
+                            {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
+                            null, // no metadata
+                            'group',
+                            (err, msg) => {
+                                if (err) {
+                                    console.error("Error send:", err);
+                                }
+                                if (LOG_STATUS) {
+                                    console.log("Message Sent ok:", msg);
+                                }
+
+                                assert.equal(msg.text, model, `Message sent from user expected to be "${message_text}"`)
+                                generatePrompt = true 
+                            }
+                        );
+
+                        // resolve();
+                        
+                    } else if( generatePrompt &&
+                        message &&  message.sender_fullname === "Ai Prompt Chatbot"
+                    ){
+                        assert(message.attributes, "Expect message.attributes exist")
+                        assert(message.attributes.intentName);
+                        assert.equal(message.attributes.intentName, 'ai_reply')
+                        assert(message.attributes.commands, "Expect message.attributes.commands")
+                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                        let commands = message.attributes.commands
+                        
+                        let command1 = commands[1]
+                        assert.equal(command1.type, 'message')
+                        assert(command1.message, "Expect command.message exist")
+                        let msg = command1.message
+                        assert(msg.text, "Expect msg.text exist")
+                        resolve();
+                    }
+                    else {
+                        // console.log("Message not computed:", message.text);
+                    }
+
+                };
+
+                //add handler to list
+                handlerId = chatClient1.onMessageAdded(messageHandler);
+
+                if (LOG_STATUS) {
+                    console.log("Sending test message...");
+                }
+                let recipient_id = group_id + '_27';
+                // let recipient_fullname = group_name;
+                triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
+                    if (err) {
+                        console.error("An error occurred while triggering echo bot conversation:", err);
+                    }
+                });
+            })
+        }).timeout(6000);
+
+        it('gpt-4-turbo-preview (~1s)', () => {
+            return new Promise(async (resolve, reject)=> {
+                let buttonGetIsPressed = false;
+                let generatePrompt = false;
+
+                const messageHandler = async (message, topic) => {
+                    const message_text = 'Openai'
+                    const model = 'gpt-4-turbo-preview'
+                    if(message.recipient !== recipient_id){
+                        // reject();
+                        return;
+                    }
+                    if (LOG_STATUS) {
+                        console.log(">(1) Incoming message [sender:" + message.sender_fullname + "]: ", message);
+                    }
+                    if (
+                        message &&
+                        message.attributes.intentName ===  "welcome" &&
+                        message.sender_fullname === "Ai Prompt Chatbot"
+                    ) {
+                        if (LOG_STATUS) {
+                            console.log("> Incoming message from 'welcome' intent ok.");
+                        }
+                        
+                        assert(message.attributes, "Expect message.attributes exist")
+                        assert(message.attributes.commands, "Expect message.attributes.commands")
+                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                        let commands = message.attributes.commands
+                        let command = commands[1]
+                        assert.equal(command.type, 'message')
+                        assert(command.message, "Expect command.message exist")
+                        let msg = command.message
+                        assert(msg.text, "Expect msg.text exist")
+                        assert.equal(msg.text, 'Hi, which LLM would you like to try?', `Expect msg.text to be 'Hi, which LLM would you like to try?' but got: ${msg.text} `)
+
+                        //check buttons 
+                        assert(msg.attributes, "Expect msg.attribues exist")
+                        assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
+                        assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
+                        assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
+                        
+                        let button1 = msg.attributes.attachment.buttons[6]
+                        assert.strictEqual(button1.value, message_text, `Expect button1 to have "${message_text} as text`)
+                        assert(button1.action)
+                        
+                        chatClient1.sendMessage(
+                            message_text,
+                            'text',
+                            recipient_id,
+                            "Test support group",
+                            user1.fullname,
+                            {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
+                            null, // no metadata
+                            'group',
+                            (err, msg) => {
+                                if (err) {
+                                    console.error("Error send:", err);
+                                }
+                                if (LOG_STATUS) {
+                                    console.log("Message Sent ok:", msg);
+                                }
+                                assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
+                                buttonGetIsPressed = true
+                            }
+                        );
+                                        
+                    } else if( buttonGetIsPressed && !generatePrompt &&
+                        message &&  message.sender_fullname === "Ai Prompt Chatbot"
+                    ){
+                        
+                        assert(message.attributes, "Expect message.attributes exist")
+                        assert(message.attributes.commands, "Expect message.attributes.commands")
+                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                        let commands = message.attributes.commands
+                        
+                        let command1 = commands[1]
+                        assert.equal(command1.type, 'message')
+                        assert(command1.message, "Expect command.message exist")
+                        let msg = command1.message
+                        assert(msg.text, "Expect msg.text exist")
+                        assert.equal(msg.text, `Ask a question to ${message_text}`, `Expect msg.text to be 'Ask a question to ${message_text}' but got: ${msg.text} `)
+                        
+                        //check buttons 
+                        assert(msg.attributes, "Expect msg.attribues exist")
+                        assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
+                        assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
+                        assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
+                        
+                        let button1 = msg.attributes.attachment.buttons[1]
+                        assert.strictEqual(button1.value, model, `Expect button1 to have "${model}" as text`)
+                        assert(button1.action)
+
+                        chatClient1.sendMessage(
+                            model,
+                            'text',
+                            recipient_id,
+                            "Test support group",
+                            user1.fullname,
+                            {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
+                            null, // no metadata
+                            'group',
+                            (err, msg) => {
+                                if (err) {
+                                    console.error("Error send:", err);
+                                }
+                                if (LOG_STATUS) {
+                                    console.log("Message Sent ok:", msg);
+                                }
+
+                                assert.equal(msg.text, model, `Message sent from user expected to be "${message_text}"`)
+                                generatePrompt = true 
+                            }
+                        );
+
+                        // resolve();
+                        
+                    } else if( generatePrompt &&
+                        message &&  message.sender_fullname === "Ai Prompt Chatbot"
+                    ){
+                        assert(message.attributes, "Expect message.attributes exist")
+                        assert(message.attributes.intentName);
+                        assert.equal(message.attributes.intentName, 'ai_reply')
+                        assert(message.attributes.commands, "Expect message.attributes.commands")
+                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                        let commands = message.attributes.commands
+                        let command1 = commands[1]
+                        assert.equal(command1.type, 'message')
+                        assert(command1.message, "Expect command.message exist")
+                        let msg = command1.message
+                        assert(msg.text, "Expect msg.text exist")
+                        resolve();
+                    }
+                    else {
+                        // console.log("Message not computed:", message.text);
+                    }
+
+                };
+
+                //add handler to list
+                handlerId = chatClient1.onMessageAdded(messageHandler);
+
+                if (LOG_STATUS) {
+                    console.log("Sending test message...");
+                }
+                let recipient_id = group_id + '_28';
+                // let recipient_fullname = group_name;
+                triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
+                    if (err) {
+                        console.error("An error occurred while triggering echo bot conversation:", err);
+                    }
+                });
+            })
+        }).timeout(6000);
+
+        it('gpt-4 (~1s)', () => {
+            return new Promise(async (resolve, reject)=> {
+                let buttonGetIsPressed = false;
+                let generatePrompt = false;
+
+                const messageHandler = async (message, topic) => {
+                    const message_text = 'Openai'
+                    const model = 'gpt-4'
+                    if(message.recipient !== recipient_id){
+                        // reject();
+                        return;
+                    }
+                    if (LOG_STATUS) {
+                        console.log(">(1) Incoming message [sender:" + message.sender_fullname + "]: ", message);
+                    }
+                    if (
+                        message &&
+                        message.attributes.intentName ===  "welcome" &&
+                        message.sender_fullname === "Ai Prompt Chatbot"
+                    ) {
+                        if (LOG_STATUS) {
+                            console.log("> Incoming message from 'welcome' intent ok.");
+                        }
+                        
+                        assert(message.attributes, "Expect message.attributes exist")
+                        assert(message.attributes.commands, "Expect message.attributes.commands")
+                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                        let commands = message.attributes.commands
+                        let command = commands[1]
+                        assert.equal(command.type, 'message')
+                        assert(command.message, "Expect command.message exist")
+                        let msg = command.message
+                        assert(msg.text, "Expect msg.text exist")
+                        assert.equal(msg.text, 'Hi, which LLM would you like to try?', `Expect msg.text to be 'Hi, which LLM would you like to try?' but got: ${msg.text} `)
+
+                        //check buttons 
+                        assert(msg.attributes, "Expect msg.attribues exist")
+                        assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
+                        assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
+                        assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
+                        
+                        let button1 = msg.attributes.attachment.buttons[6]
+                        assert.strictEqual(button1.value, message_text, `Expect button1 to have "${message_text} as text`)
+                        assert(button1.action)
+                        
+                        chatClient1.sendMessage(
+                            message_text,
+                            'text',
+                            recipient_id,
+                            "Test support group",
+                            user1.fullname,
+                            {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
+                            null, // no metadata
+                            'group',
+                            (err, msg) => {
+                                if (err) {
+                                    console.error("Error send:", err);
+                                }
+                                if (LOG_STATUS) {
+                                    console.log("Message Sent ok:", msg);
+                                }
+                                assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
+                                buttonGetIsPressed = true
+                            }
+                        );
+                                        
+                    } else if( buttonGetIsPressed && !generatePrompt &&
+                        message &&  message.sender_fullname === "Ai Prompt Chatbot"
+                    ){
+                        
+                        assert(message.attributes, "Expect message.attributes exist")
+                        assert(message.attributes.commands, "Expect message.attributes.commands")
+                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                        let commands = message.attributes.commands
+                        
+                        let command1 = commands[1]
+                        assert.equal(command1.type, 'message')
+                        assert(command1.message, "Expect command.message exist")
+                        let msg = command1.message
+                        assert(msg.text, "Expect msg.text exist")
+                        assert.equal(msg.text, `Ask a question to ${message_text}`, `Expect msg.text to be 'Ask a question to ${message_text}' but got: ${msg.text} `)
+                        
+                        //check buttons 
+                        assert(msg.attributes, "Expect msg.attribues exist")
+                        assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
+                        assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
+                        assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
+                        
+                        let button1 = msg.attributes.attachment.buttons[2]
+                        assert.strictEqual(button1.value, model, `Expect button1 to have "${model}" as text`)
+                        assert(button1.action)
+
+                        chatClient1.sendMessage(
+                            model,
+                            'text',
+                            recipient_id,
+                            "Test support group",
+                            user1.fullname,
+                            {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
+                            null, // no metadata
+                            'group',
+                            (err, msg) => {
+                                if (err) {
+                                    console.error("Error send:", err);
+                                }
+                                if (LOG_STATUS) {
+                                    console.log("Message Sent ok:", msg);
+                                }
+
+                                assert.equal(msg.text, model, `Message sent from user expected to be "${message_text}"`)
+                                generatePrompt = true 
+                            }
+                        );
+
+                        // resolve();
+                        
+                    } else if( generatePrompt &&
+                        message &&  message.sender_fullname === "Ai Prompt Chatbot"
+                    ){
+                        assert(message.attributes, "Expect message.attributes exist")
+                        assert(message.attributes.intentName);
+                        assert.equal(message.attributes.intentName, 'ai_reply')
+                        assert(message.attributes.commands, "Expect message.attributes.commands")
+                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                        let commands = message.attributes.commands
+                        
+                        let command1 = commands[1]
+                        assert.equal(command1.type, 'message')
+                        assert(command1.message, "Expect command.message exist")
+                        let msg = command1.message
+                        assert(msg.text, "Expect msg.text exist")
+                        resolve();
+                    }
+                    else {
+                        // console.log("Message not computed:", message.text);
+                    }
+
+                };
+
+                //add handler to list
+                handlerId = chatClient1.onMessageAdded(messageHandler);
+
+                if (LOG_STATUS) {
+                    console.log("Sending test message...");
+                }
+                let recipient_id = group_id + '_29';
+                // let recipient_fullname = group_name;
+                triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
+                    if (err) {
+                        console.error("An error occurred while triggering echo bot conversation:", err);
+                    }
+                });
+            })
+        }).timeout(6000);
+
+        it('gpt-4o-mini (~1s)', () => {
+            return new Promise(async (resolve, reject)=> {
+                let buttonGetIsPressed = false;
+                let generatePrompt = false;
+
+                const messageHandler = async (message, topic) => {
+                    const message_text = 'Openai'
+                    const model = 'gpt-4o-mini'
+                    if(message.recipient !== recipient_id){
+                        // reject();
+                        return;
+                    }
+                    if (LOG_STATUS) {
+                        console.log(">(1) Incoming message [sender:" + message.sender_fullname + "]: ", message);
+                    }
+                    if (
+                        message &&
+                        message.attributes.intentName ===  "welcome" &&
+                        message.sender_fullname === "Ai Prompt Chatbot"
+                    ) {
+                        if (LOG_STATUS) {
+                            console.log("> Incoming message from 'welcome' intent ok.");
+                        }
+                        
+                        assert(message.attributes, "Expect message.attributes exist")
+                        assert(message.attributes.commands, "Expect message.attributes.commands")
+                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                        let commands = message.attributes.commands
+                        let command = commands[1]
+                        assert.equal(command.type, 'message')
+                        assert(command.message, "Expect command.message exist")
+                        let msg = command.message
+                        assert(msg.text, "Expect msg.text exist")
+                        assert.equal(msg.text, 'Hi, which LLM would you like to try?', `Expect msg.text to be 'Hi, which LLM would you like to try?' but got: ${msg.text} `)
+
+                        //check buttons 
+                        assert(msg.attributes, "Expect msg.attribues exist")
+                        assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
+                        assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
+                        assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
+                        
+                        let button1 = msg.attributes.attachment.buttons[6]
+                        assert.strictEqual(button1.value, message_text, `Expect button1 to have "${message_text} as text`)
+                        assert(button1.action)
+                        
+                        chatClient1.sendMessage(
+                            message_text,
+                            'text',
+                            recipient_id,
+                            "Test support group",
+                            user1.fullname,
+                            {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
+                            null, // no metadata
+                            'group',
+                            (err, msg) => {
+                                if (err) {
+                                    console.error("Error send:", err);
+                                }
+                                if (LOG_STATUS) {
+                                    console.log("Message Sent ok:", msg);
+                                }
+                                assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
+                                buttonGetIsPressed = true
+                            }
+                        );
+                                        
+                    } else if( buttonGetIsPressed && !generatePrompt &&
+                        message &&  message.sender_fullname === "Ai Prompt Chatbot"
+                    ){
+                        
+                        assert(message.attributes, "Expect message.attributes exist")
+                        assert(message.attributes.commands, "Expect message.attributes.commands")
+                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                        let commands = message.attributes.commands
+                        
+                        let command1 = commands[1]
+                        assert.equal(command1.type, 'message')
+                        assert(command1.message, "Expect command.message exist")
+                        let msg = command1.message
+                        assert(msg.text, "Expect msg.text exist")
+                        assert.equal(msg.text, `Ask a question to ${message_text}`, `Expect msg.text to be 'Ask a question to ${message_text}' but got: ${msg.text} `)
+                        
+                        //check buttons 
+                        assert(msg.attributes, "Expect msg.attribues exist")
+                        assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
+                        assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
+                        assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
+                        
+                        let button1 = msg.attributes.attachment.buttons[3]
+                        assert.strictEqual(button1.value, model, `Expect button1 to have "${model}" as text`)
+                        assert(button1.action)
+
+                        chatClient1.sendMessage(
+                            model,
+                            'text',
+                            recipient_id,
+                            "Test support group",
+                            user1.fullname,
+                            {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
+                            null, // no metadata
+                            'group',
+                            (err, msg) => {
+                                if (err) {
+                                    console.error("Error send:", err);
+                                }
+                                if (LOG_STATUS) {
+                                    console.log("Message Sent ok:", msg);
+                                }
+
+                                assert.equal(msg.text, model, `Message sent from user expected to be "${message_text}"`)
+                                generatePrompt = true 
+                            }
+                        );
+
+                        // resolve();
+                        
+                    } else if( generatePrompt &&
+                        message &&  message.sender_fullname === "Ai Prompt Chatbot"
+                    ){
+                        assert(message.attributes, "Expect message.attributes exist")
+                        assert(message.attributes.intentName);
+                        assert.equal(message.attributes.intentName, 'ai_reply')
+                        assert(message.attributes.commands, "Expect message.attributes.commands")
+                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                        let commands = message.attributes.commands
+                        
+                        let command1 = commands[1]
+                        assert.equal(command1.type, 'message')
+                        assert(command1.message, "Expect command.message exist")
+                        let msg = command1.message
+                        assert(msg.text, "Expect msg.text exist")
+                        resolve();
+                    }
+                    else {
+                        // console.log("Message not computed:", message.text);
+                    }
+
+                };
+
+                //add handler to list
+                handlerId = chatClient1.onMessageAdded(messageHandler);
+
+                if (LOG_STATUS) {
+                    console.log("Sending test message...");
+                }
+                let recipient_id = group_id + '_30';
+                // let recipient_fullname = group_name;
+                triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
+                    if (err) {
+                        console.error("An error occurred while triggering echo bot conversation:", err);
+                    }
+                });
+            })
+        }).timeout(6000);
+
+        it('gpt-4o (~1s)', () => {
+            return new Promise(async (resolve, reject)=> {
+                let buttonGetIsPressed = false;
+                let generatePrompt = false;
+
+                const messageHandler = async (message, topic) => {
+                    const message_text = 'Openai'
+                    const model = 'gpt-4o'
+                    if(message.recipient !== recipient_id){
+                        // reject();
+                        return;
+                    }
+                    if (LOG_STATUS) {
+                        console.log(">(1) Incoming message [sender:" + message.sender_fullname + "]: ", message);
+                    }
+                    if (
+                        message &&
+                        message.attributes.intentName ===  "welcome" &&
+                        message.sender_fullname === "Ai Prompt Chatbot"
+                    ) {
+                        if (LOG_STATUS) {
+                            console.log("> Incoming message from 'welcome' intent ok.");
+                        }
+                        
+                        assert(message.attributes, "Expect message.attributes exist")
+                        assert(message.attributes.commands, "Expect message.attributes.commands")
+                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                        let commands = message.attributes.commands
+                        let command = commands[1]
+                        assert.equal(command.type, 'message')
+                        assert(command.message, "Expect command.message exist")
+                        let msg = command.message
+                        assert(msg.text, "Expect msg.text exist")
+                        assert.equal(msg.text, 'Hi, which LLM would you like to try?', `Expect msg.text to be 'Hi, which LLM would you like to try?' but got: ${msg.text} `)
+
+                        //check buttons 
+                        assert(msg.attributes, "Expect msg.attribues exist")
+                        assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
+                        assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
+                        assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
+                        
+                        let button1 = msg.attributes.attachment.buttons[6]
+                        assert.strictEqual(button1.value, message_text, `Expect button1 to have "${message_text} as text`)
+                        assert(button1.action)
+                        
+                        chatClient1.sendMessage(
+                            message_text,
+                            'text',
+                            recipient_id,
+                            "Test support group",
+                            user1.fullname,
+                            {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
+                            null, // no metadata
+                            'group',
+                            (err, msg) => {
+                                if (err) {
+                                    console.error("Error send:", err);
+                                }
+                                if (LOG_STATUS) {
+                                    console.log("Message Sent ok:", msg);
+                                }
+                                assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
+                                buttonGetIsPressed = true
+                            }
+                        );
+                                        
+                    } else if( buttonGetIsPressed && !generatePrompt &&
+                        message &&  message.sender_fullname === "Ai Prompt Chatbot"
+                    ){
+                        
+                        assert(message.attributes, "Expect message.attributes exist")
+                        assert(message.attributes.commands, "Expect message.attributes.commands")
+                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                        let commands = message.attributes.commands
+                        
+                        let command1 = commands[1]
+                        assert.equal(command1.type, 'message')
+                        assert(command1.message, "Expect command.message exist")
+                        let msg = command1.message
+                        assert(msg.text, "Expect msg.text exist")
+                        assert.equal(msg.text, `Ask a question to ${message_text}`, `Expect msg.text to be 'Ask a question to ${message_text}' but got: ${msg.text} `)
+                        
+                        //check buttons 
+                        assert(msg.attributes, "Expect msg.attribues exist")
+                        assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
+                        assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
+                        assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
+                        
+                        let button1 = msg.attributes.attachment.buttons[4]
+                        assert.strictEqual(button1.value, model, `Expect button1 to have "${model}" as text`)
+                        assert(button1.action)
+
+                        chatClient1.sendMessage(
+                            model,
+                            'text',
+                            recipient_id,
+                            "Test support group",
+                            user1.fullname,
+                            {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
+                            null, // no metadata
+                            'group',
+                            (err, msg) => {
+                                if (err) {
+                                    console.error("Error send:", err);
+                                }
+                                if (LOG_STATUS) {
+                                    console.log("Message Sent ok:", msg);
+                                }
+
+                                assert.equal(msg.text, model, `Message sent from user expected to be "${message_text}"`)
+                                generatePrompt = true 
+                            }
+                        );
+
+                        // resolve();
+                        
+                    } else if( generatePrompt &&
+                        message &&  message.sender_fullname === "Ai Prompt Chatbot"
+                    ){
+                        assert(message.attributes, "Expect message.attributes exist")
+                        assert(message.attributes.intentName);
+                        assert.equal(message.attributes.intentName, 'ai_reply')
+                        assert(message.attributes.commands, "Expect message.attributes.commands")
+                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                        let commands = message.attributes.commands
+                        
+                        let command1 = commands[1]
+                        assert.equal(command1.type, 'message')
+                        assert(command1.message, "Expect command.message exist")
+                        let msg = command1.message
+                        assert(msg.text, "Expect msg.text exist")
+                        resolve();
+                    }
+                    else {
+                        // console.log("Message not computed:", message.text);
+                    }
+
+                };
+
+                //add handler to list
+                handlerId = chatClient1.onMessageAdded(messageHandler);
+
+                if (LOG_STATUS) {
+                    console.log("Sending test message...");
+                }
+                let recipient_id = group_id + '_31';
+                // let recipient_fullname = group_name;
+                triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
+                    if (err) {
+                        console.error("An error occurred while triggering echo bot conversation:", err);
+                    }
+                });
+            })
+        }).timeout(6000);
+
+        it('gpt-5-nano (~1s)', () => {
+            return new Promise(async (resolve, reject)=> {
+                let buttonGetIsPressed = false;
+                let generatePrompt = false;
+
+                const messageHandler = async (message, topic) => {
+                    const message_text = 'Openai'
+                    const model = 'gpt-5-nano'
+                    if(message.recipient !== recipient_id){
+                        // reject();
+                        return;
+                    }
+                    if (LOG_STATUS) {
+                        console.log(">(1) Incoming message [sender:" + message.sender_fullname + "]: ", message);
+                    }
+                    if (
+                        message &&
+                        message.attributes.intentName ===  "welcome" &&
+                        message.sender_fullname === "Ai Prompt Chatbot"
+                    ) {
+                        if (LOG_STATUS) {
+                            console.log("> Incoming message from 'welcome' intent ok.");
+                        }
+                        
+                        assert(message.attributes, "Expect message.attributes exist")
+                        assert(message.attributes.commands, "Expect message.attributes.commands")
+                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                        let commands = message.attributes.commands
+                        let command = commands[1]
+                        assert.equal(command.type, 'message')
+                        assert(command.message, "Expect command.message exist")
+                        let msg = command.message
+                        assert(msg.text, "Expect msg.text exist")
+                        assert.equal(msg.text, 'Hi, which LLM would you like to try?', `Expect msg.text to be 'Hi, which LLM would you like to try?' but got: ${msg.text} `)
+
+                        //check buttons 
+                        assert(msg.attributes, "Expect msg.attribues exist")
+                        assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
+                        assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
+                        assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
+                        
+                        let button1 = msg.attributes.attachment.buttons[6]
+                        assert.strictEqual(button1.value, message_text, `Expect button1 to have "${message_text} as text`)
+                        assert(button1.action)
+                        
+                        chatClient1.sendMessage(
+                            message_text,
+                            'text',
+                            recipient_id,
+                            "Test support group",
+                            user1.fullname,
+                            {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
+                            null, // no metadata
+                            'group',
+                            (err, msg) => {
+                                if (err) {
+                                    console.error("Error send:", err);
+                                }
+                                if (LOG_STATUS) {
+                                    console.log("Message Sent ok:", msg);
+                                }
+                                assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
+                                buttonGetIsPressed = true
+                            }
+                        );
+                                        
+                    } else if( buttonGetIsPressed && !generatePrompt &&
+                        message &&  message.sender_fullname === "Ai Prompt Chatbot"
+                    ){
+                        
+                        assert(message.attributes, "Expect message.attributes exist")
+                        assert(message.attributes.commands, "Expect message.attributes.commands")
+                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                        let commands = message.attributes.commands
+                        
+                        let command1 = commands[1]
+                        assert.equal(command1.type, 'message')
+                        assert(command1.message, "Expect command.message exist")
+                        let msg = command1.message
+                        assert(msg.text, "Expect msg.text exist")
+                        assert.equal(msg.text, `Ask a question to ${message_text}`, `Expect msg.text to be 'Ask a question to ${message_text}' but got: ${msg.text} `)
+                        
+                        //check buttons 
+                        assert(msg.attributes, "Expect msg.attribues exist")
+                        assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
+                        assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
+                        assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
+                        
+                        let button1 = msg.attributes.attachment.buttons[5]
+                        assert.strictEqual(button1.value, model, `Expect button1 to have "${model}" as text`)
+                        assert(button1.action)
+
+                        chatClient1.sendMessage(
+                            model,
+                            'text',
+                            recipient_id,
+                            "Test support group",
+                            user1.fullname,
+                            {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
+                            null, // no metadata
+                            'group',
+                            (err, msg) => {
+                                if (err) {
+                                    console.error("Error send:", err);
+                                }
+                                if (LOG_STATUS) {
+                                    console.log("Message Sent ok:", msg);
+                                }
+
+                                assert.equal(msg.text, model, `Message sent from user expected to be "${message_text}"`)
+                                generatePrompt = true 
+                            }
+                        );
+
+                        // resolve();
+                        
+                    } else if( generatePrompt &&
+                        message &&  message.sender_fullname === "Ai Prompt Chatbot"
+                    ){
+                        assert(message.attributes, "Expect message.attributes exist")
+                        assert(message.attributes.intentName);
+                        assert.equal(message.attributes.intentName, 'ai_reply')
+                        assert(message.attributes.commands, "Expect message.attributes.commands")
+                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                        let commands = message.attributes.commands
+                        let command1 = commands[1]
+                        assert.equal(command1.type, 'message')
+                        assert(command1.message, "Expect command.message exist")
+                        let msg = command1.message
+                        assert(msg.text, "Expect msg.text exist")
+                        resolve();
+                    }
+                    else {
+                        // console.log("Message not computed:", message.text);
+                    }
+
+                };
+
+                //add handler to list
+                handlerId = chatClient1.onMessageAdded(messageHandler);
+
+                if (LOG_STATUS) {
+                    console.log("Sending test message...");
+                }
+                let recipient_id = group_id + '_32';
+                // let recipient_fullname = group_name;
+                triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
+                    if (err) {
+                        console.error("An error occurred while triggering echo bot conversation:", err);
+                    }
+                });
+            })
+        }).timeout(8000);
+
+        it('gpt-5-mini (~1s)', () => {
+            return new Promise(async (resolve, reject)=> {
+                let buttonGetIsPressed = false;
+                let generatePrompt = false;
+
+                const messageHandler = async (message, topic) => {
+                    const message_text = 'Openai'
+                    const model = 'gpt-5-mini'
+                    if(message.recipient !== recipient_id){
+                        // reject();
+                        return;
+                    }
+                    if (LOG_STATUS) {
+                        console.log(">(1) Incoming message [sender:" + message.sender_fullname + "]: ", message);
+                    }
+                    if (
+                        message &&
+                        message.attributes.intentName ===  "welcome" &&
+                        message.sender_fullname === "Ai Prompt Chatbot"
+                    ) {
+                        if (LOG_STATUS) {
+                            console.log("> Incoming message from 'welcome' intent ok.");
+                        }
+                        
+                        assert(message.attributes, "Expect message.attributes exist")
+                        assert(message.attributes.commands, "Expect message.attributes.commands")
+                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                        let commands = message.attributes.commands
+                        let command = commands[1]
+                        assert.equal(command.type, 'message')
+                        assert(command.message, "Expect command.message exist")
+                        let msg = command.message
+                        assert(msg.text, "Expect msg.text exist")
+                        assert.equal(msg.text, 'Hi, which LLM would you like to try?', `Expect msg.text to be 'Hi, which LLM would you like to try?' but got: ${msg.text} `)
+
+                        //check buttons 
+                        assert(msg.attributes, "Expect msg.attribues exist")
+                        assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
+                        assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
+                        assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
+                        
+                        let button1 = msg.attributes.attachment.buttons[6]
+                        assert.strictEqual(button1.value, message_text, `Expect button1 to have "${message_text} as text`)
+                        assert(button1.action)
+                        
+                        chatClient1.sendMessage(
+                            message_text,
+                            'text',
+                            recipient_id,
+                            "Test support group",
+                            user1.fullname,
+                            {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
+                            null, // no metadata
+                            'group',
+                            (err, msg) => {
+                                if (err) {
+                                    console.error("Error send:", err);
+                                }
+                                if (LOG_STATUS) {
+                                    console.log("Message Sent ok:", msg);
+                                }
+                                assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
+                                buttonGetIsPressed = true
+                            }
+                        );
+                                        
+                    } else if( buttonGetIsPressed && !generatePrompt &&
+                        message &&  message.sender_fullname === "Ai Prompt Chatbot"
+                    ){
+                        
+                        assert(message.attributes, "Expect message.attributes exist")
+                        assert(message.attributes.commands, "Expect message.attributes.commands")
+                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                        let commands = message.attributes.commands
+                        
+                        let command1 = commands[1]
+                        assert.equal(command1.type, 'message')
+                        assert(command1.message, "Expect command.message exist")
+                        let msg = command1.message
+                        assert(msg.text, "Expect msg.text exist")
+                        assert.equal(msg.text, `Ask a question to ${message_text}`, `Expect msg.text to be 'Ask a question to ${message_text}' but got: ${msg.text} `)
+                        
+                        //check buttons 
+                        assert(msg.attributes, "Expect msg.attribues exist")
+                        assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
+                        assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
+                        assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
+                        
+                        let button1 = msg.attributes.attachment.buttons[6]
+                        assert.strictEqual(button1.value, model, `Expect button1 to have "${model}" as text`)
+                        assert(button1.action)
+
+                        chatClient1.sendMessage(
+                            model,
+                            'text',
+                            recipient_id,
+                            "Test support group",
+                            user1.fullname,
+                            {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
+                            null, // no metadata
+                            'group',
+                            (err, msg) => {
+                                if (err) {
+                                    console.error("Error send:", err);
+                                }
+                                if (LOG_STATUS) {
+                                    console.log("Message Sent ok:", msg);
+                                }
+
+                                assert.equal(msg.text, model, `Message sent from user expected to be "${message_text}"`)
+                                generatePrompt = true 
+                            }
+                        );
+
+                        // resolve();
+                        
+                    } else if( generatePrompt &&
+                        message &&  message.sender_fullname === "Ai Prompt Chatbot"
+                    ){
+                        assert(message.attributes, "Expect message.attributes exist")
+                        assert(message.attributes.intentName);
+                        assert.equal(message.attributes.intentName, 'ai_reply')
+                        assert(message.attributes.commands, "Expect message.attributes.commands")
+                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                        let commands = message.attributes.commands
+                        
+                        let command1 = commands[1]
+                        assert.equal(command1.type, 'message')
+                        assert(command1.message, "Expect command.message exist")
+                        let msg = command1.message
+                        assert(msg.text, "Expect msg.text exist")
+                        resolve();
+                    }
+                    else {
+                        // console.log("Message not computed:", message.text);
+                    }
+
+                };
+
+                //add handler to list
+                handlerId = chatClient1.onMessageAdded(messageHandler);
+
+                if (LOG_STATUS) {
+                    console.log("Sending test message...");
+                }
+                let recipient_id = group_id + '_33';
+                // let recipient_fullname = group_name;
+                triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
+                    if (err) {
+                        console.error("An error occurred while triggering echo bot conversation:", err);
+                    }
+                });
+            })
+        }).timeout(8000);
+
+        it('gpt-5 (~1s)', () => {
+            return new Promise(async (resolve, reject)=> {
+                let buttonGetIsPressed = false;
+                let generatePrompt = false;
+
+                const messageHandler = async (message, topic) => {
+                    const message_text = 'Openai'
+                    const model = 'gpt-5'
+                    if(message.recipient !== recipient_id){
+                        // reject();
+                        return;
+                    }
+                    if (LOG_STATUS) {
+                        console.log(">(1) Incoming message [sender:" + message.sender_fullname + "]: ", message);
+                    }
+                    if (
+                        message &&
+                        message.attributes.intentName ===  "welcome" &&
+                        message.sender_fullname === "Ai Prompt Chatbot"
+                    ) {
+                        if (LOG_STATUS) {
+                            console.log("> Incoming message from 'welcome' intent ok.");
+                        }
+                        
+                        assert(message.attributes, "Expect message.attributes exist")
+                        assert(message.attributes.commands, "Expect message.attributes.commands")
+                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                        let commands = message.attributes.commands
+                        let command = commands[1]
+                        assert.equal(command.type, 'message')
+                        assert(command.message, "Expect command.message exist")
+                        let msg = command.message
+                        assert(msg.text, "Expect msg.text exist")
+                        assert.equal(msg.text, 'Hi, which LLM would you like to try?', `Expect msg.text to be 'Hi, which LLM would you like to try?' but got: ${msg.text} `)
+
+                        //check buttons 
+                        assert(msg.attributes, "Expect msg.attribues exist")
+                        assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
+                        assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
+                        assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
+                        
+                        let button1 = msg.attributes.attachment.buttons[6]
+                        assert.strictEqual(button1.value, message_text, `Expect button1 to have "${message_text} as text`)
+                        assert(button1.action)
+                        
+                        chatClient1.sendMessage(
+                            message_text,
+                            'text',
+                            recipient_id,
+                            "Test support group",
+                            user1.fullname,
+                            {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
+                            null, // no metadata
+                            'group',
+                            (err, msg) => {
+                                if (err) {
+                                    console.error("Error send:", err);
+                                }
+                                if (LOG_STATUS) {
+                                    console.log("Message Sent ok:", msg);
+                                }
+                                assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
+                                buttonGetIsPressed = true
+                            }
+                        );
+                                        
+                    } else if( buttonGetIsPressed && !generatePrompt &&
+                        message &&  message.sender_fullname === "Ai Prompt Chatbot"
+                    ){
+                        
+                        assert(message.attributes, "Expect message.attributes exist")
+                        assert(message.attributes.commands, "Expect message.attributes.commands")
+                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                        let commands = message.attributes.commands
+                        
+                        let command1 = commands[1]
+                        assert.equal(command1.type, 'message')
+                        assert(command1.message, "Expect command.message exist")
+                        let msg = command1.message
+                        assert(msg.text, "Expect msg.text exist")
+                        assert.equal(msg.text, `Ask a question to ${message_text}`, `Expect msg.text to be 'Ask a question to ${message_text}' but got: ${msg.text} `)
+                        
+                        //check buttons 
+                        assert(msg.attributes, "Expect msg.attribues exist")
+                        assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
+                        assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
+                        assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
+                        
+                        let button1 = msg.attributes.attachment.buttons[7]
+                        assert.strictEqual(button1.value, model, `Expect button1 to have "${model}" as text`)
+                        assert(button1.action)
+
+                        chatClient1.sendMessage(
+                            model,
+                            'text',
+                            recipient_id,
+                            "Test support group",
+                            user1.fullname,
+                            {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
+                            null, // no metadata
+                            'group',
+                            (err, msg) => {
+                                if (err) {
+                                    console.error("Error send:", err);
+                                }
+                                if (LOG_STATUS) {
+                                    console.log("Message Sent ok:", msg);
+                                }
+
+                                assert.equal(msg.text, model, `Message sent from user expected to be "${message_text}"`)
+                                generatePrompt = true 
+                            }
+                        );
+
+                        // resolve();
+                        
+                    } else if( generatePrompt &&
+                        message &&  message.sender_fullname === "Ai Prompt Chatbot"
+                    ){
+                        assert(message.attributes, "Expect message.attributes exist")
+                        assert(message.attributes.intentName);
+                        assert.equal(message.attributes.intentName, 'ai_reply')
+                        assert(message.attributes.commands, "Expect message.attributes.commands")
+                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                        let commands = message.attributes.commands
+                        
+                        let command1 = commands[1]
+                        assert.equal(command1.type, 'message')
+                        assert(command1.message, "Expect command.message exist")
+                        let msg = command1.message
+                        assert(msg.text, "Expect msg.text exist")
+                        resolve();
+                    }
+                    else {
+                        // console.log("Message not computed:", message.text);
+                    }
+
+                };
+
+                //add handler to list
+                handlerId = chatClient1.onMessageAdded(messageHandler);
+
+                if (LOG_STATUS) {
+                    console.log("Sending test message...");
+                }
+                let recipient_id = group_id + '_34';
+                // let recipient_fullname = group_name;
+                triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
+                    if (err) {
+                        console.error("An error occurred while triggering echo bot conversation:", err);
+                    }
+                });
+            })
+        }).timeout(8000);
     });
 
 });
