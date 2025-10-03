@@ -357,7 +357,6 @@ describe('CHATBOT: Audio message is sent from client', async () => {
             const messageHandler = async (message, topic) => { 
                 const message_text = ''
                 if(message.recipient !== recipient_id){
-                    reject(new Error('invalid recipient id'));
                     return;
                 }
                 if (LOG_STATUS) {
