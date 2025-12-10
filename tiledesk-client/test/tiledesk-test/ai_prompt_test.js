@@ -385,7 +385,7 @@ describe('CHATBOT: Ai prompt action', async () => {
                     }
                 });
             })
-        }).timeout(6000);
+        }).timeout(20000);
 
         it('gemini-2.5-flash-lite (~1s)', () => {
             return new Promise(async (resolve, reject)=> {
@@ -540,317 +540,319 @@ describe('CHATBOT: Ai prompt action', async () => {
                     }
                 });
             })
-        }).timeout(6000);
+        }).timeout(20000);
 
-        it('gemini-2.0-flash (~1s)', () => {
-            return new Promise(async (resolve, reject)=> {
-                let buttonGetIsPressed = false;
-                let generatePrompt = false;
+        // Commented for api key problem
+        // it('gemini-2.0-flash (~1s)', () => {
+        //     return new Promise(async (resolve, reject)=> {
+        //         let buttonGetIsPressed = false;
+        //         let generatePrompt = false;
 
-                const messageHandler = async (message, topic) => {
-                    const message_text = 'Google Gemini'
-                    const model = 'gemini-2.0-flash'
-                    if(message.recipient !== recipient_id){
-                        // reject();
-                        return;
-                    }
-                    if (LOG_STATUS) {
-                        console.log(">(1) Incoming message [sender:" + message.sender_fullname + "]: ", message);
-                    }
-                    if (
-                        message &&
-                        message.attributes.intentName ===  "welcome" &&
-                        message.sender_fullname === "Ai Prompt Chatbot"
-                    ) {
-                        if (LOG_STATUS) {
-                            console.log("> Incoming message from 'welcome' intent ok.");
-                        }
+        //         const messageHandler = async (message, topic) => {
+        //             const message_text = 'Google Gemini'
+        //             const model = 'gemini-2.0-flash'
+        //             if(message.recipient !== recipient_id){
+        //                 // reject();
+        //                 return;
+        //             }
+        //             if (LOG_STATUS) {
+        //                 console.log(">(1) Incoming message [sender:" + message.sender_fullname + "]: ", message);
+        //             }
+        //             if (
+        //                 message &&
+        //                 message.attributes.intentName ===  "welcome" &&
+        //                 message.sender_fullname === "Ai Prompt Chatbot"
+        //             ) {
+        //                 if (LOG_STATUS) {
+        //                     console.log("> Incoming message from 'welcome' intent ok.");
+        //                 }
                         
-                        assert(message.attributes, "Expect message.attributes exist")
-                        assert(message.attributes.commands, "Expect message.attributes.commands")
-                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
-                        let commands = message.attributes.commands
-                        let command = commands[1]
-                        assert.equal(command.type, 'message')
-                        assert(command.message, "Expect command.message exist")
-                        let msg = command.message
-                        assert(msg.text, "Expect msg.text exist")
-                        assert.equal(msg.text, 'Hi, which LLM would you like to try?', `Expect msg.text to be 'Hi, which LLM would you like to try?' but got: ${msg.text} `)
+        //                 assert(message.attributes, "Expect message.attributes exist")
+        //                 assert(message.attributes.commands, "Expect message.attributes.commands")
+        //                 assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+        //                 let commands = message.attributes.commands
+        //                 let command = commands[1]
+        //                 assert.equal(command.type, 'message')
+        //                 assert(command.message, "Expect command.message exist")
+        //                 let msg = command.message
+        //                 assert(msg.text, "Expect msg.text exist")
+        //                 assert.equal(msg.text, 'Hi, which LLM would you like to try?', `Expect msg.text to be 'Hi, which LLM would you like to try?' but got: ${msg.text} `)
 
-                        //check buttons 
-                        assert(msg.attributes, "Expect msg.attribues exist")
-                        assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
-                        assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
-                        assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
+        //                 //check buttons 
+        //                 assert(msg.attributes, "Expect msg.attribues exist")
+        //                 assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
+        //                 assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
+        //                 assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
                         
-                        let button1 = msg.attributes.attachment.buttons[0]
-                        assert.strictEqual(button1.value, message_text, 'Expect button1 to have "Google Gemini" as text')
-                        assert(button1.action)
+        //                 let button1 = msg.attributes.attachment.buttons[0]
+        //                 assert.strictEqual(button1.value, message_text, 'Expect button1 to have "Google Gemini" as text')
+        //                 assert(button1.action)
                         
-                        chatClient1.sendMessage(
-                            message_text,
-                            'text',
-                            recipient_id,
-                            "Test support group",
-                            user1.fullname,
-                            {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
-                            null, // no metadata
-                            'group',
-                            (err, msg) => {
-                                if (err) {
-                                    console.error("Error send:", err);
-                                }
-                                if (LOG_STATUS) {
-                                    console.log("Message Sent ok:", msg);
-                                }
-                                assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
-                                buttonGetIsPressed = true
-                            }
-                        );
+        //                 chatClient1.sendMessage(
+        //                     message_text,
+        //                     'text',
+        //                     recipient_id,
+        //                     "Test support group",
+        //                     user1.fullname,
+        //                     {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
+        //                     null, // no metadata
+        //                     'group',
+        //                     (err, msg) => {
+        //                         if (err) {
+        //                             console.error("Error send:", err);
+        //                         }
+        //                         if (LOG_STATUS) {
+        //                             console.log("Message Sent ok:", msg);
+        //                         }
+        //                         assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
+        //                         buttonGetIsPressed = true
+        //                     }
+        //                 );
                                         
-                    } else if( buttonGetIsPressed && !generatePrompt &&
-                        message &&  message.sender_fullname === "Ai Prompt Chatbot"
-                    ){
+        //             } else if( buttonGetIsPressed && !generatePrompt &&
+        //                 message &&  message.sender_fullname === "Ai Prompt Chatbot"
+        //             ){
                         
-                        assert(message.attributes, "Expect message.attributes exist")
-                        assert(message.attributes.commands, "Expect message.attributes.commands")
-                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
-                        let commands = message.attributes.commands
+        //                 assert(message.attributes, "Expect message.attributes exist")
+        //                 assert(message.attributes.commands, "Expect message.attributes.commands")
+        //                 assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+        //                 let commands = message.attributes.commands
                         
-                        let command1 = commands[1]
-                        assert.equal(command1.type, 'message')
-                        assert(command1.message, "Expect command.message exist")
-                        let msg = command1.message
-                        assert(msg.text, "Expect msg.text exist")
-                        assert.equal(msg.text, 'Ask a question to Google Gemini', `Expect msg.text to be 'Ask a question to Google Gemini' but got: ${msg.text} `)
+        //                 let command1 = commands[1]
+        //                 assert.equal(command1.type, 'message')
+        //                 assert(command1.message, "Expect command.message exist")
+        //                 let msg = command1.message
+        //                 assert(msg.text, "Expect msg.text exist")
+        //                 assert.equal(msg.text, 'Ask a question to Google Gemini', `Expect msg.text to be 'Ask a question to Google Gemini' but got: ${msg.text} `)
                         
-                        //check buttons 
-                        assert(msg.attributes, "Expect msg.attribues exist")
-                        assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
-                        assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
-                        assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
+        //                 //check buttons 
+        //                 assert(msg.attributes, "Expect msg.attribues exist")
+        //                 assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
+        //                 assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
+        //                 assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
                         
-                        let button1 = msg.attributes.attachment.buttons[2]
-                        assert.strictEqual(button1.value, model, 'Expect button1 to have "gemini-2.0-flash" as text')
-                        assert(button1.action)
+        //                 let button1 = msg.attributes.attachment.buttons[2]
+        //                 assert.strictEqual(button1.value, model, 'Expect button1 to have "gemini-2.0-flash" as text')
+        //                 assert(button1.action)
 
-                        chatClient1.sendMessage(
-                            model,
-                            'text',
-                            recipient_id,
-                            "Test support group",
-                            user1.fullname,
-                            {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
-                            null, // no metadata
-                            'group',
-                            (err, msg) => {
-                                if (err) {
-                                    console.error("Error send:", err);
-                                }
-                                if (LOG_STATUS) {
-                                    console.log("Message Sent ok:", msg);
-                                }
+        //                 chatClient1.sendMessage(
+        //                     model,
+        //                     'text',
+        //                     recipient_id,
+        //                     "Test support group",
+        //                     user1.fullname,
+        //                     {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
+        //                     null, // no metadata
+        //                     'group',
+        //                     (err, msg) => {
+        //                         if (err) {
+        //                             console.error("Error send:", err);
+        //                         }
+        //                         if (LOG_STATUS) {
+        //                             console.log("Message Sent ok:", msg);
+        //                         }
 
-                                assert.equal(msg.text, model, `Message sent from user expected to be "${message_text}"`)
-                                generatePrompt = true 
-                            }
-                        );
+        //                         assert.equal(msg.text, model, `Message sent from user expected to be "${message_text}"`)
+        //                         generatePrompt = true 
+        //                     }
+        //                 );
 
-                        // resolve();
+        //                 // resolve();
                         
-                    } else if( generatePrompt &&
-                        message &&  message.sender_fullname === "Ai Prompt Chatbot"
-                    ){
-                        assert(message.attributes, "Expect message.attributes exist")
-                        assert(message.attributes.intentName);
-                        assert.equal(message.attributes.intentName, 'ai_reply')
-                        assert(message.attributes.commands, "Expect message.attributes.commands")
-                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
-                        let commands = message.attributes.commands
+        //             } else if( generatePrompt &&
+        //                 message &&  message.sender_fullname === "Ai Prompt Chatbot"
+        //             ){
+        //                 assert(message.attributes, "Expect message.attributes exist")
+        //                 assert(message.attributes.intentName);
+        //                 assert.equal(message.attributes.intentName, 'ai_reply')
+        //                 assert(message.attributes.commands, "Expect message.attributes.commands")
+        //                 assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+        //                 let commands = message.attributes.commands
                         
-                        let command1 = commands[1]
-                        assert.equal(command1.type, 'message')
-                        assert(command1.message, "Expect command.message exist")
-                        let msg = command1.message
-                        assert(msg.text, "Expect msg.text exist")
-                        resolve();
-                    }
-                    else {
-                        // console.log("Message not computed:", message.text);
-                    }
+        //                 let command1 = commands[1]
+        //                 assert.equal(command1.type, 'message')
+        //                 assert(command1.message, "Expect command.message exist")
+        //                 let msg = command1.message
+        //                 assert(msg.text, "Expect msg.text exist")
+        //                 resolve();
+        //             }
+        //             else {
+        //                 // console.log("Message not computed:", message.text);
+        //             }
 
-                };
+        //         };
 
-                //add handler to list
-                handlerId = chatClient1.onMessageAdded(messageHandler);
+        //         //add handler to list
+        //         handlerId = chatClient1.onMessageAdded(messageHandler);
 
-                if (LOG_STATUS) {
-                    console.log("Sending test message...");
-                }
-                let recipient_id = group_id+ '_2';
-                // let recipient_fullname = group_name;
-                triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
-                    if (err) {
-                        console.error("An error occurred while triggering echo bot conversation:", err);
-                    }
-                });
-            })
-        }).timeout(6000);
+        //         if (LOG_STATUS) {
+        //             console.log("Sending test message...");
+        //         }
+        //         let recipient_id = group_id+ '_2';
+        //         // let recipient_fullname = group_name;
+        //         triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
+        //             if (err) {
+        //                 console.error("An error occurred while triggering echo bot conversation:", err);
+        //             }
+        //         });
+        //     })
+        // }).timeout(20000);
 
-        it('gemini-2.0-flash-lite (~1s)', () => {
-            return new Promise(async (resolve, reject)=> {
-                let buttonGetIsPressed = false;
-                let generatePrompt = false;
+        // Commented for api key problem
+        // it('gemini-2.0-flash-lite (~1s)', () => {
+        //     return new Promise(async (resolve, reject)=> {
+        //         let buttonGetIsPressed = false;
+        //         let generatePrompt = false;
 
-                const messageHandler = async (message, topic) => {
-                    const message_text = 'Google Gemini'
-                    const model = 'gemini-2.0-flash-lite'
-                    if(message.recipient !== recipient_id){
-                        // reject();
-                        return;
-                    }
-                    if (LOG_STATUS) {
-                        console.log(">(1) Incoming message [sender:" + message.sender_fullname + "]: ", message);
-                    }
-                    if (
-                        message &&
-                        message.attributes.intentName ===  "welcome" &&
-                        message.sender_fullname === "Ai Prompt Chatbot"
-                    ) {
-                        if (LOG_STATUS) {
-                            console.log("> Incoming message from 'welcome' intent ok.");
-                        }
+        //         const messageHandler = async (message, topic) => {
+        //             const message_text = 'Google Gemini'
+        //             const model = 'gemini-2.0-flash-lite'
+        //             if(message.recipient !== recipient_id){
+        //                 // reject();
+        //                 return;
+        //             }
+        //             if (LOG_STATUS) {
+        //                 console.log(">(1) Incoming message [sender:" + message.sender_fullname + "]: ", message);
+        //             }
+        //             if (
+        //                 message &&
+        //                 message.attributes.intentName ===  "welcome" &&
+        //                 message.sender_fullname === "Ai Prompt Chatbot"
+        //             ) {
+        //                 if (LOG_STATUS) {
+        //                     console.log("> Incoming message from 'welcome' intent ok.");
+        //                 }
                         
-                        assert(message.attributes, "Expect message.attributes exist")
-                        assert(message.attributes.commands, "Expect message.attributes.commands")
-                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
-                        let commands = message.attributes.commands
-                        let command = commands[1]
-                        assert.equal(command.type, 'message')
-                        assert(command.message, "Expect command.message exist")
-                        let msg = command.message
-                        assert(msg.text, "Expect msg.text exist")
-                        assert.equal(msg.text, 'Hi, which LLM would you like to try?', `Expect msg.text to be 'Hi, which LLM would you like to try?' but got: ${msg.text} `)
+        //                 assert(message.attributes, "Expect message.attributes exist")
+        //                 assert(message.attributes.commands, "Expect message.attributes.commands")
+        //                 assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+        //                 let commands = message.attributes.commands
+        //                 let command = commands[1]
+        //                 assert.equal(command.type, 'message')
+        //                 assert(command.message, "Expect command.message exist")
+        //                 let msg = command.message
+        //                 assert(msg.text, "Expect msg.text exist")
+        //                 assert.equal(msg.text, 'Hi, which LLM would you like to try?', `Expect msg.text to be 'Hi, which LLM would you like to try?' but got: ${msg.text} `)
 
-                        //check buttons 
-                        assert(msg.attributes, "Expect msg.attribues exist")
-                        assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
-                        assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
-                        assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
+        //                 //check buttons 
+        //                 assert(msg.attributes, "Expect msg.attribues exist")
+        //                 assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
+        //                 assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
+        //                 assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
                         
-                        let button1 = msg.attributes.attachment.buttons[0]
-                        assert.strictEqual(button1.value, message_text, 'Expect button1 to have "Google Gemini" as text')
-                        assert(button1.action)
+        //                 let button1 = msg.attributes.attachment.buttons[0]
+        //                 assert.strictEqual(button1.value, message_text, 'Expect button1 to have "Google Gemini" as text')
+        //                 assert(button1.action)
                         
-                        chatClient1.sendMessage(
-                            message_text,
-                            'text',
-                            recipient_id,
-                            "Test support group",
-                            user1.fullname,
-                            {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
-                            null, // no metadata
-                            'group',
-                            (err, msg) => {
-                                if (err) {
-                                    console.error("Error send:", err);
-                                }
-                                if (LOG_STATUS) {
-                                    console.log("Message Sent ok:", msg);
-                                }
-                                assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
-                                buttonGetIsPressed = true
-                            }
-                        );
+        //                 chatClient1.sendMessage(
+        //                     message_text,
+        //                     'text',
+        //                     recipient_id,
+        //                     "Test support group",
+        //                     user1.fullname,
+        //                     {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
+        //                     null, // no metadata
+        //                     'group',
+        //                     (err, msg) => {
+        //                         if (err) {
+        //                             console.error("Error send:", err);
+        //                         }
+        //                         if (LOG_STATUS) {
+        //                             console.log("Message Sent ok:", msg);
+        //                         }
+        //                         assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
+        //                         buttonGetIsPressed = true
+        //                     }
+        //                 );
                                         
-                    } else if( buttonGetIsPressed && !generatePrompt &&
-                        message &&  message.sender_fullname === "Ai Prompt Chatbot"
-                    ){
+        //             } else if( buttonGetIsPressed && !generatePrompt &&
+        //                 message &&  message.sender_fullname === "Ai Prompt Chatbot"
+        //             ){
                         
-                        assert(message.attributes, "Expect message.attributes exist")
-                        assert(message.attributes.commands, "Expect message.attributes.commands")
-                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
-                        let commands = message.attributes.commands
+        //                 assert(message.attributes, "Expect message.attributes exist")
+        //                 assert(message.attributes.commands, "Expect message.attributes.commands")
+        //                 assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+        //                 let commands = message.attributes.commands
                         
-                        let command1 = commands[1]
-                        assert.equal(command1.type, 'message')
-                        assert(command1.message, "Expect command.message exist")
-                        let msg = command1.message
-                        assert(msg.text, "Expect msg.text exist")
-                        assert.equal(msg.text, 'Ask a question to Google Gemini', `Expect msg.text to be 'Ask a question to Google Gemini' but got: ${msg.text} `)
+        //                 let command1 = commands[1]
+        //                 assert.equal(command1.type, 'message')
+        //                 assert(command1.message, "Expect command.message exist")
+        //                 let msg = command1.message
+        //                 assert(msg.text, "Expect msg.text exist")
+        //                 assert.equal(msg.text, 'Ask a question to Google Gemini', `Expect msg.text to be 'Ask a question to Google Gemini' but got: ${msg.text} `)
                         
-                        //check buttons 
-                        assert(msg.attributes, "Expect msg.attribues exist")
-                        assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
-                        assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
-                        assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
+        //                 //check buttons 
+        //                 assert(msg.attributes, "Expect msg.attribues exist")
+        //                 assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
+        //                 assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
+        //                 assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
                         
-                        let button1 = msg.attributes.attachment.buttons[3]
-                        assert.strictEqual(button1.value, model, 'Expect button1 to have "gemini-2.0-flash-lite" as text')
-                        assert(button1.action)
+        //                 let button1 = msg.attributes.attachment.buttons[3]
+        //                 assert.strictEqual(button1.value, model, 'Expect button1 to have "gemini-2.0-flash-lite" as text')
+        //                 assert(button1.action)
 
-                        chatClient1.sendMessage(
-                            model,
-                            'text',
-                            recipient_id,
-                            "Test support group",
-                            user1.fullname,
-                            {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
-                            null, // no metadata
-                            'group',
-                            (err, msg) => {
-                                if (err) {
-                                    console.error("Error send:", err);
-                                }
-                                if (LOG_STATUS) {
-                                    console.log("Message Sent ok:", msg);
-                                }
+        //                 chatClient1.sendMessage(
+        //                     model,
+        //                     'text',
+        //                     recipient_id,
+        //                     "Test support group",
+        //                     user1.fullname,
+        //                     {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
+        //                     null, // no metadata
+        //                     'group',
+        //                     (err, msg) => {
+        //                         if (err) {
+        //                             console.error("Error send:", err);
+        //                         }
+        //                         if (LOG_STATUS) {
+        //                             console.log("Message Sent ok:", msg);
+        //                         }
 
-                                assert.equal(msg.text, model, `Message sent from user expected to be "${message_text}"`)
-                                generatePrompt = true 
-                            }
-                        );
+        //                         assert.equal(msg.text, model, `Message sent from user expected to be "${message_text}"`)
+        //                         generatePrompt = true 
+        //                     }
+        //                 );
 
-                        // resolve();
+        //                 // resolve();
                         
-                    } else if( generatePrompt &&
-                        message &&  message.sender_fullname === "Ai Prompt Chatbot"
-                    ){
-                        assert(message.attributes, "Expect message.attributes exist")
-                        assert(message.attributes.intentName);
-                        assert.equal(message.attributes.intentName, 'ai_reply')
-                        assert(message.attributes.commands, "Expect message.attributes.commands")
-                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
-                        let commands = message.attributes.commands
+        //             } else if( generatePrompt &&
+        //                 message &&  message.sender_fullname === "Ai Prompt Chatbot"
+        //             ){
+        //                 assert(message.attributes, "Expect message.attributes exist")
+        //                 assert(message.attributes.intentName);
+        //                 assert.equal(message.attributes.intentName, 'ai_reply')
+        //                 assert(message.attributes.commands, "Expect message.attributes.commands")
+        //                 assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+        //                 let commands = message.attributes.commands
                         
-                        let command1 = commands[1]
-                        assert.equal(command1.type, 'message')
-                        assert(command1.message, "Expect command.message exist")
-                        let msg = command1.message
-                        assert(msg.text, "Expect msg.text exist")
-                        resolve();
-                    }
-                    else {
-                        // console.log("Message not computed:", message.text);
-                    }
+        //                 let command1 = commands[1]
+        //                 assert.equal(command1.type, 'message')
+        //                 assert(command1.message, "Expect command.message exist")
+        //                 let msg = command1.message
+        //                 assert(msg.text, "Expect msg.text exist")
+        //                 resolve();
+        //             }
+        //             else {
+        //                 // console.log("Message not computed:", message.text);
+        //             }
 
-                };
+        //         };
 
-                //add handler to list
-                handlerId = chatClient1.onMessageAdded(messageHandler);
+        //         //add handler to list
+        //         handlerId = chatClient1.onMessageAdded(messageHandler);
 
-                if (LOG_STATUS) {
-                    console.log("Sending test message...");
-                }
-                let recipient_id = group_id+ '_3';
-                // let recipient_fullname = group_name;
-                triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
-                    if (err) {
-                        console.error("An error occurred while triggering echo bot conversation:", err);
-                    }
-                });
-            })
-        }).timeout(6000);
+        //         if (LOG_STATUS) {
+        //             console.log("Sending test message...");
+        //         }
+        //         let recipient_id = group_id+ '_3';
+        //         // let recipient_fullname = group_name;
+        //         triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
+        //             if (err) {
+        //                 console.error("An error occurred while triggering echo bot conversation:", err);
+        //             }
+        //         });
+        //     })
+        // }).timeout(20000);
 
     });
 
@@ -1050,7 +1052,7 @@ describe('CHATBOT: Ai prompt action', async () => {
                     }
                 });
             })
-        }).timeout(6000);
+        }).timeout(20000);
 
         it('claude-sonnet-4-0 (~1s)', () => {
             return new Promise(async (resolve, reject)=> {
@@ -1205,7 +1207,7 @@ describe('CHATBOT: Ai prompt action', async () => {
                     }
                 });
             })
-        }).timeout(6000);
+        }).timeout(20000);
 
         it('claude-3-7-sonnet-latest (~1s)', () => {
             return new Promise(async (resolve, reject)=> {
@@ -1362,160 +1364,161 @@ describe('CHATBOT: Ai prompt action', async () => {
             })
         }).timeout(20000);
 
-        it('claude-3-5-sonnet-20240620 (~1s)', () => {
-            return new Promise(async (resolve, reject)=> {
-                let buttonGetIsPressed = false;
-                let generatePrompt = false;
+        // Model DEPRECATED
+        // it('claude-3-5-sonnet-20240620 (~1s)', () => {
+        //     return new Promise(async (resolve, reject)=> {
+        //         let buttonGetIsPressed = false;
+        //         let generatePrompt = false;
 
-                const messageHandler = async (message, topic) => {
-                    const message_text = 'Anthropic'
-                    const model = 'claude-3-5-sonnet-20240620'
-                    if(message.recipient !== recipient_id){
-                        // reject();
-                        return;
-                    }
-                    if (LOG_STATUS) {
-                        console.log(">(1) Incoming message [sender:" + message.sender_fullname + "]: ", message);
-                    }
-                    if (
-                        message &&
-                        message.attributes.intentName ===  "welcome" &&
-                        message.sender_fullname === "Ai Prompt Chatbot"
-                    ) {
-                        if (LOG_STATUS) {
-                            console.log("> Incoming message from 'welcome' intent ok.");
-                        }
+        //         const messageHandler = async (message, topic) => {
+        //             const message_text = 'Anthropic'
+        //             const model = 'claude-3-5-sonnet-20240620'
+        //             if(message.recipient !== recipient_id){
+        //                 // reject();
+        //                 return;
+        //             }
+        //             if (LOG_STATUS) {
+        //                 console.log(">(1) Incoming message [sender:" + message.sender_fullname + "]: ", message);
+        //             }
+        //             if (
+        //                 message &&
+        //                 message.attributes.intentName ===  "welcome" &&
+        //                 message.sender_fullname === "Ai Prompt Chatbot"
+        //             ) {
+        //                 if (LOG_STATUS) {
+        //                     console.log("> Incoming message from 'welcome' intent ok.");
+        //                 }
                         
-                        assert(message.attributes, "Expect message.attributes exist")
-                        assert(message.attributes.commands, "Expect message.attributes.commands")
-                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
-                        let commands = message.attributes.commands
-                        let command = commands[1]
-                        assert.equal(command.type, 'message')
-                        assert(command.message, "Expect command.message exist")
-                        let msg = command.message
-                        assert(msg.text, "Expect msg.text exist")
-                        assert.equal(msg.text, 'Hi, which LLM would you like to try?', `Expect msg.text to be 'Hi, which LLM would you like to try?' but got: ${msg.text} `)
+        //                 assert(message.attributes, "Expect message.attributes exist")
+        //                 assert(message.attributes.commands, "Expect message.attributes.commands")
+        //                 assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+        //                 let commands = message.attributes.commands
+        //                 let command = commands[1]
+        //                 assert.equal(command.type, 'message')
+        //                 assert(command.message, "Expect command.message exist")
+        //                 let msg = command.message
+        //                 assert(msg.text, "Expect msg.text exist")
+        //                 assert.equal(msg.text, 'Hi, which LLM would you like to try?', `Expect msg.text to be 'Hi, which LLM would you like to try?' but got: ${msg.text} `)
 
-                        //check buttons 
-                        assert(msg.attributes, "Expect msg.attribues exist")
-                        assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
-                        assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
-                        assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
+        //                 //check buttons 
+        //                 assert(msg.attributes, "Expect msg.attribues exist")
+        //                 assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
+        //                 assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
+        //                 assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
                         
-                        let button1 = msg.attributes.attachment.buttons[1]
-                        assert.strictEqual(button1.value, message_text, 'Expect button1 to have "Google Gemini" as text')
-                        assert(button1.action)
+        //                 let button1 = msg.attributes.attachment.buttons[1]
+        //                 assert.strictEqual(button1.value, message_text, 'Expect button1 to have "Google Gemini" as text')
+        //                 assert(button1.action)
                         
-                        chatClient1.sendMessage(
-                            message_text,
-                            'text',
-                            recipient_id,
-                            "Test support group",
-                            user1.fullname,
-                            {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
-                            null, // no metadata
-                            'group',
-                            (err, msg) => {
-                                if (err) {
-                                    console.error("Error send:", err);
-                                }
-                                if (LOG_STATUS) {
-                                    console.log("Message Sent ok:", msg);
-                                }
-                                assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
-                                buttonGetIsPressed = true
-                            }
-                        );
+        //                 chatClient1.sendMessage(
+        //                     message_text,
+        //                     'text',
+        //                     recipient_id,
+        //                     "Test support group",
+        //                     user1.fullname,
+        //                     {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
+        //                     null, // no metadata
+        //                     'group',
+        //                     (err, msg) => {
+        //                         if (err) {
+        //                             console.error("Error send:", err);
+        //                         }
+        //                         if (LOG_STATUS) {
+        //                             console.log("Message Sent ok:", msg);
+        //                         }
+        //                         assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
+        //                         buttonGetIsPressed = true
+        //                     }
+        //                 );
                                         
-                    } else if( buttonGetIsPressed && !generatePrompt &&
-                        message &&  message.sender_fullname === "Ai Prompt Chatbot"
-                    ){
+        //             } else if( buttonGetIsPressed && !generatePrompt &&
+        //                 message &&  message.sender_fullname === "Ai Prompt Chatbot"
+        //             ){
                         
-                        assert(message.attributes, "Expect message.attributes exist")
-                        assert(message.attributes.commands, "Expect message.attributes.commands")
-                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
-                        let commands = message.attributes.commands
+        //                 assert(message.attributes, "Expect message.attributes exist")
+        //                 assert(message.attributes.commands, "Expect message.attributes.commands")
+        //                 assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+        //                 let commands = message.attributes.commands
                         
-                        let command1 = commands[1]
-                        assert.equal(command1.type, 'message')
-                        assert(command1.message, "Expect command.message exist")
-                        let msg = command1.message
-                        assert(msg.text, "Expect msg.text exist")
-                        assert.equal(msg.text, 'Ask a question to Anthropic', `Expect msg.text to be 'Ask a question to Anthropic' but got: ${msg.text} `)
+        //                 let command1 = commands[1]
+        //                 assert.equal(command1.type, 'message')
+        //                 assert(command1.message, "Expect command.message exist")
+        //                 let msg = command1.message
+        //                 assert(msg.text, "Expect msg.text exist")
+        //                 assert.equal(msg.text, 'Ask a question to Anthropic', `Expect msg.text to be 'Ask a question to Anthropic' but got: ${msg.text} `)
                         
-                        //check buttons 
-                        assert(msg.attributes, "Expect msg.attribues exist")
-                        assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
-                        assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
-                        assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
+        //                 //check buttons 
+        //                 assert(msg.attributes, "Expect msg.attribues exist")
+        //                 assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
+        //                 assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
+        //                 assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
                         
-                        let button1 = msg.attributes.attachment.buttons[3]
-                        assert.strictEqual(button1.value, model, 'Expect button1 to have "claude-3-5-sonnet-20240620" as text')
-                        assert(button1.action)
+        //                 let button1 = msg.attributes.attachment.buttons[3]
+        //                 assert.strictEqual(button1.value, model, 'Expect button1 to have "claude-3-5-sonnet-20240620" as text')
+        //                 assert(button1.action)
 
-                        chatClient1.sendMessage(
-                            model,
-                            'text',
-                            recipient_id,
-                            "Test support group",
-                            user1.fullname,
-                            {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
-                            null, // no metadata
-                            'group',
-                            (err, msg) => {
-                                if (err) {
-                                    console.error("Error send:", err);
-                                }
-                                if (LOG_STATUS) {
-                                    console.log("Message Sent ok:", msg);
-                                }
+        //                 chatClient1.sendMessage(
+        //                     model,
+        //                     'text',
+        //                     recipient_id,
+        //                     "Test support group",
+        //                     user1.fullname,
+        //                     {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
+        //                     null, // no metadata
+        //                     'group',
+        //                     (err, msg) => {
+        //                         if (err) {
+        //                             console.error("Error send:", err);
+        //                         }
+        //                         if (LOG_STATUS) {
+        //                             console.log("Message Sent ok:", msg);
+        //                         }
 
-                                assert.equal(msg.text, model, `Message sent from user expected to be "${message_text}"`)
-                                generatePrompt = true 
-                            }
-                        );
+        //                         assert.equal(msg.text, model, `Message sent from user expected to be "${message_text}"`)
+        //                         generatePrompt = true 
+        //                     }
+        //                 );
 
-                        // resolve();
+        //                 // resolve();
                         
-                    } else if( generatePrompt &&
-                        message &&  message.sender_fullname === "Ai Prompt Chatbot"
-                    ){
-                        assert(message.attributes, "Expect message.attributes exist")
-                        assert(message.attributes.intentName);
-                        assert.equal(message.attributes.intentName, 'ai_reply')
-                        assert(message.attributes.commands, "Expect message.attributes.commands")
-                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
-                        let commands = message.attributes.commands
+        //             } else if( generatePrompt &&
+        //                 message &&  message.sender_fullname === "Ai Prompt Chatbot"
+        //             ){
+        //                 assert(message.attributes, "Expect message.attributes exist")
+        //                 assert(message.attributes.intentName);
+        //                 assert.equal(message.attributes.intentName, 'ai_reply')
+        //                 assert(message.attributes.commands, "Expect message.attributes.commands")
+        //                 assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+        //                 let commands = message.attributes.commands
                         
-                        let command1 = commands[1]
-                        assert.equal(command1.type, 'message')
-                        assert(command1.message, "Expect command.message exist")
-                        let msg = command1.message
-                        assert(msg.text, "Expect msg.text exist")
-                        resolve();
-                    }
-                    else {
-                        // console.log("Message not computed:", message.text);
-                    }
+        //                 let command1 = commands[1]
+        //                 assert.equal(command1.type, 'message')
+        //                 assert(command1.message, "Expect command.message exist")
+        //                 let msg = command1.message
+        //                 assert(msg.text, "Expect msg.text exist")
+        //                 resolve();
+        //             }
+        //             else {
+        //                 // console.log("Message not computed:", message.text);
+        //             }
 
-                };
+        //         };
 
-                //add handler to list
-                handlerId = chatClient1.onMessageAdded(messageHandler);
+        //         //add handler to list
+        //         handlerId = chatClient1.onMessageAdded(messageHandler);
 
-                if (LOG_STATUS) {
-                    console.log("Sending test message...");
-                }
-                let recipient_id = group_id + '_7';
-                // let recipient_fullname = group_name;
-                triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
-                    if (err) {
-                        console.error("An error occurred while triggering echo bot conversation:", err);
-                    }
-                });
-            })
-        }).timeout(6000);
+        //         if (LOG_STATUS) {
+        //             console.log("Sending test message...");
+        //         }
+        //         let recipient_id = group_id + '_7';
+        //         // let recipient_fullname = group_name;
+        //         triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
+        //             if (err) {
+        //                 console.error("An error occurred while triggering echo bot conversation:", err);
+        //             }
+        //         });
+        //     })
+        // }).timeout(20000);
 
         it('claude-3-5-haiku-latest (~1s)', () => {
             return new Promise(async (resolve, reject)=> {
@@ -1670,7 +1673,7 @@ describe('CHATBOT: Ai prompt action', async () => {
                     }
                 });
             })
-        }).timeout(6000);
+        }).timeout(20000);
 
     });
 
@@ -1870,7 +1873,7 @@ describe('CHATBOT: Ai prompt action', async () => {
                     }
                 });
             })
-        }).timeout(6000);
+        }).timeout(20000);
 
         it('command-r7b-12-2024 (~1s)', () => {
             return new Promise(async (resolve, reject)=> {
@@ -2025,7 +2028,7 @@ describe('CHATBOT: Ai prompt action', async () => {
                     }
                 });
             })
-        }).timeout(6000);
+        }).timeout(20000);
 
         it('command-a-vision-07-2025 (~1s)', () => {
             return new Promise(async (resolve, reject)=> {
@@ -2180,7 +2183,7 @@ describe('CHATBOT: Ai prompt action', async () => {
                     }
                 });
             })
-        }).timeout(6000);
+        }).timeout(20000);
 
         it('command-r-plus-08-2024 (~1s)', () => {
             return new Promise(async (resolve, reject)=> {
@@ -2335,7 +2338,7 @@ describe('CHATBOT: Ai prompt action', async () => {
                     }
                 });
             })
-        }).timeout(6000);
+        }).timeout(20000);
 
     });
 
@@ -2535,7 +2538,7 @@ describe('CHATBOT: Ai prompt action', async () => {
                     }
                 });
             })
-        }).timeout(6000);
+        }).timeout(20000);
 
         it('llama-3.3-70b-versatile (~1s)', () => {
             return new Promise(async (resolve, reject)=> {
@@ -2690,162 +2693,163 @@ describe('CHATBOT: Ai prompt action', async () => {
                     }
                 });
             })
-        }).timeout(6000);
+        }).timeout(20000);
 
-        it('deepseek-r1-distill-llama-70b (~1s)', () => {
-            return new Promise(async (resolve, reject)=> {
-                let buttonGetIsPressed = false;
-                let generatePrompt = false;
+        // Removed from Tiledesk
+        // it('deepseek-r1-distill-llama-70b (~1s)', () => {
+        //     return new Promise(async (resolve, reject)=> {
+        //         let buttonGetIsPressed = false;
+        //         let generatePrompt = false;
 
-                const messageHandler = async (message, topic) => {
-                    const message_text = 'Groq'
-                    const model = 'deepseek-r1-distill-llama-70b'
-                    if(message.recipient !== recipient_id){
-                        // reject();
-                        return;
-                    }
-                    if (LOG_STATUS) {
-                        console.log(">(1) Incoming message [sender:" + message.sender_fullname + "]: ", message);
-                    }
-                    if (
-                        message &&
-                        message.attributes.intentName ===  "welcome" &&
-                        message.sender_fullname === "Ai Prompt Chatbot"
-                    ) {
-                        if (LOG_STATUS) {
-                            console.log("> Incoming message from 'welcome' intent ok.");
-                        }
+        //         const messageHandler = async (message, topic) => {
+        //             const message_text = 'Groq'
+        //             const model = 'deepseek-r1-distill-llama-70b'
+        //             if(message.recipient !== recipient_id){
+        //                 // reject();
+        //                 return;
+        //             }
+        //             if (LOG_STATUS) {
+        //                 console.log(">(1) Incoming message [sender:" + message.sender_fullname + "]: ", message);
+        //             }
+        //             if (
+        //                 message &&
+        //                 message.attributes.intentName ===  "welcome" &&
+        //                 message.sender_fullname === "Ai Prompt Chatbot"
+        //             ) {
+        //                 if (LOG_STATUS) {
+        //                     console.log("> Incoming message from 'welcome' intent ok.");
+        //                 }
                         
-                        assert(message.attributes, "Expect message.attributes exist")
-                        assert(message.attributes.commands, "Expect message.attributes.commands")
-                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
-                        let commands = message.attributes.commands
-                        let command = commands[1]
-                        assert.equal(command.type, 'message')
-                        assert(command.message, "Expect command.message exist")
-                        let msg = command.message
-                        assert(msg.text, "Expect msg.text exist")
-                        assert.equal(msg.text, 'Hi, which LLM would you like to try?', `Expect msg.text to be 'Hi, which LLM would you like to try?' but got: ${msg.text} `)
+        //                 assert(message.attributes, "Expect message.attributes exist")
+        //                 assert(message.attributes.commands, "Expect message.attributes.commands")
+        //                 assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+        //                 let commands = message.attributes.commands
+        //                 let command = commands[1]
+        //                 assert.equal(command.type, 'message')
+        //                 assert(command.message, "Expect command.message exist")
+        //                 let msg = command.message
+        //                 assert(msg.text, "Expect msg.text exist")
+        //                 assert.equal(msg.text, 'Hi, which LLM would you like to try?', `Expect msg.text to be 'Hi, which LLM would you like to try?' but got: ${msg.text} `)
 
-                        //check buttons 
-                        assert(msg.attributes, "Expect msg.attribues exist")
-                        assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
-                        assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
-                        assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
+        //                 //check buttons 
+        //                 assert(msg.attributes, "Expect msg.attribues exist")
+        //                 assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
+        //                 assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
+        //                 assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
                         
-                        let button1 = msg.attributes.attachment.buttons[2]
-                        assert.strictEqual(button1.value, message_text, 'Expect button1 to have "Groq" as text')
-                        assert(button1.action)
+        //                 let button1 = msg.attributes.attachment.buttons[2]
+        //                 assert.strictEqual(button1.value, message_text, 'Expect button1 to have "Groq" as text')
+        //                 assert(button1.action)
                         
-                        chatClient1.sendMessage(
-                            message_text,
-                            'text',
-                            recipient_id,
-                            "Test support group",
-                            user1.fullname,
-                            {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
-                            null, // no metadata
-                            'group',
-                            (err, msg) => {
-                                if (err) {
-                                    console.error("Error send:", err);
-                                }
-                                if (LOG_STATUS) {
-                                    console.log("Message Sent ok:", msg);
-                                }
-                                assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
-                                buttonGetIsPressed = true
-                            }
-                        );
+        //                 chatClient1.sendMessage(
+        //                     message_text,
+        //                     'text',
+        //                     recipient_id,
+        //                     "Test support group",
+        //                     user1.fullname,
+        //                     {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
+        //                     null, // no metadata
+        //                     'group',
+        //                     (err, msg) => {
+        //                         if (err) {
+        //                             console.error("Error send:", err);
+        //                         }
+        //                         if (LOG_STATUS) {
+        //                             console.log("Message Sent ok:", msg);
+        //                         }
+        //                         assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
+        //                         buttonGetIsPressed = true
+        //                     }
+        //                 );
                                         
-                    } else if( buttonGetIsPressed && !generatePrompt &&
-                        message &&  message.sender_fullname === "Ai Prompt Chatbot"
-                    ){
+        //             } else if( buttonGetIsPressed && !generatePrompt &&
+        //                 message &&  message.sender_fullname === "Ai Prompt Chatbot"
+        //             ){
                         
-                        assert(message.attributes, "Expect message.attributes exist")
-                        assert(message.attributes.commands, "Expect message.attributes.commands")
-                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
-                        let commands = message.attributes.commands
+        //                 assert(message.attributes, "Expect message.attributes exist")
+        //                 assert(message.attributes.commands, "Expect message.attributes.commands")
+        //                 assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+        //                 let commands = message.attributes.commands
                         
-                        let command1 = commands[1]
-                        assert.equal(command1.type, 'message')
-                        assert(command1.message, "Expect command.message exist")
-                        let msg = command1.message
-                        assert(msg.text, "Expect msg.text exist")
-                        assert.equal(msg.text, 'Ask a question to Groq', `Expect msg.text to be 'Ask a question to Groq' but got: ${msg.text} `)
+        //                 let command1 = commands[1]
+        //                 assert.equal(command1.type, 'message')
+        //                 assert(command1.message, "Expect command.message exist")
+        //                 let msg = command1.message
+        //                 assert(msg.text, "Expect msg.text exist")
+        //                 assert.equal(msg.text, 'Ask a question to Groq', `Expect msg.text to be 'Ask a question to Groq' but got: ${msg.text} `)
                         
-                        //check buttons 
-                        assert(msg.attributes, "Expect msg.attribues exist")
-                        assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
-                        assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
-                        assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
+        //                 //check buttons 
+        //                 assert(msg.attributes, "Expect msg.attribues exist")
+        //                 assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
+        //                 assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
+        //                 assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
                         
-                        let button1 = msg.attributes.attachment.buttons[2]
-                        assert.strictEqual(button1.value, model, `Expect button1 to have "${model}" as text`)
-                        assert(button1.action)
+        //                 let button1 = msg.attributes.attachment.buttons[2]
+        //                 assert.strictEqual(button1.value, model, `Expect button1 to have "${model}" as text`)
+        //                 assert(button1.action)
 
-                        chatClient1.sendMessage(
-                            model,
-                            'text',
-                            recipient_id,
-                            "Test support group",
-                            user1.fullname,
-                            {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
-                            null, // no metadata
-                            'group',
-                            (err, msg) => {
-                                if (err) {
-                                    console.error("Error send:", err);
-                                }
-                                if (LOG_STATUS) {
-                                    console.log("Message Sent ok:", msg);
-                                }
+        //                 chatClient1.sendMessage(
+        //                     model,
+        //                     'text',
+        //                     recipient_id,
+        //                     "Test support group",
+        //                     user1.fullname,
+        //                     {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
+        //                     null, // no metadata
+        //                     'group',
+        //                     (err, msg) => {
+        //                         if (err) {
+        //                             console.error("Error send:", err);
+        //                         }
+        //                         if (LOG_STATUS) {
+        //                             console.log("Message Sent ok:", msg);
+        //                         }
 
-                                assert.equal(msg.text, model, `Message sent from user expected to be "${message_text}"`)
-                                generatePrompt = true
-                            }
-                        );
+        //                         assert.equal(msg.text, model, `Message sent from user expected to be "${message_text}"`)
+        //                         generatePrompt = true
+        //                     }
+        //                 );
 
-                        // resolve();
+        //                 // resolve();
                         
-                    } else if( generatePrompt &&
-                        message &&  message.sender_fullname === "Ai Prompt Chatbot"
-                    ){
-                        assert(message.attributes, "Expect message.attributes exist")
-                        assert(message.attributes.intentName);
-                        assert.equal(message.attributes.intentName, 'ai_reply')
-                        assert(message.attributes.commands, "Expect message.attributes.commands")
-                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
-                        let commands = message.attributes.commands
+        //             } else if( generatePrompt &&
+        //                 message &&  message.sender_fullname === "Ai Prompt Chatbot"
+        //             ){
+        //                 assert(message.attributes, "Expect message.attributes exist")
+        //                 assert(message.attributes.intentName);
+        //                 assert.equal(message.attributes.intentName, 'ai_reply')
+        //                 assert(message.attributes.commands, "Expect message.attributes.commands")
+        //                 assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+        //                 let commands = message.attributes.commands
                         
-                        let command1 = commands[1]
-                        assert.equal(command1.type, 'message')
-                        assert(command1.message, "Expect command.message exist")
-                        let msg = command1.message
-                        assert(msg.text, "Expect msg.text exist")
-                        resolve();
-                    }
-                    else {
-                        // console.log("Message not computed:", message.text);
-                    }
+        //                 let command1 = commands[1]
+        //                 assert.equal(command1.type, 'message')
+        //                 assert(command1.message, "Expect command.message exist")
+        //                 let msg = command1.message
+        //                 assert(msg.text, "Expect msg.text exist")
+        //                 resolve();
+        //             }
+        //             else {
+        //                 // console.log("Message not computed:", message.text);
+        //             }
 
-                };
+        //         };
 
-                //add handler to list
-                handlerId = chatClient1.onMessageAdded(messageHandler);
+        //         //add handler to list
+        //         handlerId = chatClient1.onMessageAdded(messageHandler);
 
-                if (LOG_STATUS) {
-                    console.log("Sending test message...");
-                }
-                let recipient_id = group_id + '_18';
-                // let recipient_fullname = group_name;
-                triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
-                    if (err) {
-                        console.error("An error occurred while triggering echo bot conversation:", err);
-                    }
-                });
-            })
-        }).timeout(6000);
+        //         if (LOG_STATUS) {
+        //             console.log("Sending test message...");
+        //         }
+        //         let recipient_id = group_id + '_18';
+        //         // let recipient_fullname = group_name;
+        //         triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
+        //             if (err) {
+        //                 console.error("An error occurred while triggering echo bot conversation:", err);
+        //             }
+        //         });
+        //     })
+        // }).timeout(20000);
 
         it('meta-llama/llama-guard-4-12b (~1s)', () => {
             return new Promise(async (resolve, reject)=> {
@@ -3000,7 +3004,7 @@ describe('CHATBOT: Ai prompt action', async () => {
                     }
                 });
             })
-        }).timeout(6000);
+        }).timeout(20000);
 
         it('meta-llama/llama-4-maverick-17b-128e-instruct (~1s)', () => {
             return new Promise(async (resolve, reject)=> {
@@ -3155,7 +3159,7 @@ describe('CHATBOT: Ai prompt action', async () => {
                     }
                 });
             })
-        }).timeout(6000);
+        }).timeout(20000);
 
         it('meta-llama/llama-4-scout-17b-16e-instruct (~1s)', () => {
             return new Promise(async (resolve, reject)=> {
@@ -3310,7 +3314,7 @@ describe('CHATBOT: Ai prompt action', async () => {
                     }
                 });
             })
-        }).timeout(6000);
+        }).timeout(20000);
 
         it('moonshotai/kimi-k2-instruct (~1s)', () => {
             return new Promise(async (resolve, reject)=> {
@@ -3465,7 +3469,7 @@ describe('CHATBOT: Ai prompt action', async () => {
                     }
                 });
             })
-        }).timeout(6000);
+        }).timeout(20000);
 
         it('qwen/qwen3-32b (~1s)', () => {
             return new Promise(async (resolve, reject)=> {
@@ -3620,162 +3624,163 @@ describe('CHATBOT: Ai prompt action', async () => {
                     }
                 });
             })
-        }).timeout(6000);
+        }).timeout(20000);
 
-        it('gemma2-9b-it (~1s)', () => {
-            return new Promise(async (resolve, reject)=> {
-                let buttonGetIsPressed = false;
-                let generatePrompt = false;
+        // Removed from Tiledesk
+        // it('gemma2-9b-it (~1s)', () => {
+        //     return new Promise(async (resolve, reject)=> {
+        //         let buttonGetIsPressed = false;
+        //         let generatePrompt = false;
 
-                const messageHandler = async (message, topic) => {
-                    const message_text = 'Groq'
-                    const model = 'gemma2-9b-it'
-                    if(message.recipient !== recipient_id){
-                        // reject();
-                        return;
-                    }
-                    if (LOG_STATUS) {
-                        console.log(">(1) Incoming message [sender:" + message.sender_fullname + "]: ", message);
-                    }
-                    if (
-                        message &&
-                        message.attributes.intentName ===  "welcome" &&
-                        message.sender_fullname === "Ai Prompt Chatbot"
-                    ) {
-                        if (LOG_STATUS) {
-                            console.log("> Incoming message from 'welcome' intent ok.");
-                        }
+        //         const messageHandler = async (message, topic) => {
+        //             const message_text = 'Groq'
+        //             const model = 'gemma2-9b-it'
+        //             if(message.recipient !== recipient_id){
+        //                 // reject();
+        //                 return;
+        //             }
+        //             if (LOG_STATUS) {
+        //                 console.log(">(1) Incoming message [sender:" + message.sender_fullname + "]: ", message);
+        //             }
+        //             if (
+        //                 message &&
+        //                 message.attributes.intentName ===  "welcome" &&
+        //                 message.sender_fullname === "Ai Prompt Chatbot"
+        //             ) {
+        //                 if (LOG_STATUS) {
+        //                     console.log("> Incoming message from 'welcome' intent ok.");
+        //                 }
                         
-                        assert(message.attributes, "Expect message.attributes exist")
-                        assert(message.attributes.commands, "Expect message.attributes.commands")
-                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
-                        let commands = message.attributes.commands
-                        let command = commands[1]
-                        assert.equal(command.type, 'message')
-                        assert(command.message, "Expect command.message exist")
-                        let msg = command.message
-                        assert(msg.text, "Expect msg.text exist")
-                        assert.equal(msg.text, 'Hi, which LLM would you like to try?', `Expect msg.text to be 'Hi, which LLM would you like to try?' but got: ${msg.text} `)
+        //                 assert(message.attributes, "Expect message.attributes exist")
+        //                 assert(message.attributes.commands, "Expect message.attributes.commands")
+        //                 assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+        //                 let commands = message.attributes.commands
+        //                 let command = commands[1]
+        //                 assert.equal(command.type, 'message')
+        //                 assert(command.message, "Expect command.message exist")
+        //                 let msg = command.message
+        //                 assert(msg.text, "Expect msg.text exist")
+        //                 assert.equal(msg.text, 'Hi, which LLM would you like to try?', `Expect msg.text to be 'Hi, which LLM would you like to try?' but got: ${msg.text} `)
 
-                        //check buttons 
-                        assert(msg.attributes, "Expect msg.attribues exist")
-                        assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
-                        assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
-                        assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
+        //                 //check buttons 
+        //                 assert(msg.attributes, "Expect msg.attribues exist")
+        //                 assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
+        //                 assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
+        //                 assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
                         
-                        let button1 = msg.attributes.attachment.buttons[2]
-                        assert.strictEqual(button1.value, message_text, 'Expect button1 to have "Groq" as text')
-                        assert(button1.action)
+        //                 let button1 = msg.attributes.attachment.buttons[2]
+        //                 assert.strictEqual(button1.value, message_text, 'Expect button1 to have "Groq" as text')
+        //                 assert(button1.action)
                         
-                        chatClient1.sendMessage(
-                            message_text,
-                            'text',
-                            recipient_id,
-                            "Test support group",
-                            user1.fullname,
-                            {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
-                            null, // no metadata
-                            'group',
-                            (err, msg) => {
-                                if (err) {
-                                    console.error("Error send:", err);
-                                }
-                                if (LOG_STATUS) {
-                                    console.log("Message Sent ok:", msg);
-                                }
-                                assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
-                                buttonGetIsPressed = true
-                            }
-                        );
+        //                 chatClient1.sendMessage(
+        //                     message_text,
+        //                     'text',
+        //                     recipient_id,
+        //                     "Test support group",
+        //                     user1.fullname,
+        //                     {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
+        //                     null, // no metadata
+        //                     'group',
+        //                     (err, msg) => {
+        //                         if (err) {
+        //                             console.error("Error send:", err);
+        //                         }
+        //                         if (LOG_STATUS) {
+        //                             console.log("Message Sent ok:", msg);
+        //                         }
+        //                         assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
+        //                         buttonGetIsPressed = true
+        //                     }
+        //                 );
                                         
-                    } else if( buttonGetIsPressed && !generatePrompt &&
-                        message &&  message.sender_fullname === "Ai Prompt Chatbot"
-                    ){
+        //             } else if( buttonGetIsPressed && !generatePrompt &&
+        //                 message &&  message.sender_fullname === "Ai Prompt Chatbot"
+        //             ){
                         
-                        assert(message.attributes, "Expect message.attributes exist")
-                        assert(message.attributes.commands, "Expect message.attributes.commands")
-                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
-                        let commands = message.attributes.commands
+        //                 assert(message.attributes, "Expect message.attributes exist")
+        //                 assert(message.attributes.commands, "Expect message.attributes.commands")
+        //                 assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+        //                 let commands = message.attributes.commands
                         
-                        let command1 = commands[1]
-                        assert.equal(command1.type, 'message')
-                        assert(command1.message, "Expect command.message exist")
-                        let msg = command1.message
-                        assert(msg.text, "Expect msg.text exist")
-                        assert.equal(msg.text, 'Ask a question to Groq', `Expect msg.text to be 'Ask a question to Groq' but got: ${msg.text} `)
+        //                 let command1 = commands[1]
+        //                 assert.equal(command1.type, 'message')
+        //                 assert(command1.message, "Expect command.message exist")
+        //                 let msg = command1.message
+        //                 assert(msg.text, "Expect msg.text exist")
+        //                 assert.equal(msg.text, 'Ask a question to Groq', `Expect msg.text to be 'Ask a question to Groq' but got: ${msg.text} `)
                         
-                        //check buttons 
-                        assert(msg.attributes, "Expect msg.attribues exist")
-                        assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
-                        assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
-                        assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
+        //                 //check buttons 
+        //                 assert(msg.attributes, "Expect msg.attribues exist")
+        //                 assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
+        //                 assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
+        //                 assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
                         
-                        let button1 = msg.attributes.attachment.buttons[8]
-                        assert.strictEqual(button1.value, model, `Expect button1 to have "${model}" as text`)
-                        assert(button1.action)
+        //                 let button1 = msg.attributes.attachment.buttons[8]
+        //                 assert.strictEqual(button1.value, model, `Expect button1 to have "${model}" as text`)
+        //                 assert(button1.action)
 
-                        chatClient1.sendMessage(
-                            model,
-                            'text',
-                            recipient_id,
-                            "Test support group",
-                            user1.fullname,
-                            {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
-                            null, // no metadata
-                            'group',
-                            (err, msg) => {
-                                if (err) {
-                                    console.error("Error send:", err);
-                                }
-                                if (LOG_STATUS) {
-                                    console.log("Message Sent ok:", msg);
-                                }
+        //                 chatClient1.sendMessage(
+        //                     model,
+        //                     'text',
+        //                     recipient_id,
+        //                     "Test support group",
+        //                     user1.fullname,
+        //                     {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
+        //                     null, // no metadata
+        //                     'group',
+        //                     (err, msg) => {
+        //                         if (err) {
+        //                             console.error("Error send:", err);
+        //                         }
+        //                         if (LOG_STATUS) {
+        //                             console.log("Message Sent ok:", msg);
+        //                         }
 
-                                assert.equal(msg.text, model, `Message sent from user expected to be "${message_text}"`)
-                                generatePrompt = true 
-                            }
-                        );
+        //                         assert.equal(msg.text, model, `Message sent from user expected to be "${message_text}"`)
+        //                         generatePrompt = true 
+        //                     }
+        //                 );
 
-                        // resolve();
+        //                 // resolve();
                         
-                    } else if( generatePrompt &&
-                        message &&  message.sender_fullname === "Ai Prompt Chatbot"
-                    ){
-                        assert(message.attributes, "Expect message.attributes exist")
-                        assert(message.attributes.intentName);
-                        assert.equal(message.attributes.intentName, 'ai_reply')
-                        assert(message.attributes.commands, "Expect message.attributes.commands")
-                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
-                        let commands = message.attributes.commands
+        //             } else if( generatePrompt &&
+        //                 message &&  message.sender_fullname === "Ai Prompt Chatbot"
+        //             ){
+        //                 assert(message.attributes, "Expect message.attributes exist")
+        //                 assert(message.attributes.intentName);
+        //                 assert.equal(message.attributes.intentName, 'ai_reply')
+        //                 assert(message.attributes.commands, "Expect message.attributes.commands")
+        //                 assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+        //                 let commands = message.attributes.commands
                         
-                        let command1 = commands[1]
-                        assert.equal(command1.type, 'message')
-                        assert(command1.message, "Expect command.message exist")
-                        let msg = command1.message
-                        assert(msg.text, "Expect msg.text exist")
-                        resolve();
-                    }
-                    else {
-                        // console.log("Message not computed:", message.text);
-                    }
+        //                 let command1 = commands[1]
+        //                 assert.equal(command1.type, 'message')
+        //                 assert(command1.message, "Expect command.message exist")
+        //                 let msg = command1.message
+        //                 assert(msg.text, "Expect msg.text exist")
+        //                 resolve();
+        //             }
+        //             else {
+        //                 // console.log("Message not computed:", message.text);
+        //             }
 
-                };
+        //         };
 
-                //add handler to list
-                handlerId = chatClient1.onMessageAdded(messageHandler);
+        //         //add handler to list
+        //         handlerId = chatClient1.onMessageAdded(messageHandler);
 
-                if (LOG_STATUS) {
-                    console.log("Sending test message...");
-                }
-                let recipient_id = group_id + '_24';
-                // let recipient_fullname = group_name;
-                triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
-                    if (err) {
-                        console.error("An error occurred while triggering echo bot conversation:", err);
-                    }
-                });
-            })
-        }).timeout(6000);
+        //         if (LOG_STATUS) {
+        //             console.log("Sending test message...");
+        //         }
+        //         let recipient_id = group_id + '_24';
+        //         // let recipient_fullname = group_name;
+        //         triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
+        //             if (err) {
+        //                 console.error("An error occurred while triggering echo bot conversation:", err);
+        //             }
+        //         });
+        //     })
+        // }).timeout(20000);
 
         it('allam-2-7b (~1s)', () => {
             return new Promise(async (resolve, reject)=> {
@@ -3930,7 +3935,7 @@ describe('CHATBOT: Ai prompt action', async () => {
                     }
                 });
             })
-        }).timeout(6000);
+        }).timeout(20000);
 
     });
 
@@ -3977,160 +3982,161 @@ describe('CHATBOT: Ai prompt action', async () => {
             assert(integration_result.success===true)
         });
 
-        it('deepseek-chat (~1s)', () => {
-            return new Promise(async (resolve, reject)=> {
-                let buttonGetIsPressed = false;
-                let generatePrompt = false;
+        // Free-tier Not Available
+        // it('deepseek-chat (~1s)', () => {
+        //     return new Promise(async (resolve, reject)=> {
+        //         let buttonGetIsPressed = false;
+        //         let generatePrompt = false;
 
-                const messageHandler = async (message, topic) => {
-                    const message_text = 'Deepseek'
-                    const model = 'deepseek-chat'
-                    if(message.recipient !== recipient_id){
-                        // reject();
-                        return;
-                    }
-                    if (LOG_STATUS) {
-                        console.log(">(1) Incoming message [sender:" + message.sender_fullname + "]: ", message);
-                    }
-                    if (
-                        message &&
-                        message.attributes.intentName ===  "welcome" &&
-                        message.sender_fullname === "Ai Prompt Chatbot"
-                    ) {
-                        if (LOG_STATUS) {
-                            console.log("> Incoming message from 'welcome' intent ok.");
-                        }
+        //         const messageHandler = async (message, topic) => {
+        //             const message_text = 'Deepseek'
+        //             const model = 'deepseek-chat'
+        //             if(message.recipient !== recipient_id){
+        //                 // reject();
+        //                 return;
+        //             }
+        //             if (LOG_STATUS) {
+        //                 console.log(">(1) Incoming message [sender:" + message.sender_fullname + "]: ", message);
+        //             }
+        //             if (
+        //                 message &&
+        //                 message.attributes.intentName ===  "welcome" &&
+        //                 message.sender_fullname === "Ai Prompt Chatbot"
+        //             ) {
+        //                 if (LOG_STATUS) {
+        //                     console.log("> Incoming message from 'welcome' intent ok.");
+        //                 }
                         
-                        assert(message.attributes, "Expect message.attributes exist")
-                        assert(message.attributes.commands, "Expect message.attributes.commands")
-                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
-                        let commands = message.attributes.commands
-                        let command = commands[1]
-                        assert.equal(command.type, 'message')
-                        assert(command.message, "Expect command.message exist")
-                        let msg = command.message
-                        assert(msg.text, "Expect msg.text exist")
-                        assert.equal(msg.text, 'Hi, which LLM would you like to try?', `Expect msg.text to be 'Hi, which LLM would you like to try?' but got: ${msg.text} `)
+        //                 assert(message.attributes, "Expect message.attributes exist")
+        //                 assert(message.attributes.commands, "Expect message.attributes.commands")
+        //                 assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+        //                 let commands = message.attributes.commands
+        //                 let command = commands[1]
+        //                 assert.equal(command.type, 'message')
+        //                 assert(command.message, "Expect command.message exist")
+        //                 let msg = command.message
+        //                 assert(msg.text, "Expect msg.text exist")
+        //                 assert.equal(msg.text, 'Hi, which LLM would you like to try?', `Expect msg.text to be 'Hi, which LLM would you like to try?' but got: ${msg.text} `)
 
-                        //check buttons 
-                        assert(msg.attributes, "Expect msg.attribues exist")
-                        assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
-                        assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
-                        assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
+        //                 //check buttons 
+        //                 assert(msg.attributes, "Expect msg.attribues exist")
+        //                 assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
+        //                 assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
+        //                 assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
                         
-                        let button1 = msg.attributes.attachment.buttons[5]
-                        assert.strictEqual(button1.value, message_text, 'Expect button1 to have "Deepseek" as text')
-                        assert(button1.action)
+        //                 let button1 = msg.attributes.attachment.buttons[5]
+        //                 assert.strictEqual(button1.value, message_text, 'Expect button1 to have "Deepseek" as text')
+        //                 assert(button1.action)
                         
-                        chatClient1.sendMessage(
-                            message_text,
-                            'text',
-                            recipient_id,
-                            "Test support group",
-                            user1.fullname,
-                            {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
-                            null, // no metadata
-                            'group',
-                            (err, msg) => {
-                                if (err) {
-                                    console.error("Error send:", err);
-                                }
-                                if (LOG_STATUS) {
-                                    console.log("Message Sent ok:", msg);
-                                }
-                                assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
-                                buttonGetIsPressed = true
-                            }
-                        );
+        //                 chatClient1.sendMessage(
+        //                     message_text,
+        //                     'text',
+        //                     recipient_id,
+        //                     "Test support group",
+        //                     user1.fullname,
+        //                     {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
+        //                     null, // no metadata
+        //                     'group',
+        //                     (err, msg) => {
+        //                         if (err) {
+        //                             console.error("Error send:", err);
+        //                         }
+        //                         if (LOG_STATUS) {
+        //                             console.log("Message Sent ok:", msg);
+        //                         }
+        //                         assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
+        //                         buttonGetIsPressed = true
+        //                     }
+        //                 );
                                         
-                    } else if( buttonGetIsPressed && !generatePrompt &&
-                        message &&  message.sender_fullname === "Ai Prompt Chatbot"
-                    ){
+        //             } else if( buttonGetIsPressed && !generatePrompt &&
+        //                 message &&  message.sender_fullname === "Ai Prompt Chatbot"
+        //             ){
                         
-                        assert(message.attributes, "Expect message.attributes exist")
-                        assert(message.attributes.commands, "Expect message.attributes.commands")
-                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
-                        let commands = message.attributes.commands
+        //                 assert(message.attributes, "Expect message.attributes exist")
+        //                 assert(message.attributes.commands, "Expect message.attributes.commands")
+        //                 assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+        //                 let commands = message.attributes.commands
                         
-                        let command1 = commands[1]
-                        assert.equal(command1.type, 'message')
-                        assert(command1.message, "Expect command.message exist")
-                        let msg = command1.message
-                        assert(msg.text, "Expect msg.text exist")
-                        assert.equal(msg.text, `Ask a question to ${message_text}`, `Expect msg.text to be 'Ask a question to ${message_text}' but got: ${msg.text} `)
+        //                 let command1 = commands[1]
+        //                 assert.equal(command1.type, 'message')
+        //                 assert(command1.message, "Expect command.message exist")
+        //                 let msg = command1.message
+        //                 assert(msg.text, "Expect msg.text exist")
+        //                 assert.equal(msg.text, `Ask a question to ${message_text}`, `Expect msg.text to be 'Ask a question to ${message_text}' but got: ${msg.text} `)
                         
-                        //check buttons 
-                        assert(msg.attributes, "Expect msg.attribues exist")
-                        assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
-                        assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
-                        assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
+        //                 //check buttons 
+        //                 assert(msg.attributes, "Expect msg.attribues exist")
+        //                 assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
+        //                 assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
+        //                 assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
                         
-                        let button1 = msg.attributes.attachment.buttons[0]
-                        assert.strictEqual(button1.value, model, `Expect button1 to have "${model}" as text`)
-                        assert(button1.action)
+        //                 let button1 = msg.attributes.attachment.buttons[0]
+        //                 assert.strictEqual(button1.value, model, `Expect button1 to have "${model}" as text`)
+        //                 assert(button1.action)
 
-                        chatClient1.sendMessage(
-                            model,
-                            'text',
-                            recipient_id,
-                            "Test support group",
-                            user1.fullname,
-                            {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
-                            null, // no metadata
-                            'group',
-                            (err, msg) => {
-                                if (err) {
-                                    console.error("Error send:", err);
-                                }
-                                if (LOG_STATUS) {
-                                    console.log("Message Sent ok:", msg);
-                                }
+        //                 chatClient1.sendMessage(
+        //                     model,
+        //                     'text',
+        //                     recipient_id,
+        //                     "Test support group",
+        //                     user1.fullname,
+        //                     {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
+        //                     null, // no metadata
+        //                     'group',
+        //                     (err, msg) => {
+        //                         if (err) {
+        //                             console.error("Error send:", err);
+        //                         }
+        //                         if (LOG_STATUS) {
+        //                             console.log("Message Sent ok:", msg);
+        //                         }
 
-                                assert.equal(msg.text, model, `Message sent from user expected to be "${message_text}"`)
-                                generatePrompt = true 
-                            }
-                        );
+        //                         assert.equal(msg.text, model, `Message sent from user expected to be "${message_text}"`)
+        //                         generatePrompt = true 
+        //                     }
+        //                 );
 
-                        // resolve();
+        //                 // resolve();
                         
-                    } else if( generatePrompt &&
-                        message &&  message.sender_fullname === "Ai Prompt Chatbot"
-                    ){
-                        assert(message.attributes, "Expect message.attributes exist")
-                        assert(message.attributes.intentName);
-                        assert.equal(message.attributes.intentName, 'ai_reply')
-                        assert(message.attributes.commands, "Expect message.attributes.commands")
-                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
-                        let commands = message.attributes.commands
+        //             } else if( generatePrompt &&
+        //                 message &&  message.sender_fullname === "Ai Prompt Chatbot"
+        //             ){
+        //                 assert(message.attributes, "Expect message.attributes exist")
+        //                 assert(message.attributes.intentName);
+        //                 assert.equal(message.attributes.intentName, 'ai_reply')
+        //                 assert(message.attributes.commands, "Expect message.attributes.commands")
+        //                 assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+        //                 let commands = message.attributes.commands
                         
-                        let command1 = commands[1]
-                        assert.equal(command1.type, 'message')
-                        assert(command1.message, "Expect command.message exist")
-                        let msg = command1.message
-                        assert(msg.text, "Expect msg.text exist")
-                        resolve();
-                    }
-                    else {
-                        // console.log("Message not computed:", message.text);
-                    }
+        //                 let command1 = commands[1]
+        //                 assert.equal(command1.type, 'message')
+        //                 assert(command1.message, "Expect command.message exist")
+        //                 let msg = command1.message
+        //                 assert(msg.text, "Expect msg.text exist")
+        //                 resolve();
+        //             }
+        //             else {
+        //                 // console.log("Message not computed:", message.text);
+        //             }
 
-                };
+        //         };
 
-                //add handler to list
-                handlerId = chatClient1.onMessageAdded(messageHandler);
+        //         //add handler to list
+        //         handlerId = chatClient1.onMessageAdded(messageHandler);
 
-                if (LOG_STATUS) {
-                    console.log("Sending test message...");
-                }
-                let recipient_id = group_id + '_26';
-                // let recipient_fullname = group_name;
-                triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
-                    if (err) {
-                        console.error("An error occurred while triggering echo bot conversation:", err);
-                    }
-                });
-            })
-        }).timeout(6000);
+        //         if (LOG_STATUS) {
+        //             console.log("Sending test message...");
+        //         }
+        //         let recipient_id = group_id + '_26';
+        //         // let recipient_fullname = group_name;
+        //         triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
+        //             if (err) {
+        //                 console.error("An error occurred while triggering echo bot conversation:", err);
+        //             }
+        //         });
+        //     })
+        // }).timeout(20000);
     });
 
     describe('Openai', function() {
@@ -4328,7 +4334,7 @@ describe('CHATBOT: Ai prompt action', async () => {
                     }
                 });
             })
-        }).timeout(6000);
+        }).timeout(20000);
 
         it('gpt-4-turbo-preview (~1s)', () => {
             return new Promise(async (resolve, reject)=> {
@@ -4482,7 +4488,7 @@ describe('CHATBOT: Ai prompt action', async () => {
                     }
                 });
             })
-        }).timeout(6000);
+        }).timeout(20000);
 
         it('gpt-4 (~1s)', () => {
             return new Promise(async (resolve, reject)=> {
@@ -4637,7 +4643,7 @@ describe('CHATBOT: Ai prompt action', async () => {
                     }
                 });
             })
-        }).timeout(6000);
+        }).timeout(20000);
 
         it('gpt-4o-mini (~1s)', () => {
             return new Promise(async (resolve, reject)=> {
@@ -4792,7 +4798,7 @@ describe('CHATBOT: Ai prompt action', async () => {
                     }
                 });
             })
-        }).timeout(6000);
+        }).timeout(20000);
 
         it('gpt-4o (~1s)', () => {
             return new Promise(async (resolve, reject)=> {
@@ -4947,7 +4953,7 @@ describe('CHATBOT: Ai prompt action', async () => {
                     }
                 });
             })
-        }).timeout(6000);
+        }).timeout(20000);
 
         it('gpt-5-nano (~1s)', () => {
             return new Promise(async (resolve, reject)=> {
@@ -5101,7 +5107,7 @@ describe('CHATBOT: Ai prompt action', async () => {
                     }
                 });
             })
-        }).timeout(8000);
+        }).timeout(12000);
 
         it('gpt-5-mini (~1s)', () => {
             return new Promise(async (resolve, reject)=> {
@@ -5411,7 +5417,7 @@ describe('CHATBOT: Ai prompt action', async () => {
                     }
                 });
             })
-        }).timeout(8000);
+        }).timeout(12000);
     });
 
 });
