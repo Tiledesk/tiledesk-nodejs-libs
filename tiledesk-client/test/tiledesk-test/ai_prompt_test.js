@@ -2695,15 +2695,15 @@ describe('CHATBOT: Ai prompt action', async () => {
             })
         }).timeout(20000);
 
-        // Removed from Tiledesk
-        // it('deepseek-r1-distill-llama-70b (~1s)', () => {
+
+        // it('meta-llama/llama-guard-4-12b (~1s)', () => {
         //     return new Promise(async (resolve, reject)=> {
         //         let buttonGetIsPressed = false;
         //         let generatePrompt = false;
 
         //         const messageHandler = async (message, topic) => {
         //             const message_text = 'Groq'
-        //             const model = 'deepseek-r1-distill-llama-70b'
+        //             const model = 'meta-llama/llama-guard-4-12b'
         //             if(message.recipient !== recipient_id){
         //                 // reject();
         //                 return;
@@ -2719,7 +2719,6 @@ describe('CHATBOT: Ai prompt action', async () => {
         //                 if (LOG_STATUS) {
         //                     console.log("> Incoming message from 'welcome' intent ok.");
         //                 }
-                        
         //                 assert(message.attributes, "Expect message.attributes exist")
         //                 assert(message.attributes.commands, "Expect message.attributes.commands")
         //                 assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
@@ -2805,10 +2804,10 @@ describe('CHATBOT: Ai prompt action', async () => {
         //                             console.log("Message Sent ok:", msg);
         //                         }
 
-        //                         assert.equal(msg.text, model, `Message sent from user expected to be "${message_text}"`)
-        //                         generatePrompt = true
-        //                     }
-        //                 );
+                        //         assert.equal(msg.text, model, `Message sent from user expected to be "${message_text}"`)
+                        //         generatePrompt = true 
+                        //     }
+                        // );
 
         //                 // resolve();
                         
@@ -2841,7 +2840,7 @@ describe('CHATBOT: Ai prompt action', async () => {
         //         if (LOG_STATUS) {
         //             console.log("Sending test message...");
         //         }
-        //         let recipient_id = group_id + '_18';
+        //         let recipient_id = group_id + '_17';
         //         // let recipient_fullname = group_name;
         //         triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
         //             if (err) {
@@ -2849,16 +2848,16 @@ describe('CHATBOT: Ai prompt action', async () => {
         //             }
         //         });
         //     })
-        // }).timeout(20000);
+        // }).timeout(6000);
 
-        it('meta-llama/llama-guard-4-12b (~1s)', () => {
+        it('meta-llama/llama-4-maverick-17b-128e-instruct (~1s)', () => {
             return new Promise(async (resolve, reject)=> {
                 let buttonGetIsPressed = false;
                 let generatePrompt = false;
 
                 const messageHandler = async (message, topic) => {
                     const message_text = 'Groq'
-                    const model = 'meta-llama/llama-guard-4-12b'
+                    const model = 'meta-llama/llama-4-maverick-17b-128e-instruct'
                     if(message.recipient !== recipient_id){
                         // reject();
                         return;
@@ -2996,7 +2995,7 @@ describe('CHATBOT: Ai prompt action', async () => {
                 if (LOG_STATUS) {
                     console.log("Sending test message...");
                 }
-                let recipient_id = group_id + '_19';
+                let recipient_id = group_id + '_18';
                 // let recipient_fullname = group_name;
                 triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
                     if (err) {
@@ -3006,14 +3005,14 @@ describe('CHATBOT: Ai prompt action', async () => {
             })
         }).timeout(20000);
 
-        it('meta-llama/llama-4-maverick-17b-128e-instruct (~1s)', () => {
+        it('meta-llama/llama-4-scout-17b-16e-instruct (~1s)', () => {
             return new Promise(async (resolve, reject)=> {
                 let buttonGetIsPressed = false;
                 let generatePrompt = false;
 
                 const messageHandler = async (message, topic) => {
                     const message_text = 'Groq'
-                    const model = 'meta-llama/llama-4-maverick-17b-128e-instruct'
+                    const model = 'meta-llama/llama-4-scout-17b-16e-instruct'
                     if(message.recipient !== recipient_id){
                         // reject();
                         return;
@@ -3151,7 +3150,7 @@ describe('CHATBOT: Ai prompt action', async () => {
                 if (LOG_STATUS) {
                     console.log("Sending test message...");
                 }
-                let recipient_id = group_id + '_20';
+                let recipient_id = group_id + '_19';
                 // let recipient_fullname = group_name;
                 triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
                     if (err) {
@@ -3161,14 +3160,14 @@ describe('CHATBOT: Ai prompt action', async () => {
             })
         }).timeout(20000);
 
-        it('meta-llama/llama-4-scout-17b-16e-instruct (~1s)', () => {
+        it('moonshotai/kimi-k2-instruct (~1s)', () => {
             return new Promise(async (resolve, reject)=> {
                 let buttonGetIsPressed = false;
                 let generatePrompt = false;
 
                 const messageHandler = async (message, topic) => {
                     const message_text = 'Groq'
-                    const model = 'meta-llama/llama-4-scout-17b-16e-instruct'
+                    const model = 'moonshotai/kimi-k2-instruct'
                     if(message.recipient !== recipient_id){
                         // reject();
                         return;
@@ -3306,7 +3305,7 @@ describe('CHATBOT: Ai prompt action', async () => {
                 if (LOG_STATUS) {
                     console.log("Sending test message...");
                 }
-                let recipient_id = group_id + '_21';
+                let recipient_id = group_id + '_20';
                 // let recipient_fullname = group_name;
                 triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
                     if (err) {
@@ -3316,14 +3315,14 @@ describe('CHATBOT: Ai prompt action', async () => {
             })
         }).timeout(20000);
 
-        it('moonshotai/kimi-k2-instruct (~1s)', () => {
+        it('qwen/qwen3-32b (~1s)', () => {
             return new Promise(async (resolve, reject)=> {
                 let buttonGetIsPressed = false;
                 let generatePrompt = false;
 
                 const messageHandler = async (message, topic) => {
                     const message_text = 'Groq'
-                    const model = 'moonshotai/kimi-k2-instruct'
+                    const model = 'qwen/qwen3-32b'
                     if(message.recipient !== recipient_id){
                         // reject();
                         return;
@@ -3461,7 +3460,7 @@ describe('CHATBOT: Ai prompt action', async () => {
                 if (LOG_STATUS) {
                     console.log("Sending test message...");
                 }
-                let recipient_id = group_id + '_22';
+                let recipient_id = group_id + '_21';
                 // let recipient_fullname = group_name;
                 triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
                     if (err) {
@@ -3471,14 +3470,14 @@ describe('CHATBOT: Ai prompt action', async () => {
             })
         }).timeout(20000);
 
-        it('qwen/qwen3-32b (~1s)', () => {
+        it('allam-2-7b (~1s)', () => {
             return new Promise(async (resolve, reject)=> {
                 let buttonGetIsPressed = false;
                 let generatePrompt = false;
 
                 const messageHandler = async (message, topic) => {
                     const message_text = 'Groq'
-                    const model = 'qwen/qwen3-32b'
+                    const model = 'allam-2-7b'
                     if(message.recipient !== recipient_id){
                         // reject();
                         return;
@@ -3616,7 +3615,7 @@ describe('CHATBOT: Ai prompt action', async () => {
                 if (LOG_STATUS) {
                     console.log("Sending test message...");
                 }
-                let recipient_id = group_id + '_23';
+                let recipient_id = group_id + '_22';
                 // let recipient_fullname = group_name;
                 triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
                     if (err) {
@@ -3626,15 +3625,14 @@ describe('CHATBOT: Ai prompt action', async () => {
             })
         }).timeout(20000);
 
-        // Removed from Tiledesk
-        // it('gemma2-9b-it (~1s)', () => {
+        // it('groq/compound (~1s)', () => {
         //     return new Promise(async (resolve, reject)=> {
         //         let buttonGetIsPressed = false;
         //         let generatePrompt = false;
 
         //         const messageHandler = async (message, topic) => {
         //             const message_text = 'Groq'
-        //             const model = 'gemma2-9b-it'
+        //             const model = 'groq/compound'
         //             if(message.recipient !== recipient_id){
         //                 // reject();
         //                 return;
@@ -3772,7 +3770,7 @@ describe('CHATBOT: Ai prompt action', async () => {
         //         if (LOG_STATUS) {
         //             console.log("Sending test message...");
         //         }
-        //         let recipient_id = group_id + '_24';
+        //         let recipient_id = group_id + '_23';
         //         // let recipient_fullname = group_name;
         //         triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
         //             if (err) {
@@ -3780,16 +3778,16 @@ describe('CHATBOT: Ai prompt action', async () => {
         //             }
         //         });
         //     })
-        // }).timeout(20000);
+        // }).timeout(6000);
 
-        it('allam-2-7b (~1s)', () => {
+        it('groq/compound-mini (~1s)', () => {
             return new Promise(async (resolve, reject)=> {
                 let buttonGetIsPressed = false;
                 let generatePrompt = false;
 
                 const messageHandler = async (message, topic) => {
                     const message_text = 'Groq'
-                    const model = 'allam-2-7b'
+                    const model = 'groq/compound-mini'
                     if(message.recipient !== recipient_id){
                         // reject();
                         return;
@@ -3927,6 +3925,161 @@ describe('CHATBOT: Ai prompt action', async () => {
                 if (LOG_STATUS) {
                     console.log("Sending test message...");
                 }
+                let recipient_id = group_id + '_24';
+                // let recipient_fullname = group_name;
+                triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
+                    if (err) {
+                        console.error("An error occurred while triggering echo bot conversation:", err);
+                    }
+                });
+            })
+        }).timeout(6000);
+
+        it('openai/gpt-oss-120b (~1s)', () => {
+            return new Promise(async (resolve, reject)=> {
+                let buttonGetIsPressed = false;
+                let generatePrompt = false;
+
+                const messageHandler = async (message, topic) => {
+                    const message_text = 'Groq'
+                    const model = 'openai/gpt-oss-120b'
+                    if(message.recipient !== recipient_id){
+                        // reject();
+                        return;
+                    }
+                    if (LOG_STATUS) {
+                        console.log(">(1) Incoming message [sender:" + message.sender_fullname + "]: ", message);
+                    }
+                    if (
+                        message &&
+                        message.attributes.intentName ===  "welcome" &&
+                        message.sender_fullname === "Ai Prompt Chatbot"
+                    ) {
+                        if (LOG_STATUS) {
+                            console.log("> Incoming message from 'welcome' intent ok.");
+                        }
+                        
+                        assert(message.attributes, "Expect message.attributes exist")
+                        assert(message.attributes.commands, "Expect message.attributes.commands")
+                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                        let commands = message.attributes.commands
+                        let command = commands[1]
+                        assert.equal(command.type, 'message')
+                        assert(command.message, "Expect command.message exist")
+                        let msg = command.message
+                        assert(msg.text, "Expect msg.text exist")
+                        assert.equal(msg.text, 'Hi, which LLM would you like to try?', `Expect msg.text to be 'Hi, which LLM would you like to try?' but got: ${msg.text} `)
+
+                        //check buttons 
+                        assert(msg.attributes, "Expect msg.attribues exist")
+                        assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
+                        assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
+                        assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
+                        
+                        let button1 = msg.attributes.attachment.buttons[2]
+                        assert.strictEqual(button1.value, message_text, 'Expect button1 to have "Groq" as text')
+                        assert(button1.action)
+                        
+                        chatClient1.sendMessage(
+                            message_text,
+                            'text',
+                            recipient_id,
+                            "Test support group",
+                            user1.fullname,
+                            {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
+                            null, // no metadata
+                            'group',
+                            (err, msg) => {
+                                if (err) {
+                                    console.error("Error send:", err);
+                                }
+                                if (LOG_STATUS) {
+                                    console.log("Message Sent ok:", msg);
+                                }
+                                assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
+                                buttonGetIsPressed = true
+                            }
+                        );
+                                        
+                    } else if( buttonGetIsPressed && !generatePrompt &&
+                        message &&  message.sender_fullname === "Ai Prompt Chatbot"
+                    ){
+                        
+                        assert(message.attributes, "Expect message.attributes exist")
+                        assert(message.attributes.commands, "Expect message.attributes.commands")
+                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                        let commands = message.attributes.commands
+                        
+                        let command1 = commands[1]
+                        assert.equal(command1.type, 'message')
+                        assert(command1.message, "Expect command.message exist")
+                        let msg = command1.message
+                        assert(msg.text, "Expect msg.text exist")
+                        assert.equal(msg.text, 'Ask a question to Groq', `Expect msg.text to be 'Ask a question to Groq' but got: ${msg.text} `)
+                        
+                        //check buttons 
+                        assert(msg.attributes, "Expect msg.attribues exist")
+                        assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
+                        assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
+                        assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
+                        
+                        let button1 = msg.attributes.attachment.buttons[10]
+                        assert.strictEqual(button1.value, model, `Expect button1 to have "${model}" as text`)
+                        assert(button1.action)
+
+                        chatClient1.sendMessage(
+                            model,
+                            'text',
+                            recipient_id,
+                            "Test support group",
+                            user1.fullname,
+                            {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
+                            null, // no metadata
+                            'group',
+                            (err, msg) => {
+                                if (err) {
+                                    console.error("Error send:", err);
+                                }
+                                if (LOG_STATUS) {
+                                    console.log("Message Sent ok:", msg);
+                                }
+
+                                assert.equal(msg.text, model, `Message sent from user expected to be "${message_text}"`)
+                                generatePrompt = true 
+                            }
+                        );
+
+                        // resolve();
+                        
+                    } else if( generatePrompt &&
+                        message &&  message.sender_fullname === "Ai Prompt Chatbot"
+                    ){
+                        assert(message.attributes, "Expect message.attributes exist")
+                        assert(message.attributes.intentName);
+                        assert.equal(message.attributes.intentName, 'ai_reply')
+                        assert(message.attributes.commands, "Expect message.attributes.commands")
+                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                        let commands = message.attributes.commands
+                        
+                        let command1 = commands[1]
+                        assert.equal(command1.type, 'message')
+                        assert(command1.message, "Expect command.message exist")
+                        let msg = command1.message
+                        assert(msg.text, "Expect msg.text exist")
+                        resolve();
+                    }
+                    else {
+                        // console.log("Message not computed:", message.text);
+                    }
+
+                };
+
+                //add handler to list
+                handlerId = chatClient1.onMessageAdded(messageHandler);
+
+                if (LOG_STATUS) {
+                    console.log("Sending test message...");
+                }
                 let recipient_id = group_id + '_25';
                 // let recipient_fullname = group_name;
                 triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
@@ -3936,6 +4089,163 @@ describe('CHATBOT: Ai prompt action', async () => {
                 });
             })
         }).timeout(20000);
+
+        it('openai/gpt-oss-20bb (~1s)', () => {
+            return new Promise(async (resolve, reject)=> {
+                let buttonGetIsPressed = false;
+                let generatePrompt = false;
+
+                const messageHandler = async (message, topic) => {
+                    const message_text = 'Groq'
+                    const model = 'openai/gpt-oss-20bb'
+                    if(message.recipient !== recipient_id){
+                        // reject();
+                        return;
+                    }
+                    if (LOG_STATUS) {
+                        console.log(">(1) Incoming message [sender:" + message.sender_fullname + "]: ", message);
+                    }
+                    if (
+                        message &&
+                        message.attributes.intentName ===  "welcome" &&
+                        message.sender_fullname === "Ai Prompt Chatbot"
+                    ) {
+                        if (LOG_STATUS) {
+                            console.log("> Incoming message from 'welcome' intent ok.");
+                        }
+                        
+                        assert(message.attributes, "Expect message.attributes exist")
+                        assert(message.attributes.commands, "Expect message.attributes.commands")
+                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                        let commands = message.attributes.commands
+                        let command = commands[1]
+                        assert.equal(command.type, 'message')
+                        assert(command.message, "Expect command.message exist")
+                        let msg = command.message
+                        assert(msg.text, "Expect msg.text exist")
+                        assert.equal(msg.text, 'Hi, which LLM would you like to try?', `Expect msg.text to be 'Hi, which LLM would you like to try?' but got: ${msg.text} `)
+
+                        //check buttons 
+                        assert(msg.attributes, "Expect msg.attribues exist")
+                        assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
+                        assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
+                        assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
+                        
+                        let button1 = msg.attributes.attachment.buttons[2]
+                        assert.strictEqual(button1.value, message_text, 'Expect button1 to have "Groq" as text')
+                        assert(button1.action)
+                        
+                        chatClient1.sendMessage(
+                            message_text,
+                            'text',
+                            recipient_id,
+                            "Test support group",
+                            user1.fullname,
+                            {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
+                            null, // no metadata
+                            'group',
+                            (err, msg) => {
+                                if (err) {
+                                    console.error("Error send:", err);
+                                }
+                                if (LOG_STATUS) {
+                                    console.log("Message Sent ok:", msg);
+                                }
+                                assert.equal(msg.text, message_text, `Message sent from user expected to be "${message_text}"`)
+                                buttonGetIsPressed = true
+                            }
+                        );
+                                        
+                    } else if( buttonGetIsPressed && !generatePrompt &&
+                        message &&  message.sender_fullname === "Ai Prompt Chatbot"
+                    ){
+                        
+                        assert(message.attributes, "Expect message.attributes exist")
+                        assert(message.attributes.commands, "Expect message.attributes.commands")
+                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                        let commands = message.attributes.commands
+                        
+                        let command1 = commands[1]
+                        assert.equal(command1.type, 'message')
+                        assert(command1.message, "Expect command.message exist")
+                        let msg = command1.message
+                        assert(msg.text, "Expect msg.text exist")
+                        assert.equal(msg.text, 'Ask a question to Groq', `Expect msg.text to be 'Ask a question to Groq' but got: ${msg.text} `)
+                        
+                        //check buttons 
+                        assert(msg.attributes, "Expect msg.attribues exist")
+                        assert(msg.attributes.attachment, "Expect msg.attributes.attachment exist")
+                        assert(msg.attributes.attachment.buttons, "Expect msg.attributes.attachment.buttons exist")
+                        assert(msg.attributes.attachment.buttons.length > 0, "Expect msg.attributes.attachment.buttons.length > 0")
+                        
+                        let button1 = msg.attributes.attachment.buttons[11]
+                        assert.strictEqual(button1.value, model, `Expect button1 to have "${model}" as text`)
+                        assert(button1.action)
+
+                        chatClient1.sendMessage(
+                            model,
+                            'text',
+                            recipient_id,
+                            "Test support group",
+                            user1.fullname,
+                            {projectId: config.TILEDESK_PROJECT_ID, action: button1.action },
+                            null, // no metadata
+                            'group',
+                            (err, msg) => {
+                                if (err) {
+                                    console.error("Error send:", err);
+                                }
+                                if (LOG_STATUS) {
+                                    console.log("Message Sent ok:", msg);
+                                }
+
+                                assert.equal(msg.text, model, `Message sent from user expected to be "${message_text}"`)
+                                generatePrompt = true 
+                            }
+                        );
+
+                        // resolve();
+                        
+                    } else if( generatePrompt &&
+                        message &&  message.sender_fullname === "Ai Prompt Chatbot"
+                    ){
+                        assert(message.attributes, "Expect message.attributes exist")
+                        assert(message.attributes.intentName);
+                        assert.equal(message.attributes.intentName, 'ai_reply')
+                        assert(message.attributes.commands, "Expect message.attributes.commands")
+                        assert(message.attributes.commands.length >= 2, "Expect message.attributes.commands.length > 2")
+                        let commands = message.attributes.commands
+                        
+                        let command1 = commands[1]
+                        assert.equal(command1.type, 'message')
+                        assert(command1.message, "Expect command.message exist")
+                        let msg = command1.message
+                        assert(msg.text, "Expect msg.text exist")
+                        resolve();
+                    }
+                    else {
+                        // console.log("Message not computed:", message.text);
+                    }
+
+                };
+
+                //add handler to list
+                handlerId = chatClient1.onMessageAdded(messageHandler);
+
+                if (LOG_STATUS) {
+                    console.log("Sending test message...");
+                }
+                let recipient_id = group_id + '_26';
+                // let recipient_fullname = group_name;
+                triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
+                    if (err) {
+                        console.error("An error occurred while triggering echo bot conversation:", err);
+                    }
+                });
+            })
+        }).timeout(6000);
+
+        
 
     });
 
@@ -4128,7 +4438,7 @@ describe('CHATBOT: Ai prompt action', async () => {
         //         if (LOG_STATUS) {
         //             console.log("Sending test message...");
         //         }
-        //         let recipient_id = group_id + '_26';
+        //         let recipient_id = group_id + '_27';
         //         // let recipient_fullname = group_name;
         //         triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
         //             if (err) {
@@ -4136,7 +4446,7 @@ describe('CHATBOT: Ai prompt action', async () => {
         //             }
         //         });
         //     })
-        // }).timeout(20000);
+        // }).timeout(6000);
     });
 
     describe('Openai', function() {
@@ -4326,7 +4636,7 @@ describe('CHATBOT: Ai prompt action', async () => {
                 if (LOG_STATUS) {
                     console.log("Sending test message...");
                 }
-                let recipient_id = group_id + '_27';
+                let recipient_id = group_id + '_28';
                 // let recipient_fullname = group_name;
                 triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
                     if (err) {
@@ -4480,7 +4790,7 @@ describe('CHATBOT: Ai prompt action', async () => {
                 if (LOG_STATUS) {
                     console.log("Sending test message...");
                 }
-                let recipient_id = group_id + '_28';
+                let recipient_id = group_id + '_29';
                 // let recipient_fullname = group_name;
                 triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
                     if (err) {
@@ -4635,7 +4945,7 @@ describe('CHATBOT: Ai prompt action', async () => {
                 if (LOG_STATUS) {
                     console.log("Sending test message...");
                 }
-                let recipient_id = group_id + '_29';
+                let recipient_id = group_id + '_30';
                 // let recipient_fullname = group_name;
                 triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
                     if (err) {
@@ -4790,7 +5100,7 @@ describe('CHATBOT: Ai prompt action', async () => {
                 if (LOG_STATUS) {
                     console.log("Sending test message...");
                 }
-                let recipient_id = group_id + '_30';
+                let recipient_id = group_id + '_31';
                 // let recipient_fullname = group_name;
                 triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
                     if (err) {
@@ -4945,7 +5255,7 @@ describe('CHATBOT: Ai prompt action', async () => {
                 if (LOG_STATUS) {
                     console.log("Sending test message...");
                 }
-                let recipient_id = group_id + '_31';
+                let recipient_id = group_id + '_32';
                 // let recipient_fullname = group_name;
                 triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
                     if (err) {
@@ -5099,7 +5409,7 @@ describe('CHATBOT: Ai prompt action', async () => {
                 if (LOG_STATUS) {
                     console.log("Sending test message...");
                 }
-                let recipient_id = group_id + '_32';
+                let recipient_id = group_id + '_33';
                 // let recipient_fullname = group_name;
                 triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
                     if (err) {
@@ -5254,7 +5564,7 @@ describe('CHATBOT: Ai prompt action', async () => {
                 if (LOG_STATUS) {
                     console.log("Sending test message...");
                 }
-                let recipient_id = group_id + '_33';
+                let recipient_id = group_id + '_34';
                 // let recipient_fullname = group_name;
                 triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
                     if (err) {
@@ -5409,7 +5719,7 @@ describe('CHATBOT: Ai prompt action', async () => {
                 if (LOG_STATUS) {
                     console.log("Sending test message...");
                 }
-                let recipient_id = group_id + '_34';
+                let recipient_id = group_id + '_35';
                 // let recipient_fullname = group_name;
                 triggerConversation(recipient_id, BOT_ID, user1.tiledesk_token, async (err) => {
                     if (err) {

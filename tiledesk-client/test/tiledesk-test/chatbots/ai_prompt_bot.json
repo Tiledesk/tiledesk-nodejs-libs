@@ -361,15 +361,6 @@
                           "show_echo": true
                         },
                         {
-                          "uid": "3716945e465a4086ad307c4a84739a35",
-                          "type": "action",
-                          "value": "deepseek-r1-distill-llama-70b",
-                          "link": "",
-                          "target": "blank",
-                          "action": "#71c7d068-a8cb-4991-87f9-14a995ec9687{\"ai_model\":\"deepseek-r1-distill-llama-70b\"}",
-                          "show_echo": true
-                        },
-                        {
                           "uid": "dd5df7c1cf9d414a8fbf7122e107a9fb",
                           "type": "action",
                           "value": "meta-llama/llama-guard-4-12b",
@@ -415,21 +406,48 @@
                           "show_echo": true
                         },
                         {
-                          "uid": "93429383e8954d879f32d2c8e60a709f",
-                          "type": "action",
-                          "value": "gemma2-9b-it",
-                          "link": "",
-                          "target": "blank",
-                          "action": "#71c7d068-a8cb-4991-87f9-14a995ec9687{\"ai_model\":\"gemma2-9b-it\"}",
-                          "show_echo": true
-                        },
-                        {
                           "uid": "811a0de49bf445be92bc5c6ff60ce60f",
                           "type": "action",
                           "value": "allam-2-7b",
                           "link": "",
                           "target": "blank",
                           "action": "#71c7d068-a8cb-4991-87f9-14a995ec9687{\"ai_model\":\"allam-2-7b\"}",
+                          "show_echo": true
+                        },
+                        {
+                          "uid": "a7b3f9e82c4b41d1a6e3c2dfe8b51790",
+                          "type": "action",
+                          "value": "groq/compound",
+                          "link": "",
+                          "target": "blank",
+                          "action": "#71c7d068-a8cb-4991-87f9-14a995ec9687{\"ai_model\":\"groq/compound\"}",
+                          "show_echo": true
+                        },
+                        {
+                          "uid": "c1d92e8f74bc46e59d34a8f7e2cb9b1d",
+                          "type": "action",
+                          "value": "groq/compound-mini",
+                          "link": "",
+                          "target": "blank",
+                          "action": "#71c7d068-a8cb-4991-87f9-14a995ec9687{\"ai_model\":\"groq/compound-mini\"}",
+                          "show_echo": true
+                        },
+                        {
+                          "uid": "f53a17c0d98b4f07b62c19e6e8f5a2d1",
+                          "type": "action",
+                          "value": "openai/gpt-oss-120b",
+                          "link": "",
+                          "target": "blank",
+                          "action": "#71c7d068-a8cb-4991-87f9-14a995ec9687{\"ai_model\":\"openai/gpt-oss-120b\"}",
+                          "show_echo": true
+                        },
+                        {
+                          "uid": "9e4d2b7c81a146d78f35b9e2c0d8f4a3",
+                          "type": "action",
+                          "value": "openai/gpt-oss-20bb",
+                          "link": "",
+                          "target": "blank",
+                          "action": "#71c7d068-a8cb-4991-87f9-14a995ec9687{\"ai_model\":\"openai/gpt-oss-20b\"}",
                           "show_echo": true
                         }
                       ]
