@@ -30,7 +30,7 @@
   "homepage": "https://github.com/Tiledesk/tiledesk-nodejs-libs#readme",
   "devDependencies": {
     "jsonwebtoken": "^8.5.1",
-    "mocha": "^8.2.1"
+    "mocha": "^10.1.0"
   },
   "dependencies": {
     "axios": "^0.21.1",
